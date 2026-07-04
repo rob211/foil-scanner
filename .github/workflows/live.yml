@@ -6,8 +6,13 @@ on:
   workflow_dispatch: {}
 
 concurrency:
-  group: foil-scanner-live
+  # Shared with scan.yml: both jobs commit to data/, serialising them makes
+  # push races impossible. Runs take ~20 s so queueing costs nothing.
+  group: foil-scanner-data
   cancel-in-progress: false
+
+permissions:
+  contents: write
 
 jobs:
   live:
@@ -24,3 +29,15 @@ jobs:
           FOIL_CALENDAR_ID: ${{ secrets.FOIL_CALENDAR_ID }}
           HOLFUY_KEY: ${{ secrets.HOLFUY_KEY }}
         run: python -m foilscan live
+      - name: Commit live data
+        # A failed verify can still have written a useful live.json (spec 8.9).
+        if: always()
+        run: |
+          git config user.name "foil-scanner"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/live.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data: live $(date -u +%FT%TZ)"
+            git pull --rebase origin main
+            git push
+          fi

@@ -249,12 +249,27 @@ The prime directive: this scanner must never quietly show a calm week because so
 
 `near_misses` holds single-model hits and windows that failed exactly one condition (useful on the dashboard and for tuning thresholds later).
 
+`data/live.json`, committed by the hourly live job (absent until the first live run after deploy):
+
+```json
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-05T14:23:00+10:00",
+  "obs": {"station": "Bellambi", "time": "...", "speed_kn": 12.4, "gust_kn": 16.2, "dir_deg": 157.5},
+  "holfuy": null,
+  "checks": [{"foil_key": "south_ocean:2026-07-06:12", "state": "confirmed", "live_line": "18 kn S at 14:00 (Bellambi), forecast 22 kn"}],
+  "notes": []
+}
+```
+
+`obs.dir_deg` is null when BOM reports CALM. `obs` itself is null only when the BOM fetch failed; the reason lands in `notes` and the run still exits non-zero (section 8). The dashboard overlays `checks` onto the `latest.json` windows by `foil_key` and renders `obs` as the live tile. BOM is fetched every live run, window or not, so the tile stays current all day.
+
 ## 10. Build order (1-2 day chunks)
 
 1. Repo scaffold, config module with validation, all four fetchers with the failure rules, fixture capture script that saves real responses into `tests/fixtures/`. Unit tests that every failure rule actually raises.
 2. Trigger engine: pure functions from source snapshots to windows. Tests per trigger against hand-built fixtures (including the WSW boundary at 215/260, the entrance dual-mode overlap, the NE ladder edge at exactly 2 h, the off-angle downgrade, the south-run swell narrowing at exactly 1.0 m and 2.0 m, the standalone Hill 60 swell run deduping against the south-wind large-swell case, the swell compatibility boundaries (d at exactly 25 degrees, aligned swell at exactly 1.5 m, cross swell at exactly 0.5 m and 1.0 m, the 4.3-table-wins precedence), and daylight clipping in July).
 3. Calendar sync: service account setup, Foiling calendar creation and sharing, diff-based sync, `SCANNER BROKEN` path. A `--dry-run` flag that prints the event plan without writing is required and is also the local dev mode.
-4. Workflows: `scan.yml` (cron every 6 h) and `live.yml` (hourly; exits quickly when today has no events), both with the secret plumbing. Request the Holfuy key in parallel since it has lead time.
+4. Workflows: `scan.yml` (cron every 6 h) and `live.yml` (hourly; skips calendar work when today has no events but still fetches BOM and publishes `data/live.json` for the dashboard tile), both with the secret plumbing. Request the Holfuy key in parallel since it has lead time.
 5. Calibration fortnight: compare modelled high-tide times against BOM Port Kembla tide predictions, sanity-check the Holfuy 0.9 factor against BOM on a windy lake day, eyeball events against Windguru and WillyWeather, and tune coordinates or thresholds. Log findings in the repo.
 6. Later: GitHub Pages dashboard reading `data/latest.json` and `data/history/`. Nothing in phases 1-5 may assume the calendar is the only consumer.
 

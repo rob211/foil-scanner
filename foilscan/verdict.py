@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 
 from . import config
-from .models import NearMiss, SourceStatus, Window
+from .models import NearMiss, Observation, SourceStatus, Window
 
 
 def build(
@@ -58,6 +58,45 @@ def write(verdict: dict, data_dir: str | Path = config.DATA_DIR) -> None:
     (data_dir / "latest.json").write_text(text)
     day = verdict["generated_at"][:10]
     (history / f"{day}.json").write_text(text)
+
+
+def _obs_dict(obs: Observation | None) -> dict | None:
+    if obs is None:
+        return None
+    return {
+        "station": obs.station,
+        "time": obs.time.isoformat(),
+        "speed_kn": round(obs.speed_kn, 1),
+        "gust_kn": round(obs.gust_kn, 1),
+        "dir_deg": obs.dir_deg,
+    }
+
+
+def build_live(
+    now: datetime,
+    obs: Observation | None,
+    holfuy: Observation | None,
+    checks: list[dict],
+    notes: list[str],
+) -> dict:
+    """The live contract: data/live.json. obs is None only when the BOM fetch
+    failed (the reason is in notes); the run still exits non-zero."""
+    return {
+        "schema_version": config.SCHEMA_VERSION,
+        "generated_at": now.isoformat(),
+        "obs": _obs_dict(obs),
+        "holfuy": _obs_dict(holfuy),
+        "checks": checks,
+        "notes": notes,
+    }
+
+
+def write_live(payload: dict, data_dir: str | Path = config.DATA_DIR) -> None:
+    data_dir = Path(data_dir)
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "live.json").write_text(
+        json.dumps(payload, indent=2, sort_keys=False) + "\n"
+    )
 
 
 def load_latest(data_dir: str | Path = config.DATA_DIR) -> dict:

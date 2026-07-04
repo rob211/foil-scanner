@@ -83,6 +83,22 @@
   #verdict .what { font-size: 1.15rem; font-weight: 650; margin-top: 0.35rem; text-wrap: balance; }
   #verdict .when { color: var(--muted); margin-top: 0.15rem; font-size: 0.95rem; }
 
+  /* Live observation tile */
+  #live {
+    display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 0.65rem 0.9rem; margin: 0 0 1rem;
+    font-size: 0.95rem;
+  }
+  #live .k {
+    flex: none; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.06em;
+    color: var(--rust); border: 1px solid currentColor;
+    padding: 0.12rem 0.45rem; border-radius: 999px;
+  }
+  #live .sub { color: var(--muted); font-size: 0.82rem; flex-basis: 100%; }
+  #live.stale, #live.down { color: var(--muted); }
+  #live.stale .k, #live.down .k { color: var(--muted); }
+
   /* Week strip */
   #week { display: flex; gap: 6px; margin: 0 0 1.6rem; }
   #week .day {
@@ -232,6 +248,29 @@ function verdictBlock(windows, now) {
   </div>`;
 }
 
+function liveTile(liveData, now) {
+  if (!liveData) return "";
+  const gen = new Date(liveData.generated_at);
+  const genAgeMin = (now - gen) / 6e4;
+  const notes = (liveData.notes || []).join(" · ");
+  if (!liveData.obs) {
+    return `<div id="live" class="down"><span class="k">LIVE</span> observations unavailable
+      <span class="sub">${esc(notes || "last live check could not read the station")}</span></div>`;
+  }
+  const o = liveData.obs;
+  const t = new Date(o.time);
+  const ageMin = Math.max(0, Math.round((now - t) / 6e4));
+  const age = ageMin <= 90 ? `${ageMin} min ago` : `${(ageMin / 60).toFixed(1)} h ago`;
+  const dir = o.dir_deg == null ? "calm" : compass(o.dir_deg);
+  const stale = genAgeMin > 150; // hourly job; a couple of skipped crons is tolerable
+  const staleNote = stale ? ` · last check ${fmtStamp.format(gen)}, checks are falling behind` : "";
+  return `<div id="live"${stale ? ' class="stale"' : ""}>
+    <span class="k">LIVE</span>
+    <span><strong>${esc(o.station)}</strong> ${Math.round(o.speed_kn)} kn ${esc(dir)} · gusts ${Math.round(o.gust_kn)}</span>
+    <span class="sub">reading ${fmtTime.format(t)} (${age})${staleNote}${notes ? ` · ${esc(notes)}` : ""}</span>
+  </div>`;
+}
+
 function weekStrip(windows, now) {
   let html = '<div id="week" aria-label="next 7 days">';
   for (let i = 0; i < 7; i++) {
@@ -248,7 +287,7 @@ function weekStrip(windows, now) {
   return html + "</div>";
 }
 
-function windowCard(w, now) {
+function windowCard(w, now, liveMap) {
   const s = new Date(w.start), e = new Date(w.end);
   const models = Object.entries(w.model_values || {});
   const rows = [];
@@ -259,7 +298,8 @@ function windowCard(w, now) {
   if (w.swell_m != null) rows.push(["Swell", `${w.swell_m.toFixed(1)} m from ${compass(w.swell_dir_deg)}`]);
   if (w.high_tide) rows.push(["High tide", `${fmtTime.format(new Date(w.high_tide))} (window ±2 h)`]);
   rows.push(["Confidence", w.confidence]);
-  rows.push(["Live check", w.live_status]);
+  const lc = liveMap[w.foil_key];
+  rows.push(["Live check", lc ? `${lc.state}: ${lc.live_line}` : w.live_status]);
   const tags = (w.title_tags || []).length ? `<span class="tags">${esc(w.title_tags.join(" · "))}</span>` : "";
   return `<details class="win">
     <summary>
@@ -275,14 +315,14 @@ function windowCard(w, now) {
   </details>`;
 }
 
-function windowList(windows, now) {
+function windowList(windows, now, liveMap) {
   const upcoming = windows.filter((w) => new Date(w.end) > now);
   if (!upcoming.length) return "";
   let html = "<h2>Windows</h2>", last = "";
   for (const w of upcoming) {
     const label = dayLabel(new Date(w.start), now);
     if (label !== last) { html += `<div class="dayhead">${esc(label)}</div>`; last = label; }
-    html += windowCard(w, now);
+    html += windowCard(w, now, liveMap);
   }
   return html;
 }
@@ -300,7 +340,7 @@ function sourceList(sources) {
   return `<details class="section"><summary>Sources</summary><ul class="sources">${items}</ul></details>`;
 }
 
-function render(data, now) {
+function render(data, liveData, now) {
   const generated = new Date(data.generated_at);
   const ageH = (now - generated) / 36e5;
   document.getElementById("stamp").textContent = `scanned ${fmtStamp.format(generated)}`;
@@ -314,21 +354,31 @@ function render(data, now) {
     html += alarm("SOURCE PROBLEM", badSources.map(([n, s]) => `${n}: ${s.error || "failed"}`).join(" · "));
   }
 
+  const liveMap = {};
+  for (const c of (liveData && liveData.checks) || []) liveMap[c.foil_key] = c;
+
   const windows = (data.windows || []).slice().sort((a, b) => a.start.localeCompare(b.start));
   html += verdictBlock(windows, now);
+  html += liveTile(liveData, now);
   html += weekStrip(windows, now);
-  html += windowList(windows, now);
+  html += windowList(windows, now, liveMap);
   html += missList(data.near_misses || []);
   html += sourceList(data.sources || {});
   document.getElementById("app").innerHTML = html;
 }
 
-fetch("data/latest.json", { cache: "no-store" })
-  .then((r) => {
-    if (!r.ok) throw new Error(`HTTP ${r.status} fetching data/latest.json`);
+const getJSON = (url) =>
+  fetch(url, { cache: "no-store" }).then((r) => {
+    if (!r.ok) throw new Error(`HTTP ${r.status} fetching ${url}`);
     return r.json();
-  })
-  .then((data) => render(data, new Date()))
+  });
+
+Promise.all([
+  getJSON("data/latest.json"),
+  // live.json appears after the first hourly live run; absence is normal.
+  getJSON("data/live.json").catch(() => null),
+])
+  .then(([data, liveData]) => render(data, liveData, new Date()))
   .catch((err) => {
     document.getElementById("stamp").textContent = "no data";
     document.getElementById("app").innerHTML = alarm(

@@ -121,26 +121,41 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
     latest = verdict.load_latest(data_dir)
     heartbeat(latest, now)
     todays = relevant_windows(latest, now)
-    if not todays:
-        return ["no windows near now; nothing to verify"]
 
     log: list[str] = []
-    bom = fetch.fetch_bom(now)
+    notes: list[str] = []
+    # BOM is fetched even with no window in play: the dashboard's live tile
+    # wants an hourly reading all day. A failed fetch still publishes an
+    # obs-less live.json so the dashboard can say why, then fails loudly.
+    try:
+        bom = fetch.fetch_bom(now)
+    except Exception as exc:
+        if not dry_run:
+            verdict.write_live(
+                verdict.build_live(now, None, None, [], [f"BOM fetch failed: {exc}"]),
+                data_dir,
+            )
+        raise
     holfuy = None
     key = config.env("HOLFUY_KEY", required=False)
     if any(w["trigger_id"].startswith("lake") for w in todays):
         if key:
             holfuy = fetch.fetch_holfuy(key, now)
         else:
-            log.append("lake live check: Holfuy key not configured, BOM only")
+            notes.append("lake live check: Holfuy key not configured, BOM only")
+    log += notes
 
-    svc = None if dry_run else gcal.service()
-    cal_id = None if dry_run else gcal.calendar_id()
+    checks: list[dict] = []
+    svc = None if dry_run or not todays else gcal.service()
+    cal_id = None if dry_run or not todays else gcal.calendar_id()
     for w in todays:
         obs, note = pick_obs(w, bom, holfuy)
         state, live_line = status_for(w, obs, now)
         if note:
             live_line += f" ({note})"
+        checks.append(
+            {"foil_key": w["foil_key"], "state": state, "live_line": live_line}
+        )
         if state == "none":
             log.append(f"{w['foil_key']}: skipped ({live_line})")
             continue
@@ -148,4 +163,15 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
             log.append(f"DRY RUN {w['foil_key']}: {state} ({live_line})")
         else:
             log.append(apply_status(svc, cal_id, w, state, live_line, dry_run))
+    if not todays:
+        log.append("no windows near now; nothing to verify on the calendar")
+
+    if dry_run:
+        log.append("DRY RUN: not writing live.json")
+    else:
+        verdict.write_live(verdict.build_live(now, bom, holfuy, checks, notes), data_dir)
+        log.append(
+            f"live.json: {bom.station} {bom.speed_kn:.0f} kn at {bom.time:%H:%M}, "
+            f"{len(checks)} check(s)"
+        )
     return log
