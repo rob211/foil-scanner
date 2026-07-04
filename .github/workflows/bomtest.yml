@@ -1,0 +1,22 @@
+name: bomtest
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  bomtest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe BOM from runner
+        run: |
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36"
+          echo "== www, browser UA =="
+          curl -sL -A "$UA" -o /tmp/www.json -w "%{http_code} %{url_effective}\n" --max-time 30 "http://www.bom.gov.au/fwo/IDN60801/IDN60801.94749.json" || echo "curl exit $?"
+          head -c 200 /tmp/www.json || true; echo
+          echo "== reg, browser UA =="
+          curl -sL -A "$UA" -o /tmp/reg.json -w "%{http_code} %{url_effective}\n" --max-time 30 "http://reg.bom.gov.au/fwo/IDN60801/IDN60801.94749.json" || echo "curl exit $?"
+          head -c 200 /tmp/reg.json || true; echo
+          echo "== www, no UA =="
+          curl -sL -o /dev/null -w "%{http_code}\n" --max-time 30 "http://www.bom.gov.au/fwo/IDN60801/IDN60801.94749.json" || echo "curl exit $?"
+          echo "== python requests, same path as fetch.py =="
+          python3 -c "import requests; r = requests.get('http://www.bom.gov.au/fwo/IDN60801/IDN60801.94749.json', headers={'User-Agent': '$UA'}, timeout=30); print(r.status_code, r.url); print(r.text[:150])"
