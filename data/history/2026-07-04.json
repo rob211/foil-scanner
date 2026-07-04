@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-07-04T14:14:44.580426+10:00",
+  "sources": {
+    "open_meteo_sun": {
+      "ok": true,
+      "fetched_at": "2026-07-04T14:14:45.491515+10:00",
+      "detail": null,
+      "error": null
+    },
+    "open_meteo_wind_lake": {
+      "ok": true,
+      "fetched_at": "2026-07-04T14:14:46.396735+10:00",
+      "detail": null,
+      "error": null
+    },
+    "open_meteo_wind_entrance": {
+      "ok": true,
+      "fetched_at": "2026-07-04T14:14:47.180142+10:00",
+      "detail": null,
+      "error": null
+    },
+    "open_meteo_wind_ocean": {
+      "ok": true,
+      "fetched_at": "2026-07-04T14:14:47.957329+10:00",
+      "detail": null,
+      "error": null
+    },
+    "open_meteo_marine": {
+      "ok": true,
+      "fetched_at": "2026-07-04T14:14:48.793708+10:00",
+      "detail": null,
+      "error": null
+    }
+  },
+  "windows": [
+    {
+      "trigger_id": "hill60_swell",
+      "run_name": "Hill 60 swell run",
+      "date": "2026-07-05",
+      "start": "2026-07-05T14:00:00+10:00",
+      "end": "2026-07-05T17:00:00+10:00",
+      "grade": "green",
+      "peak_median_kn": 0.0,
+      "direction_deg": 148.0,
+      "models_agreeing": 0,
+      "model_values": {},
+      "title_tags": [],
+      "notes": [
+        "swell event, wind not required"
+      ],
+      "swell_m": 2.04,
+      "swell_dir_deg": 148.0,
+      "high_tide": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "hill60_swell:2026-07-05:14"
+    },
+    {
+      "trigger_id": "hill60_swell",
+      "run_name": "Hill 60 swell run",
+      "date": "2026-07-06",
+      "start": "2026-07-06T08:00:00+10:00",
+      "end": "2026-07-06T16:00:00+10:00",
+      "grade": "green",
+      "peak_median_kn": 0.0,
+      "direction_deg": 138.0,
+      "models_agreeing": 0,
+      "model_values": {},
+      "title_tags": [],
+      "notes": [
+        "swell event, wind not required"
+      ],
+      "swell_m": 2.2,
+      "swell_dir_deg": 138.0,
+      "high_tide": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "hill60_swell:2026-07-06:08"
+    },
+    {
+      "trigger_id": "hill60_swell",
+      "run_name": "Hill 60 swell run",
+      "date": "2026-07-09",
+      "start": "2026-07-09T08:00:00+10:00",
+      "end": "2026-07-09T16:00:00+10:00",
+      "grade": "green",
+      "peak_median_kn": 0.0,
+      "direction_deg": 139.0,
+      "models_agreeing": 0,
+      "model_values": {},
+      "title_tags": [],
+      "notes": [
+        "swell event, wind not required"
+      ],
+      "swell_m": 2.04,
+      "swell_dir_deg": 139.0,
+      "high_tide": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "hill60_swell:2026-07-09:08"
+    }
+  ],
+  "near_misses": []
+}

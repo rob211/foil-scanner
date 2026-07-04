@@ -37,6 +37,18 @@ In the repo settings add:
 Then run the **scan** workflow once by hand (Actions tab, Run workflow) and
 check events appear on the Foiling calendar.
 
+## 4. Dashboard (GitHub Pages)
+
+The dashboard is `index.html` at the repo root reading `data/latest.json`.
+
+1. Make the repo public (Pages on private repos needs a paid plan). Secrets
+   stay secret either way; the only data published is wind forecasts.
+2. Repo Settings, Pages, Source: **Deploy from a branch**, branch `main`,
+   folder `/ (root)`.
+3. The dashboard comes up at `https://rob211.github.io/foil-scanner/` and
+   refreshes whenever a scan commits new data. Add it to the phone home
+   screen for the 6am check.
+
 ## Calibration fortnight (spec section 10, phase 5)
 
 - Compare the modelled high-tide times in event descriptions against the

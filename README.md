@@ -28,6 +28,13 @@ Manual cross-checks (not used by the code):
 [BOM station page](https://www.bom.gov.au/products/IDN60801/IDN60801.94749.shtml),
 [Holfuy 366](https://holfuy.com/en/data/366).
 
+## Dashboard
+
+A single self-contained page (`index.html`) on GitHub Pages reads
+`data/latest.json`: verdict up top, 7-day strip, tap a window for the model
+spread. Same loud-failure philosophy; a stale or broken scanner shows an
+alarm banner, never a calm page. Setup in [SETUP.md](SETUP.md).
+
 ## Local dev
 
 ```

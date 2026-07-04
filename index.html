@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Foil Scanner</title>
+<style>
+  :root {
+    --bg: oklch(1 0 0);
+    --surface: oklch(0.965 0.004 31);
+    --line: oklch(0.90 0.006 31);
+    --ink: oklch(0.22 0.015 31);
+    --muted: oklch(0.45 0.02 31);
+    --rust: oklch(0.50 0.17 31);
+    --grade-green: oklch(0.50 0.14 150);
+    --grade-green-bg: oklch(0.95 0.03 150);
+    --grade-yellow: oklch(0.50 0.12 85);
+    --grade-yellow-bg: oklch(0.95 0.05 90);
+    --grade-red: oklch(0.50 0.17 31);
+    --grade-red-bg: oklch(0.94 0.03 31);
+    --alarm-bg: oklch(0.42 0.15 29);
+    --alarm-ink: oklch(0.98 0.01 31);
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: oklch(0.16 0.008 31);
+      --surface: oklch(0.21 0.01 31);
+      --line: oklch(0.30 0.012 31);
+      --ink: oklch(0.93 0.008 31);
+      --muted: oklch(0.71 0.015 31);
+      --rust: oklch(0.70 0.15 33);
+      --grade-green: oklch(0.75 0.16 152);
+      --grade-green-bg: oklch(0.28 0.05 152);
+      --grade-yellow: oklch(0.82 0.14 90);
+      --grade-yellow-bg: oklch(0.29 0.05 90);
+      --grade-red: oklch(0.70 0.17 31);
+      --grade-red-bg: oklch(0.29 0.06 29);
+      --alarm-bg: oklch(0.45 0.16 29);
+      --alarm-ink: oklch(0.98 0.01 31);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 40rem; margin: 0 auto; padding: 0 1rem 4rem; }
+
+  header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 1rem; padding: 1.1rem 0 0.4rem;
+  }
+  header h1 { font-size: 1rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  header h1 span { color: var(--rust); }
+  #stamp { font-size: 0.8rem; color: var(--muted); text-align: right; }
+
+  /* Alarm states own the top of the page */
+  .alarm {
+    background: var(--alarm-bg); color: var(--alarm-ink);
+    border-radius: var(--radius); padding: 0.9rem 1rem; margin: 0.6rem 0 1rem;
+    font-weight: 600;
+  }
+  .alarm p { margin: 0.3rem 0 0; font-weight: 400; font-size: 0.9rem; overflow-wrap: anywhere; }
+
+  /* Verdict block: the 3-second answer */
+  #verdict {
+    border-radius: var(--radius); padding: 1.4rem 1.2rem; margin: 0.8rem 0 1.4rem;
+    background: var(--surface); border: 1px solid var(--line);
+  }
+  #verdict.green { background: var(--grade-green-bg); border-color: var(--grade-green); }
+  #verdict.yellow { background: var(--grade-yellow-bg); border-color: var(--grade-yellow); }
+  #verdict.red { background: var(--grade-red-bg); border-color: var(--grade-red); }
+  #verdict .word { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; text-wrap: balance; }
+  #verdict.green .word { color: var(--grade-green); }
+  #verdict.yellow .word { color: var(--grade-yellow); }
+  #verdict.red .word { color: var(--grade-red); }
+  #verdict .what { font-size: 1.15rem; font-weight: 650; margin-top: 0.35rem; text-wrap: balance; }
+  #verdict .when { color: var(--muted); margin-top: 0.15rem; font-size: 0.95rem; }
+
+  /* Week strip */
+  #week { display: flex; gap: 6px; margin: 0 0 1.6rem; }
+  #week .day {
+    flex: 1; border-radius: 8px; padding: 0.45rem 0 0.4rem; text-align: center;
+    background: var(--surface); border: 1px solid var(--line);
+    font-size: 0.72rem; color: var(--muted); font-weight: 600;
+  }
+  #week .day .dots { display: flex; gap: 3px; justify-content: center; margin-top: 4px; min-height: 8px; }
+  #week .dot { width: 8px; height: 8px; border-radius: 50%; }
+  #week .dot.green { background: var(--grade-green); }
+  #week .dot.yellow { background: var(--grade-yellow); }
+  #week .dot.red { background: var(--grade-red); }
+  #week .day.today { border-color: var(--ink); color: var(--ink); }
+
+  h2 { font-size: 0.95rem; margin: 1.6rem 0 0.6rem; }
+  .dayhead { font-size: 0.85rem; color: var(--muted); font-weight: 700; margin: 1.2rem 0 0.4rem; }
+
+  /* Window rows: summary is the glance, details is the drill-down */
+  details.win {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); margin-bottom: 0.5rem;
+  }
+  details.win summary {
+    display: flex; align-items: center; gap: 0.35rem 0.7rem; flex-wrap: wrap;
+    padding: 0.75rem 0.9rem; cursor: pointer; list-style: none;
+  }
+  details.win summary::-webkit-details-marker { display: none; }
+  .win .tags { flex: 1 1 100%; color: var(--muted); font-size: 0.82rem; }
+  .chip {
+    flex: none; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em;
+    padding: 0.2rem 0.5rem; border-radius: 999px;
+  }
+  .chip.green { background: var(--grade-green); color: var(--bg); }
+  .chip.yellow { background: var(--grade-yellow); color: var(--bg); }
+  .chip.red { background: var(--grade-red); color: var(--bg); }
+  .win .name { font-weight: 650; font-size: 0.95rem; }
+  .win .meta { color: var(--muted); font-size: 0.85rem; margin-left: auto; text-align: right; flex: none; }
+  .win .body { padding: 0.2rem 0.9rem 0.9rem; font-size: 0.9rem; border-top: 1px solid var(--line); }
+  .win .body dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.15rem 0.9rem; margin: 0.7rem 0 0; }
+  .win .body dt { color: var(--muted); }
+  .win .body dd { margin: 0; overflow-wrap: anywhere; }
+  .win .note { color: var(--muted); margin-top: 0.5rem; font-size: 0.85rem; }
+
+  .quiet {
+    color: var(--muted); background: var(--surface); border: 1px dashed var(--line);
+    border-radius: var(--radius); padding: 1.2rem; text-align: center; margin: 0.8rem 0 1.4rem;
+  }
+
+  /* Near misses + sources */
+  details.section > summary {
+    cursor: pointer; font-size: 0.95rem; font-weight: 700; padding: 0.4rem 0;
+    list-style: none; display: flex; align-items: center; gap: 0.5rem;
+  }
+  details.section > summary::-webkit-details-marker { display: none; }
+  details.section > summary::after { content: "+"; color: var(--muted); font-weight: 400; }
+  details.section[open] > summary::after { content: "\2212"; }
+  .miss { padding: 0.55rem 0.2rem; border-top: 1px solid var(--line); font-size: 0.88rem; }
+  .miss .why { color: var(--muted); font-size: 0.82rem; }
+  ul.sources { list-style: none; margin: 0.4rem 0 0; padding: 0; font-size: 0.85rem; }
+  ul.sources li { padding: 0.25rem 0; color: var(--muted); }
+  ul.sources li.bad { color: var(--grade-red); font-weight: 650; }
+  ul.sources li::before { content: "\2713  "; color: var(--grade-green); }
+  ul.sources li.bad::before { content: "\2717  "; color: var(--grade-red); }
+
+  footer { margin-top: 2.2rem; font-size: 0.78rem; color: var(--muted); }
+  footer a { color: var(--rust); }
+
+  details.win .body { animation: drop 160ms ease-out; }
+  @keyframes drop { from { opacity: 0; translate: 0 -3px; } }
+  @media (prefers-reduced-motion: reduce) {
+    details.win .body { animation: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>foil<span>scanner</span></h1>
+    <div id="stamp">loading&hellip;</div>
+  </header>
+  <div id="app"><div class="quiet">Loading latest scan&hellip;</div></div>
+  <footer>
+    Grades: yellow = marginal (about 10% under target) &middot; green = on target &middot;
+    red = firing (25%+ over). Cross-checks:
+    <a href="https://www.windguru.cz/768215">Windguru</a> &middot;
+    <a href="https://wind.willyweather.com.au/nsw/illawarra/wollongong-harbour.html">WillyWeather</a> &middot;
+    <a href="https://www.bom.gov.au/products/IDN60801/IDN60801.94749.shtml">BOM Bellambi</a> &middot;
+    <a href="https://holfuy.com/en/data/366">Holfuy lake</a>
+  </footer>
+</main>
+
+<script>
+"use strict";
+const TZ = "Australia/Sydney";
+const STALE_HOURS = 8;
+const GRADE_WORD = { green: "ON", yellow: "MAYBE", red: "FIRING" };
+const GRADE_RANK = { yellow: 1, green: 2, red: 3 };
+
+const fmtTime = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, hour: "numeric", minute: "2-digit" });
+const fmtDay = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, weekday: "short", day: "numeric", month: "short" });
+const fmtWk = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, weekday: "narrow" });
+const fmtStamp = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, weekday: "short", hour: "numeric", minute: "2-digit" });
+
+const dayKey = (d) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ, dateStyle: "short" }).format(d);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function compass(deg) {
+  const pts = ["N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"];
+  return pts[Math.round((deg % 360) / 22.5) % 16];
+}
+
+function dayLabel(d, now) {
+  const k = dayKey(d), today = dayKey(now), tmrw = dayKey(new Date(now.getTime() + 864e5));
+  if (k === today) return "Today";
+  if (k === tmrw) return "Tomorrow";
+  return fmtDay.format(d);
+}
+
+function whenLabel(w, now) {
+  const s = new Date(w.start), e = new Date(w.end);
+  const range = `${fmtTime.format(s)}–${fmtTime.format(e)}`;
+  if (s <= now && now < e) return `Now, until ${fmtTime.format(e)}`;
+  return `${dayLabel(s, now)} ${range}`;
+}
+
+function strengthLabel(w) {
+  if (w.trigger_id === "hill60_swell" || w.trigger_id === "entrance_swell") {
+    return `${w.swell_m.toFixed(1)} m ${compass(w.swell_dir_deg)} swell`;
+  }
+  return `${Math.round(w.peak_median_kn)} kn ${compass(w.direction_deg)}`;
+}
+
+function alarm(title, detail) {
+  return `<div class="alarm" role="alert">${esc(title)}${detail ? `<p>${esc(detail)}</p>` : ""}</div>`;
+}
+
+function verdictBlock(windows, now) {
+  const active = windows.find((w) => new Date(w.start) <= now && now < new Date(w.end));
+  const next = active || windows.find((w) => new Date(w.start) > now);
+  if (!next) {
+    return `<div class="quiet">Nothing on this week.<br>The models found no windows that meet your triggers.</div>`;
+  }
+  return `<div id="verdict" class="${esc(next.grade)}">
+    <div class="word">${GRADE_WORD[next.grade] || esc(next.grade)}</div>
+    <div class="what">${esc(next.run_name)}</div>
+    <div class="when">${esc(strengthLabel(next))} &middot; ${esc(whenLabel(next, now))}${next.confidence !== "normal" ? ` &middot; ${esc(next.confidence)}` : ""}</div>
+  </div>`;
+}
+
+function weekStrip(windows, now) {
+  let html = '<div id="week" aria-label="next 7 days">';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(now.getTime() + i * 864e5);
+    const k = dayKey(d);
+    const dots = windows
+      .filter((w) => dayKey(new Date(w.start)) === k)
+      .sort((a, b) => GRADE_RANK[b.grade] - GRADE_RANK[a.grade])
+      .slice(0, 3)
+      .map((w) => `<span class="dot ${esc(w.grade)}"></span>`)
+      .join("");
+    html += `<div class="day${i === 0 ? " today" : ""}">${i === 0 ? "Now" : fmtWk.format(d)}<div class="dots">${dots}</div></div>`;
+  }
+  return html + "</div>";
+}
+
+function windowCard(w, now) {
+  const s = new Date(w.start), e = new Date(w.end);
+  const models = Object.entries(w.model_values || {});
+  const rows = [];
+  if (models.length) {
+    rows.push(["Models at peak", models.map(([m, v]) => `${m} ${Math.round(v)} kn`).join(", ") + ` (${w.models_agreeing} agree)`]);
+    rows.push(["Direction", `${Math.round(w.direction_deg)}° ${compass(w.direction_deg)}`]);
+  }
+  if (w.swell_m != null) rows.push(["Swell", `${w.swell_m.toFixed(1)} m from ${compass(w.swell_dir_deg)}`]);
+  if (w.high_tide) rows.push(["High tide", `${fmtTime.format(new Date(w.high_tide))} (window ±2 h)`]);
+  rows.push(["Confidence", w.confidence]);
+  rows.push(["Live check", w.live_status]);
+  const tags = (w.title_tags || []).length ? `<span class="tags">${esc(w.title_tags.join(" · "))}</span>` : "";
+  return `<details class="win">
+    <summary>
+      <span class="chip ${esc(w.grade)}">${GRADE_WORD[w.grade] || esc(w.grade)}</span>
+      <span class="name">${esc(w.run_name)}</span>
+      <span class="meta">${fmtTime.format(s)}–${fmtTime.format(e)}<br>${esc(strengthLabel(w))}</span>
+      ${tags}
+    </summary>
+    <div class="body">
+      <dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
+      ${(w.notes || []).map((n) => `<div class="note">${esc(n)}</div>`).join("")}
+    </div>
+  </details>`;
+}
+
+function windowList(windows, now) {
+  const upcoming = windows.filter((w) => new Date(w.end) > now);
+  if (!upcoming.length) return "";
+  let html = "<h2>Windows</h2>", last = "";
+  for (const w of upcoming) {
+    const label = dayLabel(new Date(w.start), now);
+    if (label !== last) { html += `<div class="dayhead">${esc(label)}</div>`; last = label; }
+    html += windowCard(w, now);
+  }
+  return html;
+}
+
+function missList(misses) {
+  if (!misses.length) return "";
+  const items = misses.map((m) => `<div class="miss">${esc(m.trigger_id)} &middot; ${esc(m.date)}
+      <div class="why">${esc(m.reason)}: ${esc(m.detail)}</div></div>`).join("");
+  return `<details class="section"><summary>Near misses (${misses.length})</summary>${items}</details>`;
+}
+
+function sourceList(sources) {
+  const items = Object.entries(sources).map(([name, s]) =>
+    `<li class="${s.ok ? "ok" : "bad"}">${esc(name)}${s.ok ? "" : ` — ${esc(s.error || "failed")}`}</li>`).join("");
+  return `<details class="section"><summary>Sources</summary><ul class="sources">${items}</ul></details>`;
+}
+
+function render(data, now) {
+  const generated = new Date(data.generated_at);
+  const ageH = (now - generated) / 36e5;
+  document.getElementById("stamp").textContent = `scanned ${fmtStamp.format(generated)}`;
+
+  let html = "";
+  const badSources = Object.entries(data.sources || {}).filter(([, s]) => !s.ok);
+  if (ageH > STALE_HOURS) {
+    html += alarm("SCANNER STALE", `Last successful scan was ${ageH.toFixed(0)} h ago. Do not trust this page; check the Actions tab.`);
+  }
+  if (badSources.length) {
+    html += alarm("SOURCE PROBLEM", badSources.map(([n, s]) => `${n}: ${s.error || "failed"}`).join(" · "));
+  }
+
+  const windows = (data.windows || []).slice().sort((a, b) => a.start.localeCompare(b.start));
+  html += verdictBlock(windows, now);
+  html += weekStrip(windows, now);
+  html += windowList(windows, now);
+  html += missList(data.near_misses || []);
+  html += sourceList(data.sources || {});
+  document.getElementById("app").innerHTML = html;
+}
+
+fetch("data/latest.json", { cache: "no-store" })
+  .then((r) => {
+    if (!r.ok) throw new Error(`HTTP ${r.status} fetching data/latest.json`);
+    return r.json();
+  })
+  .then((data) => render(data, new Date()))
+  .catch((err) => {
+    document.getElementById("stamp").textContent = "no data";
+    document.getElementById("app").innerHTML = alarm(
+      "NO SCAN DATA",
+      `${err.message}. Either no scan has run yet, or the scanner is broken. Check the repo's Actions tab.`
+    );
+  });
+</script>
+</body>
+</html>
