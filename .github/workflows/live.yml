@@ -1,0 +1,26 @@
+name: live
+
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch: {}
+
+concurrency:
+  group: foil-scanner-live
+  cancel-in-progress: false
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - name: Verify live conditions
+        env:
+          GCAL_SERVICE_ACCOUNT_JSON: ${{ secrets.GCAL_SERVICE_ACCOUNT_JSON }}
+          FOIL_CALENDAR_ID: ${{ secrets.FOIL_CALENDAR_ID }}
+          HOLFUY_KEY: ${{ secrets.HOLFUY_KEY }}
+        run: python -m foilscan live
