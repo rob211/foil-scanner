@@ -37,6 +37,11 @@
     --green-fill-1: oklch(0.68 0.16 152); --green-fill-2: oklch(0.57 0.15 152); --green-ink: oklch(0.15 0.05 152);
     --yellow-fill-1: oklch(0.87 0.13 95); --yellow-fill-2: oklch(0.79 0.14 92); --yellow-ink: oklch(0.24 0.05 92);
     --red-fill-1: oklch(0.68 0.17 33);   --red-fill-2: oklch(0.61 0.17 30);    --red-ink: oklch(0.13 0.05 30);
+    /* per-grade panel (soon gradient top), border line and dot glow */
+    --green-panel: oklch(0.24 0.045 152); --green-line: oklch(0.42 0.09 152); --green-glow: oklch(0.78 0.15 152 / 0.55);
+    --yellow-panel: oklch(0.25 0.045 92); --yellow-line: oklch(0.44 0.08 92); --yellow-glow: oklch(0.85 0.13 92 / 0.55);
+    --red-panel: oklch(0.24 0.05 30);     --red-line: oklch(0.42 0.10 30);    --red-glow: oklch(0.72 0.17 30 / 0.55);
+    --rust-ink: oklch(0.16 0.03 40);
     --alarm-bg: oklch(0.40 0.15 29);
     --alarm-ink: oklch(0.98 0.01 31);
     --radius: 12px;
@@ -102,9 +107,9 @@
   /* soon: tinted panel, grade-coloured word + day eyebrow */
   #verdict.soon .when { color: var(--ink-dim); }
   #verdict.soon .daytag { background: oklch(1 0 0 / 0.08); }
-  #verdict.soon.green { background: linear-gradient(180deg, oklch(0.24 0.045 152), var(--grade-green-bg)); border-color: oklch(0.42 0.09 152); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-green); }
-  #verdict.soon.yellow { background: linear-gradient(180deg, oklch(0.25 0.045 92), var(--grade-yellow-bg)); border-color: oklch(0.44 0.08 92); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-yellow); }
-  #verdict.soon.red { background: linear-gradient(180deg, oklch(0.24 0.05 30), var(--grade-red-bg)); border-color: oklch(0.42 0.10 30); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-red); }
+  #verdict.soon.green { background: linear-gradient(180deg, var(--green-panel), var(--grade-green-bg)); border-color: var(--green-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-green); }
+  #verdict.soon.yellow { background: linear-gradient(180deg, var(--yellow-panel), var(--grade-yellow-bg)); border-color: var(--yellow-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-yellow); }
+  #verdict.soon.red { background: linear-gradient(180deg, var(--red-panel), var(--grade-red-bg)); border-color: var(--red-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-red); }
   #verdict.soon.green .word, #verdict.soon.green .daytag { color: var(--grade-green); }
   #verdict.soon.yellow .word, #verdict.soon.yellow .daytag { color: var(--grade-yellow); }
   #verdict.soon.red .word, #verdict.soon.red .daytag { color: var(--grade-red); }
@@ -147,9 +152,9 @@
   #week .dnum { font-size: 0.82rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
   #week .day .dots { display: flex; gap: 3px; justify-content: center; margin-top: 3px; min-height: 8px; }
   #week .dot { width: 8px; height: 8px; border-radius: 50%; }
-  #week .dot.green { background: var(--grade-green); box-shadow: 0 0 7px oklch(0.78 0.15 152 / 0.55); }
-  #week .dot.yellow { background: var(--grade-yellow); box-shadow: 0 0 7px oklch(0.85 0.13 92 / 0.55); }
-  #week .dot.red { background: var(--grade-red); box-shadow: 0 0 7px oklch(0.72 0.17 30 / 0.55); }
+  #week .dot.green { background: var(--grade-green); box-shadow: 0 0 7px var(--green-glow); }
+  #week .dot.yellow { background: var(--grade-yellow); box-shadow: 0 0 7px var(--yellow-glow); }
+  #week .dot.red { background: var(--grade-red); box-shadow: 0 0 7px var(--red-glow); }
   #week .day.today { border-color: var(--today-line); color: var(--ink); background: var(--surface-2); }
   #week .day.today .dow { color: var(--rust); }
 
@@ -170,13 +175,20 @@
   }
   details.win summary::-webkit-details-marker { display: none; }
   .win .tags { flex: 1 1 100%; color: var(--muted); font-size: 0.82rem; }
+  .win .tide { flex: 1 1 100%; color: var(--rust); font-size: 0.82rem; font-weight: 650; }
+  .win .spots { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 0.3rem; }
+  .win .spot {
+    font-size: 0.75rem; font-weight: 600; color: var(--ink);
+    background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 999px; padding: 0.1rem 0.55rem;
+  }
   .chip {
     flex: none; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em;
     padding: 0.2rem 0.5rem; border-radius: 999px;
   }
-  .chip.green { background: var(--grade-green); color: oklch(0.17 0.03 152); }
-  .chip.yellow { background: var(--grade-yellow); color: oklch(0.18 0.03 92); }
-  .chip.red { background: var(--grade-red); color: oklch(0.16 0.03 30); }
+  .chip.green { background: var(--grade-green); color: var(--green-ink); }
+  .chip.yellow { background: var(--grade-yellow); color: var(--yellow-ink); }
+  .chip.red { background: var(--grade-red); color: var(--red-ink); }
   .win .name { font-weight: 650; font-size: 0.95rem; }
   .win .meta { color: var(--muted); font-size: 0.85rem; margin-left: auto; text-align: right; flex: none; }
   .win .body { padding: 0.2rem 0.9rem 0.9rem; font-size: 0.9rem; border-top: 1px solid var(--line); }
@@ -225,7 +237,7 @@
   }
   .btn:hover { border-color: var(--line-strong); background: var(--surface-3); }
   .btn:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
-  .btn.primary { background: var(--rust); color: oklch(0.16 0.03 40); border-color: transparent; }
+  .btn.primary { background: var(--rust); color: var(--rust-ink); border-color: transparent; }
   .btn.primary:hover { background: var(--rust-hi); }
   #subscribe .fine { color: var(--muted); font-size: 0.78rem; margin: 0.7rem 0 0; }
   .icsout {
@@ -283,7 +295,7 @@
       <p class="hlabel">The triggers, spot by spot</p>
       <ul>
         <li><strong>Lake runs</strong>: 20 kn or more, and the wind direction picks the crossing: Oak Flats to Berkeley (S/SSW, 170&ndash;215&deg;), Kanahooka (SW/WSW, 215&ndash;260&deg;), Berkeley (W, 260&ndash;285&deg;). The rare NE run back to Oak Flats needs 25 kn.</li>
-        <li><strong>Lake Entrance</strong>: only within 2 h either side of high tide. Fires on 0.8 m+ swell from the NE&ndash;E with light westerly or calm wind (graded on swell height), or on 18 kn+ NE wind alone.</li>
+        <li><strong>Lake Entrance</strong>: only in the 2 h after high tide (the run-out, not before). Fires on 0.8 m+ swell from the NE&ndash;E with light westerly or calm wind (graded on swell height), or on 18 kn+ NE wind alone.</li>
         <li><strong>South ocean runs</strong>: 20 kn+ from the south (155&ndash;210&deg;). Swell size picks the runs: under 1 m all four are on (Bass Point, Hill 60, Boilers, Bellambi), 1&ndash;2 m of southerly swell narrows it to Bellambi red buoy and Hill 60, over 2 m it is Hill 60 only.</li>
         <li><strong>Hill 60 swell run</strong>: 2 m+ swell from the S/SSE/SE, no wind needed.</li>
         <li><strong>NE ocean runs</strong>: fires once the wind has already blown long enough to build the bump: 2 h at 15 kn+, or 3 h at 10 kn+. True NE (34&ndash;56&deg;) rates full; NNE or ENE drops one colour.</li>
@@ -361,6 +373,8 @@ function verdictBlock(windows, now) {
     ? `<span class="nowtag">Now</span>`
     : `<span class="daytag">${esc(dayLabel(s, now))}</span>`;
   const timing = live ? `until ${fmtTime.format(e)}` : `${fmtTime.format(s)}–${fmtTime.format(e)}`;
+  // Entrance runs live inside a tidal window; surface the high tide so the peak is obvious.
+  const tide = next.high_tide ? ` &middot; high tide ${esc(fmtTime.format(new Date(next.high_tide)))}` : "";
   const conf = next.confidence !== "normal" ? ` &middot; ${esc(next.confidence)} confidence` : "";
   return `<div id="verdict" class="${esc(next.grade)} ${live ? "live" : "soon"}">
     <div class="top">
@@ -368,7 +382,7 @@ function verdictBlock(windows, now) {
       ${tag}
     </div>
     <div class="what">${esc(next.run_name)}</div>
-    <div class="when">${esc(strengthLabel(next))} &middot; ${esc(timing)}${conf}</div>
+    <div class="when">${esc(strengthLabel(next))} &middot; ${esc(timing)}${tide}${conf}</div>
   </div>`;
 }
 
@@ -423,16 +437,21 @@ function windowCard(w, now, liveMap) {
     rows.push(["Direction", `${Math.round(w.direction_deg)}° ${compass(w.direction_deg)}`]);
   }
   if (w.swell_m != null) rows.push(["Swell", `${w.swell_m.toFixed(1)} m from ${compass(w.swell_dir_deg)}`]);
-  if (w.high_tide) rows.push(["High tide", `${fmtTime.format(new Date(w.high_tide))} (window ±2 h)`]);
+  if (w.high_tide) rows.push(["High tide", `${fmtTime.format(new Date(w.high_tide))} (go from high tide to +2 h)`]);
   rows.push(["Confidence", w.confidence]);
   const lc = liveMap[w.foil_key];
   rows.push(["Live check", lc ? `${lc.state}: ${lc.live_line}` : w.live_status]);
   const tags = (w.title_tags || []).length ? `<span class="tags">${esc(w.title_tags.join(" · "))}</span>` : "";
+  const tide = w.high_tide ? `<span class="tide">High tide ${esc(fmtTime.format(new Date(w.high_tide)))}</span>` : "";
+  // South windows cover several launch spots; show each as its own chip.
+  const spots = (w.spots || []).length ? `<span class="spots">${w.spots.map((sp) => `<span class="spot">${esc(sp)}</span>`).join("")}</span>` : "";
   return `<details class="win">
     <summary>
       <span class="chip ${esc(w.grade)}">${GRADE_WORD[w.grade] || esc(w.grade)}</span>
       <span class="name">${esc(w.run_name)}</span>
       <span class="meta">${fmtTime.format(s)}–${fmtTime.format(e)}<br>${esc(strengthLabel(w))}</span>
+      ${tide}
+      ${spots}
       ${tags}
     </summary>
     <div class="body">
