@@ -1,20 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-05T14:58:55.393975+10:00",
+  "generated_at": "2026-07-05T19:53:44.878175+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-07-05T14:35:00+10:00",
-    "speed_kn": 17.8,
-    "gust_kn": 28.1,
-    "dir_deg": 202.5
+    "time": "2026-07-05T19:30:00+10:00",
+    "speed_kn": 10.3,
+    "gust_kn": 14.0,
+    "dir_deg": 225.0
   },
   "holfuy": null,
-  "checks": [
-    {
-      "foil_key": "hill60_swell:2026-07-05:12",
-      "state": "none",
-      "live_line": "no live wind check (swell event)"
-    }
-  ],
+  "checks": [],
   "notes": []
 }
