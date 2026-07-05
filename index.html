@@ -239,6 +239,11 @@
   .btn:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
   .btn.primary { background: var(--rust); color: var(--rust-ink); border-color: transparent; }
   .btn.primary:hover { background: var(--rust-hi); }
+  #subscribe .steps { margin: 1rem 0 0; padding: 0.8rem 0.9rem; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; animation: drop 180ms ease-out; }
+  #subscribe .steps-h { color: var(--ink); font-weight: 700; font-size: 0.82rem; margin: 0 0 0.4rem; }
+  #subscribe .steps ol { margin: 0; padding-left: 1.25rem; color: var(--muted); font-size: 0.85rem; }
+  #subscribe .steps li { margin: 0.3rem 0; padding-left: 0.15rem; }
+  #subscribe .steps strong { color: var(--ink); font-weight: 650; }
   #subscribe .fine { color: var(--muted); font-size: 0.78rem; margin: 0.7rem 0 0; }
   .icsout {
     font: inherit; font-size: 0.8rem; color: var(--ink);
@@ -266,7 +271,7 @@
   details.win .body { animation: drop 160ms ease-out; }
   @keyframes drop { from { opacity: 0; translate: 0 -3px; } }
   @media (prefers-reduced-motion: reduce) {
-    details.win .body { animation: none; }
+    details.win .body, #subscribe .steps { animation: none; }
   }
 </style>
 </head>
@@ -284,10 +289,17 @@
     <div class="btns">
       <a class="btn primary" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?cid=9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com">Add to Google Calendar</a>
       <a class="btn" href="webcal://calendar.google.com/calendar/ical/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/public/basic.ics">Apple Calendar</a>
-      <a class="btn" target="_blank" rel="noopener" href="https://outlook.live.com/calendar/0/addfromweb?url=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2F9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com%2Fpublic%2Fbasic.ics&amp;name=Foiling">Outlook</a>
-      <button class="btn" id="copyics" type="button">Copy link</button>
+      <button class="btn" id="copyics" type="button" aria-expanded="false" aria-controls="outlook-steps">Copy link / Outlook</button>
     </div>
-    <p class="fine">The <strong>Outlook</strong> button is one tap for personal Outlook.com. For a work or school Outlook, or any other app, tap <strong>Copy link</strong>, then choose <strong>Add calendar &rarr; Subscribe from web</strong>, paste and Import. Non-Google calendars can take a few hours, sometimes a day, to pick up new windows.</p>
+    <div class="steps" id="outlook-steps" hidden>
+      <p class="steps-h">Adding it in Outlook (web)</p>
+      <ol>
+        <li>With the link copied, open <strong>Calendar</strong> in Outlook and choose <strong>Add calendar</strong>.</li>
+        <li>Choose <strong>Subscribe from web</strong> (not the upload-a-file option), so it keeps updating.</li>
+        <li>Paste the link, name it <strong>Foiling</strong>, then select <strong>Import</strong>.</li>
+      </ol>
+      <p class="fine">It stays up to date automatically. Outlook refreshes more slowly than Google, a few hours, sometimes a day.</p>
+    </div>
   </section>
 
   <details class="section" id="how">
@@ -541,12 +553,15 @@ Promise.all([
   });
 
 const ICS_URL = "https://calendar.google.com/calendar/ical/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/public/basic.ics";
+const outlookSteps = document.getElementById("outlook-steps");
 document.getElementById("copyics").addEventListener("click", async (e) => {
   const btn = e.currentTarget;
+  // Reveal the Outlook how-to whether or not the clipboard write succeeds.
+  if (outlookSteps) { outlookSteps.hidden = false; btn.setAttribute("aria-expanded", "true"); }
   try {
     await navigator.clipboard.writeText(ICS_URL);
     btn.textContent = "Copied ✓";
-    setTimeout(() => { btn.textContent = "Copy link"; }, 2000);
+    setTimeout(() => { btn.textContent = "Copy link / Outlook"; }, 2000);
   } catch {
     // No clipboard access: show the link itself, pre-selected for copying.
     const out = document.createElement("input");
