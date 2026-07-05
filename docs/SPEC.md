@@ -111,6 +111,8 @@ Stronger is better on the lake. The NE lake run is a rare event: prefix its titl
 
 Both modes additionally require the window to overlap the period from high tide to 2 h after it (the run-out only, not before the high), and daylight.
 
+`high_tide_m` on those windows is the modelled high-tide height referenced to chart datum (tide-table style): the Open-Meteo sea level (relative to mean sea level) plus `config.PORT_KEMBLA_MSL_ABOVE_CD_M`. It is modelled, not an official prediction, so treat it as approximate and calibrate the offset against a BOM Port Kembla tide reading (section 10).
+
 Mode 1 (swell): wind 0-10 kn with a westerly component (direction 200-340), or under 5 kn from any direction; swell from 35-110 degrees (NE through E, ENE explicitly included) at 0.8 m or more.
 
 Mode 2 (strong NE, no swell needed): wind from 20-80 (NE/ENE) at 18 kn or more. Swell ignored in this mode.
@@ -237,7 +239,7 @@ The prime directive: this scanner must never quietly show a calm week because so
       "grade": "green",
       "peak_median_kn": 24, "direction_deg": 250,
       "models_agreeing": 3, "model_values": {"GFS": 25, "ECMWF": 24, "ICON": 22, "UKMO": 18},
-      "swell_m": null, "high_tide": null,
+      "swell_m": null, "high_tide": null, "high_tide_m": null,
       "spots": null,
       "confidence": "normal",
       "live_status": "pending",

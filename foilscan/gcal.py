@@ -76,7 +76,8 @@ def description_for(w: Window, generated_at: datetime, source_notes: list[str]) 
         lines.append(f"Swell: {w.swell_m:.1f} m from {compass(w.swell_dir_deg)}")
     if w.high_tide:
         ht = datetime.fromisoformat(w.high_tide)
-        lines.append(f"High tide: {ht:%H:%M} (window is high tide to +2 h)")
+        height = f", {w.high_tide_m:.1f} m" if w.high_tide_m is not None else ""
+        lines.append(f"High tide: {ht:%H:%M}{height} (window is high tide to +2 h)")
     for note in w.notes:
         lines.append(f"Note: {_one_line(note)}")
     lines.append(f"Confidence: {w.confidence}")

@@ -355,6 +355,12 @@ function strengthLabel(w) {
   return `${Math.round(w.peak_median_kn)} kn ${compass(w.direction_deg)}`;
 }
 
+// High tide time, plus modelled height (chart datum) when the scanner has it.
+function tideText(w) {
+  const t = fmtTime.format(new Date(w.high_tide));
+  return w.high_tide_m != null ? `${t}, ${w.high_tide_m.toFixed(1)} m` : t;
+}
+
 const ALARM_ICO = `<svg class="alarm-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 22 20H2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="11" y="9" width="2" height="5.5" rx="1" fill="currentColor"/><rect x="11" y="16" width="2" height="2" rx="1" fill="currentColor"/></svg>`;
 function alarm(title, detail) {
   return `<div class="alarm" role="alert">${ALARM_ICO}<div><strong>${esc(title)}</strong>${detail ? `<p>${esc(detail)}</p>` : ""}</div></div>`;
@@ -374,7 +380,7 @@ function verdictBlock(windows, now) {
     : `<span class="daytag">${esc(dayLabel(s, now))}</span>`;
   const timing = live ? `until ${fmtTime.format(e)}` : `${fmtTime.format(s)}–${fmtTime.format(e)}`;
   // Entrance runs live inside a tidal window; surface the high tide so the peak is obvious.
-  const tide = next.high_tide ? ` &middot; high tide ${esc(fmtTime.format(new Date(next.high_tide)))}` : "";
+  const tide = next.high_tide ? ` &middot; high tide ${esc(tideText(next))}` : "";
   const conf = next.confidence !== "normal" ? ` &middot; ${esc(next.confidence)} confidence` : "";
   return `<div id="verdict" class="${esc(next.grade)} ${live ? "live" : "soon"}">
     <div class="top">
@@ -437,12 +443,12 @@ function windowCard(w, now, liveMap) {
     rows.push(["Direction", `${Math.round(w.direction_deg)}° ${compass(w.direction_deg)}`]);
   }
   if (w.swell_m != null) rows.push(["Swell", `${w.swell_m.toFixed(1)} m from ${compass(w.swell_dir_deg)}`]);
-  if (w.high_tide) rows.push(["High tide", `${fmtTime.format(new Date(w.high_tide))} (go from high tide to +2 h)`]);
+  if (w.high_tide) rows.push(["High tide", `${tideText(w)} (go from high tide to +2 h)`]);
   rows.push(["Confidence", w.confidence]);
   const lc = liveMap[w.foil_key];
   rows.push(["Live check", lc ? `${lc.state}: ${lc.live_line}` : w.live_status]);
   const tags = (w.title_tags || []).length ? `<span class="tags">${esc(w.title_tags.join(" · "))}</span>` : "";
-  const tide = w.high_tide ? `<span class="tide">High tide ${esc(fmtTime.format(new Date(w.high_tide)))}</span>` : "";
+  const tide = w.high_tide ? `<span class="tide">High tide ${esc(tideText(w))}</span>` : "";
   // South windows cover several launch spots; show each as its own chip.
   const spots = (w.spots || []).length ? `<span class="spots">${w.spots.map((sp) => `<span class="spot">${esc(sp)}</span>`).join("")}</span>` : "";
   return `<details class="win">

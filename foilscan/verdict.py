@@ -39,6 +39,7 @@ def build(
                 "swell_m": w.swell_m,
                 "swell_dir_deg": w.swell_dir_deg,
                 "high_tide": w.high_tide,
+                "high_tide_m": w.high_tide_m,
                 "spots": w.spots,
                 "confidence": w.confidence,
                 "live_status": w.live_status,

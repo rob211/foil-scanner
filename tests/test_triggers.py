@@ -217,6 +217,8 @@ def test_entrance_mode1_needs_tide_overlap(sun):
     # Clamped to the 2 h after the 13:00 high (run-out only, not before).
     assert w.start == at(13) and w.end == at(15)
     assert w.high_tide == at(13).isoformat()
+    # Height is the modelled sea level (0.0 at the peak here) plus the datum offset.
+    assert w.high_tide_m == config.PORT_KEMBLA_MSL_ABOVE_CD_M
 
 
 def test_entrance_mode1_swell_direction_matters(sun):

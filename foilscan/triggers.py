@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from statistics import median
 
 from . import config
-from .models import MarineForecast, NearMiss, SunTimes, Window, WindForecast
+from .models import MarineForecast, MarineHour, NearMiss, SunTimes, Window, WindForecast
 
 HOUR = timedelta(hours=1)
 
@@ -294,15 +294,20 @@ def ne_windows(
     return windows, misses
 
 
-def _tide_spans(marine: MarineForecast) -> list[tuple[datetime, datetime, datetime]]:
+def _tide_spans(marine: MarineForecast) -> list[tuple[datetime, datetime, MarineHour]]:
     # Entrance only works on the run-out: high tide to +2 h, not before it.
     window = timedelta(hours=config.ENTRANCE_TIDE_WINDOW_H)
-    return [(ht.time, ht.time + window, ht.time) for ht in marine.high_tides()]
+    return [(ht.time, ht.time + window, ht) for ht in marine.high_tides()]
+
+
+def _tide_height_cd(ht: MarineHour) -> float:
+    """Modelled high-tide height referenced to chart datum (tide-table style)."""
+    return round(ht.sea_level_m + config.PORT_KEMBLA_MSL_ABOVE_CD_M, 2)
 
 
 def _intersect_tides(
     spans: list[tuple[datetime, datetime]], tides
-) -> list[tuple[datetime, datetime, datetime]]:
+) -> list[tuple[datetime, datetime, MarineHour]]:
     pieces = []
     for start, end in spans:
         for t_lo, t_hi, ht in tides:
@@ -369,7 +374,8 @@ def entrance_windows(
                 },
                 swell_m=round(mh.swell_m, 2),
                 swell_dir_deg=round(mh.swell_dir_deg, 0),
-                high_tide=ht.isoformat(),
+                high_tide=ht.time.isoformat(),
+                high_tide_m=_tide_height_cd(ht),
                 confidence=(
                     "low (long range)"
                     if offset >= config.LOW_CONFIDENCE_FROM_DAY_OFFSET
@@ -395,7 +401,8 @@ def entrance_windows(
             now,
             config.ENTRANCE_M2_TARGET_KN,
         )
-        w.high_tide = ht.isoformat()
+        w.high_tide = ht.time.isoformat()
+        w.high_tide_m = _tide_height_cd(ht)
         windows.append(w)
 
     # Same window in both modes -> one event noting both (spec 4.2).
