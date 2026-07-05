@@ -34,9 +34,9 @@
     --grade-red-bg: oklch(0.21 0.04 30);
     /* Bold-fill verdict: grade colour becomes the surface when a window is
        live NOW, dark ink on top so the answer reads in beach glare. */
-    --green-fill-1: oklch(0.68 0.16 152); --green-fill-2: oklch(0.57 0.15 152); --green-ink: oklch(0.17 0.05 152);
+    --green-fill-1: oklch(0.68 0.16 152); --green-fill-2: oklch(0.57 0.15 152); --green-ink: oklch(0.15 0.05 152);
     --yellow-fill-1: oklch(0.87 0.13 95); --yellow-fill-2: oklch(0.79 0.14 92); --yellow-ink: oklch(0.24 0.05 92);
-    --red-fill-1: oklch(0.68 0.17 33);   --red-fill-2: oklch(0.58 0.17 30);    --red-ink: oklch(0.16 0.05 30);
+    --red-fill-1: oklch(0.68 0.17 33);   --red-fill-2: oklch(0.61 0.17 30);    --red-ink: oklch(0.13 0.05 30);
     --alarm-bg: oklch(0.40 0.15 29);
     --alarm-ink: oklch(0.98 0.01 31);
     --radius: 12px;
@@ -116,8 +116,7 @@
   #verdict.live.green { background: linear-gradient(160deg, var(--green-fill-1), var(--green-fill-2)); box-shadow: 0 0 60px -22px var(--grade-green), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--green-ink); }
   #verdict.live.yellow { background: linear-gradient(160deg, var(--yellow-fill-1), var(--yellow-fill-2)); box-shadow: 0 0 60px -22px var(--grade-yellow), inset 0 1px 0 oklch(1 0 0 / 0.25); color: var(--yellow-ink); }
   #verdict.live.red { background: linear-gradient(160deg, var(--red-fill-1), var(--red-fill-2)); box-shadow: 0 0 60px -22px var(--grade-red), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--red-ink); }
-  #verdict.live .word, #verdict.live .what { color: inherit; }
-  #verdict.live .when { color: inherit; opacity: 0.82; }
+  #verdict.live .word, #verdict.live .what, #verdict.live .when { color: inherit; }
 
   /* Live observation tile */
   #live {
