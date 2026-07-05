@@ -88,21 +88,23 @@ def test_south_small_swell_all_runs(sun):
     wind = mk_wind(hours(range(10, 14), 22, 185))
     windows, _ = south_windows(wind, mk_marine(0.6, 160), sun, NOW)
     assert len(windows) == 1
-    assert "Bass Point" in windows[0].run_name
-    assert "Bellambi" in windows[0].run_name
+    assert windows[0].run_name == "South runs"
+    assert windows[0].spots == ["Bass Point", "Hill 60", "Boilers", "Bellambi"]
 
 
 def test_south_medium_swell_narrows(sun):
     wind = mk_wind(hours(range(10, 14), 22, 185))
     windows, _ = south_windows(wind, mk_marine(1.5, 160), sun, NOW)
-    assert windows[0].run_name == "South runs (Bellambi red buoy, Hill 60)"
+    assert windows[0].run_name == "South runs"
+    assert windows[0].spots == ["Bellambi red buoy", "Hill 60"]
 
 
 def test_south_large_swell_hill60_only_no_kill(sun):
     # Hill 60 handles any size south swell and wind (spec 4.3/4.6).
     wind = mk_wind(hours(range(10, 14), 22, 185))
     windows, misses = south_windows(wind, mk_marine(2.8, 180), sun, NOW)
-    assert windows[0].run_name == "South runs (Hill 60)"
+    assert windows[0].run_name == "South runs"
+    assert windows[0].spots == ["Hill 60"]
     assert not any(m.reason == "aligned_swell_too_big" for m in misses)
 
 
@@ -212,8 +214,8 @@ def test_entrance_mode1_needs_tide_overlap(sun):
     w = windows[0]
     assert w.trigger_id == "entrance_swell"
     assert w.grade == "green"
-    # Clamped to 2 h either side of the 13:00 high.
-    assert w.start == at(11) and w.end == at(15)
+    # Clamped to the 2 h after the 13:00 high (run-out only, not before).
+    assert w.start == at(13) and w.end == at(15)
     assert w.high_tide == at(13).isoformat()
 
 

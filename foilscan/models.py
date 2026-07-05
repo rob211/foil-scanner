@@ -107,6 +107,8 @@ class Window:
     confidence: str = "normal"
     live_status: str = "pending"
     event_id: str | None = None
+    # Individual launch spots when one window covers several (south ocean runs).
+    spots: list[str] | None = None
 
     @property
     def foil_key(self) -> str:

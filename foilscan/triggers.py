@@ -232,7 +232,9 @@ def south_windows(
                 w.notes.append(
                     f"swell {w.swell_m:.1f} m {compass(w.swell_dir_deg)} outside the south band"
                 )
-        w.run_name = f"South runs ({', '.join(runs)})"
+        # Keep the base name; expose the qualifying spots so the dashboard and
+        # calendar can list them individually rather than as one lumped run.
+        w.spots = list(runs)
         windows.append(w)
     misses.extend(_single_model_misses("south_ocean", hour_map, sun, windows))
     return windows, misses
@@ -293,8 +295,9 @@ def ne_windows(
 
 
 def _tide_spans(marine: MarineForecast) -> list[tuple[datetime, datetime, datetime]]:
-    half = timedelta(hours=config.ENTRANCE_TIDE_WINDOW_H)
-    return [(ht.time - half, ht.time + half, ht.time) for ht in marine.high_tides()]
+    # Entrance only works on the run-out: high tide to +2 h, not before it.
+    window = timedelta(hours=config.ENTRANCE_TIDE_WINDOW_H)
+    return [(ht.time, ht.time + window, ht.time) for ht in marine.high_tides()]
 
 
 def _intersect_tides(

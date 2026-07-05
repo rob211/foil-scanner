@@ -109,7 +109,7 @@ Stronger is better on the lake. The NE lake run is a rare event: prefix its titl
 
 ### 4.2 Lake Entrance, two modes
 
-Both modes additionally require the window to overlap the period from 2 h before to 2 h after a high tide, and daylight.
+Both modes additionally require the window to overlap the period from high tide to 2 h after it (the run-out only, not before the high), and daylight.
 
 Mode 1 (swell): wind 0-10 kn with a westerly component (direction 200-340), or under 5 kn from any direction; swell from 35-110 degrees (NE through E, ENE explicitly included) at 0.8 m or more.
 
@@ -238,6 +238,7 @@ The prime directive: this scanner must never quietly show a calm week because so
       "peak_median_kn": 24, "direction_deg": 250,
       "models_agreeing": 3, "model_values": {"GFS": 25, "ECMWF": 24, "ICON": 22, "UKMO": 18},
       "swell_m": null, "high_tide": null,
+      "spots": null,
       "confidence": "normal",
       "live_status": "pending",
       "event_id": "google-event-id"
@@ -248,6 +249,8 @@ The prime directive: this scanner must never quietly show a calm week because so
 ```
 
 `near_misses` holds single-model hits and windows that failed exactly one condition (useful on the dashboard and for tuning thresholds later).
+
+`spots` is set only on south-ocean windows (`run_name` "South runs"): the list of individual launch spots that qualify at that swell size, e.g. `["Bass Point", "Hill 60", "Boilers", "Bellambi"]`. The dashboard shows them as separate chips; the calendar folds them back into the event title. It is `null` on every other trigger.
 
 `data/live.json`, committed by the hourly live job (absent until the first live run after deploy):
 
