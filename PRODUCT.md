@@ -11,6 +11,10 @@ phone (in bed at 6am, in the car, at the beach in full sun) or occasionally on
 the desktop. One job: decide in seconds whether a session is on today or this
 week, then drill into the numbers if the answer is interesting.
 
+Secondary (added 5 Jul 2026): mates with the shared link. They can subscribe
+to the Foiling calendar from the dashboard (public read-only feed, Google or
+ICS); no accounts, no email collection, no backend.
+
 ## Product Purpose
 
 A glanceable front end for the foil-scanner verdict data (data/latest.json).

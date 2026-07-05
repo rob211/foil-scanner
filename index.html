@@ -173,6 +173,33 @@
   ul.sources li::before { content: "\2713  "; color: var(--grade-green); }
   ul.sources li.bad::before { content: "\2717  "; color: var(--grade-red); }
 
+  /* Calendar subscribe */
+  #subscribe {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 0.9rem 1rem 1rem; margin: 1.4rem 0 0.4rem;
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.04);
+  }
+  #subscribe h2 { margin: 0 0 0.2rem; }
+  #subscribe .sub { color: var(--muted); font-size: 0.85rem; margin: 0 0 0.75rem; }
+  #subscribe .btns { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .btn {
+    display: inline-block; font: inherit; font-size: 0.85rem; font-weight: 650;
+    padding: 0.45rem 0.9rem; border-radius: 999px; cursor: pointer;
+    background: var(--surface-2); color: var(--ink); border: 1px solid var(--line);
+    text-decoration: none; transition: border-color 150ms ease-out, background 150ms ease-out;
+  }
+  .btn:hover { border-color: oklch(0.40 0 0); background: oklch(0.25 0 0); }
+  .btn:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
+  .btn.primary { background: var(--rust); color: oklch(0.16 0.03 40); border-color: transparent; }
+  .btn.primary:hover { background: oklch(0.76 0.15 40); }
+  #subscribe .fine { color: var(--muted); font-size: 0.78rem; margin: 0.7rem 0 0; }
+  .icsout {
+    font: inherit; font-size: 0.8rem; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+    padding: 0.45rem 0.6rem; min-width: 0; flex: 1 1 14rem;
+  }
+  .icsout:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
+
   /* "How verdicts are decided" explainer */
   #how .how { font-size: 0.88rem; border-top: 1px solid var(--line); padding: 0.2rem 0.2rem 0.6rem; }
   #how .hlabel { color: var(--muted); font-weight: 700; font-size: 0.8rem; margin: 1rem 0 0.3rem; }
@@ -203,6 +230,17 @@
     <div id="stamp">loading&hellip;</div>
   </header>
   <div id="app"><div class="quiet">Loading latest scan&hellip;</div></div>
+
+  <section id="subscribe">
+    <h2>Get these on your calendar</h2>
+    <p class="sub">Subscribe once and every window lands in your calendar automatically, the same feed this page runs on. No sign-up or email needed.</p>
+    <div class="btns">
+      <a class="btn primary" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?cid=9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com">Add to Google Calendar</a>
+      <a class="btn" href="webcal://calendar.google.com/calendar/ical/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/public/basic.ics">Apple / Outlook app</a>
+      <button class="btn" id="copyics" type="button">Copy ICS link</button>
+    </div>
+    <p class="fine">Outlook on the web: Add calendar, then Subscribe from web, and paste the copied link. Calendars outside Google can take a few hours to pick up changes.</p>
+  </section>
 
   <details class="section" id="how">
     <summary>How verdicts are decided</summary>
@@ -431,6 +469,26 @@ Promise.all([
       `${err.message}. Either no scan has run yet, or the scanner is broken. Check the repo's Actions tab.`
     );
   });
+
+const ICS_URL = "https://calendar.google.com/calendar/ical/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/public/basic.ics";
+document.getElementById("copyics").addEventListener("click", async (e) => {
+  const btn = e.currentTarget;
+  try {
+    await navigator.clipboard.writeText(ICS_URL);
+    btn.textContent = "Copied";
+    setTimeout(() => { btn.textContent = "Copy ICS link"; }, 2000);
+  } catch {
+    // No clipboard access: show the link itself, pre-selected for copying.
+    const out = document.createElement("input");
+    out.value = ICS_URL;
+    out.readOnly = true;
+    out.className = "icsout";
+    out.setAttribute("aria-label", "ICS calendar link");
+    btn.replaceWith(out);
+    out.focus();
+    out.select();
+  }
+});
 </script>
 </body>
 </html>
