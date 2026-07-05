@@ -173,6 +173,19 @@
   ul.sources li::before { content: "\2713  "; color: var(--grade-green); }
   ul.sources li.bad::before { content: "\2717  "; color: var(--grade-red); }
 
+  /* "How verdicts are decided" explainer */
+  #how .how { font-size: 0.88rem; border-top: 1px solid var(--line); padding: 0.2rem 0.2rem 0.6rem; }
+  #how .hlabel { color: var(--muted); font-weight: 700; font-size: 0.8rem; margin: 1rem 0 0.3rem; }
+  #how p { margin: 0.3rem 0; }
+  #how ul { margin: 0.3rem 0; padding-left: 1.15rem; }
+  #how li { margin: 0.3rem 0; }
+  #how li strong, #how p strong { font-weight: 650; }
+  #how a { color: var(--rust); }
+  #how .g { font-weight: 700; }
+  #how .g.green { color: var(--grade-green); }
+  #how .g.yellow { color: var(--grade-yellow); }
+  #how .g.red { color: var(--grade-red); }
+
   footer { margin-top: 2.2rem; font-size: 0.78rem; color: var(--muted); }
   footer a { color: var(--rust); }
 
@@ -190,9 +203,31 @@
     <div id="stamp">loading&hellip;</div>
   </header>
   <div id="app"><div class="quiet">Loading latest scan&hellip;</div></div>
+
+  <details class="section" id="how">
+    <summary>How verdicts are decided</summary>
+    <div class="how">
+      <p class="hlabel">The triggers, spot by spot</p>
+      <ul>
+        <li><strong>Lake runs</strong>: 20 kn or more, and the wind direction picks the crossing: Oak Flats to Berkeley (S/SSW, 170&ndash;215&deg;), Kanahooka (SW/WSW, 215&ndash;260&deg;), Berkeley (W, 260&ndash;285&deg;). The rare NE run back to Oak Flats needs 25 kn.</li>
+        <li><strong>Lake Entrance</strong>: only within 2 h either side of high tide. Fires on 0.8 m+ swell from the NE&ndash;E with light westerly or calm wind (graded on swell height), or on 18 kn+ NE wind alone.</li>
+        <li><strong>South ocean runs</strong>: 20 kn+ from the south (155&ndash;210&deg;). Swell size picks the runs: under 1 m all four are on (Bass Point, Hill 60, Boilers, Bellambi), 1&ndash;2 m of southerly swell narrows it to Bellambi red buoy and Hill 60, over 2 m it is Hill 60 only.</li>
+        <li><strong>Hill 60 swell run</strong>: 2 m+ swell from the S/SSE/SE, no wind needed.</li>
+        <li><strong>NE ocean runs</strong>: fires once the wind has already blown long enough to build the bump: 2 h at 15 kn+, or 3 h at 10 kn+. True NE (34&ndash;56&deg;) rates full; NNE or ENE drops one colour.</li>
+        <li><strong>Swell check on ocean downwinders</strong>: cross swell over 1 m (or aligned swell over 1.5 m) kills the window; 0.5&ndash;1 m of cross swell drops it one colour. Killed windows appear under near misses so a windy day never goes quiet without a reason.</li>
+      </ul>
+      <p class="hlabel">Every window must also pass</p>
+      <p>Daylight only (sunrise to sunset), and at least 2 of the 4 forecast models (GFS, ECMWF, ICON, UKMO) must meet the trigger for the same hours. Quoted strength is the median of the agreeing models at the window's peak. Single-model hits go to near misses, not the calendar.</p>
+      <p class="hlabel">Grades</p>
+      <p>Each run has a target strength. <span class="g yellow">MAYBE</span> from 90% of target (worth watching), <span class="g green">ON</span> at target, <span class="g red">FIRING</span> from 25% over. Windows four or more days out carry a low-confidence flag.</p>
+      <p class="hlabel">How the list is ordered</p>
+      <p>Windows run in start-time order. The big verdict up top is whatever is on right now, otherwise the next window coming. The week strip shows each day's strongest grades, up to three dots. From an hour before each window, the hourly live check compares real observations (BOM Bellambi; Holfuy on the lake once its key arrives) against the forecast: confirmed at 90% of target, called a miss under 70% once the window has started.</p>
+      <p>Full rules with every threshold: <a href="https://github.com/rob211/foil-scanner/blob/main/docs/SPEC.md">SPEC.md</a>.</p>
+    </div>
+  </details>
+
   <footer>
-    Grades: yellow = marginal (about 10% under target) &middot; green = on target &middot;
-    red = firing (25%+ over). Cross-checks:
+    Cross-checks:
     <a href="https://www.windguru.cz/768215">Windguru</a> &middot;
     <a href="https://wind.willyweather.com.au/nsw/illawarra/wollongong-harbour.html">WillyWeather</a> &middot;
     <a href="https://www.bom.gov.au/products/IDN60801/IDN60801.94749.shtml">BOM Bellambi</a> &middot;
