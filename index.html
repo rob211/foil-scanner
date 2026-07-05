@@ -3,52 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#101010">
 <title>Foil Scanner</title>
 <style>
+  /* Dark-only by Rob's call (5 Jul 2026): near-black neutral canvas,
+     ember accent, grade colours carry the meaning. */
   :root {
-    --bg: oklch(1 0 0);
-    --surface: oklch(0.965 0.004 31);
-    --line: oklch(0.90 0.006 31);
-    --ink: oklch(0.22 0.015 31);
-    --muted: oklch(0.45 0.02 31);
-    --rust: oklch(0.50 0.17 31);
-    --grade-green: oklch(0.50 0.14 150);
-    --grade-green-bg: oklch(0.95 0.03 150);
-    --grade-yellow: oklch(0.50 0.12 85);
-    --grade-yellow-bg: oklch(0.95 0.05 90);
-    --grade-red: oklch(0.50 0.17 31);
-    --grade-red-bg: oklch(0.94 0.03 31);
-    --alarm-bg: oklch(0.42 0.15 29);
+    --bg: oklch(0.135 0 0);
+    --surface: oklch(0.18 0 0);
+    --surface-2: oklch(0.22 0 0);
+    --line: oklch(0.27 0 0);
+    --ink: oklch(0.95 0.004 60);
+    --muted: oklch(0.68 0.008 60);
+    --rust: oklch(0.72 0.15 40);
+    --grade-green: oklch(0.78 0.15 152);
+    --grade-green-bg: oklch(0.21 0.035 152);
+    --grade-yellow: oklch(0.85 0.13 92);
+    --grade-yellow-bg: oklch(0.22 0.035 92);
+    --grade-red: oklch(0.72 0.17 30);
+    --grade-red-bg: oklch(0.21 0.04 30);
+    --alarm-bg: oklch(0.40 0.15 29);
     --alarm-ink: oklch(0.98 0.01 31);
-    --radius: 10px;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: oklch(0.16 0.008 31);
-      --surface: oklch(0.21 0.01 31);
-      --line: oklch(0.30 0.012 31);
-      --ink: oklch(0.93 0.008 31);
-      --muted: oklch(0.71 0.015 31);
-      --rust: oklch(0.70 0.15 33);
-      --grade-green: oklch(0.75 0.16 152);
-      --grade-green-bg: oklch(0.28 0.05 152);
-      --grade-yellow: oklch(0.82 0.14 90);
-      --grade-yellow-bg: oklch(0.29 0.05 90);
-      --grade-red: oklch(0.70 0.17 31);
-      --grade-red-bg: oklch(0.29 0.06 29);
-      --alarm-bg: oklch(0.45 0.16 29);
-      --alarm-ink: oklch(0.98 0.01 31);
-    }
+    --radius: 12px;
   }
 
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
-    background: var(--bg);
+    background:
+      radial-gradient(1100px 520px at 88% -12%, oklch(0.30 0.055 40 / 0.22), transparent 62%),
+      var(--bg);
     color: var(--ink);
     font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  a:focus-visible, summary:focus-visible {
+    outline: 2px solid var(--rust);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
   main { max-width: 40rem; margin: 0 auto; padding: 0 1rem 4rem; }
 
@@ -70,18 +63,31 @@
 
   /* Verdict block: the 3-second answer */
   #verdict {
-    border-radius: var(--radius); padding: 1.4rem 1.2rem; margin: 0.8rem 0 1.4rem;
+    border-radius: 16px; padding: 1.5rem 1.3rem; margin: 0.8rem 0 1.4rem;
     background: var(--surface); border: 1px solid var(--line);
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.05);
   }
-  #verdict.green { background: var(--grade-green-bg); border-color: var(--grade-green); }
-  #verdict.yellow { background: var(--grade-yellow-bg); border-color: var(--grade-yellow); }
-  #verdict.red { background: var(--grade-red-bg); border-color: var(--grade-red); }
-  #verdict .word { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; text-wrap: balance; }
+  #verdict.green {
+    background: linear-gradient(180deg, oklch(0.24 0.045 152) 0%, var(--grade-green-bg) 100%);
+    border-color: oklch(0.42 0.09 152);
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-green);
+  }
+  #verdict.yellow {
+    background: linear-gradient(180deg, oklch(0.25 0.045 92) 0%, var(--grade-yellow-bg) 100%);
+    border-color: oklch(0.44 0.08 92);
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-yellow);
+  }
+  #verdict.red {
+    background: linear-gradient(180deg, oklch(0.24 0.05 30) 0%, var(--grade-red-bg) 100%);
+    border-color: oklch(0.42 0.10 30);
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-red);
+  }
+  #verdict .word { font-size: 2.3rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; text-wrap: balance; }
   #verdict.green .word { color: var(--grade-green); }
   #verdict.yellow .word { color: var(--grade-yellow); }
   #verdict.red .word { color: var(--grade-red); }
   #verdict .what { font-size: 1.15rem; font-weight: 650; margin-top: 0.35rem; text-wrap: balance; }
-  #verdict .when { color: var(--muted); margin-top: 0.15rem; font-size: 0.95rem; }
+  #verdict .when { color: oklch(0.78 0.01 60); margin-top: 0.15rem; font-size: 0.95rem; }
 
   /* Live observation tile */
   #live {
@@ -89,6 +95,7 @@
     background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--radius); padding: 0.65rem 0.9rem; margin: 0 0 1rem;
     font-size: 0.95rem;
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.04);
   }
   #live .k {
     flex: none; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.06em;
@@ -108,10 +115,10 @@
   }
   #week .day .dots { display: flex; gap: 3px; justify-content: center; margin-top: 4px; min-height: 8px; }
   #week .dot { width: 8px; height: 8px; border-radius: 50%; }
-  #week .dot.green { background: var(--grade-green); }
-  #week .dot.yellow { background: var(--grade-yellow); }
-  #week .dot.red { background: var(--grade-red); }
-  #week .day.today { border-color: var(--ink); color: var(--ink); }
+  #week .dot.green { background: var(--grade-green); box-shadow: 0 0 7px oklch(0.78 0.15 152 / 0.55); }
+  #week .dot.yellow { background: var(--grade-yellow); box-shadow: 0 0 7px oklch(0.85 0.13 92 / 0.55); }
+  #week .dot.red { background: var(--grade-red); box-shadow: 0 0 7px oklch(0.72 0.17 30 / 0.55); }
+  #week .day.today { border-color: oklch(0.45 0 0); color: var(--ink); background: var(--surface-2); }
 
   h2 { font-size: 0.95rem; margin: 1.6rem 0 0.6rem; }
   .dayhead { font-size: 0.85rem; color: var(--muted); font-weight: 700; margin: 1.2rem 0 0.4rem; }
@@ -120,7 +127,10 @@
   details.win {
     background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--radius); margin-bottom: 0.5rem;
+    box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.04);
+    transition: border-color 180ms ease-out, background 180ms ease-out;
   }
+  details.win:hover { border-color: oklch(0.36 0 0); background: var(--surface-2); }
   details.win summary {
     display: flex; align-items: center; gap: 0.35rem 0.7rem; flex-wrap: wrap;
     padding: 0.75rem 0.9rem; cursor: pointer; list-style: none;
@@ -131,9 +141,9 @@
     flex: none; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em;
     padding: 0.2rem 0.5rem; border-radius: 999px;
   }
-  .chip.green { background: var(--grade-green); color: var(--bg); }
-  .chip.yellow { background: var(--grade-yellow); color: var(--bg); }
-  .chip.red { background: var(--grade-red); color: var(--bg); }
+  .chip.green { background: var(--grade-green); color: oklch(0.17 0.03 152); }
+  .chip.yellow { background: var(--grade-yellow); color: oklch(0.18 0.03 92); }
+  .chip.red { background: var(--grade-red); color: oklch(0.16 0.03 30); }
   .win .name { font-weight: 650; font-size: 0.95rem; }
   .win .meta { color: var(--muted); font-size: 0.85rem; margin-left: auto; text-align: right; flex: none; }
   .win .body { padding: 0.2rem 0.9rem 0.9rem; font-size: 0.9rem; border-top: 1px solid var(--line); }

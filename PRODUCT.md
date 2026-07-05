@@ -46,6 +46,8 @@ weather-app clutter (maps, ad-shaped panels, ten toggles). To be revisited.
 
 ## Accessibility & Inclusion
 
-No formal WCAG target set; hold to 4.5:1 body contrast in both themes, never
-encode grade by colour alone (always pair with a text label), respect
-prefers-reduced-motion, and follow the phone's light/dark setting.
+No formal WCAG target set; hold to 4.5:1 body contrast, never encode grade
+by colour alone (always pair with a text label), and respect
+prefers-reduced-motion. Dark-only by Rob's decision (5 Jul 2026, restyle to
+a near-black reference); the earlier follow-the-phone-setting default is
+superseded. Trade-off accepted: slightly harder to read in full sun.
