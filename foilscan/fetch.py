@@ -5,6 +5,7 @@ outside physical range means a unit or schema problem upstream, so it fails.
 """
 from __future__ import annotations
 
+import re
 import time as _time
 from datetime import date, datetime, timedelta
 
@@ -28,6 +29,22 @@ COMPASS = {
     "SE": 135.0, "SSE": 157.5, "S": 180.0, "SSW": 202.5, "SW": 225.0,
     "WSW": 247.5, "W": 270.0, "WNW": 292.5, "NW": 315.0, "NNW": 337.5,
 }
+
+
+_CONTROL_CHARS = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def clean_label(value: object, cap: int = 60) -> str:
+    """Bound an untrusted upstream free-text label (e.g. a station name).
+
+    Station names pass through to a public calendar, the committed JSON and
+    the dashboard, so strip control characters, collapse whitespace and cap
+    length. https transport is the real defence against forged values; this
+    just stops a bad one smuggling newlines or a novel of junk into a
+    subscriber's calendar.
+    """
+    text = _CONTROL_CHARS.sub(" ", str(value))
+    return " ".join(text.split())[:cap]
 
 
 def get_json(url: str, params: dict | None = None, headers: dict | None = None) -> dict:
@@ -221,7 +238,7 @@ def fetch_bom(now: datetime) -> Observation:
     if not obs:
         raise SchemaError(f"{source}: empty observation list")
     latest = obs[0]
-    station = _require(latest, "name", source)
+    station = clean_label(_require(latest, "name", source))
 
     when = datetime.strptime(
         _require(latest, "local_date_time_full", source), "%Y%m%d%H%M%S"
@@ -281,7 +298,7 @@ def fetch_holfuy(key: str, now: datetime) -> Observation:
             f"cap is {config.HOLFUY_MAX_AGE_MIN} min"
         )
     return Observation(
-        station=payload.get("stationName", f"Holfuy {config.HOLFUY_STATION}"),
+        station=clean_label(payload.get("stationName", f"Holfuy {config.HOLFUY_STATION}")),
         time=when,
         speed_kn=_check_range(_require(wind, "speed", source), 0, 80, "speed", source)
         * config.HOLFUY_CORRECTION,

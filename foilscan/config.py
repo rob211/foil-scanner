@@ -121,8 +121,10 @@ HEARTBEAT_MAX_AGE_H = 8.0
 HOLFUY_STATION = 366
 HOLFUY_CORRECTION = 0.9
 
-BOM_JSON_URL = "http://www.bom.gov.au/fwo/IDN60801/IDN60801.94749.json"
-BOM_JSON_URL_FALLBACK = "http://reg.bom.gov.au/fwo/IDN60801/IDN60801.94749.json"
+# https only: the plaintext first hop let a network MITM feed the pipeline
+# forged observations that reach the public calendar and repo (5 Jul review).
+BOM_JSON_URL = "https://www.bom.gov.au/fwo/IDN60801/IDN60801.94749.json"
+BOM_JSON_URL_FALLBACK = "https://reg.bom.gov.au/fwo/IDN60801/IDN60801.94749.json"
 
 # Live verification (spec 7)
 LIVE_CONFIRM_FACTOR = 0.9

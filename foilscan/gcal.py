@@ -7,6 +7,7 @@ Foiling calendar has been shared with (see SETUP.md).
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime, timedelta
 
 from . import config
@@ -17,6 +18,15 @@ from .triggers import compass
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 LIVE_PREFIXES = ("LIVE NOW ✅ ", "⚠ NOT VERIFYING ")
+
+_CONTROL_CHARS = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def _one_line(text: object, cap: int = 140) -> str:
+    """Bound text that ends up on the PUBLIC calendar. Notes and error
+    strings can carry upstream fragments; flatten to one line, drop control
+    characters and cap length so nothing unbounded reaches subscribers."""
+    return _CONTROL_CHARS.sub(" ", str(text)).strip()[:cap]
 
 
 def service():
@@ -65,11 +75,11 @@ def description_for(w: Window, generated_at: datetime, source_notes: list[str]) 
         ht = datetime.fromisoformat(w.high_tide)
         lines.append(f"High tide: {ht:%H:%M} (window is 2 h either side)")
     for note in w.notes:
-        lines.append(f"Note: {note}")
+        lines.append(f"Note: {_one_line(note)}")
     lines.append(f"Confidence: {w.confidence}")
     lines.append(f"Live: {w.live_status}")
     for note in source_notes:
-        lines.append(f"SOURCE PROBLEM: {note}")
+        lines.append(f"SOURCE PROBLEM: {_one_line(note)}")
     lines.append(f"Generated: {generated_at:%Y-%m-%d %H:%M %Z} by foil-scanner")
     return "\n".join(lines)
 
@@ -193,8 +203,13 @@ def write_broken_event(reason: str, now: datetime) -> None:
     day = now.date().isoformat()
     key = f"broken:{day}"
     body = {
-        "summary": f"SCANNER BROKEN: {reason[:180]}",
-        "description": f"foil-scanner failed at {now.isoformat()}.\n{reason}",
+        "summary": f"SCANNER BROKEN: {_one_line(reason, 120)}",
+        # Keep raw exception text off the public calendar; it can embed
+        # upstream response fragments. Full detail stays in the Actions logs.
+        "description": (
+            f"foil-scanner failed at {now.isoformat()}.\n"
+            "Full details are in the repo's Actions logs, not published here."
+        ),
         "start": {"date": day},
         "end": {"date": day},
         "colorId": config.COLOR_IDS["red"],
