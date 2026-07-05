@@ -283,10 +283,11 @@
     <p class="sub">Subscribe once and every window lands in your calendar automatically, the same feed this page runs on. No sign-up or email needed.</p>
     <div class="btns">
       <a class="btn primary" target="_blank" rel="noopener" href="https://calendar.google.com/calendar/render?cid=9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com">Add to Google Calendar</a>
-      <a class="btn" href="webcal://calendar.google.com/calendar/ical/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/public/basic.ics">Apple / Outlook app</a>
-      <button class="btn" id="copyics" type="button">Copy ICS link</button>
+      <a class="btn" href="webcal://calendar.google.com/calendar/ical/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/public/basic.ics">Apple Calendar</a>
+      <a class="btn" target="_blank" rel="noopener" href="https://outlook.live.com/calendar/0/addfromweb?url=https%3A%2F%2Fcalendar.google.com%2Fcalendar%2Fical%2F9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com%2Fpublic%2Fbasic.ics&amp;name=Foiling">Outlook</a>
+      <button class="btn" id="copyics" type="button">Copy link</button>
     </div>
-    <p class="fine">Outlook on the web: Add calendar, then Subscribe from web, and paste the copied link. Calendars outside Google can take a few hours to pick up changes.</p>
+    <p class="fine">The <strong>Outlook</strong> button is one tap for personal Outlook.com. For a work or school Outlook, or any other app, tap <strong>Copy link</strong>, then choose <strong>Add calendar &rarr; Subscribe from web</strong>, paste and Import. Non-Google calendars can take a few hours, sometimes a day, to pick up new windows.</p>
   </section>
 
   <details class="section" id="how">
@@ -544,8 +545,8 @@ document.getElementById("copyics").addEventListener("click", async (e) => {
   const btn = e.currentTarget;
   try {
     await navigator.clipboard.writeText(ICS_URL);
-    btn.textContent = "Copied";
-    setTimeout(() => { btn.textContent = "Copy ICS link"; }, 2000);
+    btn.textContent = "Copied ✓";
+    setTimeout(() => { btn.textContent = "Copy link"; }, 2000);
   } catch {
     // No clipboard access: show the link itself, pre-selected for copying.
     const out = document.createElement("input");
