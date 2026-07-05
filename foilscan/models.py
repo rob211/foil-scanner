@@ -104,9 +104,12 @@ class Window:
     swell_m: float | None = None
     swell_dir_deg: float | None = None
     high_tide: str | None = None
+    high_tide_m: float | None = None  # tide-table height (chart datum), modelled
     confidence: str = "normal"
     live_status: str = "pending"
     event_id: str | None = None
+    # Individual launch spots when one window covers several (south ocean runs).
+    spots: list[str] | None = None
 
     @property
     def foil_key(self) -> str:

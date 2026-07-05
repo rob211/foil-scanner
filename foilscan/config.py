@@ -72,6 +72,11 @@ LAKE_RUNS = {
 
 # Lake Entrance (spec 4.2)
 ENTRANCE_TIDE_WINDOW_H = 2.0
+# Modelled sea level (Open-Meteo) is relative to mean sea level; tide tables are
+# relative to chart datum. Add this offset to report tide-table-comparable
+# heights. Default is the NSW open-coast figure (Sydney/Fort Denison ~0.925 m);
+# calibrate against a BOM Port Kembla tide reading and adjust (spec section 10).
+PORT_KEMBLA_MSL_ABOVE_CD_M = 0.95
 ENTRANCE_M1_WIND_MAX_KN = 10.0
 ENTRANCE_M1_WIND_ARC = Arc(200, 340)
 ENTRANCE_M1_CALM_KN = 5.0
