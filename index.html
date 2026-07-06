@@ -281,7 +281,7 @@
     <h1>foil<span>watch</span></h1>
     <div id="stamp">loading&hellip;</div>
   </header>
-  <div id="app"><div class="quiet">Loading latest scan&hellip;</div></div>
+  <div id="app"><div class="quiet">Loading latest check&hellip;</div></div>
 
   <section id="subscribe">
     <h2>Get these on your calendar</h2>
@@ -508,12 +508,12 @@ function sourceList(sources) {
 function render(data, liveData, now) {
   const generated = new Date(data.generated_at);
   const ageH = (now - generated) / 36e5;
-  document.getElementById("stamp").textContent = `scanned ${fmtStamp.format(generated)}`;
+  document.getElementById("stamp").textContent = `checked ${fmtStamp.format(generated)}`;
 
   let html = "";
   const badSources = Object.entries(data.sources || {}).filter(([, s]) => !s.ok);
   if (ageH > STALE_HOURS) {
-    html += alarm("SCANNER STALE", `Last successful scan was ${ageH.toFixed(0)} h ago. Do not trust this page; check the Actions tab.`);
+    html += alarm("WATCH STALE", `Last successful check was ${ageH.toFixed(0)} h ago. Do not trust this page; check the Actions tab.`);
   }
   if (badSources.length) {
     html += alarm("SOURCE PROBLEM", badSources.map(([n, s]) => `${n}: ${s.error || "failed"}`).join(" · "));
@@ -547,8 +547,8 @@ Promise.all([
   .catch((err) => {
     document.getElementById("stamp").textContent = "no data";
     document.getElementById("app").innerHTML = alarm(
-      "NO SCAN DATA",
-      `${err.message}. Either no scan has run yet, or the scanner is broken. Check the repo's Actions tab.`
+      "NO DATA",
+      `${err.message}. Either no check has run yet, or the watch is broken. Check the repo's Actions tab.`
     );
   });
 
