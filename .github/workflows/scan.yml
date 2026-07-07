@@ -2,8 +2,10 @@ name: scan
 
 on:
   schedule:
-    # UTC. Local AEST (UTC+10): 12:17, 18:17, 00:17, 06:17. Drifts 1 h under DST.
-    - cron: "17 2,8,14,20 * * *"
+    # Every 2 h at :17 (UTC). Deliberately frequent: GitHub sheds scheduled
+    # runs, and at 6-hourly a single skip breached the 8 h stale cap. At 2 h
+    # GitHub has to skip several in a row before the live heartbeat trips.
+    - cron: "17 */2 * * *"
   workflow_dispatch: {}
 
 concurrency:
