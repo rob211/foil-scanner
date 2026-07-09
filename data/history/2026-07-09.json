@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-09T12:00:58.383929+10:00",
+  "generated_at": "2026-07-09T15:01:01.873432+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-09T12:00:59.012285+10:00",
+      "fetched_at": "2026-07-09T15:01:02.520417+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-09T12:00:59.637799+10:00",
+      "fetched_at": "2026-07-09T15:01:03.358707+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-09T12:01:00.267183+10:00",
+      "fetched_at": "2026-07-09T15:01:04.054066+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-09T12:01:00.876444+10:00",
+      "fetched_at": "2026-07-09T15:01:04.723129+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-09T12:01:01.502815+10:00",
+      "fetched_at": "2026-07-09T15:01:05.345430+10:00",
       "detail": null,
       "error": null
     }
@@ -36,10 +36,18 @@
   "windows": [],
   "near_misses": [
     {
-      "trigger_id": "lake_oakflats_berkeley",
-      "date": "2026-07-15",
-      "start": "2026-07-15T13:00:00+10:00",
-      "end": "2026-07-15T16:00:00+10:00",
+      "trigger_id": "lake_kanahooka",
+      "date": "2026-07-12",
+      "start": "2026-07-12T13:00:00+10:00",
+      "end": "2026-07-12T14:00:00+10:00",
+      "reason": "single_model",
+      "detail": "only ['icon_seamless'] sees it"
+    },
+    {
+      "trigger_id": "lake_berkeley",
+      "date": "2026-07-12",
+      "start": "2026-07-12T13:00:00+10:00",
+      "end": "2026-07-12T15:00:00+10:00",
       "reason": "single_model",
       "detail": "only ['icon_seamless'] sees it"
     }
