@@ -1,47 +1,38 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-10T04:09:13.496498+10:00",
+  "generated_at": "2026-07-10T06:00:52.350429+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-10T04:09:14.091772+10:00",
+      "fetched_at": "2026-07-10T06:00:53.015342+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-10T04:09:14.596177+10:00",
+      "fetched_at": "2026-07-10T06:00:53.672072+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-10T04:09:15.063745+10:00",
+      "fetched_at": "2026-07-10T06:00:54.340662+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-10T04:09:15.545723+10:00",
+      "fetched_at": "2026-07-10T06:00:54.973708+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-10T04:09:16.005969+10:00",
+      "fetched_at": "2026-07-10T06:00:55.610623+10:00",
       "detail": null,
       "error": null
     }
   },
   "windows": [],
-  "near_misses": [
-    {
-      "trigger_id": "lake_kanahooka",
-      "date": "2026-07-12",
-      "start": "2026-07-12T13:00:00+10:00",
-      "end": "2026-07-12T15:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['ukmo_seamless'] sees it"
-    }
-  ]
+  "near_misses": []
 }
