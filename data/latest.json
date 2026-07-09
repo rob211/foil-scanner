@@ -1,48 +1,67 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-09T15:01:01.873432+10:00",
+  "generated_at": "2026-07-09T18:01:13.054073+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-09T15:01:02.520417+10:00",
+      "fetched_at": "2026-07-09T18:01:13.466369+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-09T15:01:03.358707+10:00",
+      "fetched_at": "2026-07-09T18:01:13.875402+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-09T15:01:04.054066+10:00",
+      "fetched_at": "2026-07-09T18:01:14.271424+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-09T15:01:04.723129+10:00",
+      "fetched_at": "2026-07-09T18:01:14.676400+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-09T15:01:05.345430+10:00",
+      "fetched_at": "2026-07-09T18:01:15.070082+10:00",
       "detail": null,
       "error": null
     }
   },
-  "windows": [],
-  "near_misses": [
+  "windows": [
     {
       "trigger_id": "lake_kanahooka",
+      "run_name": "Kanahooka run",
       "date": "2026-07-12",
       "start": "2026-07-12T13:00:00+10:00",
       "end": "2026-07-12T14:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
+      "grade": "yellow",
+      "peak_median_kn": 18.5,
+      "direction_deg": 258.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ICON": 18.6,
+        "UKMO": 18.3
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": "5f0bhn46k0ftrh7vlkir3pe7ek",
+      "foil_key": "lake_kanahooka:2026-07-12:13"
+    }
+  ],
+  "near_misses": [
     {
       "trigger_id": "lake_berkeley",
       "date": "2026-07-12",
