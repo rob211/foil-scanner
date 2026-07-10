@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-11T04:01:36.372173+10:00",
+  "generated_at": "2026-07-11T05:51:57.470986+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-11T04:01:36.797194+10:00",
+      "fetched_at": "2026-07-11T05:51:58.070111+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-11T04:01:37.215905+10:00",
+      "fetched_at": "2026-07-11T05:51:58.691548+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
-      "ok": false,
-      "fetched_at": null,
+      "ok": true,
+      "fetched_at": "2026-07-11T05:51:59.307002+10:00",
       "detail": null,
-      "error": "FetchError: GET https://api.open-meteo.com/v1/forecast failed after 3 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
+      "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-11T04:03:11.088088+10:00",
+      "fetched_at": "2026-07-11T05:51:59.888325+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-11T04:03:11.464051+10:00",
+      "fetched_at": "2026-07-11T05:52:00.492107+10:00",
       "detail": null,
       "error": null
     }
@@ -58,6 +58,34 @@
       "live_status": "pending",
       "event_id": "d2640nsh8jkcmsg1kditm3c3m0",
       "foil_key": "hill60_swell:2026-07-15:10"
+    },
+    {
+      "trigger_id": "entrance_swell",
+      "run_name": "Lake Entrance (swell)",
+      "date": "2026-07-17",
+      "start": "2026-07-17T10:00:00+10:00",
+      "end": "2026-07-17T12:00:00+10:00",
+      "grade": "red",
+      "peak_median_kn": 2.2,
+      "direction_deg": 213.0,
+      "models_agreeing": 4,
+      "model_values": {
+        "GFS": 2.5,
+        "ECMWF": 1.8,
+        "ICON": 3.3,
+        "UKMO": 1.9
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": 1.54,
+      "swell_dir_deg": 106.0,
+      "high_tide": "2026-07-17T10:00:00+10:00",
+      "high_tide_m": 1.47,
+      "spots": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "r3ddhgibk2rptpgm83f2clcc8o",
+      "foil_key": "entrance_swell:2026-07-17:10"
     }
   ],
   "near_misses": []
