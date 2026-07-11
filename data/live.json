@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-11T08:28:35.481709+10:00",
+  "generated_at": "2026-07-11T10:14:46.989160+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-07-11T08:00:00+10:00",
-    "speed_kn": 8.1,
-    "gust_kn": 10.3,
-    "dir_deg": 315.0
+    "time": "2026-07-11T10:00:00+10:00",
+    "speed_kn": 5.9,
+    "gust_kn": 9.2,
+    "dir_deg": 292.5
   },
   "holfuy": null,
   "checks": [],
