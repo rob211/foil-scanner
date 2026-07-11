@@ -1,66 +1,38 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-11T21:19:07.301341+10:00",
+  "generated_at": "2026-07-11T23:54:47.616870+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-11T21:19:07.706645+10:00",
+      "fetched_at": "2026-07-11T23:54:48.268175+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-11T21:19:08.104671+10:00",
+      "fetched_at": "2026-07-11T23:54:48.809421+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-11T21:19:08.597693+10:00",
+      "fetched_at": "2026-07-11T23:54:49.532529+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-11T21:19:08.997879+10:00",
+      "fetched_at": "2026-07-11T23:54:50.142607+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-11T21:19:09.410956+10:00",
+      "fetched_at": "2026-07-11T23:54:50.691728+10:00",
       "detail": null,
       "error": null
     }
   },
-  "windows": [
-    {
-      "trigger_id": "entrance_swell",
-      "run_name": "Lake Entrance (swell)",
-      "date": "2026-07-17",
-      "start": "2026-07-17T10:00:00+10:00",
-      "end": "2026-07-17T12:00:00+10:00",
-      "grade": "green",
-      "peak_median_kn": 4.6,
-      "direction_deg": 169.0,
-      "models_agreeing": 3,
-      "model_values": {
-        "GFS": 4.6,
-        "ECMWF": 2.7,
-        "UKMO": 4.7
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": 0.86,
-      "swell_dir_deg": 102.0,
-      "high_tide": "2026-07-17T10:00:00+10:00",
-      "high_tide_m": 1.47,
-      "spots": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": "r3ddhgibk2rptpgm83f2clcc8o",
-      "foil_key": "entrance_swell:2026-07-17:10"
-    }
-  ],
+  "windows": [],
   "near_misses": []
 }
