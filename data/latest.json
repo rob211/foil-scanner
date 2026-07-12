@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-13T05:31:34.461525+10:00",
+  "generated_at": "2026-07-13T06:00:58.074822+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-13T05:31:34.920483+10:00",
+      "fetched_at": "2026-07-13T06:00:58.697349+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-13T05:31:35.485980+10:00",
+      "fetched_at": "2026-07-13T06:00:59.336018+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-13T05:31:35.905505+10:00",
+      "fetched_at": "2026-07-13T06:00:59.999805+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-13T05:31:36.330011+10:00",
+      "fetched_at": "2026-07-13T06:01:00.613670+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-13T05:31:36.719224+10:00",
+      "fetched_at": "2026-07-13T06:01:01.249132+10:00",
       "detail": null,
       "error": null
     }
@@ -64,15 +64,15 @@
       "run_name": "Lake Entrance (swell)",
       "date": "2026-07-18",
       "start": "2026-07-18T11:00:00+10:00",
-      "end": "2026-07-18T13:00:00+10:00",
+      "end": "2026-07-18T12:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 4.5,
-      "direction_deg": 153.0,
+      "peak_median_kn": 4.2,
+      "direction_deg": 156.0,
       "models_agreeing": 3,
       "model_values": {
         "GFS": 4.2,
-        "ECMWF": 4.5,
-        "UKMO": 5.8
+        "ECMWF": 4.9,
+        "UKMO": 2.7
       },
       "title_tags": [],
       "notes": [],
@@ -93,12 +93,13 @@
       "start": "2026-07-19T12:00:00+10:00",
       "end": "2026-07-19T13:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 3.1,
-      "direction_deg": 96.0,
-      "models_agreeing": 2,
+      "peak_median_kn": 4.8,
+      "direction_deg": 131.0,
+      "models_agreeing": 3,
       "model_values": {
         "GFS": 4.8,
-        "ECMWF": 1.4
+        "ECMWF": 2.1,
+        "UKMO": 4.9
       },
       "title_tags": [],
       "notes": [],
