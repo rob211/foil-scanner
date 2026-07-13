@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-13T09:09:29.361494+10:00",
+  "generated_at": "2026-07-13T12:00:51.668669+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-13T09:09:29.760707+10:00",
+      "fetched_at": "2026-07-13T12:00:52.097672+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-13T09:09:30.154907+10:00",
+      "fetched_at": "2026-07-13T12:00:52.599569+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-13T09:09:30.557118+10:00",
+      "fetched_at": "2026-07-13T12:00:53.009239+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-13T09:09:30.941300+10:00",
+      "fetched_at": "2026-07-13T12:00:53.421168+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-13T09:09:31.320123+10:00",
+      "fetched_at": "2026-07-13T12:00:53.893690+10:00",
       "detail": null,
       "error": null
     }
@@ -38,26 +38,26 @@
       "trigger_id": "hill60_swell",
       "run_name": "Hill 60 swell run",
       "date": "2026-07-15",
-      "start": "2026-07-15T11:00:00+10:00",
-      "end": "2026-07-15T15:00:00+10:00",
+      "start": "2026-07-15T10:00:00+10:00",
+      "end": "2026-07-15T11:00:00+10:00",
       "grade": "yellow",
       "peak_median_kn": 0.0,
-      "direction_deg": 154.0,
+      "direction_deg": 155.0,
       "models_agreeing": 0,
       "model_values": {},
       "title_tags": [],
       "notes": [
         "swell event, wind not required"
       ],
-      "swell_m": 1.94,
-      "swell_dir_deg": 154.0,
+      "swell_m": 1.82,
+      "swell_dir_deg": 155.0,
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
       "confidence": "normal",
       "live_status": "pending",
-      "event_id": "qg0m451i408l2a3pdofk8t7ub0",
-      "foil_key": "hill60_swell:2026-07-15:11"
+      "event_id": "r3be2a5rgitu524f8rf31sd2n0",
+      "foil_key": "hill60_swell:2026-07-15:10"
     },
     {
       "trigger_id": "entrance_swell",
@@ -65,19 +65,19 @@
       "date": "2026-07-18",
       "start": "2026-07-18T11:00:00+10:00",
       "end": "2026-07-18T12:00:00+10:00",
-      "grade": "yellow",
-      "peak_median_kn": 4.2,
-      "direction_deg": 156.0,
+      "grade": "green",
+      "peak_median_kn": 4.4,
+      "direction_deg": 157.0,
       "models_agreeing": 3,
       "model_values": {
-        "GFS": 4.2,
-        "ECMWF": 4.9,
+        "GFS": 4.4,
+        "ECMWF": 4.8,
         "UKMO": 2.7
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 0.76,
-      "swell_dir_deg": 85.0,
+      "swell_m": 0.82,
+      "swell_dir_deg": 84.0,
       "high_tide": "2026-07-18T11:00:00+10:00",
       "high_tide_m": 1.42,
       "spots": null,
@@ -92,19 +92,18 @@
       "date": "2026-07-19",
       "start": "2026-07-19T12:00:00+10:00",
       "end": "2026-07-19T13:00:00+10:00",
-      "grade": "green",
-      "peak_median_kn": 4.8,
-      "direction_deg": 131.0,
-      "models_agreeing": 3,
+      "grade": "red",
+      "peak_median_kn": 3.5,
+      "direction_deg": 161.0,
+      "models_agreeing": 2,
       "model_values": {
-        "GFS": 4.8,
         "ECMWF": 2.1,
         "UKMO": 4.9
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 0.92,
-      "swell_dir_deg": 72.0,
+      "swell_m": 1.32,
+      "swell_dir_deg": 73.0,
       "high_tide": "2026-07-19T12:00:00+10:00",
       "high_tide_m": 1.39,
       "spots": null,
