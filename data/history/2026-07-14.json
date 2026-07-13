@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-14T04:07:50.108429+10:00",
+  "generated_at": "2026-07-14T05:49:38.449917+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-14T04:07:50.746732+10:00",
+      "fetched_at": "2026-07-14T05:49:39.136320+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-14T04:07:51.383418+10:00",
+      "fetched_at": "2026-07-14T05:49:39.691649+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-14T04:07:51.992989+10:00",
+      "fetched_at": "2026-07-14T05:49:40.289501+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-14T04:07:52.602592+10:00",
+      "fetched_at": "2026-07-14T05:49:40.884259+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-14T04:07:53.210326+10:00",
+      "fetched_at": "2026-07-14T05:49:41.418279+10:00",
       "detail": null,
       "error": null
     }
@@ -41,13 +41,13 @@
       "start": "2026-07-18T11:00:00+10:00",
       "end": "2026-07-18T13:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 2.5,
-      "direction_deg": 157.0,
+      "peak_median_kn": 2.1,
+      "direction_deg": 104.0,
       "models_agreeing": 3,
       "model_values": {
         "ECMWF": 4.6,
         "ICON": 1.6,
-        "UKMO": 2.5
+        "UKMO": 2.1
       },
       "title_tags": [],
       "notes": [],
@@ -68,12 +68,12 @@
       "start": "2026-07-19T12:00:00+10:00",
       "end": "2026-07-19T14:00:00+10:00",
       "grade": "red",
-      "peak_median_kn": 4.2,
-      "direction_deg": 57.0,
+      "peak_median_kn": 4.0,
+      "direction_deg": 94.0,
       "models_agreeing": 2,
       "model_values": {
         "ICON": 4.4,
-        "UKMO": 3.9
+        "UKMO": 3.5
       },
       "title_tags": [],
       "notes": [],
@@ -94,12 +94,13 @@
       "start": "2026-07-20T13:00:00+10:00",
       "end": "2026-07-20T15:00:00+10:00",
       "grade": "red",
-      "peak_median_kn": 3.0,
-      "direction_deg": 60.0,
-      "models_agreeing": 2,
+      "peak_median_kn": 4.1,
+      "direction_deg": 32.0,
+      "models_agreeing": 3,
       "model_values": {
         "GFS": 4.1,
-        "ECMWF": 1.9
+        "ECMWF": 1.9,
+        "UKMO": 4.1
       },
       "title_tags": [],
       "notes": [],
