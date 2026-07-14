@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-14T21:00:55.265608+10:00",
+  "generated_at": "2026-07-14T21:44:56.094265+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-14T21:00:55.906835+10:00",
+      "fetched_at": "2026-07-14T21:44:56.519596+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-14T21:00:56.588513+10:00",
+      "fetched_at": "2026-07-14T21:44:56.930137+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-14T21:00:57.197322+10:00",
+      "fetched_at": "2026-07-14T21:44:57.332289+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-14T21:00:57.786408+10:00",
+      "fetched_at": "2026-07-14T21:44:57.749494+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-14T21:00:58.364726+10:00",
+      "fetched_at": "2026-07-14T21:44:58.133875+10:00",
       "detail": null,
       "error": null
     }
@@ -41,10 +41,11 @@
       "start": "2026-07-19T12:00:00+10:00",
       "end": "2026-07-19T14:00:00+10:00",
       "grade": "red",
-      "peak_median_kn": 2.9,
-      "direction_deg": 66.0,
-      "models_agreeing": 3,
+      "peak_median_kn": 3.5,
+      "direction_deg": 81.0,
+      "models_agreeing": 4,
       "model_values": {
+        "GFS": 4.1,
         "ECMWF": 2.9,
         "ICON": 4.4,
         "UKMO": 2.9
@@ -68,11 +69,11 @@
       "start": "2026-07-20T13:00:00+10:00",
       "end": "2026-07-20T15:00:00+10:00",
       "grade": "red",
-      "peak_median_kn": 3.7,
-      "direction_deg": 2.0,
+      "peak_median_kn": 4.2,
+      "direction_deg": 359.0,
       "models_agreeing": 3,
       "model_values": {
-        "GFS": 2.7,
+        "GFS": 4.9,
         "ECMWF": 4.2,
         "UKMO": 3.7
       },
