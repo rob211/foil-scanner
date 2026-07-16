@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-16T16:31:32.437246+10:00",
+  "generated_at": "2026-07-16T18:00:52.296149+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-16T16:31:33.043607+10:00",
+      "fetched_at": "2026-07-16T18:00:52.803161+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-16T16:31:33.609308+10:00",
+      "fetched_at": "2026-07-16T18:00:53.286989+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-16T16:31:34.198832+10:00",
+      "fetched_at": "2026-07-16T18:00:53.819114+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-16T16:31:34.816785+10:00",
+      "fetched_at": "2026-07-16T18:00:54.325610+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-16T16:31:35.329881+10:00",
+      "fetched_at": "2026-07-16T18:00:54.829225+10:00",
       "detail": null,
       "error": null
     }
@@ -37,17 +37,43 @@
     {
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
+      "date": "2026-07-20",
+      "start": "2026-07-20T13:00:00+10:00",
+      "end": "2026-07-20T14:00:00+10:00",
+      "grade": "red",
+      "peak_median_kn": 4.5,
+      "direction_deg": 22.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 4.3,
+        "UKMO": 4.7
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": 1.12,
+      "swell_dir_deg": 79.0,
+      "high_tide": "2026-07-20T13:00:00+10:00",
+      "high_tide_m": 1.42,
+      "spots": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "krebbpjv6iegas4121hpfe3koo",
+      "foil_key": "entrance_swell:2026-07-20:13"
+    },
+    {
+      "trigger_id": "entrance_swell",
+      "run_name": "Lake Entrance (swell)",
       "date": "2026-07-21",
       "start": "2026-07-21T13:00:00+10:00",
       "end": "2026-07-21T15:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 4.3,
-      "direction_deg": 58.0,
+      "peak_median_kn": 3.3,
+      "direction_deg": 64.0,
       "models_agreeing": 3,
       "model_values": {
         "GFS": 4.3,
-        "ECMWF": 2.3,
-        "UKMO": 4.3
+        "ECMWF": 2.4,
+        "UKMO": 3.3
       },
       "title_tags": [],
       "notes": [],
@@ -68,14 +94,14 @@
       "start": "2026-07-22T14:00:00+10:00",
       "end": "2026-07-22T15:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 3.1,
-      "direction_deg": 252.0,
+      "peak_median_kn": 4.8,
+      "direction_deg": 288.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 1.1,
-        "ECMWF": 2.4,
+        "ECMWF": 6.8,
         "ICON": 9.7,
-        "UKMO": 3.9
+        "UKMO": 2.7
       },
       "title_tags": [],
       "notes": [],
