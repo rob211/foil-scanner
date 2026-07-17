@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-18T00:03:41.673948+10:00",
+  "generated_at": "2026-07-18T01:40:25.367409+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-18T00:03:42.315404+10:00",
+      "fetched_at": "2026-07-18T01:40:25.835332+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-18T00:03:42.955487+10:00",
+      "fetched_at": "2026-07-18T01:40:26.258261+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-18T00:03:43.614237+10:00",
+      "fetched_at": "2026-07-18T01:40:26.799323+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-18T00:03:44.275330+10:00",
+      "fetched_at": "2026-07-18T01:40:27.193225+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-18T00:03:44.915607+10:00",
+      "fetched_at": "2026-07-18T01:40:27.595762+10:00",
       "detail": null,
       "error": null
     }
