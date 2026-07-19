@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-19T12:00:36.140032+10:00",
+  "generated_at": "2026-07-19T13:54:50.294936+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-19T12:00:36.658431+10:00",
+      "fetched_at": "2026-07-19T13:54:50.922571+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-19T12:00:37.172364+10:00",
+      "fetched_at": "2026-07-19T13:54:51.523759+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-19T12:00:37.676261+10:00",
+      "fetched_at": "2026-07-19T13:54:52.026526+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-19T12:00:38.189147+10:00",
+      "fetched_at": "2026-07-19T13:54:52.547006+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-19T12:00:38.663632+10:00",
+      "fetched_at": "2026-07-19T13:54:53.133131+10:00",
       "detail": null,
       "error": null
     }
@@ -41,13 +41,13 @@
       "start": "2026-07-19T12:00:00+10:00",
       "end": "2026-07-19T14:00:00+10:00",
       "grade": "red",
-      "peak_median_kn": 4.1,
-      "direction_deg": 124.0,
+      "peak_median_kn": 4.4,
+      "direction_deg": 127.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 4.8,
         "ECMWF": 4.1,
-        "ICON": 4.1,
+        "ICON": 4.9,
         "UKMO": 3.7
       },
       "title_tags": [],
@@ -121,13 +121,13 @@
       "start": "2026-07-22T14:00:00+10:00",
       "end": "2026-07-22T16:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 4.5,
+      "peak_median_kn": 5.8,
       "direction_deg": 258.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 7.0,
         "ECMWF": 4.7,
-        "ICON": 4.3,
+        "ICON": 7.1,
         "UKMO": 2.5
       },
       "title_tags": [],
