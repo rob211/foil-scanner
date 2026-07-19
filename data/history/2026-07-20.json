@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-20T03:16:14.326105+10:00",
+  "generated_at": "2026-07-20T05:32:42.950711+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-20T03:16:14.745552+10:00",
+      "fetched_at": "2026-07-20T05:32:43.654545+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-20T03:16:15.156453+10:00",
+      "fetched_at": "2026-07-20T05:32:44.252673+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-20T03:16:15.548956+10:00",
+      "fetched_at": "2026-07-20T05:32:44.818419+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-20T03:16:15.952935+10:00",
+      "fetched_at": "2026-07-20T05:32:45.382753+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-20T03:16:16.338121+10:00",
+      "fetched_at": "2026-07-20T05:32:45.847214+10:00",
       "detail": null,
       "error": null
     }
@@ -41,11 +41,11 @@
       "start": "2026-07-20T14:00:00+10:00",
       "end": "2026-07-20T15:00:00+10:00",
       "grade": "red",
-      "peak_median_kn": 4.6,
-      "direction_deg": 11.0,
+      "peak_median_kn": 4.5,
+      "direction_deg": 9.0,
       "models_agreeing": 2,
       "model_values": {
-        "GFS": 4.4,
+        "GFS": 4.3,
         "ECMWF": 4.7
       },
       "title_tags": [],
@@ -67,11 +67,11 @@
       "start": "2026-07-21T13:00:00+10:00",
       "end": "2026-07-21T15:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 4.6,
-      "direction_deg": 24.0,
+      "peak_median_kn": 4.5,
+      "direction_deg": 28.0,
       "models_agreeing": 3,
       "model_values": {
-        "GFS": 4.8,
+        "GFS": 4.5,
         "ECMWF": 4.6,
         "UKMO": 3.1
       },
@@ -98,7 +98,7 @@
       "direction_deg": 269.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 7.6,
+        "GFS": 8.2,
         "ECMWF": 4.0,
         "ICON": 5.3,
         "UKMO": 2.5
