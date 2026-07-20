@@ -3,8 +3,10 @@ from datetime import timedelta
 from conftest import DAY, NOW, at, mk_marine, mk_sun, mk_wind
 
 from foilscan import config
+from foilscan.models import MarineForecast, MarineHour
 from foilscan.triggers import (
     ang_diff,
+    baysurf_windows,
     entrance_windows,
     hill60_windows,
     lake_windows,
@@ -202,6 +204,62 @@ def test_ne_minuscule_south_swell_full_value(sun):
     wind = mk_wind(hours(range(10, 16), 25, 45))
     windows, _ = ne_windows(wind, mk_marine(0.4, 180), sun, NOW)
     assert windows[0].grade == "red"
+
+
+# ------------------------------------------------------------------ baysurf
+
+def _marine_for_baysurf(high_tide_hour: int, low_tide_hour: int) -> MarineForecast:
+    hours = []
+    for h in range(24):
+        sea_level_m = 0.0
+        if h == high_tide_hour:
+            sea_level_m = 1.0
+        elif h == low_tide_hour:
+            sea_level_m = -1.0
+        elif high_tide_hour < low_tide_hour:
+            if high_tide_hour < h < low_tide_hour:
+                sea_level_m = -0.2 * (h - high_tide_hour)
+            else:
+                sea_level_m = -0.2 * (high_tide_hour + 24 - h)
+        else:
+            if h <= high_tide_hour and h >= low_tide_hour:
+                sea_level_m = -0.2 * (high_tide_hour - h)
+            else:
+                sea_level_m = -0.2 * (h + 24 - high_tide_hour)
+        hours.append(
+            MarineHour(
+                time=at(h),
+                swell_m=1.6,
+                swell_dir_deg=60,
+                swell_period_s=9.0,
+                sea_level_m=sea_level_m,
+            )
+        )
+    return MarineForecast(fetched_at=NOW, hours=hours)
+
+
+def test_baysurf_triggers_on_east_ne_swell_and_light_wind(sun):
+    wind = mk_wind(hours(range(10, 14), 8, 270), location_key="ocean")
+    marine = _marine_for_baysurf(10, 13)
+    windows, _ = baysurf_windows(wind, marine, sun, NOW)
+    assert len(windows) == 1
+    assert windows[0].trigger_id == "baysurf"
+    assert windows[0].grade == "green"
+
+
+def test_baysurf_rejects_strong_wrong_direction_wind(sun):
+    wind = mk_wind(hours(range(10, 14), 12, 90), location_key="ocean")
+    marine = _marine_for_baysurf(10, 13)
+    windows, _ = baysurf_windows(wind, marine, sun, NOW)
+    assert windows == []
+
+
+def test_baysurf_downgrades_outside_ideal_tide_window(sun):
+    wind = mk_wind(hours(range(10, 13), 8, 270), location_key="ocean")
+    marine = _marine_for_baysurf(10, 17)
+    windows, _ = baysurf_windows(wind, marine, sun, NOW)
+    assert windows[0].grade == "yellow"
+    assert any("tide" in t.lower() for t in windows[0].title_tags)
 
 
 # ------------------------------------------------------------------ entrance

@@ -167,6 +167,15 @@ So a nuking NE day with a medium (1.0 m+) south swell creates no event, while th
 - The cross-swell downgrade stacks with the NE off-angle downgrade (4.5) but never drops below yellow; a yellow event stays on the calendar.
 - Does not apply to the lake runs (no ocean swell on the lake), the Lake Entrance triggers (E/NE swell is the point there), or the standalone Hill 60 swell run (a swell event, not a downwinder).
 
+### 4.7 Baysurf (custom event)
+
+Baysurf is a custom event for clean E/NE-swell windows. It triggers when the marine forecast shows at least 1.5 m of swell from 35-90 degrees (E through NE) while the wind is either:
+
+- light, up to 10 kn, or
+- stronger only if it is from the west, south-west or north-west (the wind must be favourably off the back for the run).
+
+The event must also overlap the falling-tide window from high tide toward low tide. The middle-to-low part of that fall is the ideal window; if the event only lands in the broader high-to-low span, it drops one colour and gets a tide tag in the event title. Baysurf is not part of the standard ocean-downwinder swell-compatibility rule; it is treated as its own trigger family.
+
 ## 5. Model consensus
 
 - A forecast window fires only when at least 2 of the 4 models meet the trigger for that hour.

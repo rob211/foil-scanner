@@ -33,12 +33,14 @@ def vector_mean(degs: list[float]) -> float:
     return math.degrees(math.atan2(y, x)) % 360.0
 
 
-def grade_for(value: float, target: float) -> str | None:
+def grade_for(value: float, target: float, yellow_floor: float | None = None) -> str | None:
+    if yellow_floor is None:
+        yellow_floor = target * config.YELLOW_FACTOR
     if value > target * config.RED_FACTOR:
         return "red"
     if value >= target:
         return "green"
-    if value >= target * config.YELLOW_FACTOR:
+    if value >= yellow_floor:
         return "yellow"
     return None
 
@@ -300,6 +302,24 @@ def _tide_spans(marine: MarineForecast) -> list[tuple[datetime, datetime, Marine
     return [(ht.time, ht.time + window, ht) for ht in marine.high_tides()]
 
 
+def _baysurf_tide_spans(marine: MarineForecast) -> list[tuple[datetime, datetime, datetime, datetime]]:
+    spans = []
+    highs = marine.high_tides()
+    for ht in highs:
+        after = [h for h in marine.hours if h.time > ht.time]
+        if not after:
+            continue
+        low = min(after, key=lambda h: h.sea_level_m)
+        full_start = ht.time
+        full_end = low.time + HOUR
+        if full_end <= full_start:
+            continue
+        ideal_start = full_start + (full_end - full_start) / 2
+        ideal_end = full_end
+        spans.append((full_start, full_end, ideal_start, ideal_end))
+    return spans
+
+
 def _tide_height_cd(ht: MarineHour) -> float:
     """Modelled high-tide height referenced to chart datum (tide-table style)."""
     return round(ht.sea_level_m + config.PORT_KEMBLA_MSL_ABOVE_CD_M, 2)
@@ -315,6 +335,88 @@ def _intersect_tides(
             if hi - lo >= HOUR:
                 pieces.append((lo, hi, ht))
     return pieces
+
+
+def baysurf_windows(
+    wind: WindForecast, marine: MarineForecast, sun: SunTimes, now: datetime
+) -> tuple[list[Window], list[NearMiss]]:
+    windows: list[Window] = []
+    misses: list[NearMiss] = []
+    tide_spans = _baysurf_tide_spans(marine)
+
+    hour_map: dict[datetime, dict] = {}
+    for model_id, series in wind.models.items():
+        for hw in series:
+            if not sun.daylight(hw.time):
+                continue
+            mh = marine.at(hw.time)
+            if mh.swell_m < config.BAYSURF_SWELL_YELLOW_M:
+                continue
+            if not config.BAYSURF_SWELL_ARC.contains(mh.swell_dir_deg):
+                continue
+            light_ok = 4.0 <= hw.speed_kn <= config.BAYSURF_WIND_MAX_KN
+            strong_ok = hw.speed_kn > config.BAYSURF_WIND_MAX_KN and config.BAYSURF_STRONG_WIND_ARC.contains(hw.dir_deg)
+            if light_ok or strong_ok:
+                hour_map.setdefault(hw.time, {})[model_id] = hw
+
+    for span in _group(_active_hours(hour_map, sun, config.MIN_MODELS_AGREE)):
+        start, end = span
+        hours = [t for t in hour_map if start <= t < end]
+        peak_time = max(hours, key=lambda t: (marine.at(t).swell_m, -t.timestamp()))
+        peak_models = hour_map[peak_time]
+        peak_median_kn = median(h.speed_kn for h in peak_models.values())
+        direction = vector_mean([h.dir_deg for h in peak_models.values()])
+        mh = marine.at(peak_time)
+        grade = grade_for(
+            mh.swell_m,
+            config.BAYSURF_SWELL_TARGET_M,
+            yellow_floor=config.BAYSURF_SWELL_YELLOW_M,
+        )
+        if grade is None:
+            continue
+
+        tide_span = next(
+            (s for s in tide_spans if s[0] <= peak_time < s[1]),
+            None,
+        )
+        if tide_span is None:
+            continue
+
+        full_start, full_end, ideal_start, ideal_end = tide_span
+        if not (start < full_end and full_start < end):
+            continue
+        if not (start < ideal_end and ideal_start < end):
+            grade = downgrade(grade)
+            title_tag = "tide"
+        else:
+            title_tag = None
+
+        offset = (start.date() - now.date()).days
+        w = Window(
+            trigger_id="baysurf",
+            run_name="Baysurf",
+            start=start,
+            end=end,
+            grade=grade,
+            peak_time=peak_time,
+            peak_median_kn=round(peak_median_kn, 1),
+            direction_deg=round(direction, 0),
+            models_agreeing=len(peak_models),
+            model_values={config.MODELS[m]: round(h.speed_kn, 1) for m, h in peak_models.items()},
+            swell_m=round(mh.swell_m, 2),
+            swell_dir_deg=round(mh.swell_dir_deg, 0),
+            confidence=(
+                "low (long range)"
+                if offset >= config.LOW_CONFIDENCE_FROM_DAY_OFFSET
+                else "normal"
+            ),
+        )
+        if title_tag is not None:
+            w.title_tags.append(title_tag)
+        windows.append(w)
+
+    misses.extend(_single_model_misses("baysurf", hour_map, sun, windows))
+    return windows, misses
 
 
 def entrance_windows(
@@ -538,6 +640,10 @@ def evaluate(
     nw, nm = ne_windows(ocean_wind, marine, sun, now)
     windows += nw
     misses += nm
+
+    bw, bm = baysurf_windows(ocean_wind, marine, sun, now)
+    windows += bw
+    misses += bm
 
     windows.sort(key=lambda w: (w.start, w.trigger_id))
     return windows, misses

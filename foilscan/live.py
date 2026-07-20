@@ -24,6 +24,7 @@ WIND_TARGETS = {
     "entrance_ne": (config.ENTRANCE_M2_TARGET_KN, config.ENTRANCE_M2_WIND_ARC),
     "south_ocean": (config.SOUTH_TARGET_KN, config.SOUTH_WIND_ARC),
     "ne_ocean": (config.NE_TARGET_KN, config.NE_WIND_ARC),
+    "baysurf": (config.BAYSURF_WIND_MAX_KN, config.BAYSURF_STRONG_WIND_ARC),
 }
 
 
@@ -65,6 +66,16 @@ def status_for(
         if obs.speed_kn <= config.ENTRANCE_M1_WIND_MAX_KN * 1.25:
             return "confirmed", f"wind staying light: {live}"
         return "miss", f"wind too strong for mode 1: {live}"
+
+    if w["trigger_id"] == "baysurf":
+        if obs.speed_kn <= config.BAYSURF_WIND_MAX_KN:
+            return "confirmed", f"{live}, forecast {w['peak_median_kn']} kn"
+        if obs.dir_deg is not None and config.BAYSURF_STRONG_WIND_ARC.contains(obs.dir_deg):
+            return "confirmed", f"{live}, forecast {w['peak_median_kn']} kn"
+        started = now >= datetime.fromisoformat(w["start"])
+        if started and obs.speed_kn > config.BAYSURF_WIND_MAX_KN:
+            return "miss", f"{live} vs forecast {w['peak_median_kn']} kn"
+        return "pending", live
 
     target, arc = WIND_TARGETS[w["trigger_id"]]
     dir_ok = obs.dir_deg is not None and arc.contains(obs.dir_deg)

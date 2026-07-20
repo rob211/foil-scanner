@@ -13,6 +13,7 @@ from datetime import datetime
 from . import config, fetch, gcal, verdict
 from .models import SourceStatus
 from .triggers import (
+    baysurf_windows,
     entrance_windows,
     hill60_windows,
     lake_windows,
@@ -76,6 +77,9 @@ def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
             misses += m
             windows += hill60_windows(sw, marine, sun, now)
             w, m = ne_windows(ocean_wind, marine, sun, now)
+            windows += w
+            misses += m
+            w, m = baysurf_windows(ocean_wind, marine, sun, now)
             windows += w
             misses += m
         else:

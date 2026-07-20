@@ -54,6 +54,8 @@ def title_for(w: Window) -> str:
         core = f"{name}: {w.swell_m:.1f} m {compass(w.swell_dir_deg)}"
     elif w.trigger_id == "entrance_swell":
         core = f"{name}: {w.swell_m:.1f} m {compass(w.swell_dir_deg)} swell"
+    elif w.trigger_id == "baysurf":
+        core = f"{name}: {w.swell_m:.1f} m {compass(w.swell_dir_deg)} swell"
     else:
         core = f"{name}: {w.peak_median_kn:.0f} kn {compass(w.direction_deg)}"
     rare = "RARE" in w.title_tags

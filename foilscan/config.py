@@ -110,6 +110,13 @@ NE_LADDER = (
     (10.0, 3),  # last 3 hours all at 10 kn or more -> ready
 )
 
+# Baysurf (custom event: east/NE swell, light wind, falling tide)
+BAYSURF_SWELL_ARC = Arc(35, 90)
+BAYSURF_SWELL_TARGET_M = 1.5
+BAYSURF_SWELL_YELLOW_M = 1.5
+BAYSURF_WIND_MAX_KN = 10.0
+BAYSURF_STRONG_WIND_ARC = Arc(225, 315)
+
 # Swell compatibility for ocean downwinders (spec 4.6)
 SWELL_IGNORE_BELOW_M = 0.5
 SWELL_ALIGNED_MAX_DEG = 25.0
@@ -175,6 +182,8 @@ def validate() -> None:
         SOUTH_SWELL_ARC,
         NE_WIND_ARC,
         NE_TRUE_ARC,
+        BAYSURF_SWELL_ARC,
+        BAYSURF_STRONG_WIND_ARC,
     ]
     for arc in arcs:
         if not (0 <= arc.lo <= 360 and 0 <= arc.hi <= 360):
@@ -186,6 +195,7 @@ def validate() -> None:
         SOUTH_TARGET_KN,
         HILL60_SWELL_TARGET_M,
         NE_TARGET_KN,
+        BAYSURF_SWELL_TARGET_M,
     ]
     if any(t <= 0 for t in targets):
         raise ConfigError("all trigger targets must be positive")
