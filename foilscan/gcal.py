@@ -107,6 +107,48 @@ def _strip_live_prefix(summary: str) -> str:
     return summary
 
 
+def lake_alert_body(obs: object, now: datetime) -> dict:
+    speed = getattr(obs, "speed_kn", None)
+    station = getattr(obs, "station", "Lake") or "Lake"
+    if speed is None:
+        speed = 0.0
+    day = now.date().isoformat()
+    if speed < 22.0:
+        title = f"LAKE NOTICE: {speed:.0f} kn at {station}"
+        desc = f"Lake wind is at {speed:.0f} kn live at {station}."
+    elif speed < 25.0:
+        title = f"LAKE ALERT: {speed:.0f} kn at {station}"
+        desc = f"Lake wind is over 22 kn live at {station}."
+    else:
+        title = f"LAKE ALERT!!! {speed:.0f} kn at {station}"
+        desc = f"Lake wind is over 25 kn live at {station}."
+    return {
+        "summary": title,
+        "description": (
+            f"{desc}\nObserved at {now:%Y-%m-%d %H:%M %Z}."
+        ),
+        "start": {"date": day},
+        "end": {"date": day},
+        "colorId": config.COLOR_IDS["red"],
+        "extendedProperties": {"private": {"foil_key": f"lake-alert:{day}"}},
+        "reminders": {"useDefault": False, "overrides": []},
+    }
+
+
+def ensure_lake_alert(obs: object, now: datetime, cal_id: str) -> None:
+    speed = getattr(obs, "speed_kn", None)
+    if speed is None or speed < 25.0:
+        return
+    svc = service()
+    key = f"lake-alert:{now.date().isoformat()}"
+    for ev in list_managed(svc, cal_id, now).values():
+        ep = ev.get("extendedProperties", {}).get("private", {}).get("foil_key", "")
+        if ep == key:
+            svc.events().patch(calendarId=cal_id, eventId=ev["id"], body=lake_alert_body(obs, now)).execute()
+            return
+    svc.events().insert(calendarId=cal_id, body=lake_alert_body(obs, now)).execute()
+
+
 def list_managed(svc, cal_id: str, now: datetime) -> dict[str, dict]:
     """All events in the horizon carrying a foil_key, keyed by it."""
     time_min = (now - timedelta(days=1)).isoformat()

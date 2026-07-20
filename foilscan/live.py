@@ -11,6 +11,10 @@ from . import config, fetch, gcal, verdict
 from .errors import CalendarError, StaleDataError
 from .models import Observation
 
+LAKE_ALERT_THRESHOLD_KN = 22.0
+LAKE_ALERT_STRONG_KN = 25.0
+LAKE_ALERT_LOUD_KN = 25.0
+
 # trigger_id -> (green-target kn, direction arc) for wind-verifiable events
 WIND_TARGETS = {
     "lake_oakflats_berkeley": (20.0, config.LAKE_RUNS["lake_oakflats_berkeley"][1]),
@@ -82,6 +86,27 @@ def pick_obs(
     return bom, None
 
 
+def lake_recommendation(obs: Observation | None) -> str | None:
+    if obs is None:
+        return None
+    if obs.speed_kn < LAKE_ALERT_THRESHOLD_KN:
+        return None
+    if obs.speed_kn < LAKE_ALERT_STRONG_KN:
+        return (
+            f"Lake recommendation: {obs.speed_kn:.0f} kn at {obs.time:%H:%M} "
+            f"({obs.station}) — first notification for the lake today"
+        )
+    if obs.speed_kn < LAKE_ALERT_LOUD_KN + 1.0:
+        return (
+            f"Lake recommendation: {obs.speed_kn:.0f} kn at {obs.time:%H:%M} "
+            f"({obs.station}) — stronger lake notification"
+        )
+    return (
+        f"Lake recommendation: {obs.speed_kn:.0f} kn at {obs.time:%H:%M} "
+        f"({obs.station}) — loudest lake notification"
+    )
+
+
 def apply_status(svc, cal_id: str, w: dict, state: str, live_line: str, dry_run: bool) -> str:
     if w.get("event_id") is None:
         raise CalendarError(f"window {w['foil_key']} has no event_id in latest.json")
@@ -148,6 +173,13 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
     checks: list[dict] = []
     svc = None if dry_run or not todays else gcal.service()
     cal_id = None if dry_run or not todays else gcal.calendar_id()
+
+    lake_rec = lake_recommendation(holfuy or bom)
+    if lake_rec is not None and not dry_run:
+        try:
+            gcal.ensure_lake_alert(holfuy or bom, now, cal_id)
+        except Exception as exc:
+            notes.append(f"lake alert event failed: {exc}")
     for w in todays:
         obs, note = pick_obs(w, bom, holfuy)
         state, live_line = status_for(w, obs, now)
@@ -170,6 +202,8 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
         log.append("DRY RUN: not writing live.json")
     else:
         verdict.write_live(verdict.build_live(now, bom, holfuy, checks, notes), data_dir)
+        if lake_rec is not None:
+            log.append(lake_rec)
         log.append(
             f"live.json: {bom.station} {bom.speed_kn:.0f} kn at {bom.time:%H:%M}, "
             f"{len(checks)} check(s)"

@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from foilscan import config, fetch, live, verdict
+from foilscan import config, fetch, gcal, live, verdict
 from foilscan.errors import FetchError, StaleDataError
 from foilscan.models import Observation
 
@@ -69,6 +69,18 @@ def test_lake_prefers_holfuy():
     assert picked is holfuy and note is None
     picked, note = live.pick_obs(w, obs(15, 250, station="BOM"), None)
     assert picked.station == "BOM" and "BOM only" in note
+
+
+def test_lake_recommendation_appears_above_threshold():
+    rec = live.lake_recommendation(obs(27.0, 220, station="Holfuy"))
+    assert rec is not None
+    assert "27 kn" in rec and "lake" in rec.lower()
+
+
+def test_lake_alert_body_uses_live_observation():
+    body = gcal.lake_alert_body(obs(27.0, 220, station="Holfuy"), NOW)
+    assert body["summary"].startswith("LAKE ALERT")
+    assert "27 kn" in body["summary"]
 
 
 def test_relevant_windows_selects_near_now():
