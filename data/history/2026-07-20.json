@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-20T09:11:49.977763+10:00",
+  "generated_at": "2026-07-20T14:04:38.880762+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-20T09:11:50.626681+10:00",
+      "fetched_at": "2026-07-20T14:04:39.503632+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-20T09:11:51.283782+10:00",
+      "fetched_at": "2026-07-20T14:04:40.112425+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-20T09:11:51.953511+10:00",
+      "fetched_at": "2026-07-20T14:04:40.735265+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-20T09:11:52.612918+10:00",
+      "fetched_at": "2026-07-20T14:04:41.372273+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-20T09:11:53.233642+10:00",
+      "fetched_at": "2026-07-20T14:04:41.998170+10:00",
       "detail": null,
       "error": null
     }
@@ -41,18 +41,18 @@
       "start": "2026-07-21T13:00:00+10:00",
       "end": "2026-07-21T15:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 4.5,
-      "direction_deg": 34.0,
+      "peak_median_kn": 3.7,
+      "direction_deg": 30.0,
       "models_agreeing": 3,
       "model_values": {
-        "GFS": 4.5,
-        "ECMWF": 4.5,
-        "UKMO": 3.1
+        "GFS": 3.7,
+        "ICON": 4.9,
+        "UKMO": 2.5
       },
       "title_tags": [],
       "notes": [],
       "swell_m": 0.98,
-      "swell_dir_deg": 78.0,
+      "swell_dir_deg": 76.0,
       "high_tide": "2026-07-21T13:00:00+10:00",
       "high_tide_m": 1.46,
       "spots": null,
@@ -68,19 +68,19 @@
       "start": "2026-07-22T14:00:00+10:00",
       "end": "2026-07-22T16:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 3.7,
-      "direction_deg": 257.0,
+      "peak_median_kn": 4.3,
+      "direction_deg": 252.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 8.2,
-        "ECMWF": 2.9,
-        "ICON": 4.3,
-        "UKMO": 3.1
+        "GFS": 6.5,
+        "ECMWF": 3.5,
+        "ICON": 5.2,
+        "UKMO": 3.5
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 0.8,
-      "swell_dir_deg": 72.0,
+      "swell_m": 0.86,
+      "swell_dir_deg": 77.0,
       "high_tide": "2026-07-22T14:00:00+10:00",
       "high_tide_m": 1.6,
       "spots": null,
