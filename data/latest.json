@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-21T16:41:30.312889+10:00",
+  "generated_at": "2026-07-21T18:00:42.879632+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-21T16:41:30.768996+10:00",
+      "fetched_at": "2026-07-21T18:00:43.278632+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-21T16:41:31.187627+10:00",
+      "fetched_at": "2026-07-21T18:00:43.674328+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-21T16:41:31.612943+10:00",
+      "fetched_at": "2026-07-21T18:00:44.075454+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-21T16:41:32.419775+10:00",
+      "fetched_at": "2026-07-21T18:00:44.493706+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-21T16:41:32.823310+10:00",
+      "fetched_at": "2026-07-21T18:00:44.905336+10:00",
       "detail": null,
       "error": null
     }
@@ -41,12 +41,13 @@
       "start": "2026-07-21T13:00:00+10:00",
       "end": "2026-07-21T15:00:00+10:00",
       "grade": "red",
-      "peak_median_kn": 4.4,
-      "direction_deg": 1.0,
-      "models_agreeing": 2,
+      "peak_median_kn": 4.6,
+      "direction_deg": 0.0,
+      "models_agreeing": 3,
       "model_values": {
         "GFS": 4.6,
-        "ECMWF": 4.2
+        "ECMWF": 4.6,
+        "UKMO": 2.7
       },
       "title_tags": [],
       "notes": [],
@@ -67,14 +68,14 @@
       "start": "2026-07-22T14:00:00+10:00",
       "end": "2026-07-22T16:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 5.4,
-      "direction_deg": 253.0,
+      "peak_median_kn": 5.3,
+      "direction_deg": 252.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 6.7,
-        "ECMWF": 4.8,
+        "ECMWF": 4.6,
         "ICON": 6.1,
-        "UKMO": 3.3
+        "UKMO": 3.1
       },
       "title_tags": [],
       "notes": [],
