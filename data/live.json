@@ -1,10 +1,14 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-22T08:15:12.556783+10:00",
-  "obs": null,
+  "generated_at": "2026-07-22T09:15:25.713366+10:00",
+  "obs": {
+    "station": "Bellambi",
+    "time": "2026-07-22T09:00:00+10:00",
+    "speed_kn": 5.9,
+    "gust_kn": 8.1,
+    "dir_deg": 22.5
+  },
   "holfuy": null,
   "checks": [],
-  "notes": [
-    "BOM fetch failed: BOM observations (Bellambi): latest reading is 45 min old, cap is 45 min"
-  ]
+  "notes": []
 }
