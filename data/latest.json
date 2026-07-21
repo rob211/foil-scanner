@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-22T05:51:04.234251+10:00",
+  "generated_at": "2026-07-22T06:00:42.568326+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-22T05:51:04.763954+10:00",
+      "fetched_at": "2026-07-22T06:00:43.235087+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-22T05:51:05.292348+10:00",
+      "fetched_at": "2026-07-22T06:00:43.929251+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-22T05:51:05.779027+10:00",
+      "fetched_at": "2026-07-22T06:00:44.570594+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-22T05:51:06.270232+10:00",
+      "fetched_at": "2026-07-22T06:00:45.176558+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-22T05:51:06.816954+10:00",
+      "fetched_at": "2026-07-22T06:00:45.806390+10:00",
       "detail": null,
       "error": null
     }
@@ -48,7 +48,7 @@
         "GFS": 5.8,
         "ECMWF": 6.0,
         "ICON": 6.4,
-        "UKMO": 2.1
+        "UKMO": 0.8
       },
       "title_tags": [],
       "notes": [],
