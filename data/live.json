@@ -1,14 +1,20 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-22T10:11:58.906926+10:00",
+  "generated_at": "2026-07-22T13:52:35.157214+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-07-22T10:00:00+10:00",
-    "speed_kn": 10.3,
-    "gust_kn": 14.0,
-    "dir_deg": 270.0
+    "time": "2026-07-22T13:30:00+10:00",
+    "speed_kn": 10.8,
+    "gust_kn": 16.2,
+    "dir_deg": 247.5
   },
   "holfuy": null,
-  "checks": [],
+  "checks": [
+    {
+      "foil_key": "entrance_swell:2026-07-22:14",
+      "state": "confirmed",
+      "live_line": "wind staying light: 11 kn WSW at 13:30 (Bellambi)"
+    }
+  ],
   "notes": []
 }
