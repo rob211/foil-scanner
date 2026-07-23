@@ -54,6 +54,16 @@ class MarineForecast:
                 highs.append(s[i])
         return highs
 
+    def low_tides(self) -> list[MarineHour]:
+        """Local minima of modelled sea level (spec 4.8). Hourly resolution,
+        so timing is +/- 30 min until calibrated."""
+        lows = []
+        s = self.hours
+        for i in range(1, len(s) - 1):
+            if s[i].sea_level_m < s[i - 1].sea_level_m and s[i].sea_level_m <= s[i + 1].sea_level_m:
+                lows.append(s[i])
+        return lows
+
 
 @dataclass
 class SunTimes:

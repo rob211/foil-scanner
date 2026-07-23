@@ -79,7 +79,14 @@ def description_for(w: Window, generated_at: datetime, source_notes: list[str]) 
     if w.high_tide:
         ht = datetime.fromisoformat(w.high_tide)
         height = f", {w.high_tide_m:.1f} m" if w.high_tide_m is not None else ""
-        lines.append(f"High tide: {ht:%H:%M}{height} (window is high tide to +2 h)")
+        if w.trigger_id == "entrance_reverse":
+            lines.append(
+                f"High tide: {ht:%H:%M}{height} "
+                f"(window is low tide +{config.ENTRANCE_REVERSE_START_AFTER_LOW_H:.0f} h "
+                f"to high tide -{config.ENTRANCE_REVERSE_END_BEFORE_HIGH_H:.0f} h)"
+            )
+        else:
+            lines.append(f"High tide: {ht:%H:%M}{height} (window is high tide to +2 h)")
     for note in w.notes:
         lines.append(f"Note: {_one_line(note)}")
     lines.append(f"Confidence: {w.confidence}")

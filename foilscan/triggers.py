@@ -523,6 +523,66 @@ def entrance_windows(
     return merged, []
 
 
+def _entrance_reverse_tide_spans(
+    marine: MarineForecast,
+) -> list[tuple[datetime, datetime, MarineHour, MarineHour]]:
+    """Spec 4.8: the reverse run works the incoming tide, the opposite gate
+    to the standard entrance runs. Opens config.ENTRANCE_REVERSE_START_AFTER_LOW_H
+    after low tide, closes config.ENTRANCE_REVERSE_END_BEFORE_HIGH_H before the
+    next high."""
+    start_after = timedelta(hours=config.ENTRANCE_REVERSE_START_AFTER_LOW_H)
+    end_before = timedelta(hours=config.ENTRANCE_REVERSE_END_BEFORE_HIGH_H)
+    highs = marine.high_tides()
+    spans = []
+    for lt in marine.low_tides():
+        after = [h for h in highs if h.time > lt.time]
+        if not after:
+            continue
+        ht = min(after, key=lambda h: h.time)
+        start, end = lt.time + start_after, ht.time - end_before
+        if end > start:
+            spans.append((start, end, lt, ht))
+    return spans
+
+
+def entrance_reverse_windows(
+    wind: WindForecast, marine: MarineForecast, sun: SunTimes, now: datetime
+) -> tuple[list[Window], list[NearMiss]]:
+    """Spec 4.8: Entrance reverse run (Boronia Ave). W/NW wind, 20 kn+ (25 kn+
+    is best), gated to the incoming tide rather than the run-out."""
+    windows, misses = [], []
+    floor = config.ENTRANCE_REVERSE_YELLOW_KN
+
+    def pred(hw):
+        return hw.speed_kn >= floor and config.ENTRANCE_REVERSE_WIND_ARC.contains(hw.dir_deg)
+
+    hour_map = _qualifying_by_hour(wind, pred)
+    tide_spans = _entrance_reverse_tide_spans(marine)
+    for start, end in _group(_active_hours(hour_map, sun, config.MIN_MODELS_AGREE)):
+        for t_lo, t_hi, lt, ht in tide_spans:
+            lo, hi = max(start, t_lo), min(end, t_hi)
+            if hi - lo < HOUR:
+                continue
+            w = _window_from_span(
+                "entrance_reverse",
+                "Entrance reverse run (Boronia Ave)",
+                (lo, hi),
+                hour_map,
+                now,
+                config.ENTRANCE_REVERSE_TARGET_KN,
+                yellow_floor=config.ENTRANCE_REVERSE_YELLOW_KN,
+            )
+            if not config.ENTRANCE_REVERSE_TRUE_ARC.contains(w.direction_deg):
+                w.grade = downgrade(w.grade)
+                w.title_tags.append(f"off-angle {compass(w.direction_deg)}")
+            w.high_tide = ht.time.isoformat()
+            w.high_tide_m = _tide_height_cd(ht)
+            w.notes.append(f"low tide {lt.time:%H:%M}")
+            windows.append(w)
+    misses.extend(_single_model_misses("entrance_reverse", hour_map, sun, windows))
+    return windows, misses
+
+
 def hill60_windows(
     south: list[Window], marine: MarineForecast, sun: SunTimes, now: datetime
 ) -> list[Window]:
@@ -630,6 +690,10 @@ def evaluate(
     ew, em = entrance_windows(entrance_wind, marine, sun, now)
     windows += ew
     misses += em
+
+    erw, erm = entrance_reverse_windows(entrance_wind, marine, sun, now)
+    windows += erw
+    misses += erm
 
     sw, sm = south_windows(ocean_wind, marine, sun, now)
     windows += sw

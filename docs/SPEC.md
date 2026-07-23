@@ -165,7 +165,7 @@ So a nuking NE day with a medium (1.0 m+) south swell creates no event, while th
 
 - The explicit swell table in 4.3 wins over this rule for the south wind family: south wind with S/SSE/SE swell follows that table with no upper swell limit, because Hill 60 can handle any size south swell and wind (confirmed by Rob). This rule handles everything else.
 - The cross-swell downgrade stacks with the NE off-angle downgrade (4.5) but never drops below yellow; a yellow event stays on the calendar.
-- Does not apply to the lake runs (no ocean swell on the lake), the Lake Entrance triggers (E/NE swell is the point there), or the standalone Hill 60 swell run (a swell event, not a downwinder).
+- Does not apply to the lake runs (no ocean swell on the lake), the Lake Entrance triggers including the reverse run (E/NE swell is the point for the standard modes; the reverse run is gated on wind and tide only), or the standalone Hill 60 swell run (a swell event, not a downwinder).
 
 ### 4.7 Baysurf (custom event)
 
@@ -175,6 +175,14 @@ Baysurf is a custom event for clean E/NE-swell windows. It triggers when the mar
 - stronger only if it is from the west, south-west or north-west (the wind must be favourably off the back for the run).
 
 The event must also overlap the falling-tide window from high tide toward low tide. The middle-to-low part of that fall is the ideal window; if the event only lands in the broader high-to-low span, it drops one colour and gets a tide tag in the event title. Baysurf is not part of the standard ocean-downwinder swell-compatibility rule; it is treated as its own trigger family.
+
+### 4.8 Entrance reverse run (Boronia Ave, custom event)
+
+A reverse-direction run near Boronia Ave, gated to the opposite tide phase from the standard Lake Entrance triggers (4.2): those want the run-out (high tide to +2 h), this one wants the run-in, so the window opens 2 h after low tide and closes 1 h before the next high tide. Uses the same entrance wind forecast as 4.2.
+
+Wind from the west or north-west (270-315). 20 kn or more to fire at all; north-west (295-315) is prime and gets the full rating, west of that (270-295) is off-angle and downgrades one colour step (same treatment as the NE ocean off-angle rule in 4.5), with an "off-angle <compass>" tag added to the title.
+
+Not part of the ocean swell-compatibility rule (4.6) — like the standard entrance triggers, it is gated on wind and tide, not swell.
 
 ## 5. Model consensus
 
@@ -197,6 +205,7 @@ Three levels per Rob's scheme: roughly 10% under desired, at desired, well over 
 | South wind ocean runs | 18-20 kn | 20-25 kn | over 25 kn |
 | Hill 60 swell run (graded on swell) | 1.8-2.0 m | 2.0-2.5 m | over 2.5 m |
 | NE ocean runs | 10-15 kn (ladder hours met) | 15-19 kn | over 19 kn |
+| Entrance reverse run (Boronia Ave) | 20-25 kn | 25-31.25 kn | over 31.25 kn |
 
 Yellow windows are "worth watching" and do create events. Entrance mode 1 is graded on swell height because the wind there is a constraint, not the quality driver. Ocean downwind runs then apply the off-angle downgrade (4.5) and the swell compatibility rule (4.6), which can downgrade or kill a window; downgrades stack but never drop below yellow. The Hill 60 swell run yellow band (1.8-2.0 m) only exists when the south-wind trigger has not already fired; with 20 kn+ south wind, 1.8-2.0 m is simply the medium-swell row of 4.3.
 

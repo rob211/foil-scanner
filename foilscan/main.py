@@ -14,6 +14,7 @@ from . import config, fetch, gcal, verdict
 from .models import SourceStatus
 from .triggers import (
     baysurf_windows,
+    entrance_reverse_windows,
     entrance_windows,
     hill60_windows,
     lake_windows,
@@ -66,6 +67,9 @@ def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
 
         if entrance_wind is not None and marine is not None:
             w, m = entrance_windows(entrance_wind, marine, sun, now)
+            windows += w
+            misses += m
+            w, m = entrance_reverse_windows(entrance_wind, marine, sun, now)
             windows += w
             misses += m
         else:

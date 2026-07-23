@@ -110,6 +110,16 @@ NE_LADDER = (
     (10.0, 3),  # last 3 hours all at 10 kn or more -> ready
 )
 
+# Entrance reverse run near Boronia Ave (custom event, spec 4.8): opposite
+# tide gate to the standard entrance runs (4.2) - works the incoming tide,
+# not the run-out. W/NW wind; NW is prime, W is off-angle.
+ENTRANCE_REVERSE_WIND_ARC = Arc(270, 315)
+ENTRANCE_REVERSE_TRUE_ARC = Arc(295, 315)
+ENTRANCE_REVERSE_TARGET_KN = 25.0
+ENTRANCE_REVERSE_YELLOW_KN = 20.0
+ENTRANCE_REVERSE_START_AFTER_LOW_H = 2.0
+ENTRANCE_REVERSE_END_BEFORE_HIGH_H = 1.0
+
 # Baysurf (custom event: east/NE swell, light wind, falling tide)
 BAYSURF_SWELL_ARC = Arc(35, 90)
 BAYSURF_SWELL_TARGET_M = 1.5
@@ -184,6 +194,8 @@ def validate() -> None:
         NE_TRUE_ARC,
         BAYSURF_SWELL_ARC,
         BAYSURF_STRONG_WIND_ARC,
+        ENTRANCE_REVERSE_WIND_ARC,
+        ENTRANCE_REVERSE_TRUE_ARC,
     ]
     for arc in arcs:
         if not (0 <= arc.lo <= 360 and 0 <= arc.hi <= 360):
@@ -196,6 +208,7 @@ def validate() -> None:
         HILL60_SWELL_TARGET_M,
         NE_TARGET_KN,
         BAYSURF_SWELL_TARGET_M,
+        ENTRANCE_REVERSE_TARGET_KN,
     ]
     if any(t <= 0 for t in targets):
         raise ConfigError("all trigger targets must be positive")
@@ -208,6 +221,11 @@ def validate() -> None:
         raise ConfigError("NE ladder must be ordered strongest first, no duplicates")
     if NE_FLOOR_KN > min(r[0] for r in NE_LADDER):
         raise ConfigError("NE floor cannot exceed the lowest ladder rung")
+
+    if not 0 < ENTRANCE_REVERSE_YELLOW_KN < ENTRANCE_REVERSE_TARGET_KN:
+        raise ConfigError("entrance reverse yellow floor must sit below its target")
+    if ENTRANCE_REVERSE_END_BEFORE_HIGH_H < 0 or ENTRANCE_REVERSE_START_AFTER_LOW_H < 0:
+        raise ConfigError("entrance reverse tide offsets cannot be negative")
 
     if not SWELL_IGNORE_BELOW_M < SWELL_CROSS_KILL_M <= SWELL_ALIGNED_MAX_M:
         raise ConfigError("swell compatibility thresholds are out of order")

@@ -1,3 +1,4 @@
+import math
 from datetime import timedelta
 
 from conftest import DAY, NOW, at, mk_marine, mk_sun, mk_wind
@@ -7,6 +8,7 @@ from foilscan.models import MarineForecast, MarineHour
 from foilscan.triggers import (
     ang_diff,
     baysurf_windows,
+    entrance_reverse_windows,
     entrance_windows,
     hill60_windows,
     lake_windows,
@@ -206,9 +208,9 @@ def test_ne_minuscule_south_swell_full_value(sun):
     assert windows[0].grade == "red"
 
 
-# ------------------------------------------------------------------ baysurf
+# --------------------------------------------------------------- tide helper
 
-def _marine_for_baysurf(high_tide_hour: int, low_tide_hour: int) -> MarineForecast:
+def _marine_with_tide(high_tide_hour: int, low_tide_hour: int) -> MarineForecast:
     hours = []
     for h in range(24):
         sea_level_m = 0.0
@@ -238,9 +240,11 @@ def _marine_for_baysurf(high_tide_hour: int, low_tide_hour: int) -> MarineForeca
     return MarineForecast(fetched_at=NOW, hours=hours)
 
 
+# ------------------------------------------------------------------ baysurf
+
 def test_baysurf_triggers_on_east_ne_swell_and_light_wind(sun):
     wind = mk_wind(hours(range(10, 14), 8, 270), location_key="ocean")
-    marine = _marine_for_baysurf(10, 13)
+    marine = _marine_with_tide(10, 13)
     windows, _ = baysurf_windows(wind, marine, sun, NOW)
     assert len(windows) == 1
     assert windows[0].trigger_id == "baysurf"
@@ -249,14 +253,14 @@ def test_baysurf_triggers_on_east_ne_swell_and_light_wind(sun):
 
 def test_baysurf_rejects_strong_wrong_direction_wind(sun):
     wind = mk_wind(hours(range(10, 14), 12, 90), location_key="ocean")
-    marine = _marine_for_baysurf(10, 13)
+    marine = _marine_with_tide(10, 13)
     windows, _ = baysurf_windows(wind, marine, sun, NOW)
     assert windows == []
 
 
 def test_baysurf_downgrades_outside_ideal_tide_window(sun):
     wind = mk_wind(hours(range(10, 13), 8, 270), location_key="ocean")
-    marine = _marine_for_baysurf(10, 17)
+    marine = _marine_with_tide(10, 17)
     windows, _ = baysurf_windows(wind, marine, sun, NOW)
     assert windows[0].grade == "yellow"
     assert any("tide" in t.lower() for t in windows[0].title_tags)
@@ -314,6 +318,89 @@ def test_entrance_both_modes_merge(sun):
     windows, _ = entrance_windows(wind, marine, sun, NOW)
     assert len(windows) == 1
     assert any("also fires as" in n for n in windows[0].notes)
+
+
+# -------------------------------------------------------- entrance reverse
+
+def _marine_low_then_high(low_hour: int) -> MarineForecast:
+    """One clean tide cycle: low at low_hour, high 12 h later. A single
+    cosine period sampled hourly has exactly one min and one max, so
+    high_tides()/low_tides() are unambiguous."""
+    hours = []
+    for h in range(24):
+        level = -math.cos(2 * math.pi * (h - low_hour) / 24)
+        hours.append(
+            MarineHour(
+                time=at(h),
+                swell_m=0.3,
+                swell_dir_deg=90.0,
+                swell_period_s=9.0,
+                sea_level_m=level,
+            )
+        )
+    return MarineForecast(fetched_at=NOW, hours=hours)
+
+
+def test_entrance_reverse_fires_between_low_plus_2_and_high_minus_1(sun):
+    wind = mk_wind(hours(range(10, 15), 25, 315), location_key="entrance")
+    marine = _marine_low_then_high(low_hour=8)  # high at 20:00
+    windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
+    assert len(windows) == 1
+    w = windows[0]
+    assert w.trigger_id == "entrance_reverse"
+    assert w.grade == "green"
+    assert w.start == at(10) and w.end == at(15)
+    assert w.high_tide == at(20).isoformat()
+    assert any("low tide 08:00" in n for n in w.notes)
+
+
+def test_entrance_reverse_grades(sun):
+    for speed, grade in [(19.0, None), (20.0, "yellow"), (25.0, "green"), (32.0, "red")]:
+        wind = mk_wind(hours(range(10, 15), speed, 315), location_key="entrance")
+        marine = _marine_low_then_high(low_hour=8)
+        windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
+        if grade is None:
+            assert windows == [], speed
+        else:
+            assert windows[0].grade == grade, speed
+
+
+def test_entrance_reverse_nw_is_prime_west_is_off_angle(sun):
+    wind = mk_wind(hours(range(10, 15), 25, 280), location_key="entrance")
+    marine = _marine_low_then_high(low_hour=8)
+    windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
+    assert windows[0].grade == "yellow"  # green downgraded one step
+    assert any("off-angle" in t for t in windows[0].title_tags)
+
+
+def test_entrance_reverse_rejects_wrong_direction(sun):
+    wind = mk_wind(hours(range(10, 15), 25, 90), location_key="entrance")
+    marine = _marine_low_then_high(low_hour=8)
+    windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
+    assert windows == []
+
+
+def test_entrance_reverse_needs_the_tide_gate(sun):
+    # Blows before the gate opens: low tide is at 08:00, gate opens 10:00.
+    wind = mk_wind(hours(range(8, 10), 25, 315), location_key="entrance")
+    marine = _marine_low_then_high(low_hour=8)
+    windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
+    assert windows == []
+
+
+def test_entrance_reverse_single_model_is_near_miss(sun):
+    wind = mk_wind(
+        hours(range(10, 15), 25, 315),
+        models=["gfs_seamless"],
+        location_key="entrance",
+    )
+    marine = _marine_low_then_high(low_hour=8)
+    windows, misses = entrance_reverse_windows(wind, marine, sun, NOW)
+    assert windows == []
+    assert any(
+        m.reason == "single_model" and m.trigger_id == "entrance_reverse"
+        for m in misses
+    )
 
 
 # ------------------------------------------------------------------ helpers
