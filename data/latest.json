@@ -1,48 +1,40 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-24T00:32:21.895472+10:00",
+  "generated_at": "2026-07-24T03:00:44.108638+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-07-24T00:32:22.537021+10:00",
+      "fetched_at": "2026-07-24T03:00:44.521627+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-07-24T00:32:23.173362+10:00",
+      "fetched_at": "2026-07-24T03:00:44.946027+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-07-24T00:32:23.809430+10:00",
+      "fetched_at": "2026-07-24T03:00:45.440159+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-07-24T00:32:24.440355+10:00",
+      "fetched_at": "2026-07-24T03:00:45.825829+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-07-24T00:32:25.052761+10:00",
+      "fetched_at": "2026-07-24T03:00:46.214631+10:00",
       "detail": null,
       "error": null
     }
   },
   "windows": [],
   "near_misses": [
-    {
-      "trigger_id": "lake_oakflats_berkeley",
-      "date": "2026-07-30",
-      "start": "2026-07-30T16:00:00+10:00",
-      "end": "2026-07-30T18:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
     {
       "trigger_id": "lake_berkeley",
       "date": "2026-07-29",
