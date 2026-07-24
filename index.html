@@ -152,11 +152,13 @@
   }
   #week .dow { font-size: 0.68rem; font-weight: 700; }
   #week .dnum { font-size: 0.82rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
-  #week .day .dots { display: flex; gap: 3px; justify-content: center; margin-top: 3px; min-height: 8px; }
+  #week .day .dots { display: flex; align-items: center; gap: 3px; justify-content: center; margin-top: 3px; min-height: 12px; }
+  /* Shape carries the grade alongside colour so the strip still reads for
+     colour-blind eyes: ON = filled disc, MAYBE = ring, FIRING = diamond. */
   #week .dot { width: 8px; height: 8px; border-radius: 50%; }
   #week .dot.green { background: var(--grade-green); box-shadow: 0 0 7px var(--green-glow); }
-  #week .dot.yellow { background: var(--grade-yellow); box-shadow: 0 0 7px var(--yellow-glow); }
-  #week .dot.red { background: var(--grade-red); box-shadow: 0 0 7px var(--red-glow); }
+  #week .dot.yellow { background: transparent; border: 2px solid var(--grade-yellow); box-shadow: 0 0 7px var(--yellow-glow); }
+  #week .dot.red { width: 7px; height: 7px; background: var(--grade-red); border-radius: 1.5px; rotate: 45deg; box-shadow: 0 0 7px var(--red-glow); }
   #week .day.today { border-color: var(--today-line); color: var(--ink); background: var(--surface-2); }
   #week .day.today .dow { color: var(--rust); }
 
@@ -446,17 +448,23 @@ function liveTiles(liveData, now) {
 }
 
 function weekStrip(windows, now) {
-  let html = '<div id="week" aria-label="next 7 days">';
+  let html = '<div id="week" role="group" aria-label="7-day outlook">';
   for (let i = 0; i < 7; i++) {
     const d = new Date(now.getTime() + i * 864e5);
     const k = dayKey(d);
-    const dots = windows
+    const grades = windows
       .filter((w) => dayKey(new Date(w.start)) === k)
       .sort((a, b) => GRADE_RANK[b.grade] - GRADE_RANK[a.grade])
       .slice(0, 3)
-      .map((w) => `<span class="dot ${esc(w.grade)}"></span>`)
+      .map((w) => w.grade);
+    const dots = grades
+      .map((g) => `<span class="dot ${esc(g)}" title="${esc(GRADE_WORD[g] || g)}"></span>`)
       .join("");
-    html += `<div class="day${i === 0 ? " today" : ""}">` +
+    // Dots are colour + shape; screen readers get the grades spelled out on the
+    // cell (role="img" so the label is announced and the dots aren't read raw).
+    const words = grades.length ? grades.map((g) => GRADE_WORD[g] || g).join(", ") : "no windows";
+    const label = `${i === 0 ? "Today, " : ""}${fmtDay.format(d)}: ${words}`;
+    html += `<div class="day${i === 0 ? " today" : ""}" role="img" aria-label="${esc(label)}">` +
       `<span class="dow">${i === 0 ? "Now" : esc(fmtWk.format(d))}</span>` +
       `<span class="dnum">${esc(fmtDnum.format(d))}</span>` +
       `<div class="dots">${dots}</div></div>`;
