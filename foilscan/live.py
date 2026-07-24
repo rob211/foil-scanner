@@ -172,13 +172,26 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
                 data_dir,
             )
         raise
+    # Fetched every run, not just when a lake window is forecast: the
+    # lake_recommendation/ensure_lake_alert safety net below exists precisely
+    # to catch wind the forecast didn't call, so it needs live data on every
+    # hour, not only the hours the forecast already agreed with.
     holfuy = None
     key = config.env("HOLFUY_KEY", required=False)
-    if any(w["trigger_id"].startswith("lake") for w in todays):
-        if key:
+    needs_holfuy = any(w["trigger_id"].startswith("lake") for w in todays)
+    if key:
+        try:
             holfuy = fetch.fetch_holfuy(key, now)
-        else:
-            notes.append("lake live check: Holfuy key not configured, BOM only")
+        except Exception as exc:
+            # A live lake window needs this reading to verify itself, so a
+            # dead feed there fails loud like any other needed source (spec
+            # 8.9). Outside a lake window it is only feeding the safety net,
+            # so note it and keep going rather than blocking unrelated checks.
+            if needs_holfuy:
+                raise
+            notes.append(f"Holfuy fetch failed, lake safety-net check skipped this hour: {exc}")
+    else:
+        notes.append("Holfuy key not configured, BOM only")
     log += notes
 
     checks: list[dict] = []

@@ -166,6 +166,47 @@ def test_run_records_checks_and_patches_calendar(tmp_path, monkeypatch):
     assert "21 kn" in got["checks"][0]["live_line"]
 
 
+def test_run_fetches_holfuy_even_without_a_lake_window(tmp_path, monkeypatch):
+    # The safety-net alert needs a live reading on every hour, not just the
+    # hours the forecast already called a lake window for.
+    data_dir = _latest_on_disk(tmp_path)
+    monkeypatch.setenv("HOLFUY_KEY", "testkey")
+    monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(12.0, 157.5, station="Bellambi"))
+    monkeypatch.setattr(fetch, "fetch_holfuy", lambda key, now: obs(14.0, 250, station="Holfuy"))
+    live.run(NOW, dry_run=False, data_dir=data_dir)
+    got = _live_json(tmp_path)
+    assert got["holfuy"]["station"] == "Holfuy"
+
+
+def test_run_holfuy_failure_without_lake_window_is_soft(tmp_path, monkeypatch):
+    data_dir = _latest_on_disk(tmp_path)
+    monkeypatch.setenv("HOLFUY_KEY", "testkey")
+    monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(12.0, 157.5, station="Bellambi"))
+
+    def boom(key, now):
+        raise FetchError("holfuy down")
+
+    monkeypatch.setattr(fetch, "fetch_holfuy", boom)
+    log = live.run(NOW, dry_run=False, data_dir=data_dir)
+    got = _live_json(tmp_path)
+    assert got["holfuy"] is None
+    assert any("Holfuy fetch failed" in n for n in got["notes"])
+    assert any("Holfuy fetch failed" in l for l in log)
+
+
+def test_run_holfuy_failure_with_live_lake_window_raises(tmp_path, monkeypatch):
+    data_dir = _latest_on_disk(tmp_path, [window(trigger_id="lake_kanahooka", start_h=12, end_h=16)])
+    monkeypatch.setenv("HOLFUY_KEY", "testkey")
+    monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(12.0, 157.5, station="Bellambi"))
+
+    def boom(key, now):
+        raise FetchError("holfuy down")
+
+    monkeypatch.setattr(fetch, "fetch_holfuy", boom)
+    with pytest.raises(FetchError):
+        live.run(NOW, dry_run=False, data_dir=data_dir)
+
+
 def test_run_bom_failure_still_publishes_obsless_live_json(tmp_path, monkeypatch):
     data_dir = _latest_on_disk(tmp_path)
 

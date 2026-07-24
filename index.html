@@ -123,22 +123,24 @@
   #verdict.live.red { background: linear-gradient(160deg, var(--red-fill-1), var(--red-fill-2)); box-shadow: 0 0 60px -22px var(--grade-red), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--red-ink); }
   #verdict.live .word, #verdict.live .what, #verdict.live .when { color: inherit; }
 
-  /* Live observation tile */
-  #live {
+  /* Live observation tiles: BOM (#live) and the lake Holfuy station (#live-lake) */
+  .livewrap { margin: 0 0 1rem; }
+  .livetile {
     display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;
     background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--radius); padding: 0.65rem 0.9rem; margin: 0 0 1rem;
+    border-radius: var(--radius); padding: 0.65rem 0.9rem; margin: 0 0 0.6rem;
     font-size: 0.95rem;
     box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.04);
   }
-  #live .k {
+  .livewrap .livetile:last-child { margin-bottom: 0; }
+  .livetile .k {
     flex: none; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.06em;
     color: var(--rust); border: 1px solid currentColor;
     padding: 0.12rem 0.45rem; border-radius: 999px;
   }
-  #live .sub { color: var(--muted); font-size: 0.82rem; flex-basis: 100%; }
-  #live.stale, #live.down { color: var(--muted); }
-  #live.stale .k, #live.down .k { color: var(--muted); }
+  .livetile .sub { color: var(--muted); font-size: 0.82rem; flex-basis: 100%; }
+  .livetile.stale, .livetile.down { color: var(--muted); }
+  .livetile.stale .k, .livetile.down .k { color: var(--muted); }
 
   /* Week strip: weekday + date so a dot maps to a real day at a glance */
   #week { display: flex; gap: 6px; margin: 0 0 1.6rem; }
@@ -320,7 +322,7 @@
       <p class="hlabel">Grades</p>
       <p>Each run has a target strength. <span class="g yellow">MAYBE</span> from 90% of target (worth watching), <span class="g green">ON</span> at target, <span class="g red">FIRING</span> from 25% over. Windows four or more days out carry a low-confidence flag.</p>
       <p class="hlabel">How the list is ordered</p>
-      <p>Windows run in start-time order. The big verdict up top is whatever is on right now, otherwise the next window coming. The week strip shows each day's strongest grades, up to three dots. From an hour before each window, the hourly live check compares real observations (BOM Bellambi; Holfuy on the lake once its key arrives) against the forecast: confirmed at 90% of target, called a miss under 70% once the window has started.</p>
+      <p>Windows run in start-time order. The big verdict up top is whatever is on right now, otherwise the next window coming. The week strip shows each day's strongest grades, up to three dots. From an hour before each window, the hourly live check compares real observations (BOM Bellambi; Holfuy on the lake) against the forecast: confirmed at 90% of target, called a miss under 70% once the window has started. Holfuy is also read every hour regardless of forecast, as a safety net: 22 kn+ live on the lake gets a calendar note, 25 kn+ a red "LAKE ALERT" event, even on a day nothing was forecast.</p>
       <p>Full rules with every threshold: <a href="https://github.com/rob211/foil-scanner/blob/main/docs/SPEC.md">SPEC.md</a>.</p>
     </div>
   </details>
@@ -406,27 +408,41 @@ function verdictBlock(windows, now) {
   </div>`;
 }
 
-function liveTile(liveData, now) {
-  if (!liveData) return "";
-  const gen = new Date(liveData.generated_at);
+// Notes in live.json aren't tagged by source, so route them to whichever
+// tile they're actually about by content (e.g. "Holfuy fetch failed...").
+function splitNotes(notes) {
+  const lake = [], other = [];
+  for (const n of notes || []) (/holfuy|lake/i.test(n) ? lake : other).push(n);
+  return { lake, other };
+}
+
+function obsTile(id, label, obs, gen, now, notes, unavailableText) {
   const genAgeMin = (now - gen) / 6e4;
-  const notes = (liveData.notes || []).join(" · ");
-  if (!liveData.obs) {
-    return `<div id="live" class="down"><span class="k">LIVE</span> observations unavailable
-      <span class="sub">${esc(notes || "last live check could not read the station")}</span></div>`;
+  const notesText = notes.join(" · ");
+  if (!obs) {
+    return `<div id="${id}" class="livetile down"><span class="k">${label}</span> ${unavailableText}
+      <span class="sub">${esc(notesText || "last check could not read the station")}</span></div>`;
   }
-  const o = liveData.obs;
-  const t = new Date(o.time);
+  const t = new Date(obs.time);
   const ageMin = Math.max(0, Math.round((now - t) / 6e4));
   const age = ageMin <= 90 ? `${ageMin} min ago` : `${(ageMin / 60).toFixed(1)} h ago`;
-  const dir = o.dir_deg == null ? "calm" : compass(o.dir_deg);
+  const dir = obs.dir_deg == null ? "calm" : compass(obs.dir_deg);
   const stale = genAgeMin > 150; // hourly job; a couple of skipped crons is tolerable
   const staleNote = stale ? ` · last check ${fmtStamp.format(gen)}, checks are falling behind` : "";
-  return `<div id="live"${stale ? ' class="stale"' : ""}>
-    <span class="k">LIVE</span>
-    <span><strong>${esc(o.station)}</strong> ${Math.round(o.speed_kn)} kn ${esc(dir)} · gusts ${Math.round(o.gust_kn)}</span>
-    <span class="sub">reading ${fmtTime.format(t)} (${age})${staleNote}${notes ? ` · ${esc(notes)}` : ""}</span>
+  return `<div id="${id}" class="livetile${stale ? " stale" : ""}">
+    <span class="k">${label}</span>
+    <span><strong>${esc(obs.station)}</strong> ${Math.round(obs.speed_kn)} kn ${esc(dir)} · gusts ${Math.round(obs.gust_kn)}</span>
+    <span class="sub">reading ${fmtTime.format(t)} (${age})${staleNote}${notesText ? ` · ${esc(notesText)}` : ""}</span>
   </div>`;
+}
+
+function liveTiles(liveData, now) {
+  if (!liveData) return "";
+  const gen = new Date(liveData.generated_at);
+  const { lake, other } = splitNotes(liveData.notes);
+  const live = obsTile("live", "LIVE", liveData.obs, gen, now, other, "observations unavailable");
+  const lakeTile = obsTile("live-lake", "LAKE", liveData.holfuy, gen, now, lake, "lake reading unavailable");
+  return `<div class="livewrap">${live}${lakeTile}</div>`;
 }
 
 function weekStrip(windows, now) {
@@ -525,7 +541,7 @@ function render(data, liveData, now) {
 
   const windows = (data.windows || []).slice().sort((a, b) => a.start.localeCompare(b.start));
   html += verdictBlock(windows, now);
-  html += liveTile(liveData, now);
+  html += liveTiles(liveData, now);
   html += weekStrip(windows, now);
   html += windowList(windows, now, liveMap);
   html += missList(data.near_misses || []);
