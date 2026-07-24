@@ -388,6 +388,17 @@ def test_entrance_reverse_needs_the_tide_gate(sun):
     assert windows == []
 
 
+def test_entrance_reverse_no_false_miss_outside_tide_gate(sun):
+    # All 4 models agree on a clean NW blow entirely before the gate opens
+    # (low tide 08:00 -> gate opens 10:00): this is a tide-gate rejection,
+    # not a model-agreement problem, and must not be reported as one.
+    wind = mk_wind(hours(range(7, 10), 26, 315), location_key="entrance")
+    marine = _marine_low_then_high(low_hour=8)
+    windows, misses = entrance_reverse_windows(wind, marine, sun, NOW)
+    assert windows == []
+    assert misses == []
+
+
 def test_entrance_reverse_single_model_is_near_miss(sun):
     wind = mk_wind(
         hours(range(10, 15), 25, 315),

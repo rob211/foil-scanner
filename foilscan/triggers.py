@@ -579,7 +579,15 @@ def entrance_reverse_windows(
             w.high_tide_m = _tide_height_cd(ht)
             w.notes.append(f"low tide {lt.time:%H:%M}")
             windows.append(w)
-    misses.extend(_single_model_misses("entrance_reverse", hour_map, sun, windows))
+    misses.extend(
+        _single_model_misses(
+            "entrance_reverse",
+            hour_map,
+            sun,
+            windows,
+            valid_spans=[(t_lo, t_hi) for t_lo, t_hi, _, _ in tide_spans],
+        )
+    )
     return windows, misses
 
 
@@ -640,15 +648,28 @@ def hill60_windows(
 
 
 def _single_model_misses(
-    trigger_id: str, hour_map: dict, sun: SunTimes, accepted: list[Window]
+    trigger_id: str,
+    hour_map: dict,
+    sun: SunTimes,
+    accepted: list[Window],
+    valid_spans: list[tuple[datetime, datetime]] | None = None,
 ) -> list[NearMiss]:
-    """Spec 5: single-model hits are recorded but create no events."""
+    """Spec 5: single-model hits are recorded but create no events.
+
+    valid_spans restricts reporting to periods where the trigger could have
+    fired at all (e.g. inside a tide gate). Without it, wind that qualifies
+    on every model but only outside the gate gets misreported as a model-
+    agreement problem, which it isn't."""
     solo = _active_hours(hour_map, sun, 1)
     misses = []
     for start, end in _group(solo):
         if any(
             w.trigger_id == trigger_id and w.start < end and start < w.end
             for w in accepted
+        ):
+            continue
+        if valid_spans is not None and not any(
+            s_lo < end and start < s_hi for s_lo, s_hi in valid_spans
         ):
             continue
         models = sorted(
