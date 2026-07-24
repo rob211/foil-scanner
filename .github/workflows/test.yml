@@ -21,4 +21,4 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install --require-hashes -r requirements.txt
-      - run: pytest
+      - run: python -m pytest
