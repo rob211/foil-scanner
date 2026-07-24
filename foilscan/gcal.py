@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from datetime import datetime, timedelta
 
 from . import config
@@ -224,6 +225,11 @@ def sync(
 
     svc = service()
     cal_id = calendar_id()
+    print(  # TEMP DEBUG: no secret content, just shape/length checks
+        f"DEBUG cal_id len={len(cal_id)!r} first3={cal_id[:3]!r} "
+        f"last3={cal_id[-3:]!r} has_ws={cal_id != cal_id.strip()!r}",
+        file=sys.stderr,
+    )
     existing = list_managed(svc, cal_id, generated_at)
 
     for key, w in sorted(desired.items()):
