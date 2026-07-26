@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-07-27T03:29:27.100034+10:00",
+  "generated_at": "2026-07-27T05:40:24.227170+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-07-27T03:00:00+10:00",
-    "speed_kn": 4.9,
-    "gust_kn": 5.9,
+    "time": "2026-07-27T05:30:00+10:00",
+    "speed_kn": 3.8,
+    "gust_kn": 4.9,
     "dir_deg": 270.0
   },
   "holfuy": null,
   "checks": [],
   "notes": [
-    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: latest reading is 481 min old, cap is 30 min"
+    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: latest reading is 480 min old, cap is 30 min"
   ]
 }
