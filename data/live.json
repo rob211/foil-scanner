@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-01T16:43:45.840390+10:00",
+  "generated_at": "2026-08-01T19:27:42.058854+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-01T16:30:00+10:00",
+    "time": "2026-08-01T19:00:00+10:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": null
