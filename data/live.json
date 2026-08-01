@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-02T01:32:12.962891+10:00",
+  "generated_at": "2026-08-02T03:27:29.916865+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-02T01:00:00+10:00",
-    "speed_kn": 7.0,
+    "time": "2026-08-02T03:00:00+10:00",
+    "speed_kn": 5.9,
     "gust_kn": 9.2,
     "dir_deg": 292.5
   },
