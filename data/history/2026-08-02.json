@@ -1,38 +1,64 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-02T21:34:26.578952+10:00",
+  "generated_at": "2026-08-02T23:54:57.583767+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-02T21:34:27.181982+10:00",
+      "fetched_at": "2026-08-02T23:54:58.515907+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-02T21:34:27.776078+10:00",
+      "fetched_at": "2026-08-02T23:54:59.450008+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-02T21:34:28.383476+10:00",
+      "fetched_at": "2026-08-02T23:55:00.286661+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-02T21:34:28.976433+10:00",
+      "fetched_at": "2026-08-02T23:55:01.138950+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-02T21:34:29.572914+10:00",
+      "fetched_at": "2026-08-02T23:55:01.958470+10:00",
       "detail": null,
       "error": null
     }
   },
-  "windows": [],
+  "windows": [
+    {
+      "trigger_id": "hill60_swell",
+      "run_name": "Hill 60 swell run",
+      "date": "2026-08-02",
+      "start": "2026-08-02T07:00:00+10:00",
+      "end": "2026-08-02T09:00:00+10:00",
+      "grade": "yellow",
+      "peak_median_kn": 0.0,
+      "direction_deg": 139.0,
+      "models_agreeing": 0,
+      "model_values": {},
+      "title_tags": [],
+      "notes": [
+        "swell event, wind not required"
+      ],
+      "swell_m": 1.84,
+      "swell_dir_deg": 139.0,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": "47vrafkc3is2ehs3tf63te625k",
+      "foil_key": "hill60_swell:2026-08-02:07"
+    }
+  ],
   "near_misses": []
 }
