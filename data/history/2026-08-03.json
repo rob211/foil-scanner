@@ -1,38 +1,65 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-03T09:11:43.490716+10:00",
+  "generated_at": "2026-08-03T12:00:44.898369+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-03T09:11:43.970070+10:00",
+      "fetched_at": "2026-08-03T12:00:45.539690+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-03T09:11:44.364876+10:00",
+      "fetched_at": "2026-08-03T12:00:46.170768+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-03T09:11:44.760382+10:00",
+      "fetched_at": "2026-08-03T12:00:46.818544+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-03T09:11:45.165339+10:00",
+      "fetched_at": "2026-08-03T12:00:47.460693+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-03T09:11:45.545480+10:00",
+      "fetched_at": "2026-08-03T12:00:48.072257+10:00",
       "detail": null,
       "error": null
     }
   },
-  "windows": [],
+  "windows": [
+    {
+      "trigger_id": "entrance_swell",
+      "run_name": "Lake Entrance (swell)",
+      "date": "2026-08-09",
+      "start": "2026-08-09T16:00:00+10:00",
+      "end": "2026-08-09T18:00:00+10:00",
+      "grade": "yellow",
+      "peak_median_kn": 5.8,
+      "direction_deg": 316.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ICON": 4.9,
+        "UKMO": 6.6
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": 0.78,
+      "swell_dir_deg": 48.0,
+      "high_tide": "2026-08-09T16:00:00+10:00",
+      "high_tide_m": 1.94,
+      "spots": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "appugqe6rt9e5f3r360rh9qcro",
+      "foil_key": "entrance_swell:2026-08-09:16"
+    }
+  ],
   "near_misses": []
 }
