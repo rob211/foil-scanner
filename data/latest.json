@@ -1,47 +1,65 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-04T04:05:25.383285+10:00",
+  "generated_at": "2026-08-04T05:57:54.963898+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-04T04:05:26.089598+10:00",
+      "fetched_at": "2026-08-04T05:57:55.356098+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-04T04:05:26.709245+10:00",
+      "fetched_at": "2026-08-04T05:57:55.805876+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-04T04:05:27.265469+10:00",
+      "fetched_at": "2026-08-04T05:57:56.203096+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-04T04:05:27.828699+10:00",
+      "fetched_at": "2026-08-04T05:57:56.591991+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-04T04:05:28.414315+10:00",
+      "fetched_at": "2026-08-04T05:57:56.992040+10:00",
       "detail": null,
       "error": null
     }
   },
-  "windows": [],
-  "near_misses": [
+  "windows": [
     {
       "trigger_id": "lake_berkeley",
+      "run_name": "Berkeley run",
       "date": "2026-08-10",
       "start": "2026-08-10T07:00:00+10:00",
       "end": "2026-08-10T11:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
+      "grade": "yellow",
+      "peak_median_kn": 19.3,
+      "direction_deg": 267.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 19.5,
+        "ICON": 19.1
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "0ov3n8up6b72u2fst6g00t53m0",
+      "foil_key": "lake_berkeley:2026-08-10:07"
     }
-  ]
+  ],
+  "near_misses": []
 }
