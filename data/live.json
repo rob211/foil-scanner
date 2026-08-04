@@ -1,16 +1,20 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-04T09:31:32.463815+10:00",
+  "generated_at": "2026-08-04T11:21:31.742307+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-04T09:00:00+10:00",
-    "speed_kn": 5.9,
-    "gust_kn": 10.8,
-    "dir_deg": 202.5
+    "time": "2026-08-04T11:00:00+10:00",
+    "speed_kn": 10.8,
+    "gust_kn": 17.8,
+    "dir_deg": 270.0
   },
-  "holfuy": null,
+  "holfuy": {
+    "station": "Lake Illawarra",
+    "time": "2026-08-04T11:20:59+10:00",
+    "speed_kn": 19.4,
+    "gust_kn": 23.3,
+    "dir_deg": 245.0
+  },
   "checks": [],
-  "notes": [
-    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: latest reading is 481 min old, cap is 30 min"
-  ]
+  "notes": []
 }
