@@ -1,5 +1,5 @@
 """Every failure rule must actually raise (spec section 8)."""
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -120,7 +120,10 @@ def test_bom_unknown_direction_is_schema_error(monkeypatch):
 def test_holfuy_applies_correction(monkeypatch):
     payload = {
         "stationName": "Lake Illawarra",
-        "dateTime": (NOW - timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S"),
+        # dateTime is UTC here (we pass utc=1), not Sydney local time.
+        "dateTime": (NOW - timedelta(minutes=5)).astimezone(timezone.utc).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        ),
         "wind": {"speed": 20.0, "gust": 26.0, "direction": 200.0},
     }
     monkeypatch.setattr(fetch, "get_json", lambda *a, **k: payload)
@@ -132,7 +135,9 @@ def test_holfuy_applies_correction(monkeypatch):
 def test_holfuy_stale_raises(monkeypatch):
     payload = {
         "stationName": "Lake Illawarra",
-        "dateTime": (NOW - timedelta(minutes=60)).strftime("%Y-%m-%d %H:%M:%S"),
+        "dateTime": (NOW - timedelta(minutes=60)).astimezone(timezone.utc).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        ),
         "wind": {"speed": 20.0, "gust": 26.0, "direction": 200.0},
     }
     monkeypatch.setattr(fetch, "get_json", lambda *a, **k: payload)

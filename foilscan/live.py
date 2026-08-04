@@ -11,10 +11,6 @@ from . import config, fetch, gcal, verdict
 from .errors import CalendarError, StaleDataError
 from .models import Observation
 
-LAKE_ALERT_THRESHOLD_KN = 22.0
-LAKE_ALERT_STRONG_KN = 25.0
-LAKE_ALERT_LOUD_KN = 25.0
-
 # trigger_id -> (green-target kn, direction arc) for wind-verifiable events
 WIND_TARGETS = {
     "lake_oakflats_berkeley": (20.0, config.LAKE_RUNS["lake_oakflats_berkeley"][1]),
@@ -100,14 +96,14 @@ def pick_obs(
 def lake_recommendation(obs: Observation | None) -> str | None:
     if obs is None:
         return None
-    if obs.speed_kn < LAKE_ALERT_THRESHOLD_KN:
+    if obs.speed_kn < config.LAKE_ALERT_THRESHOLD_KN:
         return None
-    if obs.speed_kn < LAKE_ALERT_STRONG_KN:
+    if obs.speed_kn < config.LAKE_ALERT_STRONG_KN:
         return (
             f"Lake recommendation: {obs.speed_kn:.0f} kn at {obs.time:%H:%M} "
             f"({obs.station}) — first notification for the lake today"
         )
-    if obs.speed_kn < LAKE_ALERT_LOUD_KN + 1.0:
+    if obs.speed_kn < config.LAKE_ALERT_LOUD_KN + 1.0:
         return (
             f"Lake recommendation: {obs.speed_kn:.0f} kn at {obs.time:%H:%M} "
             f"({obs.station}) — stronger lake notification"
@@ -198,10 +194,17 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
     svc = None if dry_run or not todays else gcal.service()
     cal_id = None if dry_run or not todays else gcal.calendar_id()
 
+    # cal_id above is None whenever nothing is forecast right now - exactly
+    # the case the lake safety net exists for (wind the forecast missed), so
+    # it cannot reuse that None here. Fetch it lazily instead of unlocking it
+    # unconditionally at startup, so runs with nothing to do still don't
+    # need calendar secrets configured (spec 8.9 / test_run_writes_live_json
+    # _even_without_windows).
     lake_rec = lake_recommendation(holfuy or bom)
     if lake_rec is not None and not dry_run:
         try:
-            gcal.ensure_lake_alert(holfuy or bom, now, cal_id)
+            lake_cal_id = cal_id if cal_id is not None else gcal.calendar_id()
+            gcal.ensure_lake_alert(holfuy or bom, now, lake_cal_id)
         except Exception as exc:
             notes.append(f"lake alert event failed: {exc}")
     for w in todays:

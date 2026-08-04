@@ -153,6 +153,15 @@ LIVE_CONFIRM_FACTOR = 0.9
 LIVE_MISS_FACTOR = 0.7
 LIVE_REMINDER_MINUTES = 30
 
+# Lake safety-net alert tiers (spec 7): live lake wind independent of the
+# forecast. One source of truth for both the log text (live.py) and the
+# actual calendar gate (gcal.py) - they used to be separate hardcoded copies
+# that had drifted apart, so the 22 kn tier never actually reached the
+# calendar (see 2026-08-04 review).
+LAKE_ALERT_THRESHOLD_KN = 22.0
+LAKE_ALERT_STRONG_KN = 25.0
+LAKE_ALERT_LOUD_KN = 25.0
+
 # Google Calendar colour ids (spec 6)
 COLOR_IDS = {"yellow": "5", "green": "10", "red": "11"}
 GRADE_ORDER = ("yellow", "green", "red")

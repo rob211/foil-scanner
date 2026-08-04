@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import re
 import time as _time
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 import requests
 
@@ -275,7 +275,14 @@ def fetch_bom(now: datetime) -> Observation:
 
 def fetch_holfuy(key: str, now: datetime) -> Observation:
     """Holfuy station 366. Values are corrected by 0.9 here, once, so every
-    consumer sees corrected knots (spec 3.4)."""
+    consumer sees corrected knots (spec 3.4).
+
+    Holfuy's dateTime defaults to CE(S)T, not the station's own timezone;
+    without the `utc` flag it was silently tagged as Australia/Sydney here,
+    which read as ~8 h stale (AEST is UTC+10, CEST is UTC+2) on every single
+    fetch and made the live lake check permanently non-functional (see
+    2026-07-29 near-miss, no Holfuy reading was ever accepted after this
+    landed on 24 Jul)."""
     source = f"Holfuy {config.HOLFUY_STATION}"
     payload = get_json(
         "https://api.holfuy.com/live/",
@@ -285,11 +292,12 @@ def fetch_holfuy(key: str, now: datetime) -> Observation:
             "m": "JSON",
             "tu": "C",
             "su": "knots",
+            "utc": 1,
         },
     )
     wind = _require(payload, "wind", source)
     when = datetime.fromisoformat(_require(payload, "dateTime", source)).replace(
-        tzinfo=config.TZ
+        tzinfo=timezone.utc
     )
     age_min = (now - when).total_seconds() / 60
     if age_min > config.HOLFUY_MAX_AGE_MIN:
@@ -299,7 +307,7 @@ def fetch_holfuy(key: str, now: datetime) -> Observation:
         )
     return Observation(
         station=clean_label(payload.get("stationName", f"Holfuy {config.HOLFUY_STATION}")),
-        time=when,
+        time=when.astimezone(config.TZ),
         speed_kn=_check_range(_require(wind, "speed", source), 0, 80, "speed", source)
         * config.HOLFUY_CORRECTION,
         gust_kn=_check_range(_require(wind, "gust", source), 0, 120, "gust", source)

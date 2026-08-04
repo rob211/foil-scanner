@@ -122,15 +122,14 @@ def lake_alert_body(obs: object, now: datetime) -> dict:
     if speed is None:
         speed = 0.0
     day = now.date().isoformat()
-    if speed < 22.0:
-        title = f"LAKE NOTICE: {speed:.0f} kn at {station}"
-        desc = f"Lake wind is at {speed:.0f} kn live at {station}."
-    elif speed < 25.0:
+    # ensure_lake_alert below never calls this under LAKE_ALERT_THRESHOLD_KN,
+    # so there are only two reachable tiers here.
+    if speed < config.LAKE_ALERT_STRONG_KN:
         title = f"LAKE ALERT: {speed:.0f} kn at {station}"
-        desc = f"Lake wind is over 22 kn live at {station}."
+        desc = f"Lake wind is over {config.LAKE_ALERT_THRESHOLD_KN:.0f} kn live at {station}."
     else:
         title = f"LAKE ALERT!!! {speed:.0f} kn at {station}"
-        desc = f"Lake wind is over 25 kn live at {station}."
+        desc = f"Lake wind is over {config.LAKE_ALERT_STRONG_KN:.0f} kn live at {station}."
     return {
         "summary": title,
         "description": (
@@ -146,7 +145,7 @@ def lake_alert_body(obs: object, now: datetime) -> dict:
 
 def ensure_lake_alert(obs: object, now: datetime, cal_id: str) -> None:
     speed = getattr(obs, "speed_kn", None)
-    if speed is None or speed < 25.0:
+    if speed is None or speed < config.LAKE_ALERT_THRESHOLD_KN:
         return
     svc = service()
     key = f"lake-alert:{now.date().isoformat()}"

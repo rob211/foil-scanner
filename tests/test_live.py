@@ -83,6 +83,35 @@ def test_lake_alert_body_uses_live_observation():
     assert "27 kn" in body["summary"]
 
 
+def test_ensure_lake_alert_fires_at_threshold_not_just_strong(monkeypatch):
+    # 22-25 kn used to be silently dropped: ensure_lake_alert's own gate was
+    # a separate hardcoded 25.0 that never matched the 22.0 threshold used
+    # everywhere else, so this tier never reached the calendar.
+    calls = []
+
+    class FakeEvents:
+        def list(self, **kw):
+            class R:
+                def execute(self_):
+                    return {"items": []}
+            return R()
+
+        def insert(self, **kw):
+            calls.append(kw["body"]["summary"])
+            class R:
+                def execute(self_):
+                    return {}
+            return R()
+
+    class FakeSvc:
+        def events(self):
+            return FakeEvents()
+
+    monkeypatch.setattr(gcal, "service", lambda: FakeSvc())
+    gcal.ensure_lake_alert(obs(22.0, 220, station="Holfuy"), NOW, "cal")
+    assert calls == ["LAKE ALERT: 22 kn at Holfuy"]
+
+
 def test_relevant_windows_selects_near_now():
     latest = {
         "windows": [
@@ -176,6 +205,24 @@ def test_run_fetches_holfuy_even_without_a_lake_window(tmp_path, monkeypatch):
     live.run(NOW, dry_run=False, data_dir=data_dir)
     got = _live_json(tmp_path)
     assert got["holfuy"]["station"] == "Holfuy"
+
+
+def test_run_fires_lake_alert_with_no_forecast_window_active(tmp_path, monkeypatch):
+    # The exact case the safety net exists for: strong live wind the
+    # forecast never called, so `todays` is empty and cal_id must not stay
+    # None (it did: the alert silently failed every time this fired).
+    data_dir = _latest_on_disk(tmp_path)
+    monkeypatch.setenv("HOLFUY_KEY", "testkey")
+    monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(12.0, 157.5, station="Bellambi"))
+    monkeypatch.setattr(fetch, "fetch_holfuy", lambda key, now: obs(30.0, 250, station="Holfuy"))
+    monkeypatch.setattr(live.gcal, "service", lambda: object())
+    monkeypatch.setattr(live.gcal, "calendar_id", lambda: "cal")
+    seen = {}
+    monkeypatch.setattr(
+        live.gcal, "ensure_lake_alert", lambda o, now, cal_id: seen.update(cal_id=cal_id)
+    )
+    live.run(NOW, dry_run=False, data_dir=data_dir)
+    assert seen["cal_id"] == "cal"
 
 
 def test_run_holfuy_failure_without_lake_window_is_soft(tmp_path, monkeypatch):
