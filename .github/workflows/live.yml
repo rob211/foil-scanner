@@ -2,7 +2,12 @@ name: live
 
 on:
   schedule:
-    - cron: "23 * * * *"
+    # :23 every hour (always runs) plus :53 (daylight-only no-op check
+    # inside foilscan/live.py _should_run) - together a 30 min cadence
+    # while it's light in Sydney, hourly overnight. The daylight window is
+    # evaluated in Python against local time, so it shifts with DST without
+    # needing seasonal edits here.
+    - cron: "23,53 * * * *"
   workflow_dispatch: {}
 
 concurrency:

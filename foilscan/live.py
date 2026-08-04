@@ -1,7 +1,8 @@
-"""Hourly live verification against BOM (and Holfuy for the lake), spec 7.
+"""Live verification against BOM (and Holfuy for the lake), spec 7.
 
 Reads the committed verdict, checks today's events around their windows,
-and patches titles, descriptions and reminders in place.
+and patches titles, descriptions and reminders in place. Runs hourly
+overnight, every 30 min during local daylight hours - see _should_run.
 """
 from __future__ import annotations
 
@@ -22,6 +23,15 @@ WIND_TARGETS = {
     "ne_ocean": (config.NE_TARGET_KN, config.NE_WIND_ARC),
     "baysurf": (config.BAYSURF_WIND_MAX_KN, config.BAYSURF_STRONG_WIND_ARC),
 }
+
+
+def _should_run(now: datetime) -> bool:
+    """live.yml's cron fires at :23 and :53. The :23 tick keeps the original
+    hourly cadence at all hours; the :53 tick is the extra daylight-only
+    poll, gated on local wall-clock hour so DST shifts it automatically."""
+    if now.minute < 30:
+        return True
+    return config.LIVE_FAST_POLL_START_HOUR <= now.hour < config.LIVE_FAST_POLL_END_HOUR
 
 
 def heartbeat(latest: dict, now: datetime) -> None:
@@ -150,6 +160,12 @@ def apply_status(svc, cal_id: str, w: dict, state: str, live_line: str, dry_run:
 
 
 def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -> list[str]:
+    if not _should_run(now):
+        return [
+            f"skipped: {now:%H:%M} fast-poll tick is outside local daylight hours "
+            f"({config.LIVE_FAST_POLL_START_HOUR:02d}:00-{config.LIVE_FAST_POLL_END_HOUR:02d}:00), "
+            "hourly tick still runs overnight"
+        ]
     latest = verdict.load_latest(data_dir)
     heartbeat(latest, now)
     todays = relevant_windows(latest, now)

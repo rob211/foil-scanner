@@ -12,11 +12,12 @@ today's calendar. A calm-looking week is never allowed to be a broken scanner.
 
 ## How it runs
 
-- `scan` (GitHub Actions, every 6 h): fetch forecasts, evaluate triggers,
+- `scan` (GitHub Actions, every 2 h): fetch forecasts, evaluate triggers,
   write `data/latest.json` (and `data/history/`), sync the calendar.
-- `live` (hourly): on days with events, verify against the BOM station and
-  the Holfuy lake station (corrected by 0.9 for its known overread). Confirmed
-  events get a tick and a 30-minute popup reminder; misses get flagged.
+- `live` (every 30 min from 5am-8pm local, hourly overnight): on days with
+  events, verify against the BOM station and the Holfuy lake station
+  (corrected by 0.9 for its known overread). Confirmed events get a tick and
+  a 30-minute popup reminder; misses get flagged.
 
 Data sources: Open-Meteo forecast and marine APIs (GFS, ECMWF, ICON, UKMO;
 swell and modelled sea level for tide timing), BOM observations JSON,

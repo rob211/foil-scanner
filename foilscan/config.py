@@ -159,6 +159,15 @@ LIVE_CONFIRM_FACTOR = 0.9
 LIVE_MISS_FACTOR = 0.7
 LIVE_REMINDER_MINUTES = 30
 
+# live.yml's cron fires at :23 and :53 every hour, year-round. The :23 tick
+# always runs (unchanged hourly cadence); the extra :53 tick only runs
+# inside this local-clock window, so polling doubles to every 30 min while
+# someone could plausibly be checking conditions and stays hourly overnight.
+# Local hours, not UTC, so DST shifts the window for free through config.TZ
+# - no seasonal cron edits needed (2026-08-04, missed 29 Jul lake event).
+LIVE_FAST_POLL_START_HOUR = 5
+LIVE_FAST_POLL_END_HOUR = 20
+
 # Lake safety-net alert tiers (spec 7): live lake wind independent of the
 # forecast. One source of truth for both the log text (live.py) and the
 # actual calendar gate (gcal.py) - they used to be separate hardcoded copies
@@ -250,3 +259,6 @@ def validate() -> None:
 
     if MIN_MODELS_AGREE < 1 or MIN_MODELS_AGREE > len(MODELS):
         raise ConfigError("MIN_MODELS_AGREE must be within the model count")
+
+    if not 0 <= LIVE_FAST_POLL_START_HOUR < LIVE_FAST_POLL_END_HOUR <= 24:
+        raise ConfigError("live fast-poll window must be an ascending 24 h local range")

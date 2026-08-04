@@ -36,6 +36,32 @@ def test_heartbeat_raises_when_scan_cron_dead():
     live.heartbeat({"generated_at": (NOW - timedelta(hours=5)).isoformat()}, NOW)
 
 
+def test_should_run_always_true_on_the_hourly_tick():
+    # minute < 30 is the original :23 cron tick - always runs, day or night.
+    assert live._should_run(NOW.replace(hour=13, minute=23)) is True
+    assert live._should_run(NOW.replace(hour=2, minute=23)) is True
+
+
+def test_should_run_true_on_half_hour_tick_during_daylight():
+    assert live._should_run(NOW.replace(hour=13, minute=53)) is True
+
+
+def test_should_run_false_on_half_hour_tick_outside_daylight():
+    assert live._should_run(NOW.replace(hour=22, minute=53)) is False
+    assert live._should_run(NOW.replace(hour=4, minute=53)) is False
+
+
+def test_should_run_daylight_window_follows_dst_via_local_hour():
+    # 19:53 local sits inside the 05:00-20:00 window either way, but AEDT
+    # (Jan, DST on) and AEST (Jul, DST off) are different UTC offsets - this
+    # only agrees on both dates if the gate compares local hour, not UTC.
+    aedt = datetime(2026, 1, 15, 19, 53, tzinfo=config.TZ)
+    aest = datetime(2026, 7, 6, 19, 53, tzinfo=config.TZ)
+    assert aedt.utcoffset() != aest.utcoffset()
+    assert live._should_run(aedt) is True
+    assert live._should_run(aest) is True
+
+
 def test_confirm_at_90pct_of_target():
     state, _ = live.status_for(window(), obs(18.5, 185), NOW)
     assert state == "confirmed"
@@ -250,6 +276,18 @@ def test_run_fetches_holfuy_even_without_a_lake_window(tmp_path, monkeypatch):
     live.run(NOW, dry_run=False, data_dir=data_dir)
     got = _live_json(tmp_path)
     assert got["holfuy"]["station"] == "Holfuy"
+
+
+def test_run_noop_on_off_hours_half_hour_tick_touches_nothing(tmp_path, monkeypatch):
+    # tmp_path has no latest.json at all - if this didn't short-circuit
+    # before verdict.load_latest, it would raise instead of skipping clean.
+    night_tick = NOW.replace(hour=22, minute=53)
+    fetch_calls = []
+    monkeypatch.setattr(fetch, "fetch_bom", lambda now: fetch_calls.append("bom"))
+    log = live.run(night_tick, dry_run=False, data_dir=tmp_path)
+    assert fetch_calls == []
+    assert not (tmp_path / "live.json").exists()
+    assert any("skipped" in l and "22:53" in l for l in log)
 
 
 def test_run_fires_lake_alert_with_no_forecast_window_active(tmp_path, monkeypatch):
