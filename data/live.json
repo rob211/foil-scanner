@@ -1,20 +1,16 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-04T11:21:31.742307+10:00",
+  "generated_at": "2026-08-04T15:27:05.467901+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-04T11:00:00+10:00",
-    "speed_kn": 10.8,
-    "gust_kn": 17.8,
-    "dir_deg": 270.0
+    "time": "2026-08-04T15:00:00+10:00",
+    "speed_kn": 7.0,
+    "gust_kn": 13.0,
+    "dir_deg": 225.0
   },
-  "holfuy": {
-    "station": "Lake Illawarra",
-    "time": "2026-08-04T11:20:59+10:00",
-    "speed_kn": 19.4,
-    "gust_kn": 23.3,
-    "dir_deg": 245.0
-  },
+  "holfuy": null,
   "checks": [],
-  "notes": []
+  "notes": [
+    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'"
+  ]
 }
