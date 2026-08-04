@@ -7,25 +7,34 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#101010">
+<meta name="theme-color" content="#050c13">
 <title>Foil Watch</title>
 <style>
-  /* Dark-only by Rob's call (5 Jul 2026): near-black neutral canvas,
-     ember accent, grade colours carry the meaning. */
+  /* Dark-only by Rob's call (5 Jul 2026): near-black canvas, grade colours
+     carry the meaning. Redrawn 4 Aug 2026 off a generic dark-dashboard
+     look (neutral near-black + single warm accent pop, pill/glow chrome
+     everywhere, no typographic voice) toward an instrument-panel read: a
+     cool ink ground instead of neutral grey, a muted brass accent instead
+     of a saturated "ember" pop, and a monospace voice reserved for every
+     number/readout against a sans voice for prose - so the page reads
+     like a gauge, not a SaaS card stack. */
   :root {
-    --bg: oklch(0.135 0 0);
-    --surface: oklch(0.18 0 0);
-    --surface-2: oklch(0.22 0 0);
-    --surface-3: oklch(0.25 0 0);
-    --line: oklch(0.27 0 0);
-    --line-hover: oklch(0.36 0 0);
-    --line-strong: oklch(0.40 0 0);
-    --today-line: oklch(0.45 0 0);
-    --ink: oklch(0.95 0.004 60);
-    --ink-dim: oklch(0.80 0.01 60);
-    --muted: oklch(0.68 0.008 60);
-    --rust: oklch(0.72 0.15 40);
-    --rust-hi: oklch(0.76 0.15 40);
+    --bg: oklch(0.150 0.020 250);
+    --surface: oklch(0.195 0.018 250);
+    --surface-2: oklch(0.235 0.020 250);
+    --surface-3: oklch(0.270 0.022 250);
+    --line: oklch(0.300 0.018 250);
+    --line-hover: oklch(0.380 0.020 250);
+    --line-strong: oklch(0.430 0.022 250);
+    --today-line: oklch(0.500 0.030 250);
+    --ink: oklch(0.950 0.006 250);
+    --ink-dim: oklch(0.800 0.012 250);
+    --muted: oklch(0.660 0.014 250);
+    /* Brass: the one structural accent, standing in for an instrument's
+       metal fittings rather than a flat saturated "brand" hue. */
+    --brass: oklch(0.730 0.082 75);
+    --brass-hi: oklch(0.780 0.082 75);
+    --brass-ink: oklch(0.180 0.030 75);
     --grade-green: oklch(0.78 0.15 152);
     --grade-green-bg: oklch(0.21 0.035 152);
     --grade-yellow: oklch(0.85 0.13 92);
@@ -37,14 +46,17 @@
     --green-fill-1: oklch(0.68 0.16 152); --green-fill-2: oklch(0.57 0.15 152); --green-ink: oklch(0.15 0.05 152);
     --yellow-fill-1: oklch(0.87 0.13 95); --yellow-fill-2: oklch(0.79 0.14 92); --yellow-ink: oklch(0.24 0.05 92);
     --red-fill-1: oklch(0.68 0.17 33);   --red-fill-2: oklch(0.61 0.17 30);    --red-ink: oklch(0.13 0.05 30);
-    /* per-grade panel (soon gradient top), border line and dot glow */
-    --green-panel: oklch(0.24 0.045 152); --green-line: oklch(0.42 0.09 152); --green-glow: oklch(0.78 0.15 152 / 0.55);
-    --yellow-panel: oklch(0.25 0.045 92); --yellow-line: oklch(0.44 0.08 92); --yellow-glow: oklch(0.85 0.13 92 / 0.55);
-    --red-panel: oklch(0.24 0.05 30);     --red-line: oklch(0.42 0.10 30);    --red-glow: oklch(0.72 0.17 30 / 0.55);
-    --rust-ink: oklch(0.16 0.03 40);
+    /* per-grade panel (soon gradient top) and border line */
+    --green-panel: oklch(0.24 0.045 152); --green-line: oklch(0.42 0.09 152);
+    --yellow-panel: oklch(0.25 0.045 92); --yellow-line: oklch(0.44 0.08 92);
+    --red-panel: oklch(0.24 0.05 30);     --red-line: oklch(0.42 0.10 30);
     --alarm-bg: oklch(0.40 0.15 29);
     --alarm-ink: oklch(0.98 0.01 31);
-    --radius: 12px;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
+    --radius: 10px;
+    --radius-lg: 14px;
+    --radius-sm: 7px;
     --tap: 44px; /* minimum touch target, phone-first */
   }
 
@@ -52,14 +64,12 @@
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
-    background:
-      radial-gradient(1100px 520px at 88% -12%, oklch(0.30 0.055 40 / 0.22), transparent 62%),
-      var(--bg);
+    background: var(--bg);
     color: var(--ink);
-    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font: 16px/1.5 var(--font-sans);
   }
   a:focus-visible, summary:focus-visible {
-    outline: 2px solid var(--rust);
+    outline: 2px solid var(--brass);
     outline-offset: 2px;
     border-radius: 4px;
   }
@@ -70,8 +80,8 @@
     gap: 1rem; padding: 1.1rem 0 0.4rem;
   }
   header h1 { font-size: 1rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
-  header h1 span { color: var(--rust); }
-  #stamp { font-size: 0.8rem; color: var(--muted); text-align: right; }
+  header h1 span { font-family: var(--font-mono); color: var(--brass); }
+  #stamp { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); text-align: right; }
 
   /* Alarm states own the top of the page. The warning glyph + muddy alarm-red
      keep them unmistakable from a bold red FIRING verdict below. */
@@ -91,76 +101,102 @@
      .soon  = the next window is hours or days away → calmer tinted panel with
               the day pushed forward, so future never reads as go-now. */
   #verdict {
-    border-radius: 18px; padding: 1.4rem 1.35rem; margin: 0.8rem 0 1.4rem;
-    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); border-top: 3px solid var(--line);
+    padding: 1.4rem 1.35rem; margin: 0.8rem 0 1.4rem;
+    background: var(--surface); border-left: 1px solid var(--line);
+    border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
     box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.05);
   }
   #verdict .top { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
-  #verdict .word { font-size: 2.6rem; font-weight: 850; letter-spacing: -0.025em; line-height: 1; text-wrap: balance; }
+  /* The verdict word reads like an instrument's digital readout, not a
+     marketing headline - monospace, tight tracking, no ornament. */
+  #verdict .word { font-family: var(--font-mono); font-size: 2.5rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1; text-wrap: balance; }
   #verdict .what { font-size: 1.15rem; font-weight: 650; margin-top: 0.4rem; text-wrap: balance; }
-  #verdict .when { margin-top: 0.2rem; font-size: 0.95rem; }
+  #verdict .when { font-family: var(--font-mono); margin-top: 0.3rem; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
   .nowtag, .daytag {
-    font-size: 0.7rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase;
+    font-family: var(--font-mono); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
     padding: 0.22rem 0.55rem; border-radius: 999px; white-space: nowrap;
   }
 
-  /* soon: tinted panel, grade-coloured word + day eyebrow */
+  /* soon: tinted panel, grade-coloured word + day eyebrow, a top stripe
+     stands in for what used to be an ambient glow */
   #verdict.soon .when { color: var(--ink-dim); }
   #verdict.soon .daytag { background: oklch(1 0 0 / 0.08); }
-  #verdict.soon.green { background: linear-gradient(180deg, var(--green-panel), var(--grade-green-bg)); border-color: var(--green-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-green); }
-  #verdict.soon.yellow { background: linear-gradient(180deg, var(--yellow-panel), var(--grade-yellow-bg)); border-color: var(--yellow-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-yellow); }
-  #verdict.soon.red { background: linear-gradient(180deg, var(--red-panel), var(--grade-red-bg)); border-color: var(--red-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 0 48px -20px var(--grade-red); }
+  #verdict.soon.green { background: linear-gradient(180deg, var(--green-panel), var(--grade-green-bg)); border-color: var(--grade-green) var(--green-line) var(--green-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06); }
+  #verdict.soon.yellow { background: linear-gradient(180deg, var(--yellow-panel), var(--grade-yellow-bg)); border-color: var(--grade-yellow) var(--yellow-line) var(--yellow-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06); }
+  #verdict.soon.red { background: linear-gradient(180deg, var(--red-panel), var(--grade-red-bg)); border-color: var(--grade-red) var(--red-line) var(--red-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06); }
   #verdict.soon.green .word, #verdict.soon.green .daytag { color: var(--grade-green); }
   #verdict.soon.yellow .word, #verdict.soon.yellow .daytag { color: var(--grade-yellow); }
   #verdict.soon.red .word, #verdict.soon.red .daytag { color: var(--grade-red); }
 
-  /* live: grade colour fills, dark ink, NOW tag */
+  /* live: grade colour fills, dark ink, NOW tag. A grounded drop shadow
+     gives it lift without the ambient colour bloom the fill alone doesn't
+     need - the boldness here is the fill, not a second glow on top of it. */
   #verdict.live { border: none; }
   #verdict.live .what { font-weight: 750; }
   #verdict.live .nowtag { background: oklch(0 0 0 / 0.24); }
-  #verdict.live.green { background: linear-gradient(160deg, var(--green-fill-1), var(--green-fill-2)); box-shadow: 0 0 60px -22px var(--grade-green), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--green-ink); }
-  #verdict.live.yellow { background: linear-gradient(160deg, var(--yellow-fill-1), var(--yellow-fill-2)); box-shadow: 0 0 60px -22px var(--grade-yellow), inset 0 1px 0 oklch(1 0 0 / 0.25); color: var(--yellow-ink); }
-  #verdict.live.red { background: linear-gradient(160deg, var(--red-fill-1), var(--red-fill-2)); box-shadow: 0 0 60px -22px var(--grade-red), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--red-ink); }
+  #verdict.live.green { background: linear-gradient(160deg, var(--green-fill-1), var(--green-fill-2)); box-shadow: 0 10px 28px -16px oklch(0 0 0 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--green-ink); }
+  #verdict.live.yellow { background: linear-gradient(160deg, var(--yellow-fill-1), var(--yellow-fill-2)); box-shadow: 0 10px 28px -16px oklch(0 0 0 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.25); color: var(--yellow-ink); }
+  #verdict.live.red { background: linear-gradient(160deg, var(--red-fill-1), var(--red-fill-2)); box-shadow: 0 10px 28px -16px oklch(0 0 0 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--red-ink); }
   #verdict.live .word, #verdict.live .what, #verdict.live .when { color: inherit; }
 
   /* Live observation tiles: BOM (#live) and the lake Holfuy station (#live-lake) */
   .livewrap { margin: 0 0 1rem; }
   .livetile {
     display: flex; align-items: baseline; gap: 0.5rem; flex-wrap: wrap;
-    background: var(--surface); border: 1px solid var(--line);
-    border-radius: var(--radius); padding: 0.65rem 0.9rem; margin: 0 0 0.6rem;
+    background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--brass);
+    border-radius: var(--radius); padding: 0.65rem 0.9rem 0.65rem 0.75rem; margin: 0 0 0.6rem;
     font-size: 0.95rem;
     box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.04);
   }
   .livewrap .livetile:last-child { margin-bottom: 0; }
   .livetile .k {
-    flex: none; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.06em;
-    color: var(--rust); border: 1px solid currentColor;
+    flex: none; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--brass); border: 1px solid currentColor;
     padding: 0.12rem 0.45rem; border-radius: 999px;
   }
-  .livetile .sub { color: var(--muted); font-size: 0.82rem; flex-basis: 100%; }
-  .livetile.stale, .livetile.down { color: var(--muted); }
+  .livetile .reading { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .livetile .sub { font-family: var(--font-mono); color: var(--muted); font-size: 0.8rem; flex-basis: 100%; font-variant-numeric: tabular-nums; }
+  .livetile.stale, .livetile.down { color: var(--muted); border-left-color: var(--line-strong); }
   .livetile.stale .k, .livetile.down .k { color: var(--muted); }
 
-  /* Week strip: weekday + date so a dot maps to a real day at a glance */
-  #week { display: flex; gap: 6px; margin: 0 0 1.6rem; }
+  /* Week strip: weekday + date so a dot maps to a real day at a glance,
+     set like a tide-table almanac row rather than a generic calendar
+     widget - date numerals in mono, tight and technical. Each day is a
+     button that opens that day's detail into #week-detail below (one
+     shared accordion, so an open day never fights the 7-column row). */
+  #week { display: flex; gap: 6px; margin: 0 0 0.6rem; }
   #week .day {
-    flex: 1; min-height: var(--tap); border-radius: 9px; padding: 0.4rem 0 0.42rem;
+    flex: 1; min-height: var(--tap); border-radius: var(--radius-sm); padding: 0.4rem 0 0.42rem;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
     background: var(--surface); border: 1px solid var(--line);
-    color: var(--muted);
+    color: var(--muted); font: inherit; cursor: pointer;
+    transition: border-color 150ms ease-out, background 150ms ease-out;
   }
-  #week .dow { font-size: 0.68rem; font-weight: 700; }
-  #week .dnum { font-size: 0.82rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  #week .day:hover { border-color: var(--line-hover); background: var(--surface-2); }
+  #week .day:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+  #week .dow { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; }
+  #week .dnum { font-family: var(--font-mono); font-size: 0.85rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
   #week .day .dots { display: flex; align-items: center; gap: 3px; justify-content: center; margin-top: 3px; min-height: 12px; }
   /* Shape carries the grade alongside colour so the strip still reads for
      colour-blind eyes: ON = filled disc, MAYBE = ring, FIRING = diamond. */
   #week .dot { width: 8px; height: 8px; border-radius: 50%; }
-  #week .dot.green { background: var(--grade-green); box-shadow: 0 0 7px var(--green-glow); }
-  #week .dot.yellow { background: transparent; border: 2px solid var(--grade-yellow); box-shadow: 0 0 7px var(--yellow-glow); }
-  #week .dot.red { width: 7px; height: 7px; background: var(--grade-red); border-radius: 1.5px; rotate: 45deg; box-shadow: 0 0 7px var(--red-glow); }
+  #week .dot.green { background: var(--grade-green); }
+  #week .dot.yellow { background: transparent; border: 2px solid var(--grade-yellow); }
+  #week .dot.red { width: 7px; height: 7px; background: var(--grade-red); border-radius: 1.5px; rotate: 45deg; }
   #week .day.today { border-color: var(--today-line); color: var(--ink); background: var(--surface-2); }
-  #week .day.today .dow { color: var(--rust); }
+  #week .day.today .dow { color: var(--brass); }
+  /* Selected takes precedence over the today treatment (a day can be both) -
+     brass border and a lifted surface read as "this one is open." */
+  #week .day[aria-expanded="true"] { border-color: var(--brass); background: var(--surface-3); color: var(--ink); }
+  #week .day[aria-expanded="true"] .dow { color: var(--brass); }
+
+  .week-detail { margin: 0 0 1.6rem; }
+  .week-detail:not([hidden]) { animation: drop 160ms ease-out; }
+  .week-detail-empty {
+    color: var(--muted); background: var(--surface); border: 1px dashed var(--line);
+    border-radius: var(--radius); padding: 0.9rem 1rem; font-size: 0.9rem;
+  }
 
   h2 { font-size: 0.95rem; margin: 1.6rem 0 0.6rem; }
   .dayhead { font-size: 0.85rem; color: var(--muted); font-weight: 700; margin: 1.2rem 0 0.4rem; }
@@ -179,7 +215,7 @@
   }
   details.win summary::-webkit-details-marker { display: none; }
   .win .tags { flex: 1 1 100%; color: var(--muted); font-size: 0.82rem; }
-  .win .tide { flex: 1 1 100%; color: var(--rust); font-size: 0.82rem; font-weight: 650; }
+  .win .tide { flex: 1 1 100%; font-family: var(--font-mono); color: var(--brass); font-size: 0.8rem; font-weight: 600; font-variant-numeric: tabular-nums; }
   .win .spots { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 0.3rem; }
   .win .spot {
     font-size: 0.75rem; font-weight: 600; color: var(--ink);
@@ -187,18 +223,18 @@
     border-radius: 999px; padding: 0.1rem 0.55rem;
   }
   .chip {
-    flex: none; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em;
+    flex: none; font-family: var(--font-mono); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.03em;
     padding: 0.2rem 0.5rem; border-radius: 999px;
   }
   .chip.green { background: var(--grade-green); color: var(--green-ink); }
   .chip.yellow { background: var(--grade-yellow); color: var(--yellow-ink); }
   .chip.red { background: var(--grade-red); color: var(--red-ink); }
   .win .name { font-weight: 650; font-size: 0.95rem; }
-  .win .meta { color: var(--muted); font-size: 0.85rem; margin-left: auto; text-align: right; flex: none; }
+  .win .meta { font-family: var(--font-mono); color: var(--muted); font-size: 0.82rem; margin-left: auto; text-align: right; flex: none; font-variant-numeric: tabular-nums; }
   .win .body { padding: 0.2rem 0.9rem 0.9rem; font-size: 0.9rem; border-top: 1px solid var(--line); }
   .win .body dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.15rem 0.9rem; margin: 0.7rem 0 0; }
   .win .body dt { color: var(--muted); }
-  .win .body dd { margin: 0; overflow-wrap: anywhere; }
+  .win .body dd { margin: 0; overflow-wrap: anywhere; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
   .win .note { color: var(--muted); margin-top: 0.5rem; font-size: 0.85rem; }
 
   .quiet {
@@ -235,26 +271,26 @@
   .btn {
     display: inline-flex; align-items: center; justify-content: center;
     min-height: var(--tap); font: inherit; font-size: 0.85rem; font-weight: 650;
-    padding: 0.45rem 1rem; border-radius: 999px; cursor: pointer;
+    padding: 0.45rem 1.1rem; border-radius: var(--radius-sm); cursor: pointer;
     background: var(--surface-2); color: var(--ink); border: 1px solid var(--line);
     text-decoration: none; transition: border-color 150ms ease-out, background 150ms ease-out;
   }
   .btn:hover { border-color: var(--line-strong); background: var(--surface-3); }
-  .btn:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
-  .btn.primary { background: var(--rust); color: var(--rust-ink); border-color: transparent; }
-  .btn.primary:hover { background: var(--rust-hi); }
-  #subscribe .steps { margin: 1rem 0 0; padding: 0.8rem 0.9rem; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; animation: drop 180ms ease-out; }
+  .btn:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+  .btn.primary { background: var(--brass); color: var(--brass-ink); border-color: transparent; }
+  .btn.primary:hover { background: var(--brass-hi); }
+  #subscribe .steps { margin: 1rem 0 0; padding: 0.8rem 0.9rem; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm); animation: drop 180ms ease-out; }
   #subscribe .steps-h { color: var(--ink); font-weight: 700; font-size: 0.82rem; margin: 0 0 0.4rem; }
   #subscribe .steps ol { margin: 0; padding-left: 1.25rem; color: var(--muted); font-size: 0.85rem; }
   #subscribe .steps li { margin: 0.3rem 0; padding-left: 0.15rem; }
   #subscribe .steps strong { color: var(--ink); font-weight: 650; }
   #subscribe .fine { color: var(--muted); font-size: 0.78rem; margin: 0.7rem 0 0; }
   .icsout {
-    font: inherit; font-size: 0.8rem; color: var(--ink);
-    background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+    font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm);
     padding: 0.45rem 0.6rem; min-width: 0; flex: 1 1 14rem;
   }
-  .icsout:focus-visible { outline: 2px solid var(--rust); outline-offset: 2px; }
+  .icsout:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 
   /* "How verdicts are decided" explainer */
   #how .how { font-size: 0.88rem; border-top: 1px solid var(--line); padding: 0.2rem 0.2rem 0.6rem; }
@@ -263,19 +299,19 @@
   #how ul { margin: 0.3rem 0; padding-left: 1.15rem; }
   #how li { margin: 0.3rem 0; }
   #how li strong, #how p strong { font-weight: 650; }
-  #how a { color: var(--rust); }
+  #how a { color: var(--brass); }
   #how .g { font-weight: 700; }
   #how .g.green { color: var(--grade-green); }
   #how .g.yellow { color: var(--grade-yellow); }
   #how .g.red { color: var(--grade-red); }
 
   footer { margin-top: 2.2rem; font-size: 0.78rem; color: var(--muted); }
-  footer a { color: var(--rust); }
+  footer a { color: var(--brass); }
 
   details.win .body { animation: drop 160ms ease-out; }
   @keyframes drop { from { opacity: 0; translate: 0 -3px; } }
   @media (prefers-reduced-motion: reduce) {
-    details.win .body, #subscribe .steps { animation: none; }
+    details.win .body, #subscribe .steps, .week-detail { animation: none; }
   }
 </style>
 </head>
@@ -350,6 +386,14 @@ const fmtDay = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, weekday: "short"
 const fmtWk = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, weekday: "short" });
 const fmtDnum = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, day: "numeric" });
 const fmtStamp = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, weekday: "short", hour: "numeric", minute: "2-digit" });
+
+// Week strip day buttons share one detail panel below the strip (a single-
+// open accordion) rather than each cell expanding in place, which would
+// fight the 7-column row layout. Populated by render(), read by the click
+// handler further down.
+let weekWindows = [];
+let weekLiveMap = {};
+let weekNow = new Date();
 
 const dayKey = (d) => new Intl.DateTimeFormat("en-CA", { timeZone: TZ, dateStyle: "short" }).format(d);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -437,7 +481,7 @@ function obsTile(id, label, obs, gen, now, notes, unavailableText) {
   const staleNote = stale ? ` · last check ${fmtStamp.format(gen)}, checks are falling behind` : "";
   return `<div id="${id}" class="livetile${stale ? " stale" : ""}">
     <span class="k">${label}</span>
-    <span><strong>${esc(obs.station)}</strong> ${Math.round(obs.speed_kn)} kn ${esc(dir)} · gusts ${Math.round(obs.gust_kn)}</span>
+    <span class="reading"><strong>${esc(obs.station)}</strong> ${Math.round(obs.speed_kn)} kn ${esc(dir)} · gusts ${Math.round(obs.gust_kn)}</span>
     <span class="sub">reading ${fmtTime.format(t)} (${age})${staleNote}${notesText ? ` · ${esc(notesText)}` : ""}</span>
   </div>`;
 }
@@ -464,19 +508,39 @@ function weekStrip(windows, now) {
     const dots = grades
       .map((g) => `<span class="dot ${esc(g)}" title="${esc(GRADE_WORD[g] || g)}"></span>`)
       .join("");
-    // Dots are colour + shape; screen readers get the grades spelled out on the
-    // cell (role="img" so the label is announced and the dots aren't read raw).
+    // Dots are colour + shape; screen readers get the grades spelled out in
+    // the button's label. Each day expands its detail into the single
+    // #week-detail panel below the strip (one accordion, not seven, so an
+    // opened day never fights the 7-column row layout) - same disclosure
+    // pattern as the window cards further down, just relocated.
     const words = grades.length ? grades.map((g) => GRADE_WORD[g] || g).join(", ") : "no windows";
     const label = `${i === 0 ? "Today, " : ""}${fmtDay.format(d)}: ${words}`;
-    html += `<div class="day${i === 0 ? " today" : ""}" role="img" aria-label="${esc(label)}">` +
-      `<span class="dow">${i === 0 ? "Now" : esc(fmtWk.format(d))}</span>` +
-      `<span class="dnum">${esc(fmtDnum.format(d))}</span>` +
-      `<div class="dots">${dots}</div></div>`;
+    html += `<button type="button" class="day${i === 0 ? " today" : ""}" data-daykey="${esc(k)}"
+        aria-expanded="false" aria-controls="week-detail" aria-label="${esc(label)}">` +
+      `<span class="dow" aria-hidden="true">${i === 0 ? "Now" : esc(fmtWk.format(d))}</span>` +
+      `<span class="dnum" aria-hidden="true">${esc(fmtDnum.format(d))}</span>` +
+      `<div class="dots" aria-hidden="true">${dots}</div></button>`;
   }
-  return html + "</div>";
+  html += "</div>";
+  html += '<div id="week-detail" class="week-detail" hidden></div>';
+  return html;
 }
 
-function windowCard(w, now, liveMap) {
+// Detail for one week-strip day: the day's own window cards, pre-opened -
+// clicking a day is already an explicit request to see everything about
+// it, unlike the "Windows" list below where cards start collapsed so many
+// days can be scanned at once.
+function weekDetailHTML(dayKeyStr, dayDate) {
+  const dayWindows = weekWindows
+    .filter((w) => dayKey(new Date(w.start)) === dayKeyStr)
+    .sort((a, b) => a.start.localeCompare(b.start));
+  if (!dayWindows.length) {
+    return `<div class="week-detail-empty">Nothing forecast for ${esc(fmtDay.format(dayDate))}.</div>`;
+  }
+  return dayWindows.map((w) => windowCard(w, weekNow, weekLiveMap, true)).join("");
+}
+
+function windowCard(w, now, liveMap, open) {
   const s = new Date(w.start), e = new Date(w.end);
   const models = Object.entries(w.model_values || {});
   const rows = [];
@@ -493,7 +557,7 @@ function windowCard(w, now, liveMap) {
   const tide = w.high_tide ? `<span class="tide">High tide ${esc(tideText(w))}</span>` : "";
   // South windows cover several launch spots; show each as its own chip.
   const spots = (w.spots || []).length ? `<span class="spots">${w.spots.map((sp) => `<span class="spot">${esc(sp)}</span>`).join("")}</span>` : "";
-  return `<details class="win">
+  return `<details class="win"${open ? " open" : ""}>
     <summary>
       <span class="chip ${esc(w.grade)}">${GRADE_WORD[w.grade] || esc(w.grade)}</span>
       <span class="name">${esc(w.run_name)}</span>
@@ -552,6 +616,9 @@ function render(data, liveData, now) {
   for (const c of (liveData && liveData.checks) || []) liveMap[c.foil_key] = c;
 
   const windows = (data.windows || []).slice().sort((a, b) => a.start.localeCompare(b.start));
+  weekWindows = windows;
+  weekLiveMap = liveMap;
+  weekNow = now;
   html += verdictBlock(windows, now);
   html += liveTiles(liveData, now);
   html += weekStrip(windows, now);
@@ -581,7 +648,28 @@ Promise.all([
     );
   });
 
-const ICS_URL = "https://calendar.google.com/calendar/ical/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/public/basic.ics";
+// Week strip day buttons are (re)created by render(), so this delegates
+// from #app - a stable element present from the initial static markup -
+// rather than binding to buttons that do not exist yet at script load.
+document.getElementById("app").addEventListener("click", (e) => {
+  const btn = e.target.closest("#week .day");
+  if (!btn) return;
+  const dayBtns = [...document.querySelectorAll("#week .day")];
+  const detail = document.getElementById("week-detail");
+  const wasOpen = btn.getAttribute("aria-expanded") === "true";
+  dayBtns.forEach((b) => b.setAttribute("aria-expanded", "false"));
+  if (wasOpen) {
+    detail.hidden = true;
+    detail.innerHTML = "";
+    return;
+  }
+  btn.setAttribute("aria-expanded", "true");
+  const dayDate = new Date(weekNow.getTime() + dayBtns.indexOf(btn) * 864e5);
+  detail.innerHTML = weekDetailHTML(btn.dataset.daykey, dayDate);
+  detail.hidden = false;
+});
+
+const ICS_URL ="https://calendar.google.com/calendar/ical/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/public/basic.ics";
 const outlookSteps = document.getElementById("outlook-steps");
 document.getElementById("copyics").addEventListener("click", async (e) => {
   const btn = e.currentTarget;
