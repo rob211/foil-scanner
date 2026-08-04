@@ -75,9 +75,7 @@ def _group(times: list[datetime]) -> list[tuple[datetime, datetime]]:
     (last hour + 1 h)."""
     spans = []
     for t in times:
-        if spans and t - spans[-1][1] == timedelta(0):
-            spans[-1][1] = t + HOUR
-        elif spans and t == spans[-1][1]:
+        if spans and t == spans[-1][1]:
             spans[-1][1] = t + HOUR
         else:
             spans.append([t, t + HOUR])
@@ -305,11 +303,17 @@ def _tide_spans(marine: MarineForecast) -> list[tuple[datetime, datetime, Marine
 def _baysurf_tide_spans(marine: MarineForecast) -> list[tuple[datetime, datetime, datetime, datetime]]:
     spans = []
     highs = marine.high_tides()
+    lows = marine.low_tides()
     for ht in highs:
-        after = [h for h in marine.hours if h.time > ht.time]
+        # The very next low after this high, not the lowest point anywhere
+        # in the rest of the forecast - min(..., key=sea_level_m) over all
+        # remaining hours picked up whichever day's low was deepest, which
+        # could be a spring low days later, stretching the "falling tide"
+        # window across multiple tide cycles (found 2026-08-04 review).
+        after = [lt for lt in lows if lt.time > ht.time]
         if not after:
             continue
-        low = min(after, key=lambda h: h.sea_level_m)
+        low = min(after, key=lambda h: h.time)
         full_start = ht.time
         full_end = low.time + HOUR
         if full_end <= full_start:
@@ -354,7 +358,7 @@ def baysurf_windows(
                 continue
             if not config.BAYSURF_SWELL_ARC.contains(mh.swell_dir_deg):
                 continue
-            light_ok = 4.0 <= hw.speed_kn <= config.BAYSURF_WIND_MAX_KN
+            light_ok = config.BAYSURF_WIND_MIN_KN <= hw.speed_kn <= config.BAYSURF_WIND_MAX_KN
             strong_ok = hw.speed_kn > config.BAYSURF_WIND_MAX_KN and config.BAYSURF_STRONG_WIND_ARC.contains(hw.dir_deg)
             if light_ok or strong_ok:
                 hour_map.setdefault(hw.time, {})[model_id] = hw
@@ -519,6 +523,13 @@ def entrance_windows(
             clash.end = max(clash.end, w.end)
             if config.GRADE_ORDER.index(w.grade) > config.GRADE_ORDER.index(clash.grade):
                 clash.grade = w.grade
+            # Mode 2 (entrance_ne) never sets swell fields; if it survives as
+            # clash over a merged-away Mode 1 (entrance_swell), the swell
+            # numbers that justified Mode 1 used to be lost entirely bar a
+            # bare grade mention in the note below.
+            if clash.swell_m is None and w.swell_m is not None:
+                clash.swell_m = w.swell_m
+                clash.swell_dir_deg = w.swell_dir_deg
             clash.notes.append(f"also fires as {w.run_name} ({w.grade})")
     return merged, []
 
@@ -691,44 +702,3 @@ def _single_model_misses(
             )
         )
     return misses
-
-
-def evaluate(
-    lake_wind: WindForecast,
-    entrance_wind: WindForecast,
-    ocean_wind: WindForecast,
-    marine: MarineForecast,
-    sun: SunTimes,
-    now: datetime,
-) -> tuple[list[Window], list[NearMiss]]:
-    windows: list[Window] = []
-    misses: list[NearMiss] = []
-
-    lw, lm = lake_windows(lake_wind, sun, now)
-    windows += lw
-    misses += lm
-
-    ew, em = entrance_windows(entrance_wind, marine, sun, now)
-    windows += ew
-    misses += em
-
-    erw, erm = entrance_reverse_windows(entrance_wind, marine, sun, now)
-    windows += erw
-    misses += erm
-
-    sw, sm = south_windows(ocean_wind, marine, sun, now)
-    windows += sw
-    misses += sm
-
-    windows += hill60_windows(sw, marine, sun, now)
-
-    nw, nm = ne_windows(ocean_wind, marine, sun, now)
-    windows += nw
-    misses += nm
-
-    bw, bm = baysurf_windows(ocean_wind, marine, sun, now)
-    windows += bw
-    misses += bm
-
-    windows.sort(key=lambda w: (w.start, w.trigger_id))
-    return windows, misses

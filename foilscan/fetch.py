@@ -47,7 +47,18 @@ def clean_label(value: object, cap: int = 60) -> str:
     return " ".join(text.split())[:cap]
 
 
-def get_json(url: str, params: dict | None = None, headers: dict | None = None) -> dict:
+def get_json(
+    url: str,
+    params: dict | None = None,
+    headers: dict | None = None,
+    redact: tuple[str, ...] = (),
+) -> dict:
+    """redact names params (e.g. an API password) whose values must never
+    appear in the raised message: requests/urllib3 exceptions on a network
+    failure embed the full request URL including the query string, and that
+    message can end up truncated onto the public calendar via
+    gcal.write_broken_event (found 2026-08-04 review: a Holfuy network
+    failure during a live lake window could have leaked HOLFUY_KEY there)."""
     last = None
     for attempt in range(config.HTTP_RETRIES):
         try:
@@ -60,7 +71,12 @@ def get_json(url: str, params: dict | None = None, headers: dict | None = None) 
             last = exc
             if attempt < config.HTTP_RETRIES - 1:
                 _time.sleep(2**attempt)
-    raise FetchError(f"GET {url} failed after {config.HTTP_RETRIES} attempts: {last}")
+    msg = f"GET {url} failed after {config.HTTP_RETRIES} attempts: {last}"
+    for key in redact:
+        value = (params or {}).get(key)
+        if value:
+            msg = msg.replace(str(value), "***")
+    raise FetchError(msg)
 
 
 def _require(payload: dict, key: str, source: str):
@@ -294,6 +310,7 @@ def fetch_holfuy(key: str, now: datetime) -> Observation:
             "su": "knots",
             "utc": 1,
         },
+        redact=("pw",),
     )
     wind = _require(payload, "wind", source)
     when = datetime.fromisoformat(_require(payload, "dateTime", source)).replace(

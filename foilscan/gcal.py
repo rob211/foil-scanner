@@ -243,7 +243,15 @@ def sync(
                 plan.append(f"unchanged {key}")
 
     for key, ev in existing.items():
-        # Anything left is stale, including recovered broken:* flags.
+        # Anything left is stale, including recovered broken:* flags - but
+        # not lake-alert:*: that's a same-day live notification owned by
+        # live.py's hourly safety net, not a forecast window, and it must
+        # survive an unrelated scan cycle or a real alert gets deleted off
+        # the calendar within ~2 h regardless of whether the wind is still
+        # blowing (found 2026-08-04: this deleted every lake alert the
+        # cal_id/threshold fixes had just made possible again).
+        if key.startswith("lake-alert:"):
+            continue
         svc.events().delete(calendarId=cal_id, eventId=ev["id"]).execute()
         plan.append(f"deleted stale {key}: {ev.get('summary', '')}")
     return plan

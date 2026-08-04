@@ -112,6 +112,51 @@ def test_ensure_lake_alert_fires_at_threshold_not_just_strong(monkeypatch):
     assert calls == ["LAKE ALERT: 22 kn at Holfuy"]
 
 
+def test_sync_does_not_delete_todays_lake_alert(monkeypatch):
+    # sync()'s cleanup treats anything not in this scan's computed windows
+    # as stale, which used to sweep up lake-alert:* too - a real alert from
+    # live.py's hourly safety net would be gone by the next 2-hourly scan
+    # cron, regardless of whether the wind was still blowing. broken:* must
+    # still be swept (that is how it self-heals on the next good scan).
+    existing = {
+        "lake-alert:2026-07-06": {
+            "id": "ev-lake",
+            "summary": "LAKE ALERT: 27 kn at Holfuy",
+            "extendedProperties": {"private": {"foil_key": "lake-alert:2026-07-06"}},
+        },
+        "broken:2026-07-06": {
+            "id": "ev-broken",
+            "summary": "SCANNER BROKEN: ...",
+            "extendedProperties": {"private": {"foil_key": "broken:2026-07-06"}},
+        },
+    }
+    deleted = []
+
+    class FakeEvents:
+        def list(self, **kw):
+            class R:
+                def execute(self_):
+                    return {"items": list(existing.values())}
+            return R()
+
+        def delete(self, calendarId, eventId):
+            deleted.append(eventId)
+            class R:
+                def execute(self_):
+                    return {}
+            return R()
+
+    class FakeSvc:
+        def events(self):
+            return FakeEvents()
+
+    monkeypatch.setattr(gcal, "service", lambda: FakeSvc())
+    monkeypatch.setattr(gcal, "calendar_id", lambda: "cal")
+    gcal.sync([], NOW, [], dry_run=False)
+    assert "ev-lake" not in deleted
+    assert "ev-broken" in deleted
+
+
 def test_relevant_windows_selects_near_now():
     latest = {
         "windows": [

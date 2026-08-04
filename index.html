@@ -367,7 +367,11 @@ function dayLabel(d, now) {
 }
 
 function strengthLabel(w) {
-  if (w.trigger_id === "hill60_swell" || w.trigger_id === "entrance_swell") {
+  // baysurf is graded on swell height too (grade_for(mh.swell_m, ...) in
+  // triggers.py), so it belongs in this list same as the other two - a
+  // FIRING baysurf event was headlining with wind speed and never showing
+  // the swell height that actually earned the grade.
+  if (w.trigger_id === "hill60_swell" || w.trigger_id === "entrance_swell" || w.trigger_id === "baysurf") {
     return `${w.swell_m.toFixed(1)} m ${compass(w.swell_dir_deg)} swell`;
   }
   return `${Math.round(w.peak_median_kn)} kn ${compass(w.direction_deg)}`;

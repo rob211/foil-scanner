@@ -6,6 +6,7 @@ from conftest import DAY, NOW, at, mk_marine, mk_sun, mk_wind
 from foilscan import config
 from foilscan.models import MarineForecast, MarineHour
 from foilscan.triggers import (
+    HOUR,
     ang_diff,
     baysurf_windows,
     entrance_reverse_windows,
@@ -14,6 +15,7 @@ from foilscan.triggers import (
     lake_windows,
     ne_windows,
     south_windows,
+    _baysurf_tide_spans,
 )
 
 
@@ -258,6 +260,33 @@ def test_baysurf_rejects_strong_wrong_direction_wind(sun):
     assert windows == []
 
 
+def test_baysurf_tide_span_uses_the_next_low_not_the_deepest_one():
+    # _baysurf_tide_spans used to search every remaining hour in the whole
+    # forecast for the single lowest sea level, instead of just the next low
+    # tide - a single-cycle fixture can't catch that (soonest == lowest when
+    # there's only one), so this builds several days with a deliberately
+    # deeper low on day 3 to tell them apart.
+    hours_list = []
+    for h in range(24 * 4):
+        t = at(h % 24, DAY + timedelta(days=h // 24))
+        base = 0.5 * math.sin(2 * math.pi * h / 12.42)
+        depth_bonus = -0.4 if 58 <= h <= 66 else 0.0
+        hours_list.append(
+            MarineHour(time=t, swell_m=1.6, swell_dir_deg=60.0, swell_period_s=10.0,
+                       sea_level_m=base + depth_bonus)
+        )
+    marine = MarineForecast(fetched_at=NOW, hours=hours_list)
+    highs = marine.high_tides()
+    lows = marine.low_tides()
+    soonest_low = min((lt for lt in lows if lt.time > highs[0].time), key=lambda lt: lt.time)
+
+    spans = _baysurf_tide_spans(marine)
+    full_start, full_end, _, _ = spans[0]
+    assert full_start == highs[0].time
+    assert full_end == soonest_low.time + HOUR
+    assert full_end - full_start < timedelta(hours=12)
+
+
 def test_baysurf_downgrades_outside_ideal_tide_window(sun):
     wind = mk_wind(hours(range(10, 13), 8, 270), location_key="ocean")
     marine = _marine_with_tide(10, 17)
@@ -318,6 +347,11 @@ def test_entrance_both_modes_merge(sun):
     windows, _ = entrance_windows(wind, marine, sun, NOW)
     assert len(windows) == 1
     assert any("also fires as" in n for n in windows[0].notes)
+    # entrance_ne (mode 2) sorts first and survives as the merged event here,
+    # but never sets swell fields itself - the swell numbers that justified
+    # mode 1 firing used to vanish entirely except for a bare grade mention.
+    assert windows[0].swell_m == 0.9
+    assert windows[0].swell_dir_deg == 90.0
 
 
 # -------------------------------------------------------- entrance reverse

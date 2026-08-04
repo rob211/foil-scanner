@@ -20,6 +20,31 @@ def test_clean_label_leaves_normal_names_intact():
     assert fetch.clean_label("Bellambi") == "Bellambi"
 
 
+def test_get_json_redacts_secret_params_from_its_own_error(monkeypatch):
+    # A network failure inside requests/urllib3 embeds the full request URL,
+    # including the query string, in its own exception text. Unredacted,
+    # that could carry HOLFUY_KEY through FetchError into
+    # gcal.write_broken_event and onto the *public* calendar feed (2026-08-04
+    # review) if it lands there before hitting the 120-char cap - fragile to
+    # rely on since it depends on incidental message-prefix length.
+    secret = "supersecretpw12345"
+
+    def boom(*a, **k):
+        raise ConnectionError(f"couldn't connect to https://api.holfuy.com/live/?pw={secret}&s=366")
+
+    monkeypatch.setattr(fetch.requests, "get", boom)
+    monkeypatch.setattr(fetch._time, "sleep", lambda *_: None)
+    try:
+        fetch.get_json(
+            "https://api.holfuy.com/live/",
+            params={"pw": secret, "s": 366},
+            redact=("pw",),
+        )
+        assert False, "should have raised"
+    except fetch.FetchError as e:
+        assert secret not in str(e)
+
+
 def _bom_payload(when, name="Test Station"):
     return {
         "observations": {

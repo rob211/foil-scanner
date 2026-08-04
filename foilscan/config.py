@@ -125,6 +125,12 @@ BAYSURF_SWELL_ARC = Arc(35, 90)
 BAYSURF_SWELL_TARGET_M = 1.5
 BAYSURF_SWELL_YELLOW_M = 1.5
 BAYSURF_WIND_MAX_KN = 10.0
+# Spec 4.7 says "light, up to 10 kn" with no floor; this lower bound isn't
+# in the spec and predates this review (found undocumented, unnamed, as a
+# bare literal in triggers.py). Preserved as-is since removing it would
+# change which mornings qualify and that's Rob's call, not assumed here -
+# just named and centralised like every other threshold in this file.
+BAYSURF_WIND_MIN_KN = 4.0
 BAYSURF_STRONG_WIND_ARC = Arc(225, 315)
 
 # Swell compatibility for ocean downwinders (spec 4.6)
@@ -224,6 +230,9 @@ def validate() -> None:
 
     if not 0 < YELLOW_FACTOR < 1 < RED_FACTOR:
         raise ConfigError("grading factors must satisfy yellow < 1 < red")
+
+    if not 0 <= BAYSURF_WIND_MIN_KN < BAYSURF_WIND_MAX_KN:
+        raise ConfigError("baysurf wind floor must sit below its ceiling")
 
     ladder = sorted(NE_LADDER, key=lambda r: r[0], reverse=True)
     if list(NE_LADDER) != ladder or len({r[0] for r in NE_LADDER}) != len(NE_LADDER):
