@@ -1,55 +1,104 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-06T03:53:40.135975+10:00",
+  "generated_at": "2026-08-06T05:54:54.777564+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-06T03:53:40.576349+10:00",
+      "fetched_at": "2026-08-06T05:54:55.196009+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-06T03:53:41.037782+10:00",
+      "fetched_at": "2026-08-06T05:54:55.782292+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-06T03:53:41.459423+10:00",
+      "fetched_at": "2026-08-06T05:54:56.187496+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-06T03:53:41.883115+10:00",
+      "fetched_at": "2026-08-06T05:54:56.663361+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-06T03:53:42.289688+10:00",
+      "fetched_at": "2026-08-06T05:54:57.073503+10:00",
       "detail": null,
       "error": null
     }
   },
-  "windows": [],
-  "near_misses": [
+  "windows": [
     {
       "trigger_id": "lake_berkeley",
+      "run_name": "Berkeley run",
       "date": "2026-08-12",
-      "start": "2026-08-12T11:00:00+10:00",
+      "start": "2026-08-12T14:00:00+10:00",
       "end": "2026-08-12T18:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
+      "grade": "red",
+      "peak_median_kn": 25.7,
+      "direction_deg": 278.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 24.1,
+        "ICON": 27.3
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "g8tv7hougrprll7drgeaf8pg5k",
+      "foil_key": "lake_berkeley:2026-08-12:14"
     },
     {
       "trigger_id": "entrance_reverse",
+      "run_name": "Entrance reverse run (Boronia Ave)",
       "date": "2026-08-12",
       "start": "2026-08-12T15:00:00+10:00",
       "end": "2026-08-12T18:00:00+10:00",
+      "grade": "yellow",
+      "peak_median_kn": 25.7,
+      "direction_deg": 278.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 24.1,
+        "ICON": 27.3
+      },
+      "title_tags": [
+        "off-angle W"
+      ],
+      "notes": [
+        "low tide 13:00"
+      ],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": "2026-08-12T19:00:00+10:00",
+      "high_tide_m": 2.2,
+      "spots": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "tar7s79fok1q0q0qtugjn8f4uk",
+      "foil_key": "entrance_reverse:2026-08-12:15"
+    }
+  ],
+  "near_misses": [
+    {
+      "trigger_id": "lake_berkeley",
+      "date": "2026-08-10",
+      "start": "2026-08-10T13:00:00+10:00",
+      "end": "2026-08-10T14:00:00+10:00",
       "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
+      "detail": "only ['ecmwf_ifs025'] sees it"
     }
   ]
 }
