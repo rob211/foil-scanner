@@ -1,75 +1,38 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-05T09:18:17.549009+10:00",
+  "generated_at": "2026-08-05T12:00:44.453443+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-05T09:18:18.223714+10:00",
+      "fetched_at": "2026-08-05T12:00:44.985483+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-05T09:18:18.931166+10:00",
+      "fetched_at": "2026-08-05T12:00:45.470479+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-05T09:18:19.657562+10:00",
+      "fetched_at": "2026-08-05T12:00:45.900930+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-05T09:18:20.380744+10:00",
+      "fetched_at": "2026-08-05T12:00:46.280901+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-05T09:18:21.000791+10:00",
+      "fetched_at": "2026-08-05T12:00:46.666015+10:00",
       "detail": null,
       "error": null
     }
   },
-  "windows": [
-    {
-      "trigger_id": "entrance_swell",
-      "run_name": "Lake Entrance (swell)",
-      "date": "2026-08-09",
-      "start": "2026-08-09T17:00:00+10:00",
-      "end": "2026-08-09T18:00:00+10:00",
-      "grade": "green",
-      "peak_median_kn": 4.0,
-      "direction_deg": 0.0,
-      "models_agreeing": 3,
-      "model_values": {
-        "GFS": 4.9,
-        "ECMWF": 4.0,
-        "UKMO": 1.7
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": 0.82,
-      "swell_dir_deg": 68.0,
-      "high_tide": "2026-08-09T17:00:00+10:00",
-      "high_tide_m": 1.97,
-      "spots": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": "k2tlresc0so4o47vc1telkgal8",
-      "foil_key": "entrance_swell:2026-08-09:17"
-    }
-  ],
-  "near_misses": [
-    {
-      "trigger_id": "lake_berkeley",
-      "date": "2026-08-10",
-      "start": "2026-08-10T08:00:00+10:00",
-      "end": "2026-08-10T09:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['ecmwf_ifs025'] sees it"
-    }
-  ]
+  "windows": [],
+  "near_misses": []
 }
