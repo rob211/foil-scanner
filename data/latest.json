@@ -1,39 +1,65 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-06T07:32:31.157798+10:00",
+  "generated_at": "2026-08-06T09:00:40.652078+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-06T07:32:31.840740+10:00",
+      "fetched_at": "2026-08-06T09:00:41.160935+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-06T07:32:32.645760+10:00",
+      "fetched_at": "2026-08-06T09:00:41.591549+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-06T07:32:33.449015+10:00",
+      "fetched_at": "2026-08-06T09:00:42.015867+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-06T07:32:34.201586+10:00",
+      "fetched_at": "2026-08-06T09:00:42.443064+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-06T07:32:34.831024+10:00",
+      "fetched_at": "2026-08-06T09:00:42.822338+10:00",
       "detail": null,
       "error": null
     }
   },
   "windows": [
+    {
+      "trigger_id": "entrance_swell",
+      "run_name": "Lake Entrance (swell)",
+      "date": "2026-08-10",
+      "start": "2026-08-10T17:00:00+10:00",
+      "end": "2026-08-10T18:00:00+10:00",
+      "grade": "green",
+      "peak_median_kn": 8.7,
+      "direction_deg": 294.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "GFS": 9.4,
+        "ICON": 8.0
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": 0.86,
+      "swell_dir_deg": 58.0,
+      "high_tide": "2026-08-10T17:00:00+10:00",
+      "high_tide_m": 2.02,
+      "spots": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "029mrmuj8ipbi98klebk6dhvd8",
+      "foil_key": "entrance_swell:2026-08-10:17"
+    },
     {
       "trigger_id": "lake_berkeley",
       "run_name": "Berkeley run",
