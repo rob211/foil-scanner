@@ -1,38 +1,47 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-05T13:32:54.564602+10:00",
+  "generated_at": "2026-08-05T15:00:46.868837+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-05T13:32:55.220663+10:00",
+      "fetched_at": "2026-08-05T15:00:47.466962+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-05T13:32:55.899809+10:00",
+      "fetched_at": "2026-08-05T15:00:48.042622+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-05T13:32:56.554392+10:00",
+      "fetched_at": "2026-08-05T15:00:48.604354+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-05T13:32:57.207474+10:00",
+      "fetched_at": "2026-08-05T15:00:49.201179+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-05T13:32:57.814685+10:00",
+      "fetched_at": "2026-08-05T15:00:49.767527+10:00",
       "detail": null,
       "error": null
     }
   },
   "windows": [],
-  "near_misses": []
+  "near_misses": [
+    {
+      "trigger_id": "lake_berkeley",
+      "date": "2026-08-11",
+      "start": "2026-08-11T07:00:00+10:00",
+      "end": "2026-08-11T10:00:00+10:00",
+      "reason": "single_model",
+      "detail": "only ['icon_seamless'] sees it"
+    }
+  ]
 }
