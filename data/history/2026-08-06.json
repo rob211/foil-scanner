@@ -1,64 +1,64 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-06T09:17:58.343688+10:00",
+  "generated_at": "2026-08-06T12:00:41.106058+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-06T09:17:59.098647+10:00",
+      "fetched_at": "2026-08-06T12:00:41.944771+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-06T09:17:59.711996+10:00",
+      "fetched_at": "2026-08-06T12:00:42.964405+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-06T09:18:00.476470+10:00",
+      "fetched_at": "2026-08-06T12:00:43.746638+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-06T09:18:01.208366+10:00",
+      "fetched_at": "2026-08-06T12:00:44.585768+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-06T09:18:01.808030+10:00",
+      "fetched_at": "2026-08-06T12:00:45.199976+10:00",
       "detail": null,
       "error": null
     }
   },
   "windows": [
     {
-      "trigger_id": "entrance_swell",
-      "run_name": "Lake Entrance (swell)",
+      "trigger_id": "baysurf",
+      "run_name": "Baysurf",
       "date": "2026-08-10",
-      "start": "2026-08-10T17:00:00+10:00",
-      "end": "2026-08-10T18:00:00+10:00",
+      "start": "2026-08-10T07:00:00+10:00",
+      "end": "2026-08-10T12:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 8.7,
-      "direction_deg": 294.0,
+      "peak_median_kn": 21.9,
+      "direction_deg": 278.0,
       "models_agreeing": 2,
       "model_values": {
-        "GFS": 9.4,
-        "ICON": 8.0
+        "GFS": 20.7,
+        "ECMWF": 23.1
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 0.86,
-      "swell_dir_deg": 58.0,
-      "high_tide": "2026-08-10T17:00:00+10:00",
-      "high_tide_m": 2.02,
+      "swell_m": 1.56,
+      "swell_dir_deg": 61.0,
+      "high_tide": null,
+      "high_tide_m": null,
       "spots": null,
       "confidence": "low (long range)",
       "live_status": "pending",
-      "event_id": "029mrmuj8ipbi98klebk6dhvd8",
-      "foil_key": "entrance_swell:2026-08-10:17"
+      "event_id": "03q1o5na78i8b8mo6iliovfv98",
+      "foil_key": "baysurf:2026-08-10:07"
     },
     {
       "trigger_id": "lake_berkeley",
@@ -121,10 +121,10 @@
     {
       "trigger_id": "lake_berkeley",
       "date": "2026-08-10",
-      "start": "2026-08-10T13:00:00+10:00",
+      "start": "2026-08-10T09:00:00+10:00",
       "end": "2026-08-10T14:00:00+10:00",
       "reason": "single_model",
-      "detail": "only ['ecmwf_ifs025'] sees it"
+      "detail": "models never agree on the same hour: ['ecmwf_ifs025', 'gfs_seamless']"
     }
   ]
 }
