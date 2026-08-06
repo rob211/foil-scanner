@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-07T03:06:48.569080+10:00",
+  "generated_at": "2026-08-07T09:00:42.432774+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-07T03:06:48.964930+10:00",
+      "fetched_at": "2026-08-07T09:00:42.926033+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-07T03:06:49.367137+10:00",
+      "fetched_at": "2026-08-07T09:00:43.392906+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-07T03:06:49.764736+10:00",
+      "fetched_at": "2026-08-07T09:00:43.852621+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-07T03:06:50.160627+10:00",
+      "fetched_at": "2026-08-07T09:00:44.295860+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-07T03:06:50.547136+10:00",
+      "fetched_at": "2026-08-07T09:00:44.816256+10:00",
       "detail": null,
       "error": null
     }
@@ -39,16 +39,19 @@
       "run_name": "Baysurf",
       "date": "2026-08-10",
       "start": "2026-08-10T07:00:00+10:00",
-      "end": "2026-08-10T14:00:00+10:00",
-      "grade": "green",
-      "peak_median_kn": 11.1,
-      "direction_deg": 335.0,
-      "models_agreeing": 2,
+      "end": "2026-08-10T08:00:00+10:00",
+      "grade": "yellow",
+      "peak_median_kn": 11.8,
+      "direction_deg": 312.0,
+      "models_agreeing": 3,
       "model_values": {
-        "ECMWF": 13.0,
-        "ICON": 9.1
+        "GFS": 11.8,
+        "ECMWF": 13.4,
+        "ICON": 11.4
       },
-      "title_tags": [],
+      "title_tags": [
+        "tide"
+      ],
       "notes": [],
       "swell_m": 1.66,
       "swell_dir_deg": 56.0,
@@ -59,14 +62,70 @@
       "live_status": "pending",
       "event_id": "fooute3916pqj83c5sa56m25rg",
       "foil_key": "baysurf:2026-08-10:07"
+    },
+    {
+      "trigger_id": "baysurf",
+      "run_name": "Baysurf",
+      "date": "2026-08-10",
+      "start": "2026-08-10T10:00:00+10:00",
+      "end": "2026-08-10T14:00:00+10:00",
+      "grade": "green",
+      "peak_median_kn": 20.4,
+      "direction_deg": 301.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 23.3,
+        "ICON": 17.5
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": 1.58,
+      "swell_dir_deg": 59.0,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": "4t6v6rnm2rl24vv9sjliosrhrs",
+      "foil_key": "baysurf:2026-08-10:10"
+    },
+    {
+      "trigger_id": "entrance_reverse",
+      "run_name": "Entrance reverse run (Boronia Ave)",
+      "date": "2026-08-10",
+      "start": "2026-08-10T13:00:00+10:00",
+      "end": "2026-08-10T15:00:00+10:00",
+      "grade": "yellow",
+      "peak_median_kn": 24.8,
+      "direction_deg": 293.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 23.8,
+        "ICON": 25.7
+      },
+      "title_tags": [
+        "off-angle WNW"
+      ],
+      "notes": [
+        "low tide 11:00"
+      ],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": "2026-08-10T18:00:00+10:00",
+      "high_tide_m": 2.05,
+      "spots": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": "g3urdigddraiegr5dlb50ej3b0",
+      "foil_key": "entrance_reverse:2026-08-10:13"
     }
   ],
   "near_misses": [
     {
       "trigger_id": "lake_berkeley",
-      "date": "2026-08-11",
-      "start": "2026-08-11T10:00:00+10:00",
-      "end": "2026-08-11T11:00:00+10:00",
+      "date": "2026-08-10",
+      "start": "2026-08-10T15:00:00+10:00",
+      "end": "2026-08-10T18:00:00+10:00",
       "reason": "single_model",
       "detail": "only ['icon_seamless'] sees it"
     }
