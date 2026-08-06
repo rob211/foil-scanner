@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-06T13:37:13.479484+10:00",
+  "generated_at": "2026-08-06T15:00:38.040250+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-06T13:37:14.300299+10:00",
+      "fetched_at": "2026-08-06T15:00:38.452474+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-06T13:37:14.953267+10:00",
+      "fetched_at": "2026-08-06T15:00:38.882831+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-06T13:37:15.619959+10:00",
+      "fetched_at": "2026-08-06T15:00:39.304781+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-06T13:37:16.330763+10:00",
+      "fetched_at": "2026-08-06T15:00:39.722201+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-06T13:37:16.949132+10:00",
+      "fetched_at": "2026-08-06T15:00:40.099858+10:00",
       "detail": null,
       "error": null
     }
@@ -41,12 +41,13 @@
       "start": "2026-08-10T07:00:00+10:00",
       "end": "2026-08-10T12:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 21.9,
-      "direction_deg": 278.0,
-      "models_agreeing": 2,
+      "peak_median_kn": 20.7,
+      "direction_deg": 287.0,
+      "models_agreeing": 3,
       "model_values": {
         "GFS": 20.7,
-        "ECMWF": 23.1
+        "ECMWF": 23.1,
+        "ICON": 12.5
       },
       "title_tags": [],
       "notes": [],
@@ -59,62 +60,6 @@
       "live_status": "pending",
       "event_id": "03q1o5na78i8b8mo6iliovfv98",
       "foil_key": "baysurf:2026-08-10:07"
-    },
-    {
-      "trigger_id": "lake_berkeley",
-      "run_name": "Berkeley run",
-      "date": "2026-08-12",
-      "start": "2026-08-12T14:00:00+10:00",
-      "end": "2026-08-12T18:00:00+10:00",
-      "grade": "red",
-      "peak_median_kn": 25.7,
-      "direction_deg": 278.0,
-      "models_agreeing": 2,
-      "model_values": {
-        "ECMWF": 24.1,
-        "ICON": 27.3
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": null,
-      "swell_dir_deg": null,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": "g8tv7hougrprll7drgeaf8pg5k",
-      "foil_key": "lake_berkeley:2026-08-12:14"
-    },
-    {
-      "trigger_id": "entrance_reverse",
-      "run_name": "Entrance reverse run (Boronia Ave)",
-      "date": "2026-08-12",
-      "start": "2026-08-12T15:00:00+10:00",
-      "end": "2026-08-12T18:00:00+10:00",
-      "grade": "yellow",
-      "peak_median_kn": 25.7,
-      "direction_deg": 278.0,
-      "models_agreeing": 2,
-      "model_values": {
-        "ECMWF": 24.1,
-        "ICON": 27.3
-      },
-      "title_tags": [
-        "off-angle W"
-      ],
-      "notes": [
-        "low tide 13:00"
-      ],
-      "swell_m": null,
-      "swell_dir_deg": null,
-      "high_tide": "2026-08-12T19:00:00+10:00",
-      "high_tide_m": 2.2,
-      "spots": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": "tar7s79fok1q0q0qtugjn8f4uk",
-      "foil_key": "entrance_reverse:2026-08-12:15"
     }
   ],
   "near_misses": [
@@ -125,6 +70,22 @@
       "end": "2026-08-10T14:00:00+10:00",
       "reason": "single_model",
       "detail": "models never agree on the same hour: ['ecmwf_ifs025', 'gfs_seamless']"
+    },
+    {
+      "trigger_id": "lake_berkeley",
+      "date": "2026-08-12",
+      "start": "2026-08-12T14:00:00+10:00",
+      "end": "2026-08-12T18:00:00+10:00",
+      "reason": "single_model",
+      "detail": "only ['ecmwf_ifs025'] sees it"
+    },
+    {
+      "trigger_id": "entrance_reverse",
+      "date": "2026-08-12",
+      "start": "2026-08-12T14:00:00+10:00",
+      "end": "2026-08-12T18:00:00+10:00",
+      "reason": "single_model",
+      "detail": "only ['ecmwf_ifs025'] sees it"
     }
   ]
 }
