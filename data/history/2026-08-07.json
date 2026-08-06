@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-07T00:34:50.139990+10:00",
+  "generated_at": "2026-08-07T03:06:48.569080+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-07T00:34:50.789144+10:00",
+      "fetched_at": "2026-08-07T03:06:48.964930+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-07T00:34:51.465337+10:00",
+      "fetched_at": "2026-08-07T03:06:49.367137+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-07T00:34:52.114338+10:00",
+      "fetched_at": "2026-08-07T03:06:49.764736+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-07T00:34:52.791125+10:00",
+      "fetched_at": "2026-08-07T03:06:50.160627+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-07T00:34:53.410719+10:00",
+      "fetched_at": "2026-08-07T03:06:50.547136+10:00",
       "detail": null,
       "error": null
     }
@@ -38,59 +38,35 @@
       "trigger_id": "baysurf",
       "run_name": "Baysurf",
       "date": "2026-08-10",
-      "start": "2026-08-10T08:00:00+10:00",
+      "start": "2026-08-10T07:00:00+10:00",
       "end": "2026-08-10T14:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 13.6,
-      "direction_deg": 310.0,
+      "peak_median_kn": 11.1,
+      "direction_deg": 335.0,
       "models_agreeing": 2,
       "model_values": {
-        "GFS": 11.5,
-        "ECMWF": 15.7
+        "ECMWF": 13.0,
+        "ICON": 9.1
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 1.64,
-      "swell_dir_deg": 57.0,
+      "swell_m": 1.66,
+      "swell_dir_deg": 56.0,
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
       "confidence": "normal",
       "live_status": "pending",
-      "event_id": "onu5gc5h74v7kvrotlnusfkodg",
-      "foil_key": "baysurf:2026-08-10:08"
+      "event_id": "fooute3916pqj83c5sa56m25rg",
+      "foil_key": "baysurf:2026-08-10:07"
     }
   ],
   "near_misses": [
     {
-      "trigger_id": "lake_kanahooka",
-      "date": "2026-08-13",
-      "start": "2026-08-13T11:00:00+10:00",
-      "end": "2026-08-13T14:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
-    {
       "trigger_id": "lake_berkeley",
-      "date": "2026-08-10",
-      "start": "2026-08-10T15:00:00+10:00",
-      "end": "2026-08-10T18:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
-    {
-      "trigger_id": "lake_berkeley",
-      "date": "2026-08-13",
-      "start": "2026-08-13T07:00:00+10:00",
-      "end": "2026-08-13T11:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
-    {
-      "trigger_id": "entrance_reverse",
-      "date": "2026-08-10",
-      "start": "2026-08-10T15:00:00+10:00",
-      "end": "2026-08-10T18:00:00+10:00",
+      "date": "2026-08-11",
+      "start": "2026-08-11T10:00:00+10:00",
+      "end": "2026-08-11T11:00:00+10:00",
       "reason": "single_model",
       "detail": "only ['icon_seamless'] sees it"
     }
