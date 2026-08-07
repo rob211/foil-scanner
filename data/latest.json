@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-07T13:18:42.114792+10:00",
+  "generated_at": "2026-08-07T15:00:39.694706+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-07T13:18:42.513953+10:00",
+      "fetched_at": "2026-08-07T15:00:40.159751+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-07T13:18:42.917103+10:00",
+      "fetched_at": "2026-08-07T15:00:40.640540+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-07T13:18:43.316858+10:00",
+      "fetched_at": "2026-08-07T15:00:41.098462+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-07T13:18:43.805993+10:00",
+      "fetched_at": "2026-08-07T15:00:41.566809+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-07T13:18:44.189619+10:00",
+      "fetched_at": "2026-08-07T15:00:42.003910+10:00",
       "detail": null,
       "error": null
     }
@@ -39,14 +39,14 @@
       "run_name": "Baysurf",
       "date": "2026-08-10",
       "start": "2026-08-10T07:00:00+10:00",
-      "end": "2026-08-10T09:00:00+10:00",
+      "end": "2026-08-10T12:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 9.1,
-      "direction_deg": 316.0,
+      "peak_median_kn": 6.2,
+      "direction_deg": 318.0,
       "models_agreeing": 2,
       "model_values": {
         "GFS": 6.8,
-        "ICON": 11.4
+        "ICON": 5.6
       },
       "title_tags": [],
       "notes": [],
@@ -59,50 +59,7 @@
       "live_status": "pending",
       "event_id": "fooute3916pqj83c5sa56m25rg",
       "foil_key": "baysurf:2026-08-10:07"
-    },
-    {
-      "trigger_id": "baysurf",
-      "run_name": "Baysurf",
-      "date": "2026-08-10",
-      "start": "2026-08-10T10:00:00+10:00",
-      "end": "2026-08-10T12:00:00+10:00",
-      "grade": "green",
-      "peak_median_kn": 19.1,
-      "direction_deg": 303.0,
-      "models_agreeing": 2,
-      "model_values": {
-        "ECMWF": 20.6,
-        "ICON": 17.5
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": 1.54,
-      "swell_dir_deg": 60.0,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "confidence": "normal",
-      "live_status": "pending",
-      "event_id": "4t6v6rnm2rl24vv9sjliosrhrs",
-      "foil_key": "baysurf:2026-08-10:10"
     }
   ],
-  "near_misses": [
-    {
-      "trigger_id": "lake_berkeley",
-      "date": "2026-08-10",
-      "start": "2026-08-10T15:00:00+10:00",
-      "end": "2026-08-10T18:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
-    {
-      "trigger_id": "entrance_reverse",
-      "date": "2026-08-10",
-      "start": "2026-08-10T10:00:00+10:00",
-      "end": "2026-08-10T18:00:00+10:00",
-      "reason": "single_model",
-      "detail": "models never agree on the same hour: ['ecmwf_ifs025', 'icon_seamless']"
-    }
-  ]
+  "near_misses": []
 }
