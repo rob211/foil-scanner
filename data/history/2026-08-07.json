@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-07T10:15:51.107686+10:00",
+  "generated_at": "2026-08-07T12:00:44.636215+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-07T10:15:51.734249+10:00",
+      "fetched_at": "2026-08-07T12:00:45.367647+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-07T10:15:52.389623+10:00",
+      "fetched_at": "2026-08-07T12:00:46.571643+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-07T10:15:53.159660+10:00",
+      "fetched_at": "2026-08-07T12:00:47.395584+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-07T10:15:53.818650+10:00",
+      "fetched_at": "2026-08-07T12:00:48.518118+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-07T10:15:54.414599+10:00",
+      "fetched_at": "2026-08-07T12:00:49.115814+10:00",
       "detail": null,
       "error": null
     }
@@ -41,12 +41,11 @@
       "start": "2026-08-10T07:00:00+10:00",
       "end": "2026-08-10T09:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 11.4,
-      "direction_deg": 314.0,
-      "models_agreeing": 3,
+      "peak_median_kn": 9.1,
+      "direction_deg": 316.0,
+      "models_agreeing": 2,
       "model_values": {
         "GFS": 6.8,
-        "ECMWF": 13.4,
         "ICON": 11.4
       },
       "title_tags": [],
@@ -68,11 +67,11 @@
       "start": "2026-08-10T10:00:00+10:00",
       "end": "2026-08-10T12:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 20.4,
-      "direction_deg": 301.0,
+      "peak_median_kn": 19.1,
+      "direction_deg": 303.0,
       "models_agreeing": 2,
       "model_values": {
-        "ECMWF": 23.3,
+        "ECMWF": 20.6,
         "ICON": 17.5
       },
       "title_tags": [],
@@ -86,36 +85,6 @@
       "live_status": "pending",
       "event_id": "4t6v6rnm2rl24vv9sjliosrhrs",
       "foil_key": "baysurf:2026-08-10:10"
-    },
-    {
-      "trigger_id": "entrance_reverse",
-      "run_name": "Entrance reverse run (Boronia Ave)",
-      "date": "2026-08-10",
-      "start": "2026-08-10T13:00:00+10:00",
-      "end": "2026-08-10T15:00:00+10:00",
-      "grade": "yellow",
-      "peak_median_kn": 24.8,
-      "direction_deg": 293.0,
-      "models_agreeing": 2,
-      "model_values": {
-        "ECMWF": 23.8,
-        "ICON": 25.7
-      },
-      "title_tags": [
-        "off-angle WNW"
-      ],
-      "notes": [
-        "low tide 11:00"
-      ],
-      "swell_m": null,
-      "swell_dir_deg": null,
-      "high_tide": "2026-08-10T18:00:00+10:00",
-      "high_tide_m": 2.05,
-      "spots": null,
-      "confidence": "normal",
-      "live_status": "pending",
-      "event_id": "g3urdigddraiegr5dlb50ej3b0",
-      "foil_key": "entrance_reverse:2026-08-10:13"
     }
   ],
   "near_misses": [
@@ -126,6 +95,14 @@
       "end": "2026-08-10T18:00:00+10:00",
       "reason": "single_model",
       "detail": "only ['icon_seamless'] sees it"
+    },
+    {
+      "trigger_id": "entrance_reverse",
+      "date": "2026-08-10",
+      "start": "2026-08-10T10:00:00+10:00",
+      "end": "2026-08-10T18:00:00+10:00",
+      "reason": "single_model",
+      "detail": "models never agree on the same hour: ['ecmwf_ifs025', 'icon_seamless']"
     }
   ]
 }
