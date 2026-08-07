@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-08T01:09:00.235539+10:00",
+  "generated_at": "2026-08-08T03:00:49.035398+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-08T01:09:00.672210+10:00",
+      "fetched_at": "2026-08-08T03:00:49.687757+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-08T01:09:01.082058+10:00",
+      "fetched_at": "2026-08-08T03:00:50.532221+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-08T01:09:01.479063+10:00",
+      "fetched_at": "2026-08-08T03:00:51.334647+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-08T01:09:01.885561+10:00",
+      "fetched_at": "2026-08-08T03:00:52.050296+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-08T01:09:02.262266+10:00",
+      "fetched_at": "2026-08-08T03:00:52.684513+10:00",
       "detail": null,
       "error": null
     }
@@ -42,7 +42,7 @@
       "end": "2026-08-10T09:00:00+10:00",
       "grade": "green",
       "peak_median_kn": 8.8,
-      "direction_deg": 319.0,
+      "direction_deg": 317.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 9.1,
@@ -63,22 +63,5 @@
       "foil_key": "baysurf:2026-08-10:07"
     }
   ],
-  "near_misses": [
-    {
-      "trigger_id": "lake_kanahooka",
-      "date": "2026-08-12",
-      "start": "2026-08-12T14:00:00+10:00",
-      "end": "2026-08-12T17:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
-    {
-      "trigger_id": "lake_berkeley",
-      "date": "2026-08-12",
-      "start": "2026-08-12T13:00:00+10:00",
-      "end": "2026-08-12T15:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    }
-  ]
+  "near_misses": []
 }
