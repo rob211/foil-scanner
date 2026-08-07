@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-08T05:15:23.338223+10:00",
+  "generated_at": "2026-08-08T06:00:47.210094+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-08T05:15:23.916509+10:00",
+      "fetched_at": "2026-08-08T06:00:47.690016+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-08T05:15:24.445617+10:00",
+      "fetched_at": "2026-08-08T06:00:48.176988+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-08T05:15:24.975894+10:00",
+      "fetched_at": "2026-08-08T06:00:48.635806+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-08T05:15:25.471806+10:00",
+      "fetched_at": "2026-08-08T06:00:49.145441+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-08T05:15:25.943673+10:00",
+      "fetched_at": "2026-08-08T06:00:49.680883+10:00",
       "detail": null,
       "error": null
     }
@@ -42,7 +42,7 @@
       "end": "2026-08-10T09:00:00+10:00",
       "grade": "green",
       "peak_median_kn": 8.9,
-      "direction_deg": 322.0,
+      "direction_deg": 325.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 10.0,
