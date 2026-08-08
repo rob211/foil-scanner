@@ -1,69 +1,38 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-08T21:00:39.105015+10:00",
+  "generated_at": "2026-08-08T23:12:39.943492+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-08T21:00:39.779524+10:00",
+      "fetched_at": "2026-08-08T23:12:40.330284+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-08T21:00:40.350131+10:00",
+      "fetched_at": "2026-08-08T23:12:40.732764+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-08T21:00:41.057686+10:00",
+      "fetched_at": "2026-08-08T23:12:41.135928+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-08T21:00:41.611107+10:00",
+      "fetched_at": "2026-08-08T23:12:41.554980+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-08T21:00:42.160662+10:00",
+      "fetched_at": "2026-08-08T23:12:41.940874+10:00",
       "detail": null,
       "error": null
     }
   },
-  "windows": [
-    {
-      "trigger_id": "baysurf",
-      "run_name": "Baysurf",
-      "date": "2026-08-10",
-      "start": "2026-08-10T07:00:00+10:00",
-      "end": "2026-08-10T08:00:00+10:00",
-      "grade": "yellow",
-      "peak_median_kn": 6.8,
-      "direction_deg": 319.0,
-      "models_agreeing": 4,
-      "model_values": {
-        "GFS": 5.1,
-        "ECMWF": 8.2,
-        "ICON": 5.4,
-        "UKMO": 9.9
-      },
-      "title_tags": [
-        "tide"
-      ],
-      "notes": [],
-      "swell_m": 1.56,
-      "swell_dir_deg": 56.0,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "confidence": "normal",
-      "live_status": "pending",
-      "event_id": "fooute3916pqj83c5sa56m25rg",
-      "foil_key": "baysurf:2026-08-10:07"
-    }
-  ],
+  "windows": [],
   "near_misses": []
 }
