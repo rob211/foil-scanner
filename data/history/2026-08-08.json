@@ -1,34 +1,34 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-08T15:09:30.265968+10:00",
+  "generated_at": "2026-08-08T17:15:22.379671+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-08T15:09:30.668250+10:00",
+      "fetched_at": "2026-08-08T17:15:22.873829+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-08T15:09:31.074831+10:00",
+      "fetched_at": "2026-08-08T17:15:23.303133+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-08T15:09:31.565742+10:00",
+      "fetched_at": "2026-08-08T17:15:23.795954+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-08T15:09:32.082402+10:00",
+      "fetched_at": "2026-08-08T17:15:24.205550+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-08T15:09:32.463779+10:00",
+      "fetched_at": "2026-08-08T17:15:24.590385+10:00",
       "detail": null,
       "error": null
     }
@@ -41,10 +41,11 @@
       "start": "2026-08-10T07:00:00+10:00",
       "end": "2026-08-10T08:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 9.0,
-      "direction_deg": 314.0,
-      "models_agreeing": 3,
+      "peak_median_kn": 7.0,
+      "direction_deg": 313.0,
+      "models_agreeing": 4,
       "model_values": {
+        "GFS": 5.1,
         "ECMWF": 9.0,
         "ICON": 5.1,
         "UKMO": 9.9
