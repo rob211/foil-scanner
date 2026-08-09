@@ -1,19 +1,19 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-09T10:35:58.597117+10:00",
+  "generated_at": "2026-08-09T12:53:01.276161+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-09T10:00:00+10:00",
-    "speed_kn": 10.8,
-    "gust_kn": 14.0,
+    "time": "2026-08-09T12:30:00+10:00",
+    "speed_kn": 7.0,
+    "gust_kn": 10.8,
     "dir_deg": 0.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-09T10:35:24+10:00",
-    "speed_kn": 8.7,
-    "gust_kn": 9.3,
-    "dir_deg": 313.0
+    "time": "2026-08-09T12:51:24+10:00",
+    "speed_kn": 9.7,
+    "gust_kn": 13.6,
+    "dir_deg": 335.0
   },
   "checks": [],
   "notes": []
