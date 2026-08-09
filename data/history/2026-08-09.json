@@ -1,38 +1,66 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-09T21:00:43.166454+10:00",
+  "generated_at": "2026-08-09T23:15:35.274952+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-09T21:00:43.596309+10:00",
+      "fetched_at": "2026-08-09T23:15:35.968905+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-09T21:00:43.979833+10:00",
+      "fetched_at": "2026-08-09T23:15:36.719904+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-09T21:00:44.383284+10:00",
+      "fetched_at": "2026-08-09T23:15:37.421768+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-09T21:00:44.789662+10:00",
+      "fetched_at": "2026-08-09T23:15:38.171277+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-09T21:00:45.176722+10:00",
+      "fetched_at": "2026-08-09T23:15:38.832251+10:00",
       "detail": null,
       "error": null
     }
   },
-  "windows": [],
+  "windows": [
+    {
+      "trigger_id": "baysurf",
+      "run_name": "Baysurf",
+      "date": "2026-08-10",
+      "start": "2026-08-10T07:00:00+10:00",
+      "end": "2026-08-10T09:00:00+10:00",
+      "grade": "green",
+      "peak_median_kn": 8.8,
+      "direction_deg": 321.0,
+      "models_agreeing": 3,
+      "model_values": {
+        "ECMWF": 8.8,
+        "ICON": 8.5,
+        "UKMO": 10.3
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": 1.7,
+      "swell_dir_deg": 57.0,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": "ratqgdbfi86941l33aus9gsb4o",
+      "foil_key": "baysurf:2026-08-10:07"
+    }
+  ],
   "near_misses": []
 }
