@@ -710,3 +710,102 @@ def test_daylight_gate_is_local_time_so_dst_is_free():
         sun = SunTimes(days={day.date(): (day.replace(hour=6), day.replace(hour=sunset_h))})
         assert live.alerting_hours(day, sun) is expected, month
         assert day.tzinfo is config.TZ
+
+
+# ---------------------------------------------- QA fixes, 11 Aug 2026
+
+def test_alert_start_is_measured_from_the_insert_not_the_run_start():
+    # The popup is a 0-minute override, so a start already in the past never
+    # fires. `now` is captured when the process begins; by the time the
+    # insert happens the run has fetched BOM (3 retries x 30 s), Holfuy, sun,
+    # marine and calendar credentials.
+    stale_now = NOW - timedelta(minutes=5)
+    body = gcal.alert_body("run", obs(26.0, 275), stale_now, "k", issued_at=NOW)
+    start = datetime.fromisoformat(body["start"]["dateTime"])
+    assert start > NOW
+    # The observation text still uses the run's clock, which is what it is for.
+    assert f"{stale_now:%H:%M}" in body["description"]
+
+
+def test_watch_digest_stays_under_googles_description_limit():
+    from foilscan.models import NearMiss
+
+    misses = [
+        NearMiss(trigger_id="south_ocean", date=NOW.date().isoformat(),
+                 start=NOW.isoformat(), end=(NOW + timedelta(hours=2)).isoformat(),
+                 reason="cross_swell", detail="cross swell 1.2 m E, 95 deg off the wind")
+        for _ in range(400)
+    ]
+    body = next(iter(gcal.watch_digest_bodies([], misses, NOW).values()))
+    assert len(body["description"]) <= config.WATCH_DIGEST_MAX_CHARS
+    assert "more, see the dashboard" in body["description"]
+
+
+def test_sync_finishes_the_pass_when_one_event_fails(monkeypatch):
+    from foilscan.models import Window
+
+    def win(h):
+        return Window(
+            trigger_id="lake_kanahooka", run_name="Kanahooka run",
+            start=NOW.replace(hour=h), end=NOW.replace(hour=h + 1), grade="green",
+            peak_time=NOW.replace(hour=h), peak_median_kn=22.0, direction_deg=240.0,
+            models_agreeing=3, model_values={"ICON": 22.0},
+        )
+
+    windows, attempts, inserted = [win(9), win(11), win(13)], [], []
+
+    class FakeEvents:
+        def list(self, **kw):
+            return type("R", (), {"execute": lambda s: {"items": []}})()
+
+        def insert(self, **kw):
+            attempts.append(kw["body"]["summary"])
+            if len(attempts) == 2:          # blow up on the second one only
+                raise RuntimeError("backendError")
+            inserted.append(kw["body"]["summary"])
+            return type("R", (), {"execute": lambda s: {"id": f"id{len(inserted)}"}})()
+
+    monkeypatch.setattr(gcal, "service", lambda: type("S", (), {"events": lambda s: FakeEvents()})())
+    monkeypatch.setattr(gcal, "calendar_id", lambda: "cal")
+
+    with pytest.raises(gcal.CalendarError):
+        gcal.sync(windows, NOW, [])
+    # All three were attempted rather than the third being stranded behind
+    # the second - that stranding is what poisoned the next live run.
+    assert len(attempts) == 3
+    assert len(inserted) == 2
+
+
+def test_one_bad_window_does_not_kill_the_other_live_checks(tmp_path, monkeypatch):
+    good = window(trigger_id="south_ocean")
+    good["event_id"] = "ev-good"
+    bad = dict(good, trigger_id="lake_kanahooka",
+               foil_key="lake_kanahooka:bad", event_id=None)   # never synced
+    data_dir = _latest_on_disk(tmp_path, windows=[bad, good])
+
+    monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(22.0, 180, station="Bellambi"))
+    monkeypatch.setattr(live.gcal, "service", lambda: object())
+    monkeypatch.setattr(live.gcal, "calendar_id", lambda: "cal")
+    monkeypatch.setattr(live.gcal, "ensure_alert",
+                        lambda *a, **k: True)
+    seen = []
+
+    def fake_apply(svc, cal, w, state, line, dry):
+        # Same guard as the real apply_status: a window sync never got to
+        # has no event to patch.
+        if w.get("event_id") is None:
+            raise gcal.CalendarError(f"window {w['foil_key']} has no event_id")
+        seen.append(w["foil_key"])
+        return "ok"
+
+    monkeypatch.setattr(live, "apply_status", fake_apply)
+
+    with pytest.raises(gcal.CalendarError):
+        live.run(NOW, dry_run=False, data_dir=data_dir)
+    assert good["foil_key"] in seen, "the healthy window was skipped"
+
+
+def test_force_skips_the_cadence_gate():
+    night_half_past = NOW.replace(hour=3, minute=45)
+    assert live._should_run(night_half_past) is False
+    assert live._should_run(night_half_past, force=True) is True

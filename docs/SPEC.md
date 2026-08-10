@@ -261,7 +261,10 @@ Yellow windows are "worth watching" and do create events. Entrance mode 1 is gra
   - Re-polling patches the title, description and end but never the start or the reminder, so a four-hour blow pings once.
   - Station choice takes the **windier** of Holfuy and BOM for lake and entrance runs. `holfuy or bom` meant the coastal reading was discarded whenever Holfuy answered; on 10 Aug Holfuy read 19 kn mid-lake while Bellambi did 31.9, and nothing fired for another 2.5 h.
   - Alerts are suppressed for any trigger that already has a live window on the calendar — that is the verification job's business, and double-notifying is worse than not notifying.
-  - `sync` must never delete `live-alert:*` or `lake-alert:*` as stale; the point of them is that no forecast window exists.
+  - `sync` must never delete the current day's `live-alert:*` as stale; the point of them is that no forecast window exists. Older ones are swept.
+- The alert's start is computed from the clock **at the moment of the calendar write**, not from the run's start time. A run that has spent a minute on fetches would otherwise post a start already in the past, and Google silently declines to fire a popup for one (11 Aug 2026 audit).
+- The two workflows use **separate** concurrency groups. A shared one let GitHub cancel a pending run that a newer one displaced — silently, with no non-zero exit, no failure email and no data written. They write different files; the push retry in each workflow handles the race that remains.
+- `sync` finishes its pass before failing: a per-event error is collected and raised at the end, never mid-loop. Aborting halfway left later windows with no `event_id` on disk, which the next live run then died on. The live check loop contains per-window failures the same way, so one unverifiable window cannot take the safety-net alerts down with it.
 - Every all-day event body (`broken:*`, `watch:*`) must set `end.date` to the **day after** `start.date`. Google treats it as exclusive, so `start == end` is a zero-length event.
 - Live verification updates (hourly job, trigger days only):
   - Confirmed (live reading at 90% of threshold or better, direction in band): prepend a tick to the title (`LIVE NOW:` plus tick emoji) and arm a 30-minute popup reminder via `reminders.overrides`, so the phone pings through the calendar itself.

@@ -293,6 +293,12 @@ SCHEMA_VERSION = 2
 # compares each observation against it and writes the gap to live.json.
 BIAS_FLAG_KN = 8.0
 
+# Google Calendar rejects a description over 8192 characters with a 400, and
+# sync does not catch that, so one noisy day would take the whole calendar
+# sync down with it. 120 near misses already produced 9867 characters.
+WATCH_DIGEST_MAX_LINES = 40
+WATCH_DIGEST_MAX_CHARS = 6000
+
 HTTP_TIMEOUT_S = 30
 HTTP_RETRIES = 3
 # BOM rejects default library user agents with 403 (spec 3.3).

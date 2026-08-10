@@ -134,6 +134,7 @@ def alert_body(
     now: datetime,
     key: str,
     detail: str = "",
+    issued_at: datetime | None = None,
 ) -> dict:
     """A live wind alert, as a TIMED event with a popup.
 
@@ -144,17 +145,27 @@ def alert_body(
     even a populated one could not have fired at the moment the wind was
     blowing (10 Aug 2026: 32 kn NW all morning, nothing rang).
 
-    Start sits config.ALERT_LEAD_S ahead of now so the 0-minute popup is still
-    in the future when Google receives it; a popup on a past start never
-    fires. ensure_alert never moves the start once set, so re-patching it on
-    later polls cannot re-notify.
+    Start sits config.ALERT_LEAD_S ahead of `issued_at` so the 0-minute popup
+    is still in the future when Google receives it; a popup on a past start
+    never fires. ensure_alert never moves the start once set, so re-patching
+    it on later polls cannot re-notify.
+
+    `issued_at` defaults to the real clock at call time, and that is the whole
+    point: it used to derive the start from `now`, captured once when the
+    process began. By the time the insert actually happens the run has fetched
+    BOM, Holfuy, sunrise, marine and calendar credentials - BOM alone allows
+    three retries at a 30 s timeout - so on any slow run the start was already
+    in the past and the alert silently never rang. `now` still supplies the
+    observation time in the text, which is what it is actually for.
     """
+    if issued_at is None:
+        issued_at = datetime.now(config.TZ)
     speed = getattr(obs, "speed_kn", 0.0) or 0.0
     gust = getattr(obs, "gust_kn", None)
     station = getattr(obs, "station", "live") or "live"
     dir_deg = getattr(obs, "dir_deg", None)
     where = f" {compass(dir_deg)}" if dir_deg is not None else ""
-    start = now + timedelta(seconds=config.ALERT_LEAD_S)
+    start = issued_at + timedelta(seconds=config.ALERT_LEAD_S)
     end = start + timedelta(hours=config.ALERT_DURATION_H)
     lines = [
         f"Live wind matches {run_name} right now, whatever the forecast said.",
@@ -278,17 +289,25 @@ def watch_digest_bodies(
     for day, lines in by_day.items():
         uniq = list(dict.fromkeys(names.get(day, [])))
         head = ", ".join(uniq[:2]) + (f" +{len(uniq) - 2}" if len(uniq) > 2 else "")
+        shown, hidden = lines[:config.WATCH_DIGEST_MAX_LINES], lines[config.WATCH_DIGEST_MAX_LINES:]
+        if hidden:
+            shown.append(f"... and {len(hidden)} more, see the dashboard")
+        body = "\n".join(
+            shown
+            + [
+                "",
+                "Not a call to go - these missed on strength, model "
+                "agreement or tide. Worth a look at the models.",
+                f"Generated: {generated_at:%Y-%m-%d %H:%M %Z} by foil-scanner",
+            ]
+        )
+        # Belt and braces under Google's 8192 hard limit, whatever the lines
+        # turn out to contain.
+        if len(body) > config.WATCH_DIGEST_MAX_CHARS:
+            body = body[: config.WATCH_DIGEST_MAX_CHARS - 20].rstrip() + "\n... truncated"
         out[f"watch:{day}"] = {
             "summary": f"WATCH: {head}" if uniq else "WATCH: near misses only",
-            "description": "\n".join(
-                lines
-                + [
-                    "",
-                    "Not a call to go - these missed on strength, model "
-                    "agreement or tide. Worth a look at the models.",
-                    f"Generated: {generated_at:%Y-%m-%d %H:%M %Z} by foil-scanner",
-                ]
-            ),
+            "description": body,
             "start": {"date": day},
             "end": {"date": _next_day(day)},
             "colorId": config.COLOR_IDS["watch"],
@@ -360,22 +379,30 @@ def sync(
     cal_id = calendar_id()
     existing = list_managed(svc, cal_id, generated_at)
 
+    failed: list[str] = []
     for key, w in sorted(desired.items()):
         body = desired_body(w, generated_at, source_notes)
         have = existing.pop(key, None)
-        if have is None:
-            created = svc.events().insert(calendarId=cal_id, body=body).execute()
-            w.event_id = created["id"]
-            plan.append(f"created {key}: {body['summary']}")
-        else:
-            w.event_id = have["id"]
-            if _needs_patch(have, body):
-                svc.events().patch(
-                    calendarId=cal_id, eventId=have["id"], body=body
-                ).execute()
-                plan.append(f"updated {key}: {body['summary']}")
+        try:
+            if have is None:
+                created = svc.events().insert(calendarId=cal_id, body=body).execute()
+                w.event_id = created["id"]
+                plan.append(f"created {key}: {body['summary']}")
             else:
-                plan.append(f"unchanged {key}")
+                w.event_id = have["id"]
+                if _needs_patch(have, body):
+                    svc.events().patch(
+                        calendarId=cal_id, eventId=have["id"], body=body
+                    ).execute()
+                    plan.append(f"updated {key}: {body['summary']}")
+                else:
+                    plan.append(f"unchanged {key}")
+        except Exception as exc:  # noqa: BLE001 - reported, then raised at the end
+            # One transient API error used to abort the loop, leaving every
+            # remaining window with event_id=None on disk - which the next
+            # live run then died on. Finish the pass, fail at the end.
+            failed.append(f"{key}: {type(exc).__name__}: {exc}")
+            plan.append(f"FAILED {key}: {_one_line(exc)}")
 
     for key, body in sorted(digests.items()):
         have = existing.pop(key, None)
@@ -413,8 +440,16 @@ def sync(
             parts = key.split(":")
             if len(parts) >= 2 and parts[1] == generated_at.date().isoformat():
                 continue
-        svc.events().delete(calendarId=cal_id, eventId=ev["id"]).execute()
-        plan.append(f"deleted stale {key}: {ev.get('summary', '')}")
+        try:
+            svc.events().delete(calendarId=cal_id, eventId=ev["id"]).execute()
+            plan.append(f"deleted stale {key}: {ev.get('summary', '')}")
+        except Exception as exc:  # noqa: BLE001
+            failed.append(f"delete {key}: {type(exc).__name__}: {exc}")
+            plan.append(f"FAILED delete {key}: {_one_line(exc)}")
+    if failed:
+        raise CalendarError(
+            f"{len(failed)} calendar operation(s) failed: " + "; ".join(failed[:5])
+        )
     return plan
 
 

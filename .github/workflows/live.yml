@@ -17,9 +17,16 @@ on:
   workflow_dispatch: {}
 
 concurrency:
-  # Shared with scan.yml: both jobs commit to data/, serialising them makes
-  # push races impossible. Runs take ~20 s so queueing costs nothing.
-  group: foil-scanner-data
+  # Per-workflow, NOT shared. A shared group meant scan and live collided
+  # every even hour when the Worker dispatched both in the same second, and
+  # GitHub cancels a pending run that a newer one displaces - silently: no
+  # non-zero exit, so no failure email, no SCANNER BROKEN event, and no
+  # data written for anything downstream to notice. One scan was lost that
+  # way on 10 Aug 2026 before anyone looked.
+  #
+  # The two jobs write different files, so they no longer need serialising;
+  # the push retry below handles the race they can still lose.
+  group: foil-scanner-live
   cancel-in-progress: false
 
 permissions:
@@ -39,7 +46,11 @@ jobs:
           GCAL_SERVICE_ACCOUNT_JSON: ${{ secrets.GCAL_SERVICE_ACCOUNT_JSON }}
           FOIL_CALENDAR_ID: ${{ secrets.FOIL_CALENDAR_ID }}
           HOLFUY_KEY: ${{ secrets.HOLFUY_KEY }}
-        run: python -m foilscan live
+        # --force on a dispatched run: the Cloudflare Worker already applied
+        # the cadence rule before asking, and re-applying it against the time
+        # GitHub happens to start the job only ever drops ticks. The schedule
+        # backstop arrives ungated and keeps the check.
+        run: python -m foilscan live ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
       - name: Commit live data
         # A failed verify can still have written a useful live.json (spec 8.9).
         if: always()
@@ -49,6 +60,13 @@ jobs:
           git add data/live.json
           if ! git diff --cached --quiet; then
             git commit -m "data: live $(date -u +%FT%TZ)"
-            git pull --rebase origin main
-            git push
+            # Retry: without the shared concurrency group the other workflow
+            # can land a commit between our rebase and our push. Different
+            # files, so the rebase itself merges cleanly - it is only the
+            # push that races.
+            for attempt in 1 2 3 4 5; do
+              git pull --rebase origin main && git push && break
+              echo "push attempt $attempt lost the race, retrying"
+              sleep $((attempt * 3))
+            done
           fi

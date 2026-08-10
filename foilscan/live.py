@@ -34,10 +34,20 @@ WIND_TARGETS = {
 }
 
 
-def _should_run(now: datetime) -> bool:
-    """live.yml's cron fires at :23 and :53. The :23 tick keeps the original
-    hourly cadence at all hours; the :53 tick is the extra daylight-only
-    poll, gated on local wall-clock hour so DST shifts it automatically."""
+def _should_run(now: datetime, force: bool = False) -> bool:
+    """Whether this tick should do any work.
+
+    `force` short-circuits it for a dispatched run. The Cloudflare Worker
+    applies this same rule before dispatching, so re-applying it here can
+    only produce false negatives: the gate is evaluated against the moment
+    GitHub *starts* the job, not the moment the Worker asked for it, and a
+    :00 dispatch that starts after :30 was being dropped overnight without
+    writing live.json at all.
+
+    The repo's own schedule backstop still arrives ungated, so the rule has
+    to stay for that path."""
+    if force:
+        return True
     if now.minute < 30:
         return True
     return config.LIVE_FAST_POLL_START_HOUR <= now.hour < config.LIVE_FAST_POLL_END_HOUR
@@ -358,8 +368,13 @@ def apply_status(svc, cal_id: str, w: dict, state: str, live_line: str, dry_run:
     return msg
 
 
-def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -> list[str]:
-    if not _should_run(now):
+def run(
+    now: datetime,
+    dry_run: bool = False,
+    data_dir: str = config.DATA_DIR,
+    force: bool = False,
+) -> list[str]:
+    if not _should_run(now, force):
         return [
             f"skipped: {now:%H:%M} fast-poll tick is outside local daylight hours "
             f"({config.LIVE_FAST_POLL_START_HOUR:02d}:00-{config.LIVE_FAST_POLL_END_HOUR:02d}:00), "
@@ -479,21 +494,32 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
             notes.append(line)
             log.append(line)
 
+    checked_ok = True
     for w in todays:
-        obs, note = pick_obs(w, bom, holfuy)
-        state, live_line = status_for(w, obs, now)
-        if note:
-            live_line += f" ({note})"
-        checks.append(
-            {"foil_key": w["foil_key"], "state": state, "live_line": live_line}
-        )
-        if state == "none":
-            log.append(f"{w['foil_key']}: skipped ({live_line})")
-            continue
-        if dry_run:
-            log.append(f"DRY RUN {w['foil_key']}: {state} ({live_line})")
-        else:
-            log.append(apply_status(svc, cal_id, w, state, live_line, dry_run))
+        try:
+            obs, note = pick_obs(w, bom, holfuy)
+            state, live_line = status_for(w, obs, now)
+            if note:
+                live_line += f" ({note})"
+            checks.append(
+                {"foil_key": w["foil_key"], "state": state, "live_line": live_line}
+            )
+            if state == "none":
+                log.append(f"{w['foil_key']}: skipped ({live_line})")
+                continue
+            if dry_run:
+                log.append(f"DRY RUN {w['foil_key']}: {state} ({live_line})")
+            else:
+                log.append(apply_status(svc, cal_id, w, state, live_line, dry_run))
+        except Exception as exc:  # noqa: BLE001 - noted, and re-raised below
+            # One window with no event_id (a sync that failed part-way) used
+            # to raise straight out of here and take every other check on the
+            # day down with it - including the safety-net alerts, which are
+            # the part that matters most when something is already wrong.
+            checked_ok = False
+            msg = f"{w.get('foil_key', w['trigger_id'])}: check failed: {exc}"
+            notes.append(msg)
+            log.append(msg)
     if not todays:
         log.append("no windows near now; nothing to verify on the calendar")
 
@@ -509,5 +535,11 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
         log.append(
             f"live.json: {bom.station} {bom.speed_kn:.0f} kn at {bom.time:%H:%M}, "
             f"{len(checks)} check(s)"
+        )
+    if not checked_ok:
+        # Everything else finished first, but the run still fails loudly
+        # (spec 8.9): a window that cannot be verified is a real problem.
+        raise CalendarError(
+            "one or more window checks failed; see notes in live.json"
         )
     return log

@@ -480,13 +480,36 @@ def test_entrance_reverse_off_tide_is_downgraded_not_dropped(sun):
     assert "off-tide" in windows[0].title_tags
 
 
-def test_entrance_reverse_far_off_tide_is_still_dropped(sun):
-    # ...but "the odd tide" is not "any time of day". Low tide 20:00 puts the
-    # gate well outside ENTRANCE_OFF_TIDE_TOLERANCE_H of a morning blow.
+def test_window_survives_when_no_tide_can_be_labelled(sun):
+    # A 24 h fixture whose next high falls off the end leaves no preferred
+    # window to name. The run is still not in doubt - the no-go has already
+    # been subtracted - so it is workable, not dropped.
+    #
+    # This replaces a test that asserted the opposite. It passed only because
+    # an empty preferred list fell off the end of an elif and silently binned
+    # the window; the tolerance rule it was really testing was removed when
+    # the tide became three phases.
     wind = mk_wind(hours(range(8, 10), 25, 315), location_key="entrance")
     marine = _marine_low_then_high(low_hour=20)
     windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
-    assert [w for w in windows if w.tide_state == "workable"] == []
+    real = [w for w in windows if w.grade != "watch"]
+    assert [w.tide_state for w in real] == ["workable"]
+    assert real[0].high_tide is None
+
+
+def test_entrance_without_a_detectable_high_still_reports(sun):
+    # The F3 case on the standard modes: perfect conditions, flat sea level,
+    # nothing for high_tides() to find. Must not vanish silently.
+    flat = MarineForecast(fetched_at=NOW, hours=[
+        MarineHour(time=at(h), swell_m=1.2, swell_dir_deg=70.0,
+                   swell_period_s=9.0, sea_level_m=0.0)
+        for h in range(24)
+    ])
+    wind = mk_wind(hours(range(8, 16), 6, 270), location_key="entrance")
+    windows, _ = entrance_windows(wind, flat, sun, NOW)
+    assert windows, "qualifying conditions produced no window at all"
+    assert all(w.tide_state == "workable" for w in windows)
+    assert all(w.high_tide is None for w in windows)
 
 
 def test_entrance_reverse_no_false_miss_outside_tide_gate(sun):
