@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-10T22:01:10.779252+10:00",
+  "generated_at": "2026-08-10T23:45:17.763670+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-10T22:01:11.515880+10:00",
+      "fetched_at": "2026-08-10T23:45:18.172659+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-10T22:01:12.584791+10:00",
+      "fetched_at": "2026-08-10T23:45:18.573673+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-10T22:01:13.333216+10:00",
+      "fetched_at": "2026-08-10T23:45:18.972263+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-10T22:01:14.674886+10:00",
+      "fetched_at": "2026-08-10T23:45:19.388591+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-10T22:01:15.294184+10:00",
+      "fetched_at": "2026-08-10T23:45:19.771566+10:00",
       "detail": null,
       "error": null
     },
@@ -102,8 +102,8 @@
     },
     {
       "time": "2026-08-10T12:00:00+10:00",
-      "lake": 15.0,
-      "ocean": 15.6
+      "lake": 14.9,
+      "ocean": 15.4
     },
     {
       "time": "2026-08-10T13:00:00+10:00",
@@ -113,55 +113,83 @@
     {
       "time": "2026-08-10T14:00:00+10:00",
       "lake": 14.8,
-      "ocean": 14.8
+      "ocean": 14.9
     },
     {
       "time": "2026-08-10T15:00:00+10:00",
-      "lake": 14.4,
-      "ocean": 14.1
+      "lake": 14.6,
+      "ocean": 14.2
     },
     {
       "time": "2026-08-10T16:00:00+10:00",
-      "lake": 14.1,
-      "ocean": 13.2
+      "lake": 14.2,
+      "ocean": 13.3
     },
     {
       "time": "2026-08-10T17:00:00+10:00",
-      "lake": 11.4,
-      "ocean": 11.0
+      "lake": 11.3,
+      "ocean": 11.1
     },
     {
       "time": "2026-08-10T18:00:00+10:00",
-      "lake": 10.9,
-      "ocean": 10.9
+      "lake": 10.7,
+      "ocean": 10.7
     },
     {
       "time": "2026-08-10T19:00:00+10:00",
-      "lake": 13.0,
-      "ocean": 12.8
+      "lake": 12.6,
+      "ocean": 12.6
     },
     {
       "time": "2026-08-10T20:00:00+10:00",
-      "lake": 14.4,
-      "ocean": 14.0
+      "lake": 13.6,
+      "ocean": 13.8
     },
     {
       "time": "2026-08-10T21:00:00+10:00",
-      "lake": 15.7,
-      "ocean": 14.7
+      "lake": 15.3,
+      "ocean": 14.6
     },
     {
       "time": "2026-08-10T22:00:00+10:00",
-      "lake": 15.1,
-      "ocean": 14.8
+      "lake": 15.4,
+      "ocean": 15.2
     },
     {
       "time": "2026-08-10T23:00:00+10:00",
-      "lake": 16.0,
-      "ocean": 15.1
+      "lake": 16.5,
+      "ocean": 15.6
     }
   ],
   "windows": [
+    {
+      "trigger_id": "baysurf",
+      "run_name": "Baysurf",
+      "date": "2026-08-10",
+      "start": "2026-08-10T07:00:00+10:00",
+      "end": "2026-08-10T09:00:00+10:00",
+      "grade": "green",
+      "peak_median_kn": 9.3,
+      "direction_deg": 330.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "GFS": 9.0,
+        "ICON": 9.6
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": 1.7,
+      "swell_dir_deg": 63.0,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": null,
+      "tide_state": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": "47rco85uv394su1hhd59bro4e0",
+      "foil_key": "baysurf:2026-08-10:07"
+    },
     {
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
@@ -169,12 +197,12 @@
       "start": "2026-08-10T07:00:00+10:00",
       "end": "2026-08-10T09:00:00+10:00",
       "grade": "green",
-      "peak_median_kn": 7.2,
-      "direction_deg": 345.0,
+      "peak_median_kn": 8.7,
+      "direction_deg": 334.0,
       "models_agreeing": 2,
       "model_values": {
-        "ECMWF": 9.5,
-        "ICON": 4.9
+        "GFS": 9.0,
+        "ICON": 8.4
       },
       "title_tags": [
         "off-tide"
@@ -182,10 +210,10 @@
       "notes": [
         "outside the high-tide run-out; worth a look on the odd tide"
       ],
-      "swell_m": 1.42,
-      "swell_dir_deg": 65.0,
-      "high_tide": "2026-08-10T05:20:00+10:00",
-      "high_tide_m": 1.45,
+      "swell_m": 1.7,
+      "swell_dir_deg": 63.0,
+      "high_tide": "2026-08-10T05:17:08.571429+10:00",
+      "high_tide_m": 1.46,
       "spots": null,
       "watch": null,
       "tide_state": "off tide",
@@ -199,7 +227,7 @@
       "run_name": "Entrance reverse run (Boronia Ave)",
       "date": "2026-08-10",
       "start": "2026-08-10T14:00:00+10:00",
-      "end": "2026-08-10T16:00:00+10:00",
+      "end": "2026-08-10T17:00:00+10:00",
       "grade": "watch",
       "peak_median_kn": 18.5,
       "direction_deg": 306.0,
@@ -222,53 +250,62 @@
       "foil_key": "entrance_reverse:2026-08-10:14"
     },
     {
-      "trigger_id": "baysurf",
-      "run_name": "Baysurf",
+      "trigger_id": "entrance_swell",
+      "run_name": "Lake Entrance (swell)",
       "date": "2026-08-10",
-      "start": "2026-08-10T15:00:00+10:00",
+      "start": "2026-08-10T17:00:00+10:00",
       "end": "2026-08-10T18:00:00+10:00",
-      "grade": "yellow",
-      "peak_median_kn": 13.3,
-      "direction_deg": 302.0,
-      "models_agreeing": 3,
+      "grade": "green",
+      "peak_median_kn": 8.5,
+      "direction_deg": 280.0,
+      "models_agreeing": 2,
       "model_values": {
-        "ECMWF": 13.3,
-        "ICON": 13.1,
-        "UKMO": 15.4
+        "GFS": 10.0,
+        "UKMO": 7.0
       },
       "title_tags": [
-        "tide"
+        "off-tide"
       ],
-      "notes": [],
-      "swell_m": 1.54,
-      "swell_dir_deg": 58.0,
-      "high_tide": null,
-      "high_tide_m": null,
+      "notes": [
+        "outside the high-tide run-out; worth a look on the odd tide"
+      ],
+      "swell_m": 1.44,
+      "swell_dir_deg": 59.0,
+      "high_tide": "2026-08-10T17:36:40+10:00",
+      "high_tide_m": 2.08,
       "spots": null,
       "watch": null,
-      "tide_state": null,
+      "tide_state": "off tide",
       "confidence": "normal",
       "live_status": "pending",
-      "event_id": "onk4h23olttspfb9kl1f7471j8",
-      "foil_key": "baysurf:2026-08-10:15"
+      "event_id": "0hfrni5fupmfj21rkbo8k0f8ok",
+      "foil_key": "entrance_swell:2026-08-10:17"
     }
   ],
   "near_misses": [
     {
       "trigger_id": "entrance_swell",
       "date": "2026-08-10",
-      "start": "2026-08-10T17:00:00+10:00",
-      "end": "2026-08-10T18:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['ukmo_seamless'] sees it"
+      "start": "2026-08-10T07:00:00+10:00",
+      "end": "2026-08-10T09:00:00+10:00",
+      "reason": "off_tide",
+      "detail": "wind and swell qualified but the run-out gate was 05:17-07:17; kept as green"
     },
     {
       "trigger_id": "entrance_swell",
       "date": "2026-08-10",
-      "start": "2026-08-10T07:00:00+10:00",
-      "end": "2026-08-10T09:00:00+10:00",
+      "start": "2026-08-10T17:00:00+10:00",
+      "end": "2026-08-10T18:00:00+10:00",
       "reason": "off_tide",
-      "detail": "wind and swell qualified but the run-out gate was 05:20-07:20; kept as green"
+      "detail": "wind and swell qualified but the run-out gate was 17:36-19:36; kept as green"
+    },
+    {
+      "trigger_id": "baysurf",
+      "date": "2026-08-10",
+      "start": "2026-08-10T13:00:00+10:00",
+      "end": "2026-08-10T15:00:00+10:00",
+      "reason": "single_model",
+      "detail": "models never agree on the same hour: ['ecmwf_ifs025', 'icon_seamless', 'ukmo_seamless']"
     }
   ]
 }
