@@ -4,7 +4,9 @@ Downwind foiling conditions scanner for Lake Illawarra and the Wollongong
 coast. Scans multiple wind models and swell for the week ahead, evaluates the
 run triggers in [docs/SPEC.md](docs/SPEC.md), and maintains colour-coded
 events on a dedicated "Foiling" Google Calendar. Banana yellow is marginal,
-basil green is on target, tomato red is firing.
+basil green is on target, tomato red is firing, and graphite is the watch
+band: the maybes, collected into one all-day digest per day rather than
+cluttering the calendar with events for runs that probably aren't on.
 
 Failures are loud by design: any dead feed, stale reading or schema change
 fails the run red, emails via GitHub, and drops a red SCANNER BROKEN event on
@@ -17,7 +19,10 @@ today's calendar. A calm-looking week is never allowed to be a broken scanner.
 - `live` (every 30 min from 5am-8pm local, hourly overnight): on days with
   events, verify against the BOM station and the Holfuy lake station
   (corrected by 0.9 for its known overread). Confirmed events get a tick and
-  a 30-minute popup reminder; misses get flagged.
+  a 30-minute popup reminder; misses get flagged. Every run, window or not,
+  it also checks live wind against every run's direction and strength and
+  fires a timed red `WIND NOW` event with a popup when one matches - the
+  safety net for the days the models miss entirely.
 
 Data sources: Open-Meteo forecast and marine APIs (GFS, ECMWF, ICON, UKMO;
 swell and modelled sea level for tide timing), BOM observations JSON,

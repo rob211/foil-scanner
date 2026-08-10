@@ -1,4 +1,6 @@
 import math
+
+import pytest
 from datetime import timedelta
 
 from conftest import DAY, NOW, at, mk_marine, mk_sun, mk_wind
@@ -50,8 +52,13 @@ def test_lake_grades(sun):
 
 
 def test_lake_ne_rare_needs_25_and_flags(sun):
+    # 21 kn is under the 22.5 yellow floor, so it is no longer a run - but it
+    # is inside the watch band (0.75 * 25 = 18.75), so it is flagged rather
+    # than dropped (Rob, 10 Aug 2026).
     below_yellow = mk_wind(hours(range(10, 13), 21, 45), location_key="lake")
-    assert lake_windows(below_yellow, sun, NOW)[0] == []
+    marginal_only, _ = lake_windows(below_yellow, sun, NOW)
+    assert [w.grade for w in marginal_only] == ["watch"]
+    assert marginal_only[0].watch == "21 kn, needs 22"
     marginal = mk_wind(hours(range(10, 13), 23, 45), location_key="lake")
     assert lake_windows(marginal, sun, NOW)[0][0].grade == "yellow"
     strong = mk_wind(hours(range(10, 13), 26, 45), location_key="lake")
@@ -67,14 +74,18 @@ def test_daylight_clipping(sun):
     assert windows == []
 
 
-def test_single_model_is_near_miss_not_event(sun):
+def test_single_model_is_watch_not_event(sun):
+    # One model at full strength is not a run (spec 5 needs 2), but it is
+    # exactly the shape of a model bust, so it now surfaces as a watch as
+    # well as a near miss instead of only living in the JSON.
     wind = mk_wind(
         hours(range(10, 13), 22, 190),
         models=["gfs_seamless"],
         location_key="lake",
     )
     windows, misses = lake_windows(wind, sun, NOW)
-    assert windows == []
+    assert [w.grade for w in windows] == ["watch"]
+    assert windows[0].watch == "1 of 4 models only (needs 2)"
     assert any(
         m.reason == "single_model" and m.trigger_id == "lake_oakflats_berkeley"
         for m in misses
@@ -320,7 +331,10 @@ def test_entrance_mode1_swell_direction_matters(sun):
 
 
 def test_entrance_mode1_wind_too_strong(sun):
-    wind = mk_wind(hours(range(8, 16), 14, 270), location_key="entrance")
+    # All 24 h, not just the daylight block: mk_wind's filler hours are 2 kn,
+    # which qualifies mode 1 through the calm clause and (now that off-tide
+    # windows survive) would put an unrelated window in the result.
+    wind = mk_wind(hours(range(0, 24), 14, 270), location_key="entrance")
     marine = mk_marine(0.9, 90, high_tide_hour=13)
     windows, _ = entrance_windows(wind, marine, sun, NOW)
     assert windows == []
@@ -389,14 +403,13 @@ def test_entrance_reverse_fires_between_low_plus_2_and_high_minus_1(sun):
 
 
 def test_entrance_reverse_grades(sun):
-    for speed, grade in [(19.0, None), (20.0, "yellow"), (25.0, "green"), (32.0, "red")]:
+    # 19 kn is below the 20 kn yellow floor but inside the watch band
+    # (0.75 * 25 = 18.75), so it is flagged rather than dropped.
+    for speed, grade in [(19.0, "watch"), (20.0, "yellow"), (25.0, "green"), (32.0, "red")]:
         wind = mk_wind(hours(range(10, 15), speed, 315), location_key="entrance")
         marine = _marine_low_then_high(low_hour=8)
         windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
-        if grade is None:
-            assert windows == [], speed
-        else:
-            assert windows[0].grade == grade, speed
+        assert windows[0].grade == grade, speed
 
 
 def test_entrance_reverse_nw_is_prime_west_is_off_angle(sun):
@@ -414,12 +427,26 @@ def test_entrance_reverse_rejects_wrong_direction(sun):
     assert windows == []
 
 
-def test_entrance_reverse_needs_the_tide_gate(sun):
+def test_entrance_reverse_off_tide_is_downgraded_not_dropped(sun):
     # Blows before the gate opens: low tide is at 08:00, gate opens 10:00.
+    # The tide is a penalty now, not a veto (Rob, 10 Aug 2026) - a clean
+    # 25 kn NW an hour early is still worth knowing about.
     wind = mk_wind(hours(range(8, 10), 25, 315), location_key="entrance")
     marine = _marine_low_then_high(low_hour=8)
     windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
-    assert windows == []
+    assert len(windows) == 1
+    assert windows[0].tide_state == "off tide"
+    assert windows[0].grade == "yellow"  # green, downgraded one step
+    assert "off-tide" in windows[0].title_tags
+
+
+def test_entrance_reverse_far_off_tide_is_still_dropped(sun):
+    # ...but "the odd tide" is not "any time of day". Low tide 20:00 puts the
+    # gate well outside ENTRANCE_OFF_TIDE_TOLERANCE_H of a morning blow.
+    wind = mk_wind(hours(range(8, 10), 25, 315), location_key="entrance")
+    marine = _marine_low_then_high(low_hour=20)
+    windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
+    assert [w for w in windows if w.tide_state == "off tide"] == []
 
 
 def test_entrance_reverse_no_false_miss_outside_tide_gate(sun):
@@ -429,7 +456,7 @@ def test_entrance_reverse_no_false_miss_outside_tide_gate(sun):
     wind = mk_wind(hours(range(7, 10), 26, 315), location_key="entrance")
     marine = _marine_low_then_high(low_hour=8)
     windows, misses = entrance_reverse_windows(wind, marine, sun, NOW)
-    assert windows == []
+    assert [w.tide_state for w in windows] == ["off tide"]
     assert misses == []
 
 
@@ -441,7 +468,7 @@ def test_entrance_reverse_single_model_is_near_miss(sun):
     )
     marine = _marine_low_then_high(low_hour=8)
     windows, misses = entrance_reverse_windows(wind, marine, sun, NOW)
-    assert windows == []
+    assert [w.grade for w in windows] == ["watch"]
     assert any(
         m.reason == "single_model" and m.trigger_id == "entrance_reverse"
         for m in misses
@@ -459,3 +486,90 @@ def test_arc_wrap():
     arc = config.Arc(300, 60)
     assert arc.contains(350) and arc.contains(30)
     assert not arc.contains(180)
+
+
+# ------------------------------------------------------- watch / maybe band
+
+def test_watch_band_flags_below_yellow(sun):
+    # 16 kn against a 20 kn lake target: under the 18 kn yellow floor, inside
+    # the 15 kn watch floor.
+    wind = mk_wind(hours(range(10, 13), 16, 190), location_key="lake")
+    windows, _ = lake_windows(wind, sun, NOW)
+    assert [w.grade for w in windows] == ["watch"]
+    assert windows[0].watch == "16 kn, needs 18"
+
+
+def test_watch_band_has_a_floor(sun):
+    # 14 kn is below the 15 kn watch floor: still nothing at all.
+    wind = mk_wind(hours(range(10, 13), 14, 190), location_key="lake")
+    windows, _ = lake_windows(wind, sun, NOW)
+    assert windows == []
+
+
+def test_watch_never_resurrects_a_swell_veto(sun):
+    # 4.6 kills this window on cross swell. The watch pass sees uncovered
+    # hours at full strength and full consensus and must leave them alone -
+    # re-adding it as a maybe would quietly overrule a safety rule.
+    wind = mk_wind(hours(range(10, 14), 22, 185))
+    windows, misses = south_windows(wind, mk_marine(1.2, 90), sun, NOW)
+    assert windows == []
+    assert any(m.reason == "cross_swell" for m in misses)
+
+
+def test_watch_band_is_proportional_for_an_explicit_yellow_floor():
+    # The reverse run's yellow floor is an explicit 20 against a 25 target
+    # (spec 4.8), so measuring the band down from the target gave it 1.25 kn
+    # where every other trigger gets 15%. Anchored to the yellow floor now.
+    assert config.watch_floor_for(20.0) == pytest.approx(16.667, abs=0.01)
+    assert config.watch_floor_for(18.0) == pytest.approx(15.0, abs=0.01)
+
+
+def test_downgrades_still_floor_at_yellow(sun):
+    # Adding watch below yellow must not let the 4.5/4.6 downgrades through
+    # it; spec 6 says they never drop below yellow.
+    from foilscan.triggers import downgrade
+
+    assert downgrade("yellow") == "yellow"
+    assert downgrade("green", 5) == "yellow"
+    assert downgrade("green", 5, floor="watch") == "watch"
+
+
+# ------------------------------------------------------------ tide accuracy
+
+def test_high_tide_is_interpolated_between_hourly_samples():
+    # A peak skewed towards the later sample must land after the sample hour,
+    # not on it. The 10 Aug entrance miss was decided by 20 minutes.
+    hours_list = [
+        MarineHour(time=at(h), swell_m=1.0, swell_dir_deg=60.0, swell_period_s=9.0,
+                   sea_level_m=lvl)
+        for h, lvl in enumerate([0.0, 0.30, 0.50, 0.45, 0.10] + [0.0] * 19)
+    ]
+    marine = MarineForecast(fetched_at=NOW, hours=hours_list)
+    high = marine.high_tides()[0]
+    assert high.sample.time == at(2)
+    assert at(2) < high.time < at(3)
+
+
+def test_symmetric_peak_is_not_moved():
+    hours_list = [
+        MarineHour(time=at(h), swell_m=1.0, swell_dir_deg=60.0, swell_period_s=9.0,
+                   sea_level_m=lvl)
+        for h, lvl in enumerate([0.0, 0.4, 0.5, 0.4, 0.0] + [0.0] * 19)
+    ]
+    marine = MarineForecast(fetched_at=NOW, hours=hours_list)
+    assert marine.high_tides()[0].time == at(2)
+
+
+def test_entrance_off_tide_survives_and_is_recorded(sun):
+    # The 10 Aug shape: wind and swell qualify right as the run-out gate
+    # closes. It used to vanish with no near miss to explain it.
+    # Every hour spelled out: mk_wind's 2 kn filler would itself qualify
+    # mode 1 through the calm clause and blur the window boundary.
+    spec = {h: (14.0, 270.0) for h in range(24)}
+    spec.update({h: (6.0, 270.0) for h in range(9, 12)})
+    wind = mk_wind(spec, location_key="entrance")
+    marine = mk_marine(1.2, 70, high_tide_hour=7)
+    windows, misses = entrance_windows(wind, marine, sun, NOW)
+    assert [w.tide_state for w in windows] == ["off tide"]
+    assert "off-tide" in windows[0].title_tags
+    assert any(m.reason == "off_tide" for m in misses)

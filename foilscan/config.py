@@ -31,6 +31,30 @@ MODELS = {
 YELLOW_FACTOR = 0.9
 RED_FACTOR = 1.25
 
+# "Maybe" band below yellow (Rob, 10 Aug 2026). A blanket percentage of the
+# same target every trigger already grades against, so one number widens the
+# net everywhere instead of eight hand-tuned floors. Watch runs from 0.75*T up
+# to the yellow floor at 0.9*T, and unlike a real window it only needs
+# MIN_MODELS_WATCH model to hit - the point is to surface days worth a second
+# look at the models, not to claim a run is on.
+WATCH_FACTOR = 0.75
+MIN_MODELS_WATCH = 1
+
+
+def watch_floor_for(yellow_floor: float) -> float:
+    """The maybe band measured down from a trigger's yellow floor, not from
+    its target.
+
+    Most triggers derive yellow as 0.9 * target, so this is just
+    WATCH_FACTOR * target for them. The entrance reverse run does not - spec
+    4.8 fires it at 20 kn against a 25 kn target - and taking 0.75 of the
+    target there left it a 1.25 kn band where every other trigger gets 15%,
+    which on 10 Aug missed a genuine single-model hit at 18.5 kn by a quarter
+    of a knot. Anchoring to the yellow floor gives every trigger the same
+    proportional band.
+    """
+    return yellow_floor * WATCH_FACTOR / YELLOW_FACTOR
+
 
 @dataclass(frozen=True)
 class Location:
@@ -72,6 +96,27 @@ LAKE_RUNS = {
 
 # Lake Entrance (spec 4.2)
 ENTRANCE_TIDE_WINDOW_H = 2.0
+# The tide gate downgrades an entrance window, it does not delete it (Rob,
+# 10 Aug 2026: "it can still work on the odd tide, so any suitable should be
+# flagged"). A wind-and-swell window that lands outside the gate keeps its
+# event, drops this many colour steps and carries an "off-tide" tag; with
+# WATCH in the ladder a yellow one lands on the calendar as a watch rather
+# than vanishing. Set to 0 to stop treating the tide as a penalty at all.
+ENTRANCE_OFF_TIDE_DOWNGRADE = 1
+# "The odd tide" is not "any time of day": a window six hours off the high is
+# sitting on the bottom of the ebb and genuinely doesn't work. Off-tide
+# windows survive only within this many hours of the gate, which keeps the
+# 10 Aug case (window opened at 07:00, gate closed 07:00 - zero hours out)
+# and still drops a dead-low-tide one.
+ENTRANCE_OFF_TIDE_TOLERANCE_H = 3.0
+# Modelled sea level is hourly, so a tide peak lands anywhere in a +/- 30 min
+# band around the sample - the 10 Aug entrance miss turned on exactly that
+# (gate closed 07:00, window opened 07:00). high_tides()/low_tides() now fit a
+# parabola through the three samples around each extremum for a sub-hourly
+# time. This offset is then added on top, for calibration against a real BOM
+# Port Kembla prediction (spec section 10); positive means the model peaks
+# early and the real tide is later.
+TIDE_TIME_OFFSET_MIN = 0.0
 # Modelled sea level (Open-Meteo) is relative to mean sea level; tide tables are
 # relative to chart datum. Add this offset to report tide-table-comparable
 # heights. Default is the NSW open-coast figure (Sydney/Fort Denison ~0.925 m);
@@ -167,6 +212,9 @@ LIVE_REMINDER_MINUTES = 30
 # - no seasonal cron edits needed (2026-08-04, missed 29 Jul lake event).
 LIVE_FAST_POLL_START_HOUR = 5
 LIVE_FAST_POLL_END_HOUR = 20
+# Warn when the previous live poll was longer ago than this. The cron asks
+# for 30 min during daylight; 75 min means at least two ticks were shed.
+LIVE_POLL_GAP_WARN_MIN = 75.0
 
 # Lake safety-net alert tiers (spec 7): live lake wind independent of the
 # forecast. One source of truth for both the log text (live.py) and the
@@ -175,14 +223,56 @@ LIVE_FAST_POLL_END_HOUR = 20
 # calendar (see 2026-08-04 review).
 LAKE_ALERT_THRESHOLD_KN = 22.0
 LAKE_ALERT_STRONG_KN = 25.0
-LAKE_ALERT_LOUD_KN = 25.0
+# Was also 25.0, which made the loudest tier unreachable and left
+# lake_recommendation's three tiers disagreeing with gcal._alert_tier's two
+# (10 Aug 2026 review). Now a real third tier.
+LAKE_ALERT_LOUD_KN = 30.0
 
-# Google Calendar colour ids (spec 6)
-COLOR_IDS = {"yellow": "5", "green": "10", "red": "11"}
-GRADE_ORDER = ("yellow", "green", "red")
+# Live alerts beyond the lake (10 Aug 2026). The forecast missed a 32 kn NW
+# blow entirely, so nothing was on the calendar, so nothing could be verified
+# and nothing could fire: no forecast window meant no notification of any
+# kind. These fire off live observations alone, whatever the forecast said.
+# trigger_id -> (threshold kn, direction arc, run name, station preference).
+# Thresholds are each trigger's own yellow floor so a live alert appears at
+# the same bar a forecast window would have.
+LIVE_ALERT_TRIGGERS = {
+    "lake_oakflats_berkeley": (18.0, Arc(170, 215), "Oak Flats to Berkeley", "lake"),
+    "lake_kanahooka": (18.0, Arc(215, 260), "Kanahooka run", "lake"),
+    "lake_berkeley": (18.0, Arc(260, 285), "Berkeley run", "lake"),
+    "lake_ne_rare": (22.5, Arc(20, 70), "Sailing Club to Oak Flats", "lake"),
+    "entrance_ne": (16.2, Arc(20, 80), "Lake Entrance (NE wind)", "either"),
+    "entrance_reverse": (20.0, Arc(270, 315), "Entrance reverse run (Boronia Ave)", "either"),
+    "south_ocean": (18.0, Arc(155, 210), "South runs", "coast"),
+    "ne_ocean": (10.0, Arc(20, 75), "NE ocean runs", "coast"),
+}
+# Live alert events are timed, not all-day: an all-day event's reminder is
+# measured from local midnight, so it can never ping you at the moment the
+# wind is actually blowing. Timed + a 0-minute popup does.
+ALERT_DURATION_H = 2.0
+# Start the event a minute ahead of now so the 0-minute popup is still in the
+# future when Google receives it; a popup on a past start never fires.
+ALERT_LEAD_S = 60
+ALERT_REMINDER_MINUTES = 0
+
+# Google Calendar colour ids (spec 6). Graphite for watch: visible, obviously
+# not a call to go, and distinct from the three real grades.
+COLOR_IDS = {"watch": "8", "yellow": "5", "green": "10", "red": "11"}
+GRADE_ORDER = ("watch", "yellow", "green", "red")
+# Existing downgrades (off-angle 4.5, cross swell 4.6) must never drop below
+# yellow per spec 6. Watch sits below yellow, so downgrade() floors at yellow
+# unless a caller explicitly opts into the watch tier.
+DOWNGRADE_FLOOR = "yellow"
 
 DATA_DIR = "data"
-SCHEMA_VERSION = 1
+# 2: added the watch grade (windows[].grade gains "watch"), windows[].watch
+# and windows[].tide_state, latest.json.expected_today and live.json.bias.
+SCHEMA_VERSION = 2
+
+# Forecast-vs-observed bias tracking (10 Aug 2026). All four models under-read
+# a NW gale by ~13 kn at once and nothing recorded it, so the bust was
+# invisible. The scan publishes what it expects hour by hour; the live job
+# compares each observation against it and writes the gap to live.json.
+BIAS_FLAG_KN = 8.0
 
 HTTP_TIMEOUT_S = 30
 HTTP_RETRIES = 3
@@ -237,8 +327,33 @@ def validate() -> None:
     if any(t <= 0 for t in targets):
         raise ConfigError("all trigger targets must be positive")
 
-    if not 0 < YELLOW_FACTOR < 1 < RED_FACTOR:
-        raise ConfigError("grading factors must satisfy yellow < 1 < red")
+    if not 0 < WATCH_FACTOR < YELLOW_FACTOR < 1 < RED_FACTOR:
+        raise ConfigError("grading factors must satisfy watch < yellow < 1 < red")
+
+    if GRADE_ORDER[0] != "watch" or DOWNGRADE_FLOOR not in GRADE_ORDER:
+        raise ConfigError("watch must be the lowest grade and the floor a real grade")
+    if set(COLOR_IDS) != set(GRADE_ORDER):
+        raise ConfigError("every grade needs a calendar colour")
+
+    if not 1 <= MIN_MODELS_WATCH <= MIN_MODELS_AGREE:
+        raise ConfigError("watch consensus must be at least 1 and no stricter than a window")
+
+    if ENTRANCE_OFF_TIDE_DOWNGRADE < 0:
+        raise ConfigError("off-tide downgrade cannot be negative")
+
+    if not LAKE_ALERT_THRESHOLD_KN < LAKE_ALERT_STRONG_KN < LAKE_ALERT_LOUD_KN:
+        raise ConfigError("lake alert tiers must be strictly ascending")
+
+    for tid, (kn, arc, name, station) in LIVE_ALERT_TRIGGERS.items():
+        if kn <= 0:
+            raise ConfigError(f"live alert threshold for {tid} must be positive")
+        if not (0 <= arc.lo <= 360 and 0 <= arc.hi <= 360):
+            raise ConfigError(f"live alert arc for {tid} out of range")
+        if station not in ("lake", "coast", "either"):
+            raise ConfigError(f"live alert station for {tid} must be lake|coast|either")
+
+    if ALERT_DURATION_H <= 0 or ALERT_LEAD_S < 0 or ALERT_REMINDER_MINUTES < 0:
+        raise ConfigError("live alert event timing must be non-negative and non-empty")
 
     if not 0 <= BAYSURF_WIND_MIN_KN < BAYSURF_WIND_MAX_KN:
         raise ConfigError("baysurf wind floor must sit below its ceiling")
