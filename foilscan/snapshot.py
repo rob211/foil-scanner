@@ -56,7 +56,7 @@ def _tide_state(marine, now: datetime) -> dict:
         moving = "falling (ebb)"
 
     return {
-        "height_cd_m": level_msl + config.PORT_KEMBLA_MSL_ABOVE_CD_M,
+        "height_cd_m": level_msl + config.TIDE_HEIGHT_OFFSET_M,
         "rate_m_per_h": rate_m_per_h,
         "moving": moving,
         "next_high": next_high,
@@ -193,7 +193,7 @@ def build(now: datetime) -> list[str]:
                 mins = (tide.time - now).total_seconds() / 60
                 out.append(
                     f"  {label:<10} {tide.time:%H:%M}  "
-                    f"{tide.sea_level_m + config.PORT_KEMBLA_MSL_ABOVE_CD_M:.2f} m "
+                    f"{tide.sea_level_m + config.TIDE_HEIGHT_OFFSET_M:.2f} m "
                     f"(in {mins / 60:.0f} h {mins % 60:.0f} m)"
                 )
 

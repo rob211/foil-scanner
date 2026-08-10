@@ -428,7 +428,7 @@ def _baysurf_tide_spans(marine: MarineForecast) -> list[tuple[datetime, datetime
 
 def _tide_height_cd(ht: MarineHour) -> float:
     """Modelled high-tide height referenced to chart datum (tide-table style)."""
-    return round(ht.sea_level_m + config.PORT_KEMBLA_MSL_ABOVE_CD_M, 2)
+    return round(ht.sea_level_m + config.TIDE_HEIGHT_OFFSET_M, 2)
 
 
 def _gap_to_gate(gate, start: datetime, end: datetime) -> float:

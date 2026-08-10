@@ -90,3 +90,11 @@ def sun():
 @pytest.fixture
 def calm_marine():
     return mk_marine()
+
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers",
+        "real_tide_offset: run against the configured TIDE_TIME_OFFSET_MIN "
+        "instead of the zeroed one the trigger tests use",
+    )

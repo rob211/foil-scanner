@@ -627,3 +627,86 @@ def test_missing_sun_narrows_the_window_rather_than_alerting_all_night():
     # never a 3am one.
     assert live.alerting_hours(NOW.replace(hour=3), None) is False
     assert live.alerting_hours(NOW.replace(hour=12), None) is True
+
+
+# ------------------------------------------------ stale live-alert cleanup
+
+def _managed(monkeypatch, existing):
+    """sync() against a fake calendar holding `existing` foil_key -> event."""
+    deleted, svc_calls = [], []
+
+    class FakeEvents:
+        def list(self, **kw):
+            items = [
+                {"id": k, "extendedProperties": {"private": {"foil_key": k}},
+                 "summary": v}
+                for k, v in existing.items()
+            ]
+            return type("R", (), {"execute": lambda s: {"items": items}})()
+
+        def insert(self, **kw):
+            svc_calls.append(("insert", kw["body"]["summary"]))
+            return type("R", (), {"execute": lambda s: {"id": "new"}})()
+
+        def patch(self, **kw):
+            svc_calls.append(("patch", kw.get("eventId")))
+            return type("R", (), {"execute": lambda s: {}})()
+
+        def delete(self, **kw):
+            deleted.append(kw["eventId"])
+            return type("R", (), {"execute": lambda s: {}})()
+
+    monkeypatch.setattr(gcal, "service", lambda: type("S", (), {"events": lambda s: FakeEvents()})())
+    monkeypatch.setattr(gcal, "calendar_id", lambda: "cal")
+    return deleted
+
+
+def test_todays_live_alert_survives_a_scan(monkeypatch):
+    today = f"live-alert:{NOW.date().isoformat()}:lake_kanahooka"
+    deleted = _managed(monkeypatch, {today: "WIND NOW: Kanahooka"})
+    gcal.sync([], NOW, [])
+    assert today not in deleted
+
+
+def test_yesterdays_live_alert_is_swept(monkeypatch):
+    old = f"live-alert:{(NOW - timedelta(days=1)).date().isoformat()}:lake_berkeley"
+    deleted = _managed(monkeypatch, {old: "WIND NOW!!: Berkeley run 26 kn W"})
+    gcal.sync([], NOW, [])
+    assert old in deleted
+
+
+# ------------------------------------------ daylight gate: season and DST
+
+def test_daylight_gate_follows_the_season():
+    from foilscan.models import SunTimes
+
+    # Sunset moves ~4 h between a Wollongong winter and summer. A fixed
+    # clock-hour rule would be wrong at both ends; the gate uses the real
+    # sunrise/sunset for the date, so it tracks automatically.
+    winter_day = datetime(2026, 6, 21, 12, 0, tzinfo=config.TZ)
+    summer_day = datetime(2026, 12, 21, 12, 0, tzinfo=config.TZ)
+    winter = SunTimes(days={winter_day.date(): (
+        winter_day.replace(hour=6, minute=58), winter_day.replace(hour=16, minute=55))})
+    summer = SunTimes(days={summer_day.date(): (
+        summer_day.replace(hour=5, minute=37), summer_day.replace(hour=19, minute=57))})
+
+    # 18:30 is dark midwinter and broad daylight midsummer.
+    assert live.alerting_hours(winter_day.replace(hour=18, minute=30), winter) is False
+    assert live.alerting_hours(summer_day.replace(hour=18, minute=30), summer) is True
+    # 06:00 is before a winter sunrise and after a summer one.
+    assert live.alerting_hours(winter_day.replace(hour=6, minute=0), winter) is False
+    assert live.alerting_hours(summer_day.replace(hour=6, minute=0), summer) is True
+
+
+def test_daylight_gate_is_local_time_so_dst_is_free():
+    # Sun times come back tagged Australia/Sydney, and `now` is built from
+    # config.TZ, so the comparison is local-vs-local on both sides of a DST
+    # changeover. 19:00 AEDT in January and 19:00 AEST in July are different
+    # UTC instants; neither needs a seasonal code change.
+    from foilscan.models import SunTimes
+
+    for month, sunset_h, expected in ((1, 20, True), (7, 17, False)):
+        day = datetime(2026, month, 15, 19, 0, tzinfo=config.TZ)
+        sun = SunTimes(days={day.date(): (day.replace(hour=6), day.replace(hour=sunset_h))})
+        assert live.alerting_hours(day, sun) is expected, month
+        assert day.tzinfo is config.TZ
