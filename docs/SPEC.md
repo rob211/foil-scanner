@@ -115,7 +115,27 @@ Stronger is better on the lake. The NE lake run is a rare event: prefix its titl
 
 Both modes prefer the window to overlap the period from high tide to 2 h after it (the run-out only, not before the high), and require daylight.
 
-The tide is a penalty, not a veto (Rob, 10 Aug 2026: "don't let tide fully exclude the entrance run, especially for swell — it can still work on the odd tide, so any suitable should be flagged"). A wind-and-swell window that misses the gate keeps its event, drops `config.ENTRANCE_OFF_TIDE_DOWNGRADE` colour steps, gains an "off-tide" title tag, and is recorded in `near_misses` with reason `off_tide`. It survives only within `config.ENTRANCE_OFF_TIDE_TOLERANCE_H` of the gate — the odd tide, not any time of day. The same rule applies to the reverse run (4.8).
+The tide has three phases, not a gate (Rob, 11 Aug 2026 — refining the 10 Aug call that it should not be a veto at all):
+
+| Phase | When | Effect |
+|---|---|---|
+| **No go** | the last `ENTRANCE_NO_GO_BEFORE_LOW_H` (4 h) before dead low | Too much outflow — the lake draining through a narrow entrance. Cut out of the window before a `Window` is built. The only tide state that removes a run. |
+| **Preferred** | overlapping high tide to +`ENTRANCE_TIDE_WINDOW_H` (2 h), the run-out | Full rating. |
+| **Workable** | any other tide | The run is on, just not at its best: keeps its event, drops `ENTRANCE_OFF_TIDE_DOWNGRADE` colour steps, gains an "off-tide" tag, and is recorded in `near_misses` with reason `off_tide`. |
+
+A qualifying stretch is **split at the preferred boundaries into separate events** (Rob, 11 Aug 2026), so the calendar shows when it is actually good rather than one long block carrying a single colour:
+
+```
+07:00-13:00  yellow   workable   (off-tide)
+13:00-15:00  green    preferred
+15:00-17:00  yellow   workable   (off-tide)
+```
+
+A shoulder shorter than an hour is dropped rather than emitted as a stub, matching the minimum window everywhere else. Two modes firing over the same piece still merge into one event (4.2); the merge only joins windows sharing a `tide_state`, so a workable window can never be promoted by folding a preferred one into it.
+
+Both entrance modes (4.2) and the reverse run (4.8) share the no-go: peak ebb is peak ebb whichever direction you are running. The reverse run keeps its own preferred window, the run-in (4.8).
+
+This replaced a distance-from-the-gate tolerance, which was a guess standing in for a physical constraint.
 
 This mattered: on 10 Aug 2026 wind and swell both qualified for 07:00–09:00 with 1.4 m of ENE swell, the gate ran to 07:00, the overlap was zero minutes, and a good morning produced no event and — because `entrance_windows` returned a hardcoded empty near-miss list — no record anywhere of why.
 
@@ -300,7 +320,7 @@ The prime directive: this scanner must never quietly show a calm week because so
 
 `spots` is set only on south-ocean windows (`run_name` "South runs"): the list of individual launch spots that qualify at that swell size, e.g. `["Bass Point", "Hill 60", "Boilers", "Bellambi"]`. The dashboard shows them as separate chips; the calendar folds them back into the event title. It is `null` on every other trigger.
 
-`windows[]` also carries `watch` (why it only reached the watch tier, else null) and `tide_state` ("in gate" | "off tide" | null). `latest.json` carries `expected_today`: one row per hour with the median model wind per location, published so the live job can diff observations against it.
+`windows[]` also carries `watch` (why it only reached the watch tier, else null) and `tide_state` ("preferred" | "workable" | null). `latest.json` carries `expected_today`: one row per hour with the median model wind per location, published so the live job can diff observations against it.
 
 `data/live.json`, committed by the hourly live job (absent until the first live run after deploy):
 

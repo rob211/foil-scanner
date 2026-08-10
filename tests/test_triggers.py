@@ -321,19 +321,36 @@ def test_baysurf_downgrades_outside_ideal_tide_window(sun):
 
 # ------------------------------------------------------------------ entrance
 
-def test_entrance_mode1_needs_tide_overlap(sun):
+def test_entrance_splits_the_run_out_from_its_shoulders(sun):
+    # Rob, 11 Aug 2026: the run-out gets its own full-rating event and the
+    # rest of the workable stretch is downgraded around it, so the calendar
+    # shows when it is actually good rather than one long single-coloured
+    # block.
     wind = mk_wind(hours(range(8, 16), 6, 270), location_key="entrance")
     marine = mk_marine(0.9, 90, high_tide_hour=13)
     windows, _ = entrance_windows(wind, marine, sun, NOW)
-    assert len(windows) == 1
-    w = windows[0]
-    assert w.trigger_id == "entrance_swell"
-    assert w.grade == "green"
-    # Clamped to the 2 h after the 13:00 high (run-out only, not before).
-    assert w.start == at(13) and w.end == at(15)
-    assert w.high_tide == at(13).isoformat()
-    # Height is the modelled sea level (0.0 at the peak here) plus the datum offset.
-    assert w.high_tide_m == config.TIDE_HEIGHT_OFFSET_M
+    by_start = sorted(windows, key=lambda w: w.start)
+    assert [(w.start.hour, w.end.hour, w.grade, w.tide_state) for w in by_start] == [
+        (7, 13, "yellow", "workable"),
+        (13, 15, "green", "preferred"),
+        (15, 17, "yellow", "workable"),
+    ]
+    run_out = by_start[1]
+    assert run_out.trigger_id == "entrance_swell"
+    assert run_out.title_tags == []                 # only the shoulders are tagged
+    assert all("off-tide" in w.title_tags for w in (by_start[0], by_start[2]))
+    assert run_out.high_tide == at(13).isoformat()
+    # Height is the modelled sea level (0.0 at the peak here) plus the offset.
+    assert run_out.high_tide_m == config.TIDE_HEIGHT_OFFSET_M
+
+
+def test_entrance_sub_hour_shoulder_is_dropped_not_stubbed(sun):
+    # A 30-minute leftover either side of the run-out is below the minimum
+    # window used everywhere else; it should vanish, not become a stub event.
+    wind = mk_wind(hours(range(12, 16), 6, 270), location_key="entrance")
+    marine = mk_marine(0.9, 90, high_tide_hour=13)
+    windows, _ = entrance_windows(wind, marine, sun, NOW)
+    assert all((w.end - w.start) >= HOUR for w in windows)
 
 
 def test_entrance_mode1_swell_direction_matters(sun):
@@ -357,9 +374,10 @@ def test_entrance_mode2_strong_ne(sun):
     wind = mk_wind(hours(range(8, 16), 20, 50), location_key="entrance")
     marine = mk_marine(0.2, 90, high_tide_hour=13)
     windows, _ = entrance_windows(wind, marine, sun, NOW)
-    assert len(windows) == 1
-    assert windows[0].trigger_id == "entrance_ne"
-    assert windows[0].grade == "green"
+    run_out = [w for w in windows if w.tide_state == "preferred"]
+    assert len(run_out) == 1
+    assert run_out[0].trigger_id == "entrance_ne"
+    assert run_out[0].grade == "green"
 
 
 def test_entrance_both_modes_merge(sun):
@@ -372,7 +390,11 @@ def test_entrance_both_modes_merge(sun):
     )
     marine = mk_marine(0.9, 90, high_tide_hour=13)
     windows, _ = entrance_windows(wind, marine, sun, NOW)
-    assert len(windows) == 1
+    # One event per tide phase, not one per mode: the run-out piece carries
+    # both modes rather than appearing twice.
+    run_out = [w for w in windows if w.tide_state == "preferred"]
+    assert len(run_out) == 1
+    windows = run_out
     assert any("also fires as" in n for n in windows[0].notes)
     # entrance_ne (mode 2) sorts first and survives as the merged event here,
     # but never sets swell fields itself - the swell numbers that justified
@@ -383,18 +405,23 @@ def test_entrance_both_modes_merge(sun):
 
 # -------------------------------------------------------- entrance reverse
 
-def _marine_low_then_high(low_hour: int) -> MarineForecast:
+def _marine_low_then_high(
+    low_hour: int, swell_m: float = 0.3, swell_dir: float = 90.0
+) -> MarineForecast:
     """One clean tide cycle: low at low_hour, high 12 h later. A single
     cosine period sampled hourly has exactly one min and one max, so
-    high_tides()/low_tides() are unambiguous."""
+    high_tides()/low_tides() are unambiguous.
+
+    Swell defaults below the entrance mode 1 floor, so wind-only tests are
+    not accidentally firing on swell; pass swell_m to exercise mode 1."""
     hours = []
     for h in range(24):
         level = -math.cos(2 * math.pi * (h - low_hour) / 24)
         hours.append(
             MarineHour(
                 time=at(h),
-                swell_m=0.3,
-                swell_dir_deg=90.0,
+                swell_m=swell_m,
+                swell_dir_deg=swell_dir,
                 swell_period_s=9.0,
                 sea_level_m=level,
             )
@@ -448,7 +475,7 @@ def test_entrance_reverse_off_tide_is_downgraded_not_dropped(sun):
     marine = _marine_low_then_high(low_hour=8)
     windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
     assert len(windows) == 1
-    assert windows[0].tide_state == "off tide"
+    assert windows[0].tide_state == "workable"
     assert windows[0].grade == "yellow"  # green, downgraded one step
     assert "off-tide" in windows[0].title_tags
 
@@ -459,7 +486,7 @@ def test_entrance_reverse_far_off_tide_is_still_dropped(sun):
     wind = mk_wind(hours(range(8, 10), 25, 315), location_key="entrance")
     marine = _marine_low_then_high(low_hour=20)
     windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
-    assert [w for w in windows if w.tide_state == "off tide"] == []
+    assert [w for w in windows if w.tide_state == "workable"] == []
 
 
 def test_entrance_reverse_no_false_miss_outside_tide_gate(sun):
@@ -469,7 +496,7 @@ def test_entrance_reverse_no_false_miss_outside_tide_gate(sun):
     wind = mk_wind(hours(range(7, 10), 26, 315), location_key="entrance")
     marine = _marine_low_then_high(low_hour=8)
     windows, misses = entrance_reverse_windows(wind, marine, sun, NOW)
-    assert [w.tide_state for w in windows] == ["off tide"]
+    assert [w.tide_state for w in windows] == ["workable"]
     assert misses == []
 
 
@@ -583,7 +610,7 @@ def test_entrance_off_tide_survives_and_is_recorded(sun):
     wind = mk_wind(spec, location_key="entrance")
     marine = mk_marine(1.2, 70, high_tide_hour=7)
     windows, misses = entrance_windows(wind, marine, sun, NOW)
-    assert [w.tide_state for w in windows] == ["off tide"]
+    assert [w.tide_state for w in windows] == ["workable"]
     assert "off-tide" in windows[0].title_tags
     assert any(m.reason == "off_tide" for m in misses)
 
@@ -606,3 +633,51 @@ def test_calibrated_offset_is_applied_by_default():
     # Guards against the constant being reset to 0 without the note in
     # config.py being revisited.
     assert config.TIDE_TIME_OFFSET_MIN != 0.0
+
+
+# ------------------------------------------- entrance tide phases (11 Aug)
+
+def test_entrance_no_go_in_the_last_hours_before_low(sun):
+    # "Can still work on any tide except the last 4 hours before dead low -
+    # water flow is too much." Low at 16:00 makes 12:00-16:00 a hard no.
+    marine = _marine_low_then_high(low_hour=16, swell_m=1.2)
+    spec = {h: (14.0, 90.0) for h in range(24)}       # never qualifies
+    spec.update({h: (6.0, 270.0) for h in range(13, 16)})   # only inside the no-go
+    wind = mk_wind(spec, location_key="entrance")
+    windows, _ = entrance_windows(wind, marine, sun, NOW)
+    assert windows == []
+
+
+def test_entrance_window_is_clipped_at_the_no_go_boundary(sun):
+    marine = _marine_low_then_high(low_hour=16, swell_m=1.2)
+    spec = {h: (14.0, 90.0) for h in range(24)}
+    spec.update({h: (6.0, 270.0) for h in range(10, 15)})   # straddles 12:00
+    wind = mk_wind(spec, location_key="entrance")
+    windows, _ = entrance_windows(wind, marine, sun, NOW)
+    assert len(windows) == 1
+    # 10:00-15:00 minus the 12:00-16:00 no-go leaves 10:00-12:00.
+    assert windows[0].start == at(10) and windows[0].end == at(12)
+
+
+def test_entrance_workable_tide_is_downgraded_not_dropped(sun):
+    # Neither the run-out nor the no-go: the run is on, just not at its best.
+    marine = _marine_low_then_high(low_hour=16, swell_m=1.2)  # no-go 12:00-16:00
+    spec = {h: (14.0, 90.0) for h in range(24)}
+    spec.update({h: (6.0, 270.0) for h in range(8, 12)})
+    wind = mk_wind(spec, location_key="entrance")
+    windows, misses = entrance_windows(wind, marine, sun, NOW)
+    assert len(windows) == 1
+    w = windows[0]
+    assert w.tide_state == "workable"
+    assert "off-tide" in w.title_tags
+    assert w.grade == "green"      # red on swell, downgraded one step
+    assert any(m.reason == "off_tide" for m in misses)
+
+
+def test_no_go_applies_to_the_reverse_run_too(sun):
+    # Peak ebb is peak ebb whichever direction you are running.
+    marine = _marine_low_then_high(low_hour=16)
+    spec = {h: (25.0, 315.0) for h in range(13, 16)}   # inside the no-go only
+    wind = mk_wind(spec, location_key="entrance")
+    windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
+    assert [w for w in windows if w.grade != "watch"] == []

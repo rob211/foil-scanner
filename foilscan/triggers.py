@@ -431,53 +431,94 @@ def _tide_height_cd(ht: MarineHour) -> float:
     return round(ht.sea_level_m + config.TIDE_HEIGHT_OFFSET_M, 2)
 
 
-def _gap_to_gate(gate, start: datetime, end: datetime) -> float:
-    """Hours a span sits outside a gate; 0 when they touch or overlap."""
-    t_lo, t_hi, _ = gate
-    gap = max(t_lo - end, start - t_hi, timedelta(0))
-    return gap.total_seconds() / 3600.0
+def _no_go_spans(marine: MarineForecast) -> list[tuple[datetime, datetime]]:
+    """The last config.ENTRANCE_NO_GO_BEFORE_LOW_H hours before each low: peak
+    ebb, with the whole lake draining through the entrance. Rob's hard no."""
+    window = timedelta(hours=config.ENTRANCE_NO_GO_BEFORE_LOW_H)
+    return [(lt.time - window, lt.time) for lt in marine.low_tides()]
 
 
-def _nearest_tide(tides, start: datetime, end: datetime):
-    """The tide gate a span sits closest to, for labelling an off-tide window."""
-    if not tides:
-        return None
-    return min(tides, key=lambda g: _gap_to_gate(g, start, end))
+def _subtract(
+    span: tuple[datetime, datetime], blocks: list[tuple[datetime, datetime]]
+) -> list[tuple[datetime, datetime]]:
+    """`span` with `blocks` cut out of it. Survivors shorter than an hour are
+    dropped, matching the minimum window everywhere else."""
+    pieces = [span]
+    for b_lo, b_hi in blocks:
+        nxt = []
+        for lo, hi in pieces:
+            if b_hi <= lo or b_lo >= hi:
+                nxt.append((lo, hi))
+                continue
+            if lo < b_lo:
+                nxt.append((lo, min(hi, b_lo)))
+            if hi > b_hi:
+                nxt.append((max(lo, b_hi), hi))
+        pieces = nxt
+    return [(lo, hi) for lo, hi in pieces if hi - lo >= HOUR]
 
 
-def _apply_tide_gate(
-    spans: list[tuple[datetime, datetime]], tides
-) -> list[tuple[datetime, datetime, MarineHour, str]]:
-    """Tide gating for the entrance families, as a penalty rather than a veto.
+def _phase_spans(
+    spans: list[tuple[datetime, datetime]],
+    preferred: list[tuple[datetime, datetime, object]],
+    no_go: list[tuple[datetime, datetime]],
+) -> list[tuple[datetime, datetime, object, str, tuple | None]]:
+    """Spec 4.2's tide rule (Rob, 11 Aug 2026). Three phases, not a gate:
 
-    A span overlapping a gate by an hour or more is clipped to the gate and
-    marked "in gate", exactly as before. A span that misses every gate used to
-    be deleted; Rob's call on 10 Aug 2026 is that the entrance still works on
-    the odd tide, especially on swell, so it survives whole, marked "off tide"
-    and labelled with the nearest high. entrance_windows then downgrades it by
-    config.ENTRANCE_OFF_TIDE_DOWNGRADE rather than dropping it.
+    - **no go**: the last ENTRANCE_NO_GO_BEFORE_LOW_H hours before a low.
+      Too much outflow. Cut out of the window entirely.
+    - **preferred**: overlapping high tide to +ENTRANCE_TIDE_WINDOW_H, the
+      run-out. Full rating.
+    - **workable**: any other tide. The run is on, just not at its best, so
+      it keeps its event and drops ENTRANCE_OFF_TIDE_DOWNGRADE steps.
 
-    This is the exact case that lost 10 Aug: wind and swell both qualified for
-    07:00-09:00 and the gate closed at 07:00, so the overlap was zero minutes
-    and a perfectly good ENE swell morning produced no event and no near miss.
+    Returns (start, end, tide, phase, preferred_span). The window is *not*
+    clipped to the preferred period: the whole workable stretch is runnable,
+    so the event spans it and the description names the best part of it.
     """
-    out: list[tuple[datetime, datetime, MarineHour, str]] = []
-    for start, end in spans:
-        clipped = [
-            (max(start, t_lo), min(end, t_hi), ht)
-            for t_lo, t_hi, ht in tides
-            if min(end, t_hi) - max(start, t_lo) >= HOUR
-        ]
-        if clipped:
-            out.extend((lo, hi, ht, "in gate") for lo, hi, ht in clipped)
-            continue
-        near = _nearest_tide(tides, start, end)
-        if near is None:
-            continue
-        if _gap_to_gate(near, start, end) > config.ENTRANCE_OFF_TIDE_TOLERANCE_H:
-            continue
-        out.append((start, end, near[2], "off tide"))
+    out: list[tuple[datetime, datetime, object, str, tuple | None]] = []
+    for span in spans:
+        for lo, hi in _subtract(span, no_go):
+            best = None
+            for p_lo, p_hi, tag in preferred:
+                overlap = min(hi, p_hi) - max(lo, p_lo)
+                if overlap >= HOUR and (best is None or overlap > best[0]):
+                    best = (overlap, p_lo, p_hi, tag)
+            if best is not None:
+                # Split rather than grade the whole stretch off its best part
+                # (Rob, 11 Aug 2026): the run-out becomes its own full-rating
+                # event and the shoulders become downgraded ones, so the
+                # calendar shows when it is actually good instead of one long
+                # block carrying a single colour.
+                _, p_lo, p_hi, tag = best
+                inside = (max(lo, p_lo), min(hi, p_hi))
+                shoulders = [(lo, inside[0]), (inside[1], hi)]
+                out.append((inside[0], inside[1], tag, "preferred", None))
+                for s_lo, s_hi in shoulders:
+                    # Sub-hour remainders are dropped, matching the minimum
+                    # window everywhere else rather than emitting a stub.
+                    if s_hi - s_lo >= HOUR:
+                        out.append((s_lo, s_hi, tag, "workable", None))
+            elif preferred:
+                mid = lo + (hi - lo) / 2
+                nearest = min(
+                    preferred,
+                    key=lambda p: abs(((p[0] + (p[1] - p[0]) / 2) - mid).total_seconds()),
+                )
+                out.append((lo, hi, nearest[2], "workable", None))
     return out
+
+
+def _entrance_phases(spans, marine: MarineForecast):
+    """Spec 4.2: preferred is the run-out, high tide to +2 h."""
+    return _phase_spans(
+        spans,
+        [
+            (h.time, h.time + timedelta(hours=config.ENTRANCE_TIDE_WINDOW_H), h)
+            for h in marine.high_tides()
+        ],
+        _no_go_spans(marine),
+    )
 
 
 def baysurf_windows(
@@ -573,7 +614,6 @@ def entrance_windows(
 ) -> tuple[list[Window], list[NearMiss]]:
     """Spec 4.2: both modes need daylight and the high-tide window."""
     windows: list[Window] = []
-    tides = _tide_spans(marine)
 
     # Mode 1: light west (or near calm) wind, E/NE swell, graded on swell.
     def m1_wind(hw):
@@ -595,7 +635,7 @@ def entrance_windows(
         if t in swell_ok
     }
     m1_hours = _active_hours(m1_map, sun, config.MIN_MODELS_AGREE)
-    for start, end, ht, tide_state in _apply_tide_gate(_group(m1_hours), tides):
+    for start, end, ht, tide_state, _ in _entrance_phases(_group(m1_hours), marine):
         hours = [t for t in m1_map if start <= t < end]
         peak_time = max(hours, key=lambda t: marine.at(t).swell_m)
         mh = marine.at(peak_time)
@@ -650,7 +690,7 @@ def entrance_windows(
 
     m2_map = _qualifying_by_hour(wind, m2_wind)
     m2_hours = _active_hours(m2_map, sun, config.MIN_MODELS_AGREE)
-    for start, end, ht, tide_state in _apply_tide_gate(_group(m2_hours), tides):
+    for start, end, ht, tide_state, _ in _entrance_phases(_group(m2_hours), marine):
         w = _window_from_span(
             "entrance_ne",
             "Lake Entrance (NE wind)",
@@ -668,13 +708,13 @@ def entrance_windows(
     # Applied before the merge below so a merged pair grades off the penalised
     # values rather than sneaking a full-rating grade through.
     for w in windows:
-        if w.tide_state == "off tide" and config.ENTRANCE_OFF_TIDE_DOWNGRADE:
+        if w.tide_state == "workable" and config.ENTRANCE_OFF_TIDE_DOWNGRADE:
             w.grade = downgrade(
                 w.grade, config.ENTRANCE_OFF_TIDE_DOWNGRADE, floor="watch"
             )
             w.title_tags.append("off-tide")
             w.notes.append(
-                "outside the high-tide run-out; worth a look on the odd tide"
+                "runnable but not the preferred run-out (high tide to +2 h)"
             )
             if w.grade == "watch":
                 w.watch = "off tide"
@@ -683,7 +723,13 @@ def entrance_windows(
     merged: list[Window] = []
     for w in sorted(windows, key=lambda w: (w.start, w.trigger_id)):
         clash = next(
-            (m for m in merged if m.start < w.end and w.start < m.end), None
+            (
+                m
+                for m in merged
+                if m.start < w.end and w.start < m.end
+                and m.tide_state == w.tide_state
+            ),
+            None,
         )
         if clash is None:
             merged.append(w)
@@ -703,15 +749,20 @@ def entrance_windows(
     # This used to be a hardcoded `return merged, []`: the entrance was the
     # one family that recorded no near misses at all, so when it went quiet
     # there was nothing anywhere saying why (10 Aug 2026 review).
+    # "Valid" now means anywhere the entrance can run at all, which under the
+    # 11 Aug rule is everything except the no-go before each low - not just
+    # the preferred run-out. Reporting a single-model miss outside those is
+    # correct; reporting one inside them would blame model disagreement for
+    # what is really too much outflow.
+    horizon = (marine.hours[0].time, marine.hours[-1].time + HOUR)
+    valid = _subtract(horizon, _no_go_spans(marine))
     misses = _single_model_misses(
-        "entrance_swell", m1_map, sun, merged,
-        valid_spans=[(lo, hi) for lo, hi, _ in tides],
+        "entrance_swell", m1_map, sun, merged, valid_spans=valid,
     ) + _single_model_misses(
-        "entrance_ne", m2_map, sun, merged,
-        valid_spans=[(lo, hi) for lo, hi, _ in tides],
+        "entrance_ne", m2_map, sun, merged, valid_spans=valid,
     )
     for w in merged:
-        if w.tide_state == "off tide":
+        if w.tide_state == "workable":
             misses.append(
                 NearMiss(
                     trigger_id=w.trigger_id,
@@ -720,10 +771,10 @@ def entrance_windows(
                     end=w.end.isoformat(),
                     reason="off_tide",
                     detail=(
-                        f"wind and swell qualified but the run-out gate was "
-                        f"{datetime.fromisoformat(w.high_tide):%H:%M}-"
+                        f"runnable but outside the preferred run-out "
+                        f"({datetime.fromisoformat(w.high_tide):%H:%M}-"
                         f"{datetime.fromisoformat(w.high_tide) + timedelta(hours=config.ENTRANCE_TIDE_WINDOW_H):%H:%M}"
-                        f"; kept as {w.grade}"
+                        f"); kept as {w.grade}"
                     ),
                 )
             )
@@ -765,9 +816,12 @@ def entrance_reverse_windows(
 
     hour_map = _qualifying_by_hour(wind, pred)
     tide_spans = _entrance_reverse_tide_spans(marine)
-    gates = [(t_lo, t_hi, (lt, ht)) for t_lo, t_hi, lt, ht in tide_spans]
-    for lo, hi, tides, tide_state in _apply_tide_gate(
-        _group(_active_hours(hour_map, sun, config.MIN_MODELS_AGREE)), gates
+    # Same no-go as the standard runs - peak ebb is peak ebb whichever
+    # direction you are running - but its own preferred window, the run-in.
+    for lo, hi, tides, tide_state, _best in _phase_spans(
+        _group(_active_hours(hour_map, sun, config.MIN_MODELS_AGREE)),
+        [(t_lo, t_hi, (lt, ht)) for t_lo, t_hi, lt, ht in tide_spans],
+        _no_go_spans(marine),
     ):
         lt, ht = tides
         w = _window_from_span(
@@ -786,7 +840,7 @@ def entrance_reverse_windows(
         w.high_tide_m = _tide_height_cd(ht)
         w.notes.append(f"low tide {lt.time:%H:%M}")
         w.tide_state = tide_state
-        if tide_state == "off tide" and config.ENTRANCE_OFF_TIDE_DOWNGRADE:
+        if tide_state == "workable" and config.ENTRANCE_OFF_TIDE_DOWNGRADE:
             # Same call as the standard entrance runs: the incoming-tide gate
             # opened at 13:00 on 10 Aug while the wind was already firing from
             # 09:30, so a hard gate here throws away the front of a blow.
@@ -794,7 +848,7 @@ def entrance_reverse_windows(
                 w.grade, config.ENTRANCE_OFF_TIDE_DOWNGRADE, floor="watch"
             )
             w.title_tags.append("off-tide")
-            w.notes.append("outside the run-in gate; worth a look on the odd tide")
+            w.notes.append("runnable but not the preferred run-in")
             if w.grade == "watch":
                 w.watch = "off tide"
         windows.append(w)

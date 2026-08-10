@@ -95,6 +95,8 @@ LAKE_RUNS = {
 }
 
 # Lake Entrance (spec 4.2)
+# The *preferred* window: high tide to +2 h, the run-out. Not a gate - see
+# ENTRANCE_NO_GO_BEFORE_LOW_H for the only period that actually excludes a run.
 ENTRANCE_TIDE_WINDOW_H = 2.0
 # The tide gate downgrades an entrance window, it does not delete it (Rob,
 # 10 Aug 2026: "it can still work on the odd tide, so any suitable should be
@@ -103,12 +105,13 @@ ENTRANCE_TIDE_WINDOW_H = 2.0
 # WATCH in the ladder a yellow one lands on the calendar as a watch rather
 # than vanishing. Set to 0 to stop treating the tide as a penalty at all.
 ENTRANCE_OFF_TIDE_DOWNGRADE = 1
-# "The odd tide" is not "any time of day": a window six hours off the high is
-# sitting on the bottom of the ebb and genuinely doesn't work. Off-tide
-# windows survive only within this many hours of the gate, which keeps the
-# 10 Aug case (window opened at 07:00, gate closed 07:00 - zero hours out)
-# and still drops a dead-low-tide one.
-ENTRANCE_OFF_TIDE_TOLERANCE_H = 3.0
+# Rob, 11 Aug 2026, replacing a distance-from-the-gate heuristic with the
+# actual constraint: the entrance "can still work on any tide except the last
+# 4 hours before dead low - water flow is too much". That is peak ebb, the
+# lake draining through a narrow entrance, and it is a hard no rather than a
+# downgrade. Everything outside it is workable; the high-tide run-out above
+# is merely preferred.
+ENTRANCE_NO_GO_BEFORE_LOW_H = 4.0
 # Modelled sea level is hourly, so a tide peak lands anywhere in a +/- 30 min
 # band around the sample - the 10 Aug entrance miss turned on exactly that
 # (gate closed 07:00, window opened 07:00). high_tides()/low_tides() fit a
@@ -356,6 +359,8 @@ def validate() -> None:
 
     if ENTRANCE_OFF_TIDE_DOWNGRADE < 0:
         raise ConfigError("off-tide downgrade cannot be negative")
+    if not 0 <= ENTRANCE_NO_GO_BEFORE_LOW_H < 6:
+        raise ConfigError("entrance no-go window must be a sane part of one ebb")
 
     if not LAKE_ALERT_THRESHOLD_KN < LAKE_ALERT_STRONG_KN < LAKE_ALERT_LOUD_KN:
         raise ConfigError("lake alert tiers must be strictly ascending")

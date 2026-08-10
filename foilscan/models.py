@@ -162,8 +162,10 @@ class Window:
     # Why this only reached the watch tier ("one model only", "18 kn, needs
     # 20"). None on a real window.
     watch: str | None = None
-    # "in gate" | "off tide" for the tide-gated entrance families, None where
-    # the tide is irrelevant. Off-tide windows are downgraded, not deleted.
+    # "preferred" | "workable" for the entrance families, None where the tide
+    # is irrelevant. Workable windows are downgraded, not deleted; the only
+    # tide state that removes a window is the no-go before low, which is cut
+    # out of the span before a Window is ever built.
     tide_state: str | None = None
 
     @property
