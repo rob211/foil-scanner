@@ -14,7 +14,13 @@ today's calendar. A calm-looking week is never allowed to be a broken scanner.
 
 ## How it runs
 
-- `scan` (GitHub Actions, every 2 h): fetch forecasts, evaluate triggers,
+Triggering is done by the Cloudflare Worker in [cron-worker/](cron-worker/),
+not by GitHub's own cron: `schedule` events are deprioritised under load and
+shed 10 of ~13 live ticks on 10 Aug 2026, which is not something to hang a
+wind alert on. The workflows keep a sparse `schedule` block as a backstop, and
+a degraded cadence shows up as a `poll gap:` note in `data/live.json`.
+
+- `scan` (every 2 h): fetch forecasts, evaluate triggers,
   write `data/latest.json` (and `data/history/`), sync the calendar.
 - `live` (every 30 min from 5am-8pm local, hourly overnight): on days with
   events, verify against the BOM station and the Holfuy lake station

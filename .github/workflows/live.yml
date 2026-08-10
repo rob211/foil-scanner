@@ -2,12 +2,18 @@ name: live
 
 on:
   schedule:
-    # :23 every hour (always runs) plus :53 (daylight-only no-op check
-    # inside foilscan/live.py _should_run) - together a 30 min cadence
-    # while it's light in Sydney, hourly overnight. The daylight window is
-    # evaluated in Python against local time, so it shifts with DST without
-    # needing seasonal edits here.
-    - cron: "23,53 * * * *"
+    # BACKSTOP ONLY. The real cadence comes from the Cloudflare Worker in
+    # cron-worker/, which dispatches this workflow every 30 min in daylight
+    # and hourly overnight. GitHub's `schedule` queue is deprioritised under
+    # load and shed 10 of ~13 live ticks on 10 Aug 2026, with gaps up to
+    # 142 min - not something to hang a wind alert on.
+    #
+    # This tick exists so a dead Worker degrades the cadence instead of
+    # stopping it, and it is deliberately sparse: two reliable triggers at
+    # the old rate would double the Actions minutes, and the live job bills
+    # a whole minute per run however fast it exits. live.py's poll_gap_note
+    # reports the degraded cadence when the Worker stops.
+    - cron: "23 */3 * * *"
   workflow_dispatch: {}
 
 concurrency:

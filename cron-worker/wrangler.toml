@@ -1,0 +1,35 @@
+name = "foil-scanner-cron"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+# No public URL. Cron triggers fire regardless of routes, so a workers.dev
+# hostname would only expose the manual endpoint in src/index.js - attack
+# surface this Worker does not need, on an account that had no workers.dev
+# subdomain registered anyway. Set true (and register a subdomain) if you
+# want the manual POST endpoint reachable for debugging.
+workers_dev = false
+
+# ONE schedule. The Worker works out from the clock which workflows a tick
+# means (src/index.js plan()); it does not branch on event.cron, because two
+# crons keyed off event.cron sent both dispatches at 11:00 UTC on 10 Aug 2026
+# when "7 */2 * * *" should not have run at all.
+#
+# Times are UTC. Sydney is a whole number of hours ahead in both AEST and
+# AEDT, so ":00 / :30 UTC" is always ":00 / :30 local" and the daylight gate
+# inside the Worker shifts with DST on its own.
+[triggers]
+crons = ["*/30 * * * *"]
+
+[vars]
+GITHUB_REPO = "rob211/foil-scanner"
+GITHUB_REF = "main"
+
+# Secrets, set with `wrangler secret put` - never in this file:
+#   GITHUB_TOKEN        fine-grained PAT, repo rob211/foil-scanner,
+#                       permission "Actions: Read and write". Nothing else.
+#   CRON_SHARED_SECRET  guards the manual POST endpoint (any long random
+#                       string); the endpoint can start CI jobs that write to
+#                       a real calendar.
+
+[observability]
+enabled = true
