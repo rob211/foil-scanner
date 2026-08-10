@@ -2,6 +2,13 @@ name = "foil-scanner-cron"
 main = "src/index.js"
 compatibility_date = "2026-08-01"
 
+# No public URL. Cron triggers fire regardless of routes, so a workers.dev
+# hostname would only expose the manual endpoint in src/index.js - attack
+# surface this Worker does not need, on an account that had no workers.dev
+# subdomain registered anyway. Set true (and register a subdomain) if you
+# want the manual POST endpoint reachable for debugging.
+workers_dev = false
+
 # Two independent schedules. The Worker decides which workflow each one means
 # (src/index.js LIVE_CRON / SCAN_CRON) - keep these strings in sync with it.
 #

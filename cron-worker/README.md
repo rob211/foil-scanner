@@ -59,16 +59,22 @@ GitHub is the fix; the scanner code does not change.
    wrangler deploy
    ```
 
-3. Check the wiring without waiting for a cron:
+3. Check it fired: at the next :00 or :30 a `workflow_dispatch` run should
+   appear in the repo's Actions tab, and `wrangler tail` shows one JSON line
+   per fire.
+
+   The Worker deploys with `workers_dev = false`, so it has no public URL -
+   cron triggers do not need one, and the manual POST endpoint in
+   `src/index.js` is therefore unreachable by default. If you want it for
+   debugging, register a workers.dev subdomain, flip `workers_dev` to true,
+   and then:
 
    ```
    curl -X POST https://foil-scanner-cron.<subdomain>.workers.dev/live \
      -H "x-foil-key: <CRON_SHARED_SECRET>"
    ```
 
-   `202` plus a new `workflow_dispatch` run in the Actions tab means it works.
-   The endpoint is secret-gated because it can start jobs that write to a real
-   calendar.
+   It is secret-gated because it can start jobs that write to a real calendar.
 
 4. Watch it: `wrangler tail`, or the Workers dashboard. Each fire logs one
    JSON line - dispatched workflow, or why it skipped.
