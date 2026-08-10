@@ -214,12 +214,16 @@ def ensure_alert(
             continue
         keep_start = ev.get("start", {}).get("dateTime")
         if keep_start:
+            start = datetime.fromisoformat(keep_start)
             body["start"] = ev["start"]
+            # Track the latest observation plus a short tail, and never past
+            # the cap. Adding a full ALERT_DURATION_H on every poll turned a
+            # 5 h blow into a 7 h event.
             end = max(
-                datetime.fromisoformat(keep_start)
-                + timedelta(hours=config.ALERT_DURATION_H),
-                datetime.fromisoformat(body["end"]["dateTime"]),
+                start + timedelta(hours=config.ALERT_DURATION_H),
+                datetime.now(config.TZ) + timedelta(hours=config.ALERT_TAIL_H),
             )
+            end = min(end, start + timedelta(hours=config.ALERT_MAX_H))
             body["end"] = {"dateTime": end.isoformat(), "timeZone": str(config.TZ)}
         body.pop("reminders", None)
         svc.events().patch(calendarId=cal_id, eventId=ev["id"], body=body).execute()
@@ -287,7 +291,14 @@ def watch_digest_bodies(
         )
     out = {}
     for day, lines in by_day.items():
-        uniq = list(dict.fromkeys(names.get(day, [])))
+        # A lone single-model near miss is not worth a calendar entry. If most
+        # days carried one the marker would stop meaning anything, and the
+        # genuine maybes would stop standing out - which is the whole job of
+        # the digest. Near misses still ride along on days that have a watch,
+        # and the dashboard lists them all regardless.
+        if not names.get(day):
+            continue
+        uniq = list(dict.fromkeys(names[day]))
         head = ", ".join(uniq[:2]) + (f" +{len(uniq) - 2}" if len(uniq) > 2 else "")
         shown, hidden = lines[:config.WATCH_DIGEST_MAX_LINES], lines[config.WATCH_DIGEST_MAX_LINES:]
         if hidden:
@@ -306,7 +317,7 @@ def watch_digest_bodies(
         if len(body) > config.WATCH_DIGEST_MAX_CHARS:
             body = body[: config.WATCH_DIGEST_MAX_CHARS - 20].rstrip() + "\n... truncated"
         out[f"watch:{day}"] = {
-            "summary": f"WATCH: {head}" if uniq else "WATCH: near misses only",
+            "summary": f"WATCH: {head}",
             "description": body,
             "start": {"date": day},
             "end": {"date": _next_day(day)},

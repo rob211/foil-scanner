@@ -261,7 +261,8 @@ def live_alerts(
     out = []
     if not daylight:
         return out
-    for tid, (threshold, arc, run_name, pref) in config.LIVE_ALERT_TRIGGERS.items():
+    best: dict[str, dict] = {}
+    for tid, (threshold, arc, run_name, pref, group) in config.LIVE_ALERT_TRIGGERS.items():
         if tid in covered:
             continue
         obs = alert_obs(pref, bom, holfuy)
@@ -269,8 +270,15 @@ def live_alerts(
             continue
         if obs.speed_kn < threshold or not arc.contains(obs.dir_deg):
             continue
-        out.append(
-            {
+        # One alert per body of water. The lake bands abut exactly, so a wind
+        # hunting either side of a boundary used to mint an event per band,
+        # each with its own popup. Where two triggers on the same water both
+        # match, the one clearing its own bar by the widest margin wins.
+        margin = obs.speed_kn / threshold
+        if group in best and best[group]["_margin"] >= margin:
+            continue
+        best[group] = {
+                "_margin": margin,
                 "trigger_id": tid,
                 "run_name": run_name,
                 # The reading this decision was made on, so the calendar
@@ -281,9 +289,11 @@ def live_alerts(
                 "dir_deg": obs.dir_deg,
                 "threshold_kn": threshold,
                 "detail": (tide_notes or {}).get(tid, ""),
-                "foil_key": f"live-alert:{now.date().isoformat()}:{tid}",
-            }
-        )
+                "foil_key": f"live-alert:{now.date().isoformat()}:{group}",
+        }
+    for row in best.values():
+        row.pop("_margin", None)
+        out.append(row)
     return out
 
 
@@ -297,7 +307,28 @@ def bias_rows(latest: dict, now: datetime, obs_by_key: dict) -> list[dict]:
         (r for r in expected if datetime.fromisoformat(r["time"]) == hour), None
     )
     if row is None:
-        return []
+        # Returning [] made "the models were right" and "nobody checked"
+        # identical. Between midnight and the day's first scan, expected_today
+        # is yesterday's, and a bust left no trace at all - in the one place
+        # built to catch busts.
+        why = (
+            "no expectation published yet"
+            if not expected
+            else f"expectation is from {expected[0]['time'][:10]}, not {hour.date()}"
+        )
+        return [
+            {
+                "location": key,
+                "station": obs.station,
+                "observed_kn": round(obs.speed_kn, 1),
+                "forecast_kn": None,
+                "gap_kn": None,
+                "flagged": None,
+                "reason": why,
+            }
+            for key, obs in obs_by_key.items()
+            if obs is not None
+        ]
     out = []
     for key, obs in obs_by_key.items():
         if obs is None or key not in row:
@@ -485,6 +516,9 @@ def run(
         ]
 
     bias = bias_rows(latest, now, {"lake": holfuy, "ocean": bom})
+    unchecked = [b for b in bias if b.get("flagged") is None]
+    if unchecked:
+        notes.append(f"model bias not checked: {unchecked[0]['reason']}")
     for b in bias:
         if b["flagged"]:
             line = (

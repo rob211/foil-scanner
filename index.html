@@ -391,7 +391,9 @@
 <script>
 "use strict";
 const TZ = "Australia/Sydney";
-const STALE_HOURS = 8;
+// Fallback only. The live value comes from latest.json.heartbeat_max_age_h,
+// so config.py stays the single source of truth for the rule.
+const STALE_HOURS_FALLBACK = 8;
 const GRADE_WORD = { watch: "WATCH", green: "ON", yellow: "MAYBE", red: "FIRING" };
 const GRADE_RANK = { watch: 0, yellow: 1, green: 2, red: 3 };
 
@@ -628,7 +630,8 @@ function render(data, liveData, now) {
 
   let html = "";
   const badSources = Object.entries(data.sources || {}).filter(([, s]) => !s.ok);
-  if (ageH > STALE_HOURS) {
+  const staleAfter = Number(data.heartbeat_max_age_h) || STALE_HOURS_FALLBACK;
+  if (ageH > staleAfter) {
     html += alarm("SCANNER STALE", `Last successful check was ${ageH.toFixed(0)} h ago. Do not trust this page; check the Actions tab.`);
   }
   if (badSources.length) {

@@ -60,6 +60,10 @@ def build(
         "schema_version": config.SCHEMA_VERSION,
         "generated_at": now.isoformat(),
         "sources": {name: asdict(s) for name, s in sources.items()},
+        # Published so the dashboard stops carrying its own copy of the
+        # staleness rule. Two sources of truth for one threshold is the exact
+        # drift that made the 22 kn lake alert tier unreachable.
+        "heartbeat_max_age_h": config.HEARTBEAT_MAX_AGE_H,
         "expected_today": expected_today or [],
         "windows": [
             {

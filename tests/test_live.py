@@ -367,7 +367,8 @@ def test_run_fires_lake_alert_with_no_forecast_window_active(tmp_path, monkeypat
     # failed every time this fired).
     assert seen
     assert all(cal_id == "cal" for cal_id, _ in seen)
-    assert any(key.endswith("lake_kanahooka") for _, key in seen)
+    # Keyed on the water, not the crossing (see LIVE_ALERT_TRIGGERS).
+    assert any(key.endswith(":lake") for _, key in seen)
 
 
 def test_alert_prefers_the_windier_station_not_just_holfuy(tmp_path, monkeypatch):
@@ -500,8 +501,10 @@ def test_watch_digest_carries_near_misses_too():
         reason="cross_swell",
         detail="cross swell 1.2 m E, 95 deg off the wind",
     )
-    bodies = gcal.watch_digest_bodies([], [miss], NOW)
-    body = next(iter(bodies.values()))
+    # Near misses ride along on a day that has a watch; they do not create a
+    # digest on their own (that put a grey marker on almost every day).
+    assert gcal.watch_digest_bodies([], [miss], NOW) == {}
+    body = next(iter(gcal.watch_digest_bodies([_watch_window()], [miss], NOW).values()))
     assert "cross swell" in body["description"]
 
 
@@ -544,8 +547,65 @@ def test_bias_is_quiet_when_the_models_are_right():
     assert rows[0]["flagged"] is False
 
 
-def test_bias_survives_a_latest_json_from_before_the_field_existed():
-    assert live.bias_rows({}, NOW, {"ocean": obs(20.0, 300)}) == []
+def test_bias_says_it_could_not_check_rather_than_going_blank():
+    # An empty list read as "the models were right". Between midnight and the
+    # day's first scan that hid every bust, in the one place built to catch
+    # busts.
+    rows = live.bias_rows({}, NOW, {"ocean": obs(20.0, 300)})
+    assert len(rows) == 1
+    assert rows[0]["flagged"] is None
+    assert "no expectation" in rows[0]["reason"]
+
+    stale = {"expected_today": [
+        {"time": (NOW - timedelta(days=1)).replace(minute=0).isoformat(), "ocean": 12.0}
+    ]}
+    rows = live.bias_rows(stale, NOW, {"ocean": obs(30.0, 300)})
+    assert rows[0]["flagged"] is None and "not " in rows[0]["reason"]
+
+
+def test_one_alert_per_water_when_wind_sits_on_a_band_boundary():
+    # 258 deg matched Kanahooka, 262 matched Berkeley, and each minted its own
+    # event with its own popup.
+    for deg in (258, 262):
+        alerts = live.live_alerts(
+            NOW, obs(26.0, deg, station="Bellambi"), None, covered=set(), daylight=True
+        )
+        lake = [a for a in alerts if a["foil_key"].endswith(":lake")]
+        assert len(lake) == 1, deg
+
+
+def test_alert_end_tracks_the_wind_without_running_away(monkeypatch):
+    from datetime import datetime as _dt
+
+    start = NOW
+    existing = {
+        "id": "e1",
+        "extendedProperties": {"private": {"foil_key": "k"}},
+        "start": {"dateTime": start.isoformat(), "timeZone": str(config.TZ)},
+    }
+    patched = {}
+
+    class FakeEvents:
+        def list(self, **kw):
+            return type("R", (), {"execute": lambda s: {"items": [existing]}})()
+
+        def patch(self, **kw):
+            patched.update(kw["body"])
+            return type("R", (), {"execute": lambda s: {}})()
+
+    monkeypatch.setattr(gcal, "service", lambda: type("S", (), {"events": lambda s: FakeEvents()})())
+
+    class FrozenNow(_dt):
+        @classmethod
+        def now(cls, tz=None):
+            return start + timedelta(hours=5)
+
+    monkeypatch.setattr(gcal, "datetime", FrozenNow)
+    gcal.ensure_alert("run", obs(26.0, 275), start, "cal", "k")
+    end = _dt.fromisoformat(patched["end"]["dateTime"])
+    # 5 h in: end tracks the observation plus the tail, not +2 h per poll.
+    assert end == start + timedelta(hours=5 + config.ALERT_TAIL_H)
+    assert end - start <= timedelta(hours=config.ALERT_MAX_H)
 
 
 # ----------------------------------------------------------- poll gap
@@ -736,7 +796,7 @@ def test_watch_digest_stays_under_googles_description_limit():
                  reason="cross_swell", detail="cross swell 1.2 m E, 95 deg off the wind")
         for _ in range(400)
     ]
-    body = next(iter(gcal.watch_digest_bodies([], misses, NOW).values()))
+    body = next(iter(gcal.watch_digest_bodies([_watch_window()], misses, NOW).values()))
     assert len(body["description"]) <= config.WATCH_DIGEST_MAX_CHARS
     assert "more, see the dashboard" in body["description"]
 
