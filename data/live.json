@@ -1,64 +1,41 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-10T21:01:08.466069+10:00",
+  "generated_at": "2026-08-10T22:01:39.600596+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-10T20:30:00+10:00",
-    "speed_kn": 20.0,
-    "gust_kn": 38.9,
+    "time": "2026-08-10T21:30:00+10:00",
+    "speed_kn": 21.1,
+    "gust_kn": 37.3,
     "dir_deg": 270.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-10T20:59:30+10:00",
-    "speed_kn": 26.3,
-    "gust_kn": 37.4,
-    "dir_deg": 276.0
+    "time": "2026-08-10T22:01:30+10:00",
+    "speed_kn": 27.2,
+    "gust_kn": 36.0,
+    "dir_deg": 266.0
   },
   "checks": [],
-  "alerts": [
-    {
-      "trigger_id": "lake_berkeley",
-      "run_name": "Berkeley run",
-      "station": "Lake Illawarra",
-      "speed_kn": 26.3,
-      "dir_deg": 276.0,
-      "threshold_kn": 18.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-08-10:lake_berkeley",
-      "created": false
-    },
-    {
-      "trigger_id": "entrance_reverse",
-      "run_name": "Entrance reverse run (Boronia Ave)",
-      "station": "Lake Illawarra",
-      "speed_kn": 26.3,
-      "dir_deg": 276.0,
-      "threshold_kn": 20.0,
-      "detail": "Run-in gate today: 12:53-16:33.",
-      "foil_key": "live-alert:2026-08-10:entrance_reverse",
-      "created": false
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 26.3,
-      "forecast_kn": 15.7,
-      "gap_kn": 10.6,
+      "observed_kn": 27.2,
+      "forecast_kn": 15.1,
+      "gap_kn": 12.1,
       "flagged": true
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 20.0,
-      "forecast_kn": 14.7,
-      "gap_kn": 5.3,
+      "observed_kn": 21.1,
+      "forecast_kn": 14.8,
+      "gap_kn": 6.3,
       "flagged": false
     }
   ],
   "notes": [
-    "MODEL BUST (lake): observed 26 kn vs forecast 16 kn at Lake Illawarra"
+    "MODEL BUST (lake): observed 27 kn vs forecast 15 kn at Lake Illawarra"
   ]
 }
