@@ -123,7 +123,15 @@ The tide has three phases, not a gate (Rob, 11 Aug 2026 — refining the 10 Aug 
 | **Preferred** | overlapping high tide to +`ENTRANCE_TIDE_WINDOW_H` (2 h), the run-out | Full rating. |
 | **Workable** | any other tide | The run is on, just not at its best: keeps its event, drops `ENTRANCE_OFF_TIDE_DOWNGRADE` colour steps, gains an "off-tide" tag, and is recorded in `near_misses` with reason `off_tide`. |
 
-The window is **not clipped to the preferred period** — the whole workable stretch is runnable, so the event spans it and the description names the best part ("best 13:00-15:00 (run-out)").
+A qualifying stretch is **split at the preferred boundaries into separate events** (Rob, 11 Aug 2026), so the calendar shows when it is actually good rather than one long block carrying a single colour:
+
+```
+07:00-13:00  yellow   workable   (off-tide)
+13:00-15:00  green    preferred
+15:00-17:00  yellow   workable   (off-tide)
+```
+
+A shoulder shorter than an hour is dropped rather than emitted as a stub, matching the minimum window everywhere else. Two modes firing over the same piece still merge into one event (4.2); the merge only joins windows sharing a `tide_state`, so a workable window can never be promoted by folding a preferred one into it.
 
 Both entrance modes (4.2) and the reverse run (4.8) share the no-go: peak ebb is peak ebb whichever direction you are running. The reverse run keeps its own preferred window, the run-in (4.8).
 

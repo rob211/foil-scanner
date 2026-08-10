@@ -321,23 +321,36 @@ def test_baysurf_downgrades_outside_ideal_tide_window(sun):
 
 # ------------------------------------------------------------------ entrance
 
-def test_entrance_preferred_tide_is_full_rating_and_names_the_sweet_spot(sun):
-    # Rob, 11 Aug 2026: the run-out is preferred, not required. The event
-    # spans the whole workable stretch and the description says which part is
-    # best, rather than the window being clamped to the two hours.
+def test_entrance_splits_the_run_out_from_its_shoulders(sun):
+    # Rob, 11 Aug 2026: the run-out gets its own full-rating event and the
+    # rest of the workable stretch is downgraded around it, so the calendar
+    # shows when it is actually good rather than one long single-coloured
+    # block.
     wind = mk_wind(hours(range(8, 16), 6, 270), location_key="entrance")
     marine = mk_marine(0.9, 90, high_tide_hour=13)
     windows, _ = entrance_windows(wind, marine, sun, NOW)
-    assert len(windows) == 1
-    w = windows[0]
-    assert w.trigger_id == "entrance_swell"
-    assert w.grade == "green"          # full rating: it covers the run-out
-    assert w.tide_state == "preferred"
-    assert w.start == at(7) and w.end == at(17)
-    assert any("best 13:00-15:00" in n for n in w.notes)
-    assert w.high_tide == at(13).isoformat()
+    by_start = sorted(windows, key=lambda w: w.start)
+    assert [(w.start.hour, w.end.hour, w.grade, w.tide_state) for w in by_start] == [
+        (7, 13, "yellow", "workable"),
+        (13, 15, "green", "preferred"),
+        (15, 17, "yellow", "workable"),
+    ]
+    run_out = by_start[1]
+    assert run_out.trigger_id == "entrance_swell"
+    assert run_out.title_tags == []                 # only the shoulders are tagged
+    assert all("off-tide" in w.title_tags for w in (by_start[0], by_start[2]))
+    assert run_out.high_tide == at(13).isoformat()
     # Height is the modelled sea level (0.0 at the peak here) plus the offset.
-    assert w.high_tide_m == config.TIDE_HEIGHT_OFFSET_M
+    assert run_out.high_tide_m == config.TIDE_HEIGHT_OFFSET_M
+
+
+def test_entrance_sub_hour_shoulder_is_dropped_not_stubbed(sun):
+    # A 30-minute leftover either side of the run-out is below the minimum
+    # window used everywhere else; it should vanish, not become a stub event.
+    wind = mk_wind(hours(range(12, 16), 6, 270), location_key="entrance")
+    marine = mk_marine(0.9, 90, high_tide_hour=13)
+    windows, _ = entrance_windows(wind, marine, sun, NOW)
+    assert all((w.end - w.start) >= HOUR for w in windows)
 
 
 def test_entrance_mode1_swell_direction_matters(sun):
@@ -361,9 +374,10 @@ def test_entrance_mode2_strong_ne(sun):
     wind = mk_wind(hours(range(8, 16), 20, 50), location_key="entrance")
     marine = mk_marine(0.2, 90, high_tide_hour=13)
     windows, _ = entrance_windows(wind, marine, sun, NOW)
-    assert len(windows) == 1
-    assert windows[0].trigger_id == "entrance_ne"
-    assert windows[0].grade == "green"
+    run_out = [w for w in windows if w.tide_state == "preferred"]
+    assert len(run_out) == 1
+    assert run_out[0].trigger_id == "entrance_ne"
+    assert run_out[0].grade == "green"
 
 
 def test_entrance_both_modes_merge(sun):
@@ -376,7 +390,11 @@ def test_entrance_both_modes_merge(sun):
     )
     marine = mk_marine(0.9, 90, high_tide_hour=13)
     windows, _ = entrance_windows(wind, marine, sun, NOW)
-    assert len(windows) == 1
+    # One event per tide phase, not one per mode: the run-out piece carries
+    # both modes rather than appearing twice.
+    run_out = [w for w in windows if w.tide_state == "preferred"]
+    assert len(run_out) == 1
+    windows = run_out
     assert any("also fires as" in n for n in windows[0].notes)
     # entrance_ne (mode 2) sorts first and survives as the merged event here,
     # but never sets swell fields itself - the swell numbers that justified

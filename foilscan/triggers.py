@@ -485,7 +485,20 @@ def _phase_spans(
                 if overlap >= HOUR and (best is None or overlap > best[0]):
                     best = (overlap, p_lo, p_hi, tag)
             if best is not None:
-                out.append((lo, hi, best[3], "preferred", (best[1], best[2])))
+                # Split rather than grade the whole stretch off its best part
+                # (Rob, 11 Aug 2026): the run-out becomes its own full-rating
+                # event and the shoulders become downgraded ones, so the
+                # calendar shows when it is actually good instead of one long
+                # block carrying a single colour.
+                _, p_lo, p_hi, tag = best
+                inside = (max(lo, p_lo), min(hi, p_hi))
+                shoulders = [(lo, inside[0]), (inside[1], hi)]
+                out.append((inside[0], inside[1], tag, "preferred", None))
+                for s_lo, s_hi in shoulders:
+                    # Sub-hour remainders are dropped, matching the minimum
+                    # window everywhere else rather than emitting a stub.
+                    if s_hi - s_lo >= HOUR:
+                        out.append((s_lo, s_hi, tag, "workable", None))
             elif preferred:
                 mid = lo + (hi - lo) / 2
                 nearest = min(
@@ -622,7 +635,7 @@ def entrance_windows(
         if t in swell_ok
     }
     m1_hours = _active_hours(m1_map, sun, config.MIN_MODELS_AGREE)
-    for start, end, ht, tide_state, best in _entrance_phases(_group(m1_hours), marine):
+    for start, end, ht, tide_state, _ in _entrance_phases(_group(m1_hours), marine):
         hours = [t for t in m1_map if start <= t < end]
         peak_time = max(hours, key=lambda t: marine.at(t).swell_m)
         mh = marine.at(peak_time)
@@ -661,11 +674,6 @@ def entrance_windows(
                 high_tide=ht.time.isoformat(),
                 high_tide_m=_tide_height_cd(ht),
                 tide_state=tide_state,
-                notes=(
-                    [f"best {best[0]:%H:%M}-{best[1]:%H:%M} (run-out)"]
-                    if best is not None and (best[0] > start or best[1] < end)
-                    else []
-                ),
                 confidence=(
                     "low (long range)"
                     if offset >= config.LOW_CONFIDENCE_FROM_DAY_OFFSET
@@ -682,7 +690,7 @@ def entrance_windows(
 
     m2_map = _qualifying_by_hour(wind, m2_wind)
     m2_hours = _active_hours(m2_map, sun, config.MIN_MODELS_AGREE)
-    for start, end, ht, tide_state, best in _entrance_phases(_group(m2_hours), marine):
+    for start, end, ht, tide_state, _ in _entrance_phases(_group(m2_hours), marine):
         w = _window_from_span(
             "entrance_ne",
             "Lake Entrance (NE wind)",
@@ -694,8 +702,6 @@ def entrance_windows(
         w.high_tide = ht.time.isoformat()
         w.high_tide_m = _tide_height_cd(ht)
         w.tide_state = tide_state
-        if best is not None and (best[0] > start or best[1] < end):
-            w.notes.append(f"best {best[0]:%H:%M}-{best[1]:%H:%M} (run-out)")
         windows.append(w)
 
     # Off-tide is a penalty, not a veto (config.ENTRANCE_OFF_TIDE_DOWNGRADE).
@@ -717,7 +723,13 @@ def entrance_windows(
     merged: list[Window] = []
     for w in sorted(windows, key=lambda w: (w.start, w.trigger_id)):
         clash = next(
-            (m for m in merged if m.start < w.end and w.start < m.end), None
+            (
+                m
+                for m in merged
+                if m.start < w.end and w.start < m.end
+                and m.tide_state == w.tide_state
+            ),
+            None,
         )
         if clash is None:
             merged.append(w)
