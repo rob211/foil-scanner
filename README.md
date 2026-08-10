@@ -34,6 +34,19 @@ Manual cross-checks (not used by the code):
 [BOM station page](https://www.bom.gov.au/products/IDN60801/IDN60801.94749.shtml),
 [Holfuy 366](https://holfuy.com/en/data/366).
 
+## Snapshot
+
+`python -m foilscan snapshot` prints what it is doing right now: observed wind
+from both stations, the median model wind for the same hour beside it (so a
+bust is visible rather than implied), swell height/direction/period with a
+3 h trend, tide height above chart datum with flood/ebb and the next high and
+low, today's tide gates, and daylight remaining. Read-only - no calendar
+writes, nothing committed, so it is safe to run any time.
+
+Marine data is hourly; the tide and swell figures are interpolated to the
+current minute rather than snapped to the last sample. `HOLFUY_KEY` in the
+environment adds the lake station line.
+
 ## Dashboard
 
 A single self-contained page (`index.html`) on GitHub Pages reads

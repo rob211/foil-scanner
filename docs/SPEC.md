@@ -325,6 +325,22 @@ The prime directive: this scanner must never quietly show a calm week because so
 5. Calibration fortnight: compare modelled high-tide times against BOM Port Kembla tide predictions, sanity-check the Holfuy 0.9 factor against BOM on a windy lake day, eyeball events against Windguru and WillyWeather, and tune coordinates or thresholds. Log findings in the repo.
 6. Later: GitHub Pages dashboard reading `data/latest.json` and `data/history/`. Nothing in phases 1-5 may assume the calendar is the only consumer.
 
+## 12. Snapshot command
+
+`python -m foilscan snapshot` is a read-only report of current conditions:
+observed wind (both stations), median model wind for the same hour alongside
+it, swell (height, direction, period, 3 h trend), tide (height above chart
+datum, flood/ebb, next high and low), today's tide gates for 4.2 and 4.8, and
+daylight remaining.
+
+- It writes nothing - no calendar, no JSON - so the loud-failure rules in
+  section 8 do not apply and a dead source degrades its own line into a
+  PROBLEMS list rather than failing the process.
+- Hourly marine samples are interpolated to the current minute. The tide moves
+  enough within an hour that reporting the last sample as "now" misleads, and
+  swell direction is interpolated the short way round so a swell near north
+  does not average to south.
+
 ## 11. Dependencies
 
 Keep it lean: `requests`, `google-api-python-client`, `google-auth`, `pytest`. Stdlib `zoneinfo` for timezones. No pandas, no scraping libraries.

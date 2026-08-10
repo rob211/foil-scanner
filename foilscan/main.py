@@ -143,6 +143,14 @@ def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
     return 0
 
 
+def snapshot_cmd(now: datetime) -> int:
+    from . import snapshot
+
+    for line in snapshot.run(now):
+        print(line)
+    return 0
+
+
 def live_cmd(now: datetime, dry_run: bool, data_dir: str) -> int:
     from . import live
 
@@ -153,7 +161,7 @@ def live_cmd(now: datetime, dry_run: bool, data_dir: str) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="foilscan")
-    parser.add_argument("command", choices=["scan", "live"])
+    parser.add_argument("command", choices=["scan", "live", "snapshot"])
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--data-dir", default=config.DATA_DIR)
     args = parser.parse_args(argv)
@@ -163,11 +171,15 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.command == "scan":
             return scan(now, args.dry_run, args.data_dir)
+        if args.command == "snapshot":
+            # Read-only: never writes the calendar, so the SCANNER BROKEN
+            # path below must not fire for it either.
+            return snapshot_cmd(now)
         return live_cmd(now, args.dry_run, args.data_dir)
     except Exception as exc:  # noqa: BLE001 - loud failure path (spec 8)
         traceback.print_exc()
         reason = f"{type(exc).__name__}: {exc}"
-        if not args.dry_run:
+        if not args.dry_run and args.command != "snapshot":
             try:
                 gcal.write_broken_event(reason, now)
                 print("wrote SCANNER BROKEN calendar flag", file=sys.stderr)
