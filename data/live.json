@@ -1,47 +1,41 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-10T16:44:50.987205+10:00",
+  "generated_at": "2026-08-10T18:17:46.451207+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-10T16:30:00+10:00",
-    "speed_kn": 20.0,
-    "gust_kn": 27.0,
-    "dir_deg": 292.5
+    "time": "2026-08-10T18:00:00+10:00",
+    "speed_kn": 14.0,
+    "gust_kn": 24.8,
+    "dir_deg": 247.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-10T16:43:30+10:00",
-    "speed_kn": 14.1,
-    "gust_kn": 17.0,
-    "dir_deg": 273.0
+    "time": "2026-08-10T18:17:30+10:00",
+    "speed_kn": 8.3,
+    "gust_kn": 10.2,
+    "dir_deg": 250.0
   },
-  "checks": [
-    {
-      "foil_key": "baysurf:2026-08-10:15",
-      "state": "confirmed",
-      "live_line": "20 kn WNW at 16:30 (Bellambi), forecast 14.4 kn"
-    }
-  ],
+  "checks": [],
   "alerts": [],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 14.1,
-      "forecast_kn": 13.9,
-      "gap_kn": 0.2,
+      "observed_kn": 8.3,
+      "forecast_kn": 11.2,
+      "gap_kn": -2.9,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 20.0,
-      "forecast_kn": 13.7,
-      "gap_kn": 6.3,
+      "observed_kn": 14.0,
+      "forecast_kn": 10.9,
+      "gap_kn": 3.1,
       "flagged": false
     }
   ],
   "notes": [
-    "poll gap: 106 min since the last live check (14:58); GitHub shed scheduled runs, live alerts could be that late"
+    "poll gap: 93 min since the last live check (16:44); GitHub shed scheduled runs, live alerts could be that late"
   ]
 }
