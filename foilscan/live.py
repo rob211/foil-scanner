@@ -34,10 +34,20 @@ WIND_TARGETS = {
 }
 
 
-def _should_run(now: datetime) -> bool:
-    """live.yml's cron fires at :23 and :53. The :23 tick keeps the original
-    hourly cadence at all hours; the :53 tick is the extra daylight-only
-    poll, gated on local wall-clock hour so DST shifts it automatically."""
+def _should_run(now: datetime, force: bool = False) -> bool:
+    """Whether this tick should do any work.
+
+    `force` short-circuits it for a dispatched run. The Cloudflare Worker
+    applies this same rule before dispatching, so re-applying it here can
+    only produce false negatives: the gate is evaluated against the moment
+    GitHub *starts* the job, not the moment the Worker asked for it, and a
+    :00 dispatch that starts after :30 was being dropped overnight without
+    writing live.json at all.
+
+    The repo's own schedule backstop still arrives ungated, so the rule has
+    to stay for that path."""
+    if force:
+        return True
     if now.minute < 30:
         return True
     return config.LIVE_FAST_POLL_START_HOUR <= now.hour < config.LIVE_FAST_POLL_END_HOUR
@@ -251,7 +261,8 @@ def live_alerts(
     out = []
     if not daylight:
         return out
-    for tid, (threshold, arc, run_name, pref) in config.LIVE_ALERT_TRIGGERS.items():
+    best: dict[str, dict] = {}
+    for tid, (threshold, arc, run_name, pref, group) in config.LIVE_ALERT_TRIGGERS.items():
         if tid in covered:
             continue
         obs = alert_obs(pref, bom, holfuy)
@@ -259,8 +270,15 @@ def live_alerts(
             continue
         if obs.speed_kn < threshold or not arc.contains(obs.dir_deg):
             continue
-        out.append(
-            {
+        # One alert per body of water. The lake bands abut exactly, so a wind
+        # hunting either side of a boundary used to mint an event per band,
+        # each with its own popup. Where two triggers on the same water both
+        # match, the one clearing its own bar by the widest margin wins.
+        margin = obs.speed_kn / threshold
+        if group in best and best[group]["_margin"] >= margin:
+            continue
+        best[group] = {
+                "_margin": margin,
                 "trigger_id": tid,
                 "run_name": run_name,
                 # The reading this decision was made on, so the calendar
@@ -271,9 +289,11 @@ def live_alerts(
                 "dir_deg": obs.dir_deg,
                 "threshold_kn": threshold,
                 "detail": (tide_notes or {}).get(tid, ""),
-                "foil_key": f"live-alert:{now.date().isoformat()}:{tid}",
-            }
-        )
+                "foil_key": f"live-alert:{now.date().isoformat()}:{group}",
+        }
+    for row in best.values():
+        row.pop("_margin", None)
+        out.append(row)
     return out
 
 
@@ -287,7 +307,28 @@ def bias_rows(latest: dict, now: datetime, obs_by_key: dict) -> list[dict]:
         (r for r in expected if datetime.fromisoformat(r["time"]) == hour), None
     )
     if row is None:
-        return []
+        # Returning [] made "the models were right" and "nobody checked"
+        # identical. Between midnight and the day's first scan, expected_today
+        # is yesterday's, and a bust left no trace at all - in the one place
+        # built to catch busts.
+        why = (
+            "no expectation published yet"
+            if not expected
+            else f"expectation is from {expected[0]['time'][:10]}, not {hour.date()}"
+        )
+        return [
+            {
+                "location": key,
+                "station": obs.station,
+                "observed_kn": round(obs.speed_kn, 1),
+                "forecast_kn": None,
+                "gap_kn": None,
+                "flagged": None,
+                "reason": why,
+            }
+            for key, obs in obs_by_key.items()
+            if obs is not None
+        ]
     out = []
     for key, obs in obs_by_key.items():
         if obs is None or key not in row:
@@ -358,8 +399,13 @@ def apply_status(svc, cal_id: str, w: dict, state: str, live_line: str, dry_run:
     return msg
 
 
-def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -> list[str]:
-    if not _should_run(now):
+def run(
+    now: datetime,
+    dry_run: bool = False,
+    data_dir: str = config.DATA_DIR,
+    force: bool = False,
+) -> list[str]:
+    if not _should_run(now, force):
         return [
             f"skipped: {now:%H:%M} fast-poll tick is outside local daylight hours "
             f"({config.LIVE_FAST_POLL_START_HOUR:02d}:00-{config.LIVE_FAST_POLL_END_HOUR:02d}:00), "
@@ -470,6 +516,9 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
         ]
 
     bias = bias_rows(latest, now, {"lake": holfuy, "ocean": bom})
+    unchecked = [b for b in bias if b.get("flagged") is None]
+    if unchecked:
+        notes.append(f"model bias not checked: {unchecked[0]['reason']}")
     for b in bias:
         if b["flagged"]:
             line = (
@@ -479,21 +528,32 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
             notes.append(line)
             log.append(line)
 
+    checked_ok = True
     for w in todays:
-        obs, note = pick_obs(w, bom, holfuy)
-        state, live_line = status_for(w, obs, now)
-        if note:
-            live_line += f" ({note})"
-        checks.append(
-            {"foil_key": w["foil_key"], "state": state, "live_line": live_line}
-        )
-        if state == "none":
-            log.append(f"{w['foil_key']}: skipped ({live_line})")
-            continue
-        if dry_run:
-            log.append(f"DRY RUN {w['foil_key']}: {state} ({live_line})")
-        else:
-            log.append(apply_status(svc, cal_id, w, state, live_line, dry_run))
+        try:
+            obs, note = pick_obs(w, bom, holfuy)
+            state, live_line = status_for(w, obs, now)
+            if note:
+                live_line += f" ({note})"
+            checks.append(
+                {"foil_key": w["foil_key"], "state": state, "live_line": live_line}
+            )
+            if state == "none":
+                log.append(f"{w['foil_key']}: skipped ({live_line})")
+                continue
+            if dry_run:
+                log.append(f"DRY RUN {w['foil_key']}: {state} ({live_line})")
+            else:
+                log.append(apply_status(svc, cal_id, w, state, live_line, dry_run))
+        except Exception as exc:  # noqa: BLE001 - noted, and re-raised below
+            # One window with no event_id (a sync that failed part-way) used
+            # to raise straight out of here and take every other check on the
+            # day down with it - including the safety-net alerts, which are
+            # the part that matters most when something is already wrong.
+            checked_ok = False
+            msg = f"{w.get('foil_key', w['trigger_id'])}: check failed: {exc}"
+            notes.append(msg)
+            log.append(msg)
     if not todays:
         log.append("no windows near now; nothing to verify on the calendar")
 
@@ -509,5 +569,11 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
         log.append(
             f"live.json: {bom.station} {bom.speed_kn:.0f} kn at {bom.time:%H:%M}, "
             f"{len(checks)} check(s)"
+        )
+    if not checked_ok:
+        # Everything else finished first, but the run still fails loudly
+        # (spec 8.9): a window that cannot be verified is a real problem.
+        raise CalendarError(
+            "one or more window checks failed; see notes in live.json"
         )
     return log

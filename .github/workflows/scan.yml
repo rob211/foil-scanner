@@ -11,7 +11,16 @@ on:
   workflow_dispatch: {}
 
 concurrency:
-  group: foil-scanner-data
+  # Per-workflow, NOT shared. A shared group meant scan and live collided
+  # every even hour when the Worker dispatched both in the same second, and
+  # GitHub cancels a pending run that a newer one displaces - silently: no
+  # non-zero exit, so no failure email, no SCANNER BROKEN event, and no
+  # data written for anything downstream to notice. One scan was lost that
+  # way on 10 Aug 2026 before anyone looked.
+  #
+  # The two jobs write different files, so they no longer need serialising;
+  # the push retry below handles the race they can still lose.
+  group: foil-scanner-scan
   cancel-in-progress: false
 
 permissions:
@@ -39,5 +48,11 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           git add data
           git diff --cached --quiet || git commit -m "data: scan $(date -u +%FT%TZ)"
-          git pull --rebase origin main
-          git push
+          # Retry: without the shared concurrency group the live job can land
+          # a commit between our rebase and our push. Different files, so the
+          # rebase merges cleanly - it is only the push that races.
+          for attempt in 1 2 3 4 5; do
+            git pull --rebase origin main && git push && break
+            echo "push attempt $attempt lost the race, retrying"
+            sleep $((attempt * 3))
+          done

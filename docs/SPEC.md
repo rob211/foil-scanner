@@ -221,7 +221,7 @@ Below yellow sits `watch`, a deliberately wide net whose only job is to say "wor
 
 A watch never overrules a deliberate veto: if a span is strong enough *and* agreed on but still has no window, something downstream killed it on purpose (the 4.6 swell rules), and it stays killed and stays in `near_misses`.
 
-Watch windows do not get their own calendar events. Each day's collect into one graphite all-day digest keyed `watch:<date>`, which also lists that day's near misses. They are excluded from live verification (they have no event to patch) and never take the dashboard's headline verdict while a real window exists.
+Watch windows do not get their own calendar events. Each day's collect into one graphite all-day digest keyed `watch:<date>`, which also lists that day's near misses. A day with near misses but no watch window gets **no** digest — a lone single-model miss is not worth a calendar entry, and a marker on almost every day would stop meaning anything. The digest is capped at `WATCH_DIGEST_MAX_LINES` and hard-truncated at `WATCH_DIGEST_MAX_CHARS`, well under Google's 8192-character limit; exceeding it returns a 400 that would take the whole calendar sync with it. They are excluded from live verification (they have no event to patch) and never take the dashboard's headline verdict while a real window exists.
 
 ## 5. Model consensus
 
@@ -260,8 +260,13 @@ Yellow windows are "worth watching" and do create events. Entrance mode 1 is gra
   - Timed, not all-day: an all-day event's reminder offset is measured from local midnight, so it cannot ring when the wind is actually blowing. The event starts `config.ALERT_LEAD_S` ahead of now, because Google drops a popup whose start is already past.
   - Re-polling patches the title, description and end but never the start or the reminder, so a four-hour blow pings once.
   - Station choice takes the **windier** of Holfuy and BOM for lake and entrance runs. `holfuy or bom` meant the coastal reading was discarded whenever Holfuy answered; on 10 Aug Holfuy read 19 kn mid-lake while Bellambi did 31.9, and nothing fired for another 2.5 h.
-  - Alerts are suppressed for any trigger that already has a live window on the calendar — that is the verification job's business, and double-notifying is worse than not notifying.
-  - `sync` must never delete `live-alert:*` or `lake-alert:*` as stale; the point of them is that no forecast window exists.
+  - Alerts are keyed on the **body of water**, not the individual crossing (`config.LIVE_ALERT_TRIGGERS`'s `group`). The lake bands abut exactly, so a wind hunting either side of a boundary otherwise minted an event, and a popup, per band. Where two triggers on one water both match, the one clearing its own bar by the widest margin wins.
+- A refreshed alert's end tracks the latest observation plus `ALERT_TAIL_H`, capped at `ALERT_MAX_H` from the start. Adding a full `ALERT_DURATION_H` on every poll grew a 5 h blow into a 7 h event.
+- Alerts are suppressed for any trigger that already has a live window on the calendar — that is the verification job's business, and double-notifying is worse than not notifying.
+  - `sync` must never delete the current day's `live-alert:*` as stale; the point of them is that no forecast window exists. Older ones are swept.
+- The alert's start is computed from the clock **at the moment of the calendar write**, not from the run's start time. A run that has spent a minute on fetches would otherwise post a start already in the past, and Google silently declines to fire a popup for one (11 Aug 2026 audit).
+- The two workflows use **separate** concurrency groups. A shared one let GitHub cancel a pending run that a newer one displaced — silently, with no non-zero exit, no failure email and no data written. They write different files; the push retry in each workflow handles the race that remains.
+- `sync` finishes its pass before failing: a per-event error is collected and raised at the end, never mid-loop. Aborting halfway left later windows with no `event_id` on disk, which the next live run then died on. The live check loop contains per-window failures the same way, so one unverifiable window cannot take the safety-net alerts down with it.
 - Every all-day event body (`broken:*`, `watch:*`) must set `end.date` to the **day after** `start.date`. Google treats it as exclusive, so `start == end` is a zero-length event.
 - Live verification updates (hourly job, trigger days only):
   - Confirmed (live reading at 90% of threshold or better, direction in band): prepend a tick to the title (`LIVE NOW:` plus tick emoji) and arm a 30-minute popup reminder via `reminders.overrides`, so the phone pings through the calendar itself.
@@ -335,7 +340,9 @@ The prime directive: this scanner must never quietly show a calm week because so
 }
 ```
 
-`live.json` also carries `alerts` (live wind matching a trigger with no forecast window behind it) and `bias` (observed minus forecast for the current hour, with `flagged` set past `config.BIAS_FLAG_KN`). A poll gap longer than `config.LIVE_POLL_GAP_WARN_MIN` is recorded in `notes`: GitHub sheds scheduled runs, and on 10 Aug it shed three consecutive live ticks across the peak of the blow, which looked identical to a quiet morning.
+`live.json` also carries `alerts` (live wind matching a trigger with no forecast window behind it) and `bias` (observed minus forecast for the current hour, with `flagged` set past `config.BIAS_FLAG_KN`). When the hour cannot be checked — no scan has run yet today, so `expected_today` is yesterday's — `bias` carries rows with `flagged: null` and a `reason` instead of being empty, because an empty list read as "the models were right".
+
+`latest.json` carries `heartbeat_max_age_h` so the dashboard uses `config.HEARTBEAT_MAX_AGE_H` rather than its own copy of the staleness rule. A poll gap longer than `config.LIVE_POLL_GAP_WARN_MIN` is recorded in `notes`: GitHub sheds scheduled runs, and on 10 Aug it shed three consecutive live ticks across the peak of the blow, which looked identical to a quiet morning.
 
 `obs.dir_deg` is null when BOM reports CALM. `obs` itself is null only when the BOM fetch failed; the reason lands in `notes` and the run still exits non-zero (section 8). The dashboard overlays `checks` onto the `latest.json` windows by `foil_key` and renders `obs` as the live tile. BOM is fetched every live run, window or not, so the tile stays current all day.
 

@@ -506,6 +506,15 @@ def _phase_spans(
                     key=lambda p: abs(((p[0] + (p[1] - p[0]) / 2) - mid).total_seconds()),
                 )
                 out.append((lo, hi, nearest[2], "workable", None))
+            else:
+                # No tide to label it with, but the run itself is not in
+                # doubt - the no-go has already been subtracted. This used to
+                # fall off the end of the elif and drop qualifying conditions
+                # with no window AND no near miss, which is the silent calm
+                # week spec 8 exists to prevent. high_tides() ignores the
+                # first and last samples, so a high on the edge of the
+                # forecast axis is invisible and this is reachable.
+                out.append((lo, hi, None, "workable", None))
     return out
 
 
@@ -671,8 +680,8 @@ def entrance_windows(
                 },
                 swell_m=round(mh.swell_m, 2),
                 swell_dir_deg=round(mh.swell_dir_deg, 0),
-                high_tide=ht.time.isoformat(),
-                high_tide_m=_tide_height_cd(ht),
+                high_tide=ht.time.isoformat() if ht is not None else None,
+                high_tide_m=_tide_height_cd(ht) if ht is not None else None,
                 tide_state=tide_state,
                 confidence=(
                     "low (long range)"
@@ -699,8 +708,9 @@ def entrance_windows(
             now,
             config.ENTRANCE_M2_TARGET_KN,
         )
-        w.high_tide = ht.time.isoformat()
-        w.high_tide_m = _tide_height_cd(ht)
+        if ht is not None:
+            w.high_tide = ht.time.isoformat()
+            w.high_tide_m = _tide_height_cd(ht)
         w.tide_state = tide_state
         windows.append(w)
 
@@ -762,7 +772,7 @@ def entrance_windows(
         "entrance_ne", m2_map, sun, merged, valid_spans=valid,
     )
     for w in merged:
-        if w.tide_state == "workable":
+        if w.tide_state == "workable" and w.high_tide is not None:
             misses.append(
                 NearMiss(
                     trigger_id=w.trigger_id,
@@ -823,7 +833,9 @@ def entrance_reverse_windows(
         [(t_lo, t_hi, (lt, ht)) for t_lo, t_hi, lt, ht in tide_spans],
         _no_go_spans(marine),
     ):
-        lt, ht = tides
+        # tides is None when the horizon holds no run-in window to name -
+        # the run is still valid, it just cannot be labelled with a tide.
+        lt, ht = tides if tides is not None else (None, None)
         w = _window_from_span(
             "entrance_reverse",
             "Entrance reverse run (Boronia Ave)",
@@ -836,9 +848,11 @@ def entrance_reverse_windows(
         if not config.ENTRANCE_REVERSE_TRUE_ARC.contains(w.direction_deg):
             w.grade = downgrade(w.grade)
             w.title_tags.append(f"off-angle {compass(w.direction_deg)}")
-        w.high_tide = ht.time.isoformat()
-        w.high_tide_m = _tide_height_cd(ht)
-        w.notes.append(f"low tide {lt.time:%H:%M}")
+        if ht is not None:
+            w.high_tide = ht.time.isoformat()
+            w.high_tide_m = _tide_height_cd(ht)
+        if lt is not None:
+            w.notes.append(f"low tide {lt.time:%H:%M}")
         w.tide_state = tide_state
         if tide_state == "workable" and config.ENTRANCE_OFF_TIDE_DOWNGRADE:
             # Same call as the standard entrance runs: the incoming-tide gate

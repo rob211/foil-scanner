@@ -75,7 +75,43 @@ export function plan(date) {
   return { live: shouldDispatchLive(date), scan: shouldDispatchScan(date) };
 }
 
-async function dispatch(workflow, env) {
+const GH_TIMEOUT_MS = 15000;
+// Cloudflare cron delivery is at-least-once, and a duplicate was observed on
+// 10 Aug (20:00:27 and 20:00:56). Harmless to the calendar - sync is
+// diff-based - but each one bills a full Actions minute.
+const DEDUPE_WINDOW_MS = 5 * 60 * 1000;
+
+function ghHeaders(env) {
+  return {
+    Authorization: `Bearer ${env.GITHUB_TOKEN}`,
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28",
+    "User-Agent": "foil-scanner-cron",
+  };
+}
+
+/** True when this workflow already has a run created very recently. */
+async function ranRecently(workflow, env) {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${env.GITHUB_REPO}` +
+        `/actions/workflows/${workflow}/runs?per_page=1&event=workflow_dispatch`,
+      { headers: ghHeaders(env), signal: AbortSignal.timeout(GH_TIMEOUT_MS) }
+    );
+    if (!res.ok) return false;           // can't tell - dispatching twice
+    const data = await res.json();       // beats not dispatching at all
+    const last = data.workflow_runs && data.workflow_runs[0];
+    if (!last) return false;
+    return Date.now() - Date.parse(last.created_at) < DEDUPE_WINDOW_MS;
+  } catch {
+    return false;
+  }
+}
+
+export async function dispatch(workflow, env) {
+  if (await ranRecently(workflow, env)) {
+    return { ok: true, workflow, skipped: "dispatched within the dedupe window" };
+  }
   const url =
     `https://api.github.com/repos/${env.GITHUB_REPO}` +
     `/actions/workflows/${workflow}/dispatches`;
@@ -86,14 +122,11 @@ async function dispatch(workflow, env) {
     try {
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${env.GITHUB_TOKEN}`,
-          Accept: "application/vnd.github+json",
-          "X-GitHub-Api-Version": "2022-11-28",
-          "User-Agent": "foil-scanner-cron",
-          "Content-Type": "application/json",
-        },
+        headers: { ...ghHeaders(env), "Content-Type": "application/json" },
         body: JSON.stringify({ ref: env.GITHUB_REF || "main" }),
+        // Without this a hung subrequest burns the whole invocation and the
+        // tick is lost, with the retry loop below never reached.
+        signal: AbortSignal.timeout(GH_TIMEOUT_MS),
       });
       if (res.status === 204) return { ok: true, workflow };
       // Never log the response body verbatim; it can echo request detail.
@@ -113,17 +146,34 @@ export default {
     const work = async () => {
       // event.cron is recorded, never branched on - see the note at the top.
       const log = { cron: event.cron, at: now.toISOString(), live, scan };
+      const wanted = [];
+      if (scan) wanted.push("scan.yml");
+      if (live) wanted.push("live.yml");
+      const settled = await Promise.allSettled(
+        wanted.map((w) => dispatch(w, env))
+      );
       const results = [];
-      if (scan) results.push(await dispatch("scan.yml", env));
-      if (live) results.push(await dispatch("live.yml", env));
+      settled.forEach((r, i) => {
+        if (r.status === "fulfilled") results.push(r.value);
+        else console.error(JSON.stringify({ workflow: wanted[i], error: String(r.reason) }));
+      });
       if (!results.length) {
         console.log(JSON.stringify({ ...log, skipped: "nothing due this tick" }));
         return;
       }
       console.log(JSON.stringify({ ...log, dispatched: results.map((r) => r.workflow) }));
     };
+    // An exception inside waitUntil is an unhandled rejection: it aborts the
+    // remaining work silently and is easy to miss. Catching it means a failed
+    // scan dispatch cannot also lose the live one, and the reason is on the
+    // record. There is nowhere better to send it from here - the scanner
+    // notices independently, via the poll-gap note on the next run that does
+    // happen, and the dashboard's stale alarm if none does.
+    const guarded = work().catch((err) =>
+      console.error(JSON.stringify({ cron: event.cron, error: String(err) }))
+    );
     // waitUntil so a slow GitHub response cannot truncate the dispatch.
-    ctx.waitUntil(work());
+    ctx.waitUntil(guarded);
   },
 
   /**

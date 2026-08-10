@@ -151,10 +151,10 @@ def snapshot_cmd(now: datetime) -> int:
     return 0
 
 
-def live_cmd(now: datetime, dry_run: bool, data_dir: str) -> int:
+def live_cmd(now: datetime, dry_run: bool, data_dir: str, force: bool = False) -> int:
     from . import live
 
-    for line in live.run(now, dry_run=dry_run, data_dir=data_dir):
+    for line in live.run(now, dry_run=dry_run, data_dir=data_dir, force=force):
         print(line)
     return 0
 
@@ -164,6 +164,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("command", choices=["scan", "live", "snapshot"])
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--data-dir", default=config.DATA_DIR)
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="skip the cadence gate; the caller has already decided this tick "
+        "should run (the Cloudflare Worker applies the same rule before it "
+        "dispatches)",
+    )
     args = parser.parse_args(argv)
 
     config.validate()
@@ -175,7 +182,7 @@ def main(argv: list[str] | None = None) -> int:
             # Read-only: never writes the calendar, so the SCANNER BROKEN
             # path below must not fire for it either.
             return snapshot_cmd(now)
-        return live_cmd(now, args.dry_run, args.data_dir)
+        return live_cmd(now, args.dry_run, args.data_dir, args.force)
     except Exception as exc:  # noqa: BLE001 - loud failure path (spec 8)
         traceback.print_exc()
         reason = f"{type(exc).__name__}: {exc}"

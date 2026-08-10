@@ -103,3 +103,84 @@ test("a single tick can mean both workflows, or neither", () => {
   // local is before the daylight window, so live is too. Nothing due.
   assert.deepEqual(plan(new Date(Date.UTC(2026, 7, 10, 18, 30))), { live: false, scan: false });
 });
+
+// ------------------------------------------------- QA fixes, 11 Aug 2026
+
+import { dispatch } from "./src/index.js";
+
+function fakeFetch(handlers) {
+  const calls = [];
+  globalThis.fetch = async (url, init = {}) => {
+    calls.push({ url: String(url), method: init.method || "GET", signal: init.signal });
+    for (const [match, respond] of handlers) {
+      if (String(url).includes(match)) return respond();
+    }
+    throw new Error(`unexpected fetch ${url}`);
+  };
+  return calls;
+}
+
+const ENV = { GITHUB_REPO: "x/y", GITHUB_TOKEN: "t", GITHUB_REF: "main" };
+const noRecentRuns = ["/runs?", () => new Response(JSON.stringify({ workflow_runs: [] }), { status: 200 })];
+
+test("every GitHub request carries a timeout signal", async () => {
+  const calls = fakeFetch([noRecentRuns, ["/dispatches", () => new Response(null, { status: 204 })]]);
+  await dispatch("live.yml", ENV);
+  assert.ok(calls.length >= 2);
+  for (const c of calls) {
+    assert.ok(c.signal, `no AbortSignal on ${c.method} ${c.url}`);
+  }
+});
+
+test("a run dispatched moments ago is not dispatched again", async () => {
+  const justNow = new Date(Date.now() - 30_000).toISOString();
+  const calls = fakeFetch([
+    ["/runs?", () => new Response(JSON.stringify({ workflow_runs: [{ created_at: justNow }] }), { status: 200 })],
+    ["/dispatches", () => new Response(null, { status: 204 })],
+  ]);
+  const res = await dispatch("scan.yml", ENV);
+  assert.equal(res.skipped, "dispatched within the dedupe window");
+  assert.equal(calls.filter((c) => c.method === "POST").length, 0);
+});
+
+test("an old run does not suppress a new dispatch", async () => {
+  const longAgo = new Date(Date.now() - 90 * 60_000).toISOString();
+  const calls = fakeFetch([
+    ["/runs?", () => new Response(JSON.stringify({ workflow_runs: [{ created_at: longAgo }] }), { status: 200 })],
+    ["/dispatches", () => new Response(null, { status: 204 })],
+  ]);
+  await dispatch("scan.yml", ENV);
+  assert.equal(calls.filter((c) => c.method === "POST").length, 1);
+});
+
+test("an unreadable run list dispatches rather than staying silent", async () => {
+  // Failing to check must never be a reason to skip the safety net.
+  const calls = fakeFetch([
+    ["/runs?", () => new Response("nope", { status: 500 })],
+    ["/dispatches", () => new Response(null, { status: 204 })],
+  ]);
+  await dispatch("live.yml", ENV);
+  assert.equal(calls.filter((c) => c.method === "POST").length, 1);
+});
+
+test("one workflow failing does not lose the other", async () => {
+  fakeFetch([
+    noRecentRuns,
+    ["scan.yml/dispatches", () => new Response("boom", { status: 500 })],
+    ["live.yml/dispatches", () => new Response(null, { status: 204 })],
+  ]);
+  const logged = [];
+  const realErr = console.error, realLog = console.log;
+  console.error = (m) => logged.push(m); console.log = (m) => logged.push(m);
+  const pending = [];
+  await worker.scheduled(
+    { cron: "*/30 * * * *", scheduledTime: Date.UTC(2026, 7, 10, 10, 0) },
+    ENV,
+    { waitUntil: (p) => pending.push(p) }
+  );
+  await Promise.all(pending);
+  console.error = realErr; console.log = realLog;
+  const blob = logged.join(" ");
+  assert.ok(blob.includes("scan.yml"), "the scan failure was not recorded");
+  assert.ok(blob.includes("live.yml"), "the live dispatch was lost with it");
+});

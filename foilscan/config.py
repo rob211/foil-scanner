@@ -254,20 +254,31 @@ LAKE_ALERT_LOUD_KN = 30.0
 # trigger_id -> (threshold kn, direction arc, run name, station preference).
 # Thresholds are each trigger's own yellow floor so a live alert appears at
 # the same bar a forecast window would have.
+# trigger_id -> (threshold kn, arc, run name, station preference, group).
+# `group` is the body of water. Alerts are keyed on it rather than on the
+# trigger, because the lake bands abut exactly: a wind hunting either side of
+# 260 deg matched Kanahooka at 258 and Berkeley at 262 and minted a separate
+# event, with its own popup, for each - two phone pings for one blow.
 LIVE_ALERT_TRIGGERS = {
-    "lake_oakflats_berkeley": (18.0, Arc(170, 215), "Oak Flats to Berkeley", "lake"),
-    "lake_kanahooka": (18.0, Arc(215, 260), "Kanahooka run", "lake"),
-    "lake_berkeley": (18.0, Arc(260, 285), "Berkeley run", "lake"),
-    "lake_ne_rare": (22.5, Arc(20, 70), "Sailing Club to Oak Flats", "lake"),
-    "entrance_ne": (16.2, Arc(20, 80), "Lake Entrance (NE wind)", "either"),
-    "entrance_reverse": (20.0, Arc(270, 315), "Entrance reverse run (Boronia Ave)", "either"),
-    "south_ocean": (18.0, Arc(155, 210), "South runs", "coast"),
-    "ne_ocean": (10.0, Arc(20, 75), "NE ocean runs", "coast"),
+    "lake_oakflats_berkeley": (18.0, Arc(170, 215), "Oak Flats to Berkeley", "lake", "lake"),
+    "lake_kanahooka": (18.0, Arc(215, 260), "Kanahooka run", "lake", "lake"),
+    "lake_berkeley": (18.0, Arc(260, 285), "Berkeley run", "lake", "lake"),
+    "lake_ne_rare": (22.5, Arc(20, 70), "Sailing Club to Oak Flats", "lake", "lake"),
+    "entrance_ne": (16.2, Arc(20, 80), "Lake Entrance (NE wind)", "either", "entrance"),
+    "entrance_reverse": (20.0, Arc(270, 315), "Entrance reverse run (Boronia Ave)", "either", "entrance"),
+    "south_ocean": (18.0, Arc(155, 210), "South runs", "coast", "ocean"),
+    "ne_ocean": (10.0, Arc(20, 75), "NE ocean runs", "coast", "ocean"),
 }
 # Live alert events are timed, not all-day: an all-day event's reminder is
 # measured from local midnight, so it can never ping you at the moment the
 # wind is actually blowing. Timed + a 0-minute popup does.
 ALERT_DURATION_H = 2.0
+# On a refresh the end tracks the latest observation plus this short tail,
+# not another full ALERT_DURATION_H. Adding the full duration every poll grew
+# a 5 h blow into a 7 h event, which misrepresents the record you look back
+# at. ALERT_MAX_H is the hard ceiling however long the wind holds.
+ALERT_TAIL_H = 1.0
+ALERT_MAX_H = 8.0
 # Start the event a minute ahead of now so the 0-minute popup is still in the
 # future when Google receives it; a popup on a past start never fires.
 ALERT_LEAD_S = 60
@@ -292,6 +303,12 @@ SCHEMA_VERSION = 2
 # invisible. The scan publishes what it expects hour by hour; the live job
 # compares each observation against it and writes the gap to live.json.
 BIAS_FLAG_KN = 8.0
+
+# Google Calendar rejects a description over 8192 characters with a 400, and
+# sync does not catch that, so one noisy day would take the whole calendar
+# sync down with it. 120 near misses already produced 9867 characters.
+WATCH_DIGEST_MAX_LINES = 40
+WATCH_DIGEST_MAX_CHARS = 6000
 
 HTTP_TIMEOUT_S = 30
 HTTP_RETRIES = 3
@@ -365,16 +382,20 @@ def validate() -> None:
     if not LAKE_ALERT_THRESHOLD_KN < LAKE_ALERT_STRONG_KN < LAKE_ALERT_LOUD_KN:
         raise ConfigError("lake alert tiers must be strictly ascending")
 
-    for tid, (kn, arc, name, station) in LIVE_ALERT_TRIGGERS.items():
+    for tid, (kn, arc, name, station, group) in LIVE_ALERT_TRIGGERS.items():
         if kn <= 0:
             raise ConfigError(f"live alert threshold for {tid} must be positive")
         if not (0 <= arc.lo <= 360 and 0 <= arc.hi <= 360):
             raise ConfigError(f"live alert arc for {tid} out of range")
         if station not in ("lake", "coast", "either"):
             raise ConfigError(f"live alert station for {tid} must be lake|coast|either")
+        if not group:
+            raise ConfigError(f"live alert group for {tid} must name a body of water")
 
     if ALERT_DURATION_H <= 0 or ALERT_LEAD_S < 0 or ALERT_REMINDER_MINUTES < 0:
         raise ConfigError("live alert event timing must be non-negative and non-empty")
+    if not 0 < ALERT_TAIL_H <= ALERT_DURATION_H <= ALERT_MAX_H:
+        raise ConfigError("alert tail must fit inside the duration, and both inside the cap")
 
     if not 0 <= BAYSURF_WIND_MIN_KN < BAYSURF_WIND_MAX_KN:
         raise ConfigError("baysurf wind floor must sit below its ceiling")
