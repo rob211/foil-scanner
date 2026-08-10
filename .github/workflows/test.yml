@@ -22,8 +22,8 @@ jobs:
           python-version: "3.12"
       - run: pip install --require-hashes -r requirements.txt
       - run: python -m pytest
-      # The Worker's daylight gate decides how many Actions minutes get
-      # billed, so it is worth testing. Node's built-in runner, no deps.
+      # The Worker's daylight gate decides which ticks reach GitHub at all,
+      # so it is worth testing. Node's built-in runner, no deps.
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "22"

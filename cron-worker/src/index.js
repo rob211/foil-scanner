@@ -28,7 +28,7 @@
 //
 // Left unfixed this was not merely untidy - scan would have gone out on
 // every 30 minute tick, 48 runs a day against the 12 intended, and the live
-// job already bills a full Actions minute per run.
+// job would otherwise still spend a runner on getting there.
 const SCAN_EVERY_N_HOURS = 2;
 
 // Mirrors foilscan/config.py LIVE_FAST_POLL_{START,END}_HOUR. Kept here as
@@ -78,7 +78,7 @@ export function plan(date) {
 const GH_TIMEOUT_MS = 15000;
 // Cloudflare cron delivery is at-least-once, and a duplicate was observed on
 // 10 Aug (20:00:27 and 20:00:56). Harmless to the calendar - sync is
-// diff-based - but each one bills a full Actions minute.
+// diff-based - but it spends a runner and adds a redundant data commit.
 const DEDUPE_WINDOW_MS = 5 * 60 * 1000;
 
 function ghHeaders(env) {
@@ -94,8 +94,10 @@ function ghHeaders(env) {
 async function ranRecently(workflow, env) {
   try {
     const res = await fetch(
+      // No event filter: the repo's own schedule backstop is a real cadence
+      // again, and a run it started counts just as much as one we started.
       `https://api.github.com/repos/${env.GITHUB_REPO}` +
-        `/actions/workflows/${workflow}/runs?per_page=1&event=workflow_dispatch`,
+        `/actions/workflows/${workflow}/runs?per_page=1`,
       { headers: ghHeaders(env), signal: AbortSignal.timeout(GH_TIMEOUT_MS) }
     );
     if (!res.ok) return false;           // can't tell - dispatching twice

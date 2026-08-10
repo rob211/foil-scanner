@@ -9,11 +9,12 @@ on:
     # 142 min - not something to hang a wind alert on.
     #
     # This tick exists so a dead Worker degrades the cadence instead of
-    # stopping it, and it is deliberately sparse: two reliable triggers at
-    # the old rate would double the Actions minutes, and the live job bills
-    # a whole minute per run however fast it exits. live.py's poll_gap_note
-    # reports the degraded cadence when the Worker stops.
-    - cron: "23 */3 * * *"
+    # stopping it. It was 3-hourly to save Actions minutes - but this repo is
+    # public, where GitHub Actions is free and unmetered, so that reasoning
+    # was wrong and the backstop was needlessly thin. Hourly costs nothing
+    # and means a dead Worker degrades to hourly rather than to 3-hourly.
+    # live.py's poll_gap_note still reports the degraded cadence.
+    - cron: "23 * * * *"
   workflow_dispatch: {}
 
 concurrency:

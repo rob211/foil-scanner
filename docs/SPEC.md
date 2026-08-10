@@ -4,7 +4,7 @@ Instructions for programming a downwind foiling conditions scanner. It scans mul
 
 ## 1. Goal and architecture
 
-- New private GitHub repo: `foil-scanner`. Personal project, kept separate from sitework-tools.
+- GitHub repo `foil-scanner`. Written as "private" on 4 Jul 2026; it is in fact **public** (verified 11 Aug 2026). Nothing sensitive is committed - credentials live in Actions secrets and the Worker's secret store, and the data is station readings and forecasts - but two consequences follow: the repo is world-readable, and **Actions is free and unmetered**, which invalidates any argument that trims cadence to save minutes. Personal project, kept separate from sitework-tools.
 - Python 3.12 scanner run by GitHub Actions cron. Two workflows: a full scan every 6 hours, and an hourly live-verification job that only does work on days that already have a trigger event.
 - All data and verdicts are written as JSON committed to the repo (`data/latest.json` plus `data/history/YYYY-MM-DD.json`). The calendar is one consumer of that JSON. A future dashboard (GitHub Pages, static page reading the same JSON) is the second consumer, so the verdict schema is a stable contract: version it, and never change field meanings without bumping `schema_version`.
 - Output: events on a dedicated "Foiling" Google Calendar, full sync (create, update, move, delete to match the latest verdict).

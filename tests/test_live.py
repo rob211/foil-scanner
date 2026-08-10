@@ -869,3 +869,41 @@ def test_force_skips_the_cadence_gate():
     night_half_past = NOW.replace(hour=3, minute=45)
     assert live._should_run(night_half_past) is False
     assert live._should_run(night_half_past, force=True) is True
+
+
+def test_verdict_reaches_disk_even_when_sync_fails(tmp_path, monkeypatch):
+    # sync finishes its pass and reports failures at the end, so some windows
+    # genuinely did get event ids. Skipping the re-write threw those away and
+    # left the next live run unable to verify anything - the same failure the
+    # sync change existed to stop, one layer up.
+    from foilscan import main as scanner_main
+    from foilscan.models import Window
+
+    w = Window(
+        trigger_id="lake_kanahooka", run_name="Kanahooka run",
+        start=NOW.replace(hour=10), end=NOW.replace(hour=12), grade="green",
+        peak_time=NOW.replace(hour=10), peak_median_kn=22.0, direction_deg=240.0,
+        models_agreeing=3, model_values={"ICON": 22.0},
+    )
+
+    def boom(windows, now, notes, dry_run=False, near_misses=None):
+        windows[0].event_id = "ev-that-synced-fine"   # this one worked
+        raise gcal.CalendarError("1 calendar operation(s) failed")
+
+    # Every source "succeeds" with a sentinel; only the lake family returns a
+    # window, and the trigger engine itself is not under test here.
+    monkeypatch.setattr(scanner_main, "_capture", lambda src, name, fn: object())
+    monkeypatch.setattr(scanner_main, "_identical", lambda a, b: False)
+    monkeypatch.setattr(scanner_main, "lake_windows", lambda *a: ([w], []))
+    for fn in ("entrance_windows", "entrance_reverse_windows", "south_windows",
+               "ne_windows", "baysurf_windows"):
+        monkeypatch.setattr(scanner_main, fn, lambda *a: ([], []))
+    monkeypatch.setattr(scanner_main, "hill60_windows", lambda *a: [])
+    monkeypatch.setattr(scanner_main.verdict, "build_expected", lambda now, fc: [])
+    monkeypatch.setattr(scanner_main.gcal, "sync", boom)
+
+    with pytest.raises(gcal.CalendarError):
+        scanner_main.scan(NOW, dry_run=False, data_dir=str(tmp_path))
+
+    on_disk = json.loads((tmp_path / "latest.json").read_text())
+    assert on_disk["windows"][0]["event_id"] == "ev-that-synced-fine"
