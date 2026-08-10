@@ -12,16 +12,55 @@ from . import config
 from .models import NearMiss, Observation, SourceStatus, Window
 
 
+def build_expected(now: datetime, forecasts: dict) -> list[dict]:
+    """What the models say for the rest of today, per hour, per location.
+
+    The live job diffs observations against this to catch a model bust. On
+    10 Aug 2026 every model under-read a NW gale by ~13 kn at once and nothing
+    anywhere recorded it, so the only trace was an empty calendar.
+    """
+    from statistics import median
+
+    out = []
+    times = sorted(
+        {
+            hw.time
+            for fc in forecasts.values()
+            if fc is not None
+            for series in fc.models.values()
+            for hw in series
+            if hw.time.date() == now.date()
+        }
+    )
+    for t in times:
+        row: dict = {"time": t.isoformat()}
+        for key, fc in forecasts.items():
+            if fc is None:
+                continue
+            vals = [
+                hw.speed_kn
+                for series in fc.models.values()
+                for hw in series
+                if hw.time == t
+            ]
+            if vals:
+                row[key] = round(median(vals), 1)
+        out.append(row)
+    return out
+
+
 def build(
     now: datetime,
     sources: dict[str, SourceStatus],
     windows: list[Window],
     near_misses: list[NearMiss],
+    expected_today: list[dict] | None = None,
 ) -> dict:
     return {
         "schema_version": config.SCHEMA_VERSION,
         "generated_at": now.isoformat(),
         "sources": {name: asdict(s) for name, s in sources.items()},
+        "expected_today": expected_today or [],
         "windows": [
             {
                 "trigger_id": w.trigger_id,
@@ -41,6 +80,8 @@ def build(
                 "high_tide": w.high_tide,
                 "high_tide_m": w.high_tide_m,
                 "spots": w.spots,
+                "watch": w.watch,
+                "tide_state": w.tide_state,
                 "confidence": w.confidence,
                 "live_status": w.live_status,
                 "event_id": w.event_id,
@@ -80,6 +121,8 @@ def build_live(
     holfuy: Observation | None,
     checks: list[dict],
     notes: list[str],
+    alerts: list[dict] | None = None,
+    bias: list[dict] | None = None,
 ) -> dict:
     """The live contract: data/live.json. obs is None only when the BOM fetch
     failed (the reason is in notes); the run still exits non-zero."""
@@ -89,6 +132,14 @@ def build_live(
         "obs": _obs_dict(obs),
         "holfuy": _obs_dict(holfuy),
         "checks": checks,
+        # Live wind that matched a trigger with no forecast window behind it.
+        # `obs` is the Observation the decision was made on, carried in memory
+        # for the calendar writer and dropped here - the station, speed and
+        # direction it chose are already flattened into the row.
+        "alerts": [{k: v for k, v in a.items() if k != "obs"} for a in (alerts or [])],
+        # Observed minus forecast for this hour, so a model bust leaves a
+        # trace instead of just an empty calendar.
+        "bias": bias or [],
         "notes": notes,
     }
 

@@ -55,7 +55,8 @@ https://marine-api.open-meteo.com/v1/marine
 ```
 
 - Swell rules use `swell_wave_*` (not total `wave_height`, which mixes in wind chop).
-- High tide times: find local maxima of `sea_level_height_msl` per day. This is modelled, not the official tide table, so calibration (section 10) compares it against the BOM Port Kembla tide predictions for a fortnight before it is trusted. If it is consistently off by more than about 30 minutes, add a fixed offset constant in config.
+- High tide times: find local maxima of `sea_level_height_msl` per day. The series is hourly, so a raw local maximum is only accurate to ±30 min; fit a parabola through the three samples bracketing each extremum and take its vertex for a sub-hourly time. That half hour decides gate membership at the edges (see 4.2).
+- This is modelled, not the official tide table, so calibration (section 10) compares it against the BOM Port Kembla tide predictions for a fortnight before it is trusted. Any residual bias goes in `config.TIDE_TIME_OFFSET_MIN`, applied on top of the interpolated time.
 
 ### 3.3 BOM observations (live verification, primary)
 
@@ -109,7 +110,11 @@ Stronger is better on the lake. The NE lake run is a rare event: prefix its titl
 
 ### 4.2 Lake Entrance, two modes
 
-Both modes additionally require the window to overlap the period from high tide to 2 h after it (the run-out only, not before the high), and daylight.
+Both modes prefer the window to overlap the period from high tide to 2 h after it (the run-out only, not before the high), and require daylight.
+
+The tide is a penalty, not a veto (Rob, 10 Aug 2026: "don't let tide fully exclude the entrance run, especially for swell — it can still work on the odd tide, so any suitable should be flagged"). A wind-and-swell window that misses the gate keeps its event, drops `config.ENTRANCE_OFF_TIDE_DOWNGRADE` colour steps, gains an "off-tide" title tag, and is recorded in `near_misses` with reason `off_tide`. It survives only within `config.ENTRANCE_OFF_TIDE_TOLERANCE_H` of the gate — the odd tide, not any time of day. The same rule applies to the reverse run (4.8).
+
+This mattered: on 10 Aug 2026 wind and swell both qualified for 07:00–09:00 with 1.4 m of ENE swell, the gate ran to 07:00, the overlap was zero minutes, and a good morning produced no event and — because `entrance_windows` returned a hardcoded empty near-miss list — no record anywhere of why.
 
 `high_tide_m` on those windows is the modelled high-tide height referenced to chart datum (tide-table style): the Open-Meteo sea level (relative to mean sea level) plus `config.PORT_KEMBLA_MSL_ABOVE_CD_M`. It is modelled, not an official prediction, so treat it as approximate and calibrate the offset against a BOM Port Kembla tide reading (section 10).
 
@@ -184,6 +189,17 @@ Wind from the west or north-west (270-315). 20 kn or more to fire at all; north-
 
 Not part of the ocean swell-compatibility rule (4.6) — like the standard entrance triggers, it is gated on wind and tide, not swell.
 
+### 4.9 Watch band (the "maybe" tier)
+
+Below yellow sits `watch`, a deliberately wide net whose only job is to say "worth looking at the models" (Rob, 10 Aug 2026). A window is a watch when either:
+
+- its strength falls between `config.watch_floor_for(yellow_floor)` and the yellow floor — a blanket `WATCH_FACTOR` (0.75) measured **down from the trigger's yellow floor**, not from its target, so every trigger gets the same proportional band regardless of whether its yellow floor is derived or explicit; or
+- its strength clears the yellow floor but fewer models agree than section 5 requires, down to `config.MIN_MODELS_WATCH`. A lone model calling 18 kn while the coast does 32 is what a model bust looks like from inside the forecast.
+
+A watch never overrules a deliberate veto: if a span is strong enough *and* agreed on but still has no window, something downstream killed it on purpose (the 4.6 swell rules), and it stays killed and stays in `near_misses`.
+
+Watch windows do not get their own calendar events. Each day's collect into one graphite all-day digest keyed `watch:<date>`, which also lists that day's near misses. They are excluded from live verification (they have no event to patch) and never take the dashboard's headline verdict while a real window exists.
+
 ## 5. Model consensus
 
 - A forecast window fires only when at least 2 of the 4 models meet the trigger for that hour.
@@ -195,6 +211,8 @@ Not part of the ocean swell-compatibility rule (4.6) — like the standard entra
 ## 6. Colour grading
 
 Three levels per Rob's scheme: roughly 10% under desired, at desired, well over (25%+ over). Google Calendar `colorId`: Banana = 5, Basil = 10, Tomato = 11.
+
+Watch (4.9) sits below yellow and is graphite (`colorId` 8). Grades in ascending order: `watch`, `yellow`, `green`, `red`. The off-angle (4.5) and cross-swell (4.6) downgrades still never drop below yellow — only the off-tide penalty (4.2) may reach watch.
 
 | Trigger | Yellow (marginal) | Green (on target) | Red (firing) |
 |---|---|---|---|
@@ -215,6 +233,13 @@ Yellow windows are "worth watching" and do create events. Entrance mode 1 is gra
 - Auth for GitHub Actions: GCP project, enable the Calendar API, create a service account, download its JSON key into the Actions secret `GCAL_SERVICE_ACCOUNT_JSON`. Then share the Foiling calendar with the service account's email address with "Make changes to events" permission. This works on a personal Google account with no domain delegation. Put the calendar ID in config.
 - Event shape: timed event spanning the window (e.g. "Oak Flats to Berkeley 1pm-5pm"). Title: run name, peak median knots and direction, e.g. `Kanahooka run: 24 kn WSW`. Description: per-model numbers, gusts, swell/tide details where relevant, confidence note, live verification status, and a generated-at stamp.
 - Dedup and sync: stamp every event with `extendedProperties.private.foil_key = "<trigger_id>:<date>:<window_start_hour>"`. Each scan lists existing events in the horizon carrying any `foil_key`, diffs against the new verdicts, then patches changed events, inserts new ones, and deletes events whose window no longer exists. Never touch events without a `foil_key`.
+- Live wind alerts (every live run, forecast or not). The whole notification path used to hang off a forecast window, so when every model missed a 32 kn NW blow on 10 Aug 2026 there was no window, nothing to verify, and no notification of any kind. `config.LIVE_ALERT_TRIGGERS` maps each run to its yellow-floor strength, direction arc and preferred station; any live observation clearing both fires a **timed** red event keyed `live-alert:<date>:<trigger_id>` with a 0-minute popup override.
+  - Timed, not all-day: an all-day event's reminder offset is measured from local midnight, so it cannot ring when the wind is actually blowing. The event starts `config.ALERT_LEAD_S` ahead of now, because Google drops a popup whose start is already past.
+  - Re-polling patches the title, description and end but never the start or the reminder, so a four-hour blow pings once.
+  - Station choice takes the **windier** of Holfuy and BOM for lake and entrance runs. `holfuy or bom` meant the coastal reading was discarded whenever Holfuy answered; on 10 Aug Holfuy read 19 kn mid-lake while Bellambi did 31.9, and nothing fired for another 2.5 h.
+  - Alerts are suppressed for any trigger that already has a live window on the calendar — that is the verification job's business, and double-notifying is worse than not notifying.
+  - `sync` must never delete `live-alert:*` or `lake-alert:*` as stale; the point of them is that no forecast window exists.
+- Every all-day event body (`broken:*`, `watch:*`) must set `end.date` to the **day after** `start.date`. Google treats it as exclusive, so `start == end` is a zero-length event.
 - Live verification updates (hourly job, trigger days only):
   - Confirmed (live reading at 90% of threshold or better, direction in band): prepend a tick to the title (`LIVE NOW:` plus tick emoji) and arm a 30-minute popup reminder via `reminders.overrides`, so the phone pings through the calendar itself.
   - Not verifying (window has started, live under 70% of threshold or direction out of band): prepend a warning to the title and put "forecast X kn vs live Y kn at HH:MM (station)" in the description.
@@ -272,6 +297,8 @@ The prime directive: this scanner must never quietly show a calm week because so
 
 `spots` is set only on south-ocean windows (`run_name` "South runs"): the list of individual launch spots that qualify at that swell size, e.g. `["Bass Point", "Hill 60", "Boilers", "Bellambi"]`. The dashboard shows them as separate chips; the calendar folds them back into the event title. It is `null` on every other trigger.
 
+`windows[]` also carries `watch` (why it only reached the watch tier, else null) and `tide_state` ("in gate" | "off tide" | null). `latest.json` carries `expected_today`: one row per hour with the median model wind per location, published so the live job can diff observations against it.
+
 `data/live.json`, committed by the hourly live job (absent until the first live run after deploy):
 
 ```json
@@ -284,6 +311,8 @@ The prime directive: this scanner must never quietly show a calm week because so
   "notes": []
 }
 ```
+
+`live.json` also carries `alerts` (live wind matching a trigger with no forecast window behind it) and `bias` (observed minus forecast for the current hour, with `flagged` set past `config.BIAS_FLAG_KN`). A poll gap longer than `config.LIVE_POLL_GAP_WARN_MIN` is recorded in `notes`: GitHub sheds scheduled runs, and on 10 Aug it shed three consecutive live ticks across the peak of the blow, which looked identical to a quiet morning.
 
 `obs.dir_deg` is null when BOM reports CALM. `obs` itself is null only when the BOM fetch failed; the reason lands in `notes` and the run still exits non-zero (section 8). The dashboard overlays `checks` onto the `latest.json` windows by `foil_key` and renders `obs` as the live tile. BOM is fetched every live run, window or not, so the tile stays current all day.
 

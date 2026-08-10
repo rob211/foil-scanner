@@ -6,6 +6,7 @@ overnight, every 30 min during local daylight hours - see _should_run.
 """
 from __future__ import annotations
 
+import json
 from datetime import datetime, timedelta
 
 from . import config, fetch, gcal, verdict
@@ -19,6 +20,14 @@ WIND_TARGETS = {
     "lake_berkeley": (20.0, config.LAKE_RUNS["lake_berkeley"][1]),
     "lake_ne_rare": (25.0, config.LAKE_RUNS["lake_ne_rare"][1]),
     "entrance_ne": (config.ENTRANCE_M2_TARGET_KN, config.ENTRANCE_M2_WIND_ARC),
+    # Missing since the reverse run was added (spec 4.8): the first live
+    # reverse-run window would have crashed the whole live job on a KeyError
+    # here, taking every other check on the day down with it (found 10 Aug
+    # 2026 running the live job against a real reverse-run watch).
+    "entrance_reverse": (
+        config.ENTRANCE_REVERSE_TARGET_KN,
+        config.ENTRANCE_REVERSE_WIND_ARC,
+    ),
     "south_ocean": (config.SOUTH_TARGET_KN, config.SOUTH_WIND_ARC),
     "ne_ocean": (config.NE_TARGET_KN, config.NE_WIND_ARC),
     "baysurf": (config.BAYSURF_WIND_MAX_KN, config.BAYSURF_STRONG_WIND_ARC),
@@ -47,6 +56,11 @@ def heartbeat(latest: dict, now: datetime) -> None:
 def relevant_windows(latest: dict, now: datetime) -> list[dict]:
     out = []
     for w in latest["windows"]:
+        # Watch windows are maybes: they live in the day's digest event, not
+        # as events of their own, so they have no event_id to patch and
+        # nothing to verify against.
+        if w.get("grade") == "watch":
+            continue
         start = datetime.fromisoformat(w["start"])
         end = datetime.fromisoformat(w["end"])
         if start - timedelta(hours=1) <= now < end:
@@ -83,6 +97,12 @@ def status_for(
             return "miss", f"{live} vs forecast {w['peak_median_kn']} kn"
         return "pending", live
 
+    if w["trigger_id"] not in WIND_TARGETS:
+        # Loud, not a KeyError three frames down: an unknown trigger id here
+        # means a new trigger family shipped without its live check.
+        raise CalendarError(
+            f"no live wind target configured for trigger {w['trigger_id']!r}"
+        )
     target, arc = WIND_TARGETS[w["trigger_id"]]
     dir_ok = obs.dir_deg is not None and arc.contains(obs.dir_deg)
     if obs.speed_kn >= target * config.LIVE_CONFIRM_FACTOR and dir_ok:
@@ -96,11 +116,170 @@ def status_for(
 def pick_obs(
     w: dict, bom: Observation, holfuy: Observation | None
 ) -> tuple[Observation, str | None]:
+    """Station for verifying a forecast window. Deliberately not `stronger()`:
+    verification asks whether the forecast for *this spot* was right, so the
+    spot's own station is the authority. `stronger()` belongs to the alert
+    path, which asks the different question of whether anything is blowing
+    anywhere that the forecast missed."""
     if w["trigger_id"].startswith("lake"):
         if holfuy is not None:
             return holfuy, None
         return bom, "Holfuy unavailable, verified with BOM only"
     return bom, None
+
+
+# Triggers whose alert is worth annotating with today's tide gate.
+_TIDE_GATED = ("entrance_reverse", "entrance_ne")
+
+
+def _tide_notes(marine, now: datetime) -> dict[str, str]:
+    """Today's tide gates, as a line per tide-gated trigger.
+
+    An alert saying "32 kn NW right now" is more use when it also says the
+    run-in gate is 13:00-17:00, so the tide can be judged rather than
+    guessed - especially now that a window outside the gate is downgraded
+    rather than deleted."""
+    from .triggers import _entrance_reverse_tide_spans, _tide_spans
+
+    def fmt(spans):
+        today = [
+            f"{lo:%H:%M}-{hi:%H:%M}"
+            for lo, hi, *_ in spans
+            if lo.date() == now.date()
+        ]
+        return ", ".join(today) if today else "none today"
+
+    return {
+        "entrance_reverse": f"Run-in gate today: {fmt(_entrance_reverse_tide_spans(marine))}.",
+        "entrance_ne": f"Run-out gate today: {fmt(_tide_spans(marine))}.",
+    }
+
+
+def poll_gap_note(data_dir, now: datetime) -> str | None:
+    """Flag a gap since the previous live poll.
+
+    GitHub sheds scheduled runs under load, and it shed three consecutive
+    live ticks on 10 Aug 2026 - the last poll before 13:01 was 10:39, right
+    across the peak of a 32 kn blow. Nothing recorded that, so a two and a
+    half hour hole in the safety net looked identical to a quiet morning.
+    Raising the cron rate does not fix shedding (a busier schedule gets shed
+    harder) and costs Actions minutes, so this makes the hole visible
+    instead of pretending it isn't there."""
+    from pathlib import Path
+
+    path = Path(data_dir) / "live.json"
+    if not path.exists():
+        return None
+    try:
+        previous = json.loads(path.read_text())["generated_at"]
+    except (json.JSONDecodeError, KeyError, OSError):
+        return None
+    gap_min = (now - datetime.fromisoformat(previous)).total_seconds() / 60
+    if gap_min <= config.LIVE_POLL_GAP_WARN_MIN:
+        return None
+    return (
+        f"poll gap: {gap_min:.0f} min since the last live check "
+        f"({previous[11:16]}); GitHub shed scheduled runs, live alerts "
+        f"could be that late"
+    )
+
+
+def stronger(a: Observation | None, b: Observation | None) -> Observation | None:
+    """The windier of two readings.
+
+    `holfuy or bom` used to decide this, so Holfuy always won when it
+    answered and BOM was never consulted. On 10 Aug 2026 the 10:39 poll had
+    Holfuy at 19.0 kn (under the 22 kn alert threshold, mid-lake and still
+    sheltered from the NW) while Bellambi was reading 31.9. Nothing fired for
+    another two and a half hours."""
+    if a is None:
+        return b
+    if b is None:
+        return a
+    return a if a.speed_kn >= b.speed_kn else b
+
+
+def alert_obs(
+    station_pref: str, bom: Observation | None, holfuy: Observation | None
+) -> Observation | None:
+    """Which reading speaks for a trigger. "lake" and "either" take whichever
+    station is windier; the ocean runs only ever trust the coastal station."""
+    if station_pref == "coast":
+        return bom
+    return stronger(holfuy, bom)
+
+
+def live_alerts(
+    now: datetime,
+    bom: Observation | None,
+    holfuy: Observation | None,
+    covered: set[str],
+    tide_notes: dict[str, str] | None = None,
+) -> list[dict]:
+    """Live wind matching a trigger, with no forecast window behind it.
+
+    This is the gap that let 10 Aug pass in silence: every alerting path in
+    the scanner hung off a forecast window, so when all four models missed a
+    32 kn NW blow there was no window, therefore nothing to verify, therefore
+    no notification of any kind. These fire off the observation alone.
+
+    `covered` holds trigger ids that already have a live window on the
+    calendar - those are the live-verification job's business, not the safety
+    net's, and double-notifying is worse than not notifying."""
+    out = []
+    for tid, (threshold, arc, run_name, pref) in config.LIVE_ALERT_TRIGGERS.items():
+        if tid in covered:
+            continue
+        obs = alert_obs(pref, bom, holfuy)
+        if obs is None or obs.dir_deg is None:
+            continue
+        if obs.speed_kn < threshold or not arc.contains(obs.dir_deg):
+            continue
+        out.append(
+            {
+                "trigger_id": tid,
+                "run_name": run_name,
+                # The reading this decision was made on, so the calendar
+                # writer never has to re-derive which station won.
+                "obs": obs,
+                "station": obs.station,
+                "speed_kn": round(obs.speed_kn, 1),
+                "dir_deg": obs.dir_deg,
+                "threshold_kn": threshold,
+                "detail": (tide_notes or {}).get(tid, ""),
+                "foil_key": f"live-alert:{now.date().isoformat()}:{tid}",
+            }
+        )
+    return out
+
+
+def bias_rows(latest: dict, now: datetime, obs_by_key: dict) -> list[dict]:
+    """Observed minus forecast for the current hour (spec 9, added 10 Aug
+    2026). `expected_today` is written by the scan; an older latest.json from
+    before this landed simply has none, which is not an error."""
+    expected = latest.get("expected_today") or []
+    hour = now.replace(minute=0, second=0, microsecond=0)
+    row = next(
+        (r for r in expected if datetime.fromisoformat(r["time"]) == hour), None
+    )
+    if row is None:
+        return []
+    out = []
+    for key, obs in obs_by_key.items():
+        if obs is None or key not in row:
+            continue
+        gap = obs.speed_kn - row[key]
+        out.append(
+            {
+                "location": key,
+                "station": obs.station,
+                "observed_kn": round(obs.speed_kn, 1),
+                "forecast_kn": row[key],
+                "gap_kn": round(gap, 1),
+                "flagged": abs(gap) >= config.BIAS_FLAG_KN,
+            }
+        )
+    return out
 
 
 def lake_recommendation(obs: Observation | None) -> str | None:
@@ -109,18 +288,14 @@ def lake_recommendation(obs: Observation | None) -> str | None:
     if obs.speed_kn < config.LAKE_ALERT_THRESHOLD_KN:
         return None
     if obs.speed_kn < config.LAKE_ALERT_STRONG_KN:
-        return (
-            f"Lake recommendation: {obs.speed_kn:.0f} kn at {obs.time:%H:%M} "
-            f"({obs.station}) — first notification for the lake today"
-        )
-    if obs.speed_kn < config.LAKE_ALERT_LOUD_KN + 1.0:
-        return (
-            f"Lake recommendation: {obs.speed_kn:.0f} kn at {obs.time:%H:%M} "
-            f"({obs.station}) — stronger lake notification"
-        )
+        tier = "first notification for the lake today"
+    elif obs.speed_kn < config.LAKE_ALERT_LOUD_KN:
+        tier = "stronger lake notification"
+    else:
+        tier = "loudest lake notification"
     return (
         f"Lake recommendation: {obs.speed_kn:.0f} kn at {obs.time:%H:%M} "
-        f"({obs.station}) — loudest lake notification"
+        f"({obs.station}) — {tier}"
     )
 
 
@@ -168,10 +343,11 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
         ]
     latest = verdict.load_latest(data_dir)
     heartbeat(latest, now)
+    gap = poll_gap_note(data_dir, now)
     todays = relevant_windows(latest, now)
 
     log: list[str] = []
-    notes: list[str] = []
+    notes: list[str] = [gap] if gap else []
     # BOM is fetched even with no window in play: the dashboard's live tile
     # wants an hourly reading all day. A failed fetch still publishes an
     # obs-less live.json so the dashboard can say why, then fails loudly.
@@ -185,7 +361,7 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
             )
         raise
     # Fetched every run, not just when a lake window is forecast: the
-    # lake_recommendation/ensure_lake_alert safety net below exists precisely
+    # lake_recommendation/live_alerts safety net below exists precisely
     # to catch wind the forecast didn't call, so it needs live data on every
     # hour, not only the hours the forecast already agreed with.
     holfuy = None
@@ -216,13 +392,59 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
     # unconditionally at startup, so runs with nothing to do still don't
     # need calendar secrets configured (spec 8.9 / test_run_writes_live_json
     # _even_without_windows).
-    lake_rec = lake_recommendation(holfuy or bom)
-    if lake_rec is not None and not dry_run:
+    covered = {w["trigger_id"] for w in todays}
+    alerts = live_alerts(now, bom, holfuy, covered)
+    # Tide context, only when an entrance alert is actually going out - this
+    # runs every 30 min all day and most polls have nothing to say. Best
+    # effort either way: a dead marine feed must not stop a wind alert, it
+    # only costs the gate times in the description.
+    if any(a["trigger_id"] in _TIDE_GATED for a in alerts):
         try:
-            lake_cal_id = cal_id if cal_id is not None else gcal.calendar_id()
-            gcal.ensure_lake_alert(holfuy or bom, now, lake_cal_id)
+            tide_notes = _tide_notes(fetch.fetch_marine(now), now)
+            for a in alerts:
+                a["detail"] = tide_notes.get(a["trigger_id"], "")
         except Exception as exc:
-            notes.append(f"lake alert event failed: {exc}")
+            notes.append(f"tide context unavailable for alerts: {exc}")
+    lake_rec = lake_recommendation(stronger(holfuy, bom))
+    if not dry_run:
+        for a in alerts:
+            try:
+                alert_cal_id = cal_id if cal_id is not None else gcal.calendar_id()
+                created = gcal.ensure_alert(
+                    a["run_name"],
+                    # Same call live_alerts already made. Re-deriving it here
+                    # is how the lake alert tiers drifted apart before (see
+                    # config.LAKE_ALERT_*), so reuse the decision, don't
+                    # repeat the rule.
+                    a["obs"],
+                    now,
+                    alert_cal_id,
+                    a["foil_key"],
+                    a["detail"],
+                )
+                a["created"] = created
+                log.append(
+                    f"{'ALERT' if created else 'alert refreshed'}: {a['run_name']} "
+                    f"{a['speed_kn']:.0f} kn at {a['station']}"
+                )
+            except Exception as exc:
+                notes.append(f"live alert event failed for {a['trigger_id']}: {exc}")
+    elif alerts:
+        log += [
+            f"DRY RUN alert: {a['run_name']} {a['speed_kn']:.0f} kn at {a['station']}"
+            for a in alerts
+        ]
+
+    bias = bias_rows(latest, now, {"lake": holfuy, "ocean": bom})
+    for b in bias:
+        if b["flagged"]:
+            line = (
+                f"MODEL BUST ({b['location']}): observed {b['observed_kn']:.0f} kn "
+                f"vs forecast {b['forecast_kn']:.0f} kn at {b['station']}"
+            )
+            notes.append(line)
+            log.append(line)
+
     for w in todays:
         obs, note = pick_obs(w, bom, holfuy)
         state, live_line = status_for(w, obs, now)
@@ -244,7 +466,10 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
     if dry_run:
         log.append("DRY RUN: not writing live.json")
     else:
-        verdict.write_live(verdict.build_live(now, bom, holfuy, checks, notes), data_dir)
+        verdict.write_live(
+            verdict.build_live(now, bom, holfuy, checks, notes, alerts, bias),
+            data_dir,
+        )
         if lake_rec is not None:
             log.append(lake_rec)
         log.append(

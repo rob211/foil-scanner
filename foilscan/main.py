@@ -35,6 +35,17 @@ def _capture(sources: dict, name: str, fn):
         return None
 
 
+def _identical(a, b) -> bool:
+    """True when two wind snapshots carry the same numbers for every model."""
+    if a is None or b is None or set(a.models) != set(b.models):
+        return False
+    return all(
+        [(h.time, h.speed_kn, h.dir_deg) for h in a.models[m]]
+        == [(h.time, h.speed_kn, h.dir_deg) for h in b.models[m]]
+        for m in a.models
+    )
+
+
 def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
     sources: dict[str, SourceStatus] = {}
 
@@ -90,16 +101,32 @@ def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
             skipped.append("ocean triggers skipped: wind or marine unavailable")
 
     windows.sort(key=lambda w: (w.start, w.trigger_id))
+    if _identical(lake_wind, entrance_wind):
+        # The lake and the entrance are 3 km apart and every model here is
+        # 10-25 km resolution, so both points land in the same grid cell and
+        # the two fetches return the same numbers - 671 of 671 model-hours on
+        # 10 Aug 2026. Spec section 2 anticipated this ("land cells read low,
+        # compare against the manual sites"). Recorded, not silently accepted:
+        # it means the entrance triggers have no entrance-specific signal.
+        sources["entrance_grid"] = SourceStatus(
+            ok=True,
+            detail="entrance forecast identical to lake: same model grid cell, "
+            "no entrance-specific signal",
+        )
     source_notes = skipped + [
         f"{name} failed: {s.error}" for name, s in sources.items() if not s.ok
     ]
 
-    verdict.write(verdict.build(now, sources, windows, misses), data_dir)
-    plan = gcal.sync(windows, now, source_notes, dry_run=dry_run)
+    # Published so the live job can diff observations against it and leave a
+    # trace when the models bust (spec 9, added 10 Aug 2026).
+    expected = verdict.build_expected(now, {"lake": lake_wind, "ocean": ocean_wind})
+
+    verdict.write(verdict.build(now, sources, windows, misses, expected), data_dir)
+    plan = gcal.sync(windows, now, source_notes, dry_run=dry_run, near_misses=misses)
     for line in plan:
         print(line)
     # Re-write with event ids filled in by sync.
-    verdict.write(verdict.build(now, sources, windows, misses), data_dir)
+    verdict.write(verdict.build(now, sources, windows, misses, expected), data_dir)
 
     failed = [name for name, s in sources.items() if not s.ok]
     if failed:
@@ -108,7 +135,11 @@ def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
         if not dry_run:
             gcal.write_broken_event(reason, now)
         return 1
-    print(f"scan ok: {len(windows)} window(s), {len(misses)} near miss(es)")
+    runs = [w for w in windows if w.grade != "watch"]
+    print(
+        f"scan ok: {len(runs)} window(s), {len(windows) - len(runs)} watch, "
+        f"{len(misses)} near miss(es)"
+    )
     return 0
 
 

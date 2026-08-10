@@ -33,7 +33,15 @@ def vector_mean(degs: list[float]) -> float:
     return math.degrees(math.atan2(y, x)) % 360.0
 
 
-def grade_for(value: float, target: float, yellow_floor: float | None = None) -> str | None:
+def grade_for(
+    value: float,
+    target: float,
+    yellow_floor: float | None = None,
+    watch_floor: float | None = None,
+) -> str | None:
+    """Colour for a value against a trigger's target (spec 6). `watch_floor`
+    opts into the maybe band below yellow; without it the behaviour is
+    unchanged and a sub-yellow value still grades None."""
     if yellow_floor is None:
         yellow_floor = target * config.YELLOW_FACTOR
     if value > target * config.RED_FACTOR:
@@ -42,12 +50,20 @@ def grade_for(value: float, target: float, yellow_floor: float | None = None) ->
         return "green"
     if value >= yellow_floor:
         return "yellow"
+    if watch_floor is not None and value >= watch_floor:
+        return "watch"
     return None
 
 
-def downgrade(grade: str, steps: int = 1) -> str:
+def downgrade(grade: str, steps: int = 1, floor: str | None = None) -> str:
+    """Drop `steps` colour steps, never below `floor`. The floor defaults to
+    yellow because spec 6 says the off-angle and cross-swell downgrades never
+    drop a window below yellow; only callers that mean the maybe band (the
+    off-tide entrance penalty) pass floor="watch"."""
+    if floor is None:
+        floor = config.DOWNGRADE_FLOOR
     idx = config.GRADE_ORDER.index(grade)
-    return config.GRADE_ORDER[max(0, idx - steps)]
+    return config.GRADE_ORDER[max(config.GRADE_ORDER.index(floor), idx - steps)]
 
 
 # ---------------------------------------------------------------- consensus
@@ -90,6 +106,7 @@ def _window_from_span(
     now: datetime,
     grade_target: float,
     yellow_floor: float | None = None,
+    watch_floor: float | None = None,
 ) -> Window:
     start, end = span
     hours = [t for t in hour_map if start <= t < end]
@@ -99,7 +116,7 @@ def _window_from_span(
     peak_models = hour_map[peak_time]
     peak_median = median(h.speed_kn for h in peak_models.values())
     direction = vector_mean([h.dir_deg for h in peak_models.values()])
-    grade = grade_for(peak_median, grade_target)
+    grade = grade_for(peak_median, grade_target, watch_floor=watch_floor)
     if grade is None:
         # NE ocean's yellow band (10-15 kn, spec 6) is wider than the
         # generic 0.9 factor; an explicit floor extends yellow down to it.
@@ -131,6 +148,78 @@ def _window_from_span(
     )
 
 
+# ------------------------------------------------------------------- watch
+
+def _covered(t: datetime, windows: list[Window], trigger_id: str) -> bool:
+    return any(
+        w.trigger_id == trigger_id and w.start <= t < w.end for w in windows
+    )
+
+
+def watch_windows(
+    trigger_id: str,
+    run_name: str,
+    wind: WindForecast,
+    sun: SunTimes,
+    now: datetime,
+    arc,
+    target: float,
+    existing: list[Window],
+    yellow_floor: float | None = None,
+) -> list[Window]:
+    """The maybe band (Rob, 10 Aug 2026): flag it on the calendar so the
+    models can be looked at, without claiming the run is on.
+
+    Two ways in, both graded watch:
+      - strength between config.WATCH_FACTOR * target and the yellow floor,
+        at the normal consensus; or
+      - strength at or above the yellow floor but on fewer models than
+        config.MIN_MODELS_AGREE, down to config.MIN_MODELS_WATCH.
+
+    The second is what a model bust looks like from inside the forecast: on
+    10 Aug only ICON reached 18.5 kn for the reverse run while the coast was
+    doing 32, and one model's word was worth nothing anywhere in the output.
+    """
+    if yellow_floor is None:
+        yellow_floor = target * config.YELLOW_FACTOR
+    watch_floor = config.watch_floor_for(yellow_floor)
+
+    def pred(hw):
+        return hw.speed_kn >= watch_floor and arc.contains(hw.dir_deg)
+
+    hour_map = _qualifying_by_hour(wind, pred)
+    hours = [
+        t
+        for t in _active_hours(hour_map, sun, config.MIN_MODELS_WATCH)
+        if not _covered(t, existing, trigger_id)
+    ]
+    out = []
+    for span in _group(hours):
+        w = _window_from_span(
+            trigger_id, run_name, span, hour_map, now, target,
+            yellow_floor=yellow_floor, watch_floor=watch_floor,
+        )
+        weak = w.peak_median_kn < yellow_floor
+        thin = w.models_agreeing < config.MIN_MODELS_AGREE
+        if not weak and not thin:
+            # Strong enough and agreed on, yet no window covers it: something
+            # downstream vetoed it deliberately - the 4.6 cross-swell kill, or
+            # a family that folds windows together. Re-adding it as a maybe
+            # would quietly overrule a safety rule, so leave it to near_misses
+            # (the watch digest lists those too).
+            continue
+        if thin:
+            w.watch = (
+                f"{w.models_agreeing} of {len(config.MODELS)} models only "
+                f"(needs {config.MIN_MODELS_AGREE})"
+            )
+        else:
+            w.watch = f"{w.peak_median_kn:.0f} kn, needs {yellow_floor:.0f}"
+        w.grade = "watch"
+        out.append(w)
+    return out
+
+
 # ---------------------------------------------------------------- families
 
 def lake_windows(
@@ -151,6 +240,12 @@ def lake_windows(
                 w.title_tags.append("RARE")
             windows.append(w)
         misses.extend(_single_model_misses(trigger_id, hour_map, sun, windows))
+        for w in watch_windows(
+            trigger_id, run_name, wind, sun, now, arc, target, windows
+        ):
+            if rare:
+                w.title_tags.append("RARE")
+            windows.append(w)
     return windows, misses
 
 
@@ -237,6 +332,13 @@ def south_windows(
         w.spots = list(runs)
         windows.append(w)
     misses.extend(_single_model_misses("south_ocean", hour_map, sun, windows))
+    # Watch windows skip the 4.6 swell pass deliberately: a maybe is a prompt
+    # to go and look at the models, and killing it on swell would hide the
+    # very days worth looking at.
+    windows += watch_windows(
+        "south_ocean", "South runs", wind, sun, now,
+        config.SOUTH_WIND_ARC, config.SOUTH_TARGET_KN, windows,
+    )
     return windows, misses
 
 
@@ -329,16 +431,53 @@ def _tide_height_cd(ht: MarineHour) -> float:
     return round(ht.sea_level_m + config.PORT_KEMBLA_MSL_ABOVE_CD_M, 2)
 
 
-def _intersect_tides(
+def _gap_to_gate(gate, start: datetime, end: datetime) -> float:
+    """Hours a span sits outside a gate; 0 when they touch or overlap."""
+    t_lo, t_hi, _ = gate
+    gap = max(t_lo - end, start - t_hi, timedelta(0))
+    return gap.total_seconds() / 3600.0
+
+
+def _nearest_tide(tides, start: datetime, end: datetime):
+    """The tide gate a span sits closest to, for labelling an off-tide window."""
+    if not tides:
+        return None
+    return min(tides, key=lambda g: _gap_to_gate(g, start, end))
+
+
+def _apply_tide_gate(
     spans: list[tuple[datetime, datetime]], tides
-) -> list[tuple[datetime, datetime, MarineHour]]:
-    pieces = []
+) -> list[tuple[datetime, datetime, MarineHour, str]]:
+    """Tide gating for the entrance families, as a penalty rather than a veto.
+
+    A span overlapping a gate by an hour or more is clipped to the gate and
+    marked "in gate", exactly as before. A span that misses every gate used to
+    be deleted; Rob's call on 10 Aug 2026 is that the entrance still works on
+    the odd tide, especially on swell, so it survives whole, marked "off tide"
+    and labelled with the nearest high. entrance_windows then downgrades it by
+    config.ENTRANCE_OFF_TIDE_DOWNGRADE rather than dropping it.
+
+    This is the exact case that lost 10 Aug: wind and swell both qualified for
+    07:00-09:00 and the gate closed at 07:00, so the overlap was zero minutes
+    and a perfectly good ENE swell morning produced no event and no near miss.
+    """
+    out: list[tuple[datetime, datetime, MarineHour, str]] = []
     for start, end in spans:
-        for t_lo, t_hi, ht in tides:
-            lo, hi = max(start, t_lo), min(end, t_hi)
-            if hi - lo >= HOUR:
-                pieces.append((lo, hi, ht))
-    return pieces
+        clipped = [
+            (max(start, t_lo), min(end, t_hi), ht)
+            for t_lo, t_hi, ht in tides
+            if min(end, t_hi) - max(start, t_lo) >= HOUR
+        ]
+        if clipped:
+            out.extend((lo, hi, ht, "in gate") for lo, hi, ht in clipped)
+            continue
+        near = _nearest_tide(tides, start, end)
+        if near is None:
+            continue
+        if _gap_to_gate(near, start, end) > config.ENTRANCE_OFF_TIDE_TOLERANCE_H:
+            continue
+        out.append((start, end, near[2], "off tide"))
+    return out
 
 
 def baysurf_windows(
@@ -379,16 +518,22 @@ def baysurf_windows(
         if grade is None:
             continue
 
-        tide_span = next(
-            (s for s in tide_spans if s[0] <= peak_time < s[1]),
-            None,
-        )
-        if tide_span is None:
+        # Pick the falling-tide span this window sits in by how much of the
+        # window it actually covers. This used to be a point test on peak_time
+        # (`s[0] <= peak_time < s[1]`), which assumed tide boundaries land on
+        # the hour; now that high/low tides are interpolated to sub-hourly
+        # times (models.MarineForecast._extrema) a high at 10:20 made a
+        # 10:00-14:00 window match nothing at all.
+        def _overlap(s, start=start, end=end):
+            return max(
+                timedelta(0), min(end, s[1]) - max(start, s[0])
+            ).total_seconds()
+
+        tide_span = max(tide_spans, key=_overlap, default=None)
+        if tide_span is None or _overlap(tide_span) <= 0:
             continue
 
         full_start, full_end, ideal_start, ideal_end = tide_span
-        if not (start < full_end and full_start < end):
-            continue
         if not (start < ideal_end and ideal_start < end):
             grade = downgrade(grade)
             title_tag = "tide"
@@ -450,11 +595,17 @@ def entrance_windows(
         if t in swell_ok
     }
     m1_hours = _active_hours(m1_map, sun, config.MIN_MODELS_AGREE)
-    for start, end, ht in _intersect_tides(_group(m1_hours), tides):
+    for start, end, ht, tide_state in _apply_tide_gate(_group(m1_hours), tides):
         hours = [t for t in m1_map if start <= t < end]
         peak_time = max(hours, key=lambda t: marine.at(t).swell_m)
         mh = marine.at(peak_time)
-        grade = grade_for(mh.swell_m, config.ENTRANCE_M1_SWELL_TARGET_M)
+        grade = grade_for(
+            mh.swell_m,
+            config.ENTRANCE_M1_SWELL_TARGET_M,
+            watch_floor=config.watch_floor_for(
+                config.ENTRANCE_M1_SWELL_TARGET_M * config.YELLOW_FACTOR
+            ),
+        )
         if grade is None:
             continue
         peak_models = m1_map[peak_time]
@@ -482,6 +633,7 @@ def entrance_windows(
                 swell_dir_deg=round(mh.swell_dir_deg, 0),
                 high_tide=ht.time.isoformat(),
                 high_tide_m=_tide_height_cd(ht),
+                tide_state=tide_state,
                 confidence=(
                     "low (long range)"
                     if offset >= config.LOW_CONFIDENCE_FROM_DAY_OFFSET
@@ -498,7 +650,7 @@ def entrance_windows(
 
     m2_map = _qualifying_by_hour(wind, m2_wind)
     m2_hours = _active_hours(m2_map, sun, config.MIN_MODELS_AGREE)
-    for start, end, ht in _intersect_tides(_group(m2_hours), tides):
+    for start, end, ht, tide_state in _apply_tide_gate(_group(m2_hours), tides):
         w = _window_from_span(
             "entrance_ne",
             "Lake Entrance (NE wind)",
@@ -509,7 +661,23 @@ def entrance_windows(
         )
         w.high_tide = ht.time.isoformat()
         w.high_tide_m = _tide_height_cd(ht)
+        w.tide_state = tide_state
         windows.append(w)
+
+    # Off-tide is a penalty, not a veto (config.ENTRANCE_OFF_TIDE_DOWNGRADE).
+    # Applied before the merge below so a merged pair grades off the penalised
+    # values rather than sneaking a full-rating grade through.
+    for w in windows:
+        if w.tide_state == "off tide" and config.ENTRANCE_OFF_TIDE_DOWNGRADE:
+            w.grade = downgrade(
+                w.grade, config.ENTRANCE_OFF_TIDE_DOWNGRADE, floor="watch"
+            )
+            w.title_tags.append("off-tide")
+            w.notes.append(
+                "outside the high-tide run-out; worth a look on the odd tide"
+            )
+            if w.grade == "watch":
+                w.watch = "off tide"
 
     # Same window in both modes -> one event noting both (spec 4.2).
     merged: list[Window] = []
@@ -531,7 +699,35 @@ def entrance_windows(
                 clash.swell_m = w.swell_m
                 clash.swell_dir_deg = w.swell_dir_deg
             clash.notes.append(f"also fires as {w.run_name} ({w.grade})")
-    return merged, []
+
+    # This used to be a hardcoded `return merged, []`: the entrance was the
+    # one family that recorded no near misses at all, so when it went quiet
+    # there was nothing anywhere saying why (10 Aug 2026 review).
+    misses = _single_model_misses(
+        "entrance_swell", m1_map, sun, merged,
+        valid_spans=[(lo, hi) for lo, hi, _ in tides],
+    ) + _single_model_misses(
+        "entrance_ne", m2_map, sun, merged,
+        valid_spans=[(lo, hi) for lo, hi, _ in tides],
+    )
+    for w in merged:
+        if w.tide_state == "off tide":
+            misses.append(
+                NearMiss(
+                    trigger_id=w.trigger_id,
+                    date=w.start.date().isoformat(),
+                    start=w.start.isoformat(),
+                    end=w.end.isoformat(),
+                    reason="off_tide",
+                    detail=(
+                        f"wind and swell qualified but the run-out gate was "
+                        f"{datetime.fromisoformat(w.high_tide):%H:%M}-"
+                        f"{datetime.fromisoformat(w.high_tide) + timedelta(hours=config.ENTRANCE_TIDE_WINDOW_H):%H:%M}"
+                        f"; kept as {w.grade}"
+                    ),
+                )
+            )
+    return merged, misses
 
 
 def _entrance_reverse_tide_spans(
@@ -569,27 +765,43 @@ def entrance_reverse_windows(
 
     hour_map = _qualifying_by_hour(wind, pred)
     tide_spans = _entrance_reverse_tide_spans(marine)
-    for start, end in _group(_active_hours(hour_map, sun, config.MIN_MODELS_AGREE)):
-        for t_lo, t_hi, lt, ht in tide_spans:
-            lo, hi = max(start, t_lo), min(end, t_hi)
-            if hi - lo < HOUR:
-                continue
-            w = _window_from_span(
-                "entrance_reverse",
-                "Entrance reverse run (Boronia Ave)",
-                (lo, hi),
-                hour_map,
-                now,
-                config.ENTRANCE_REVERSE_TARGET_KN,
-                yellow_floor=config.ENTRANCE_REVERSE_YELLOW_KN,
+    gates = [(t_lo, t_hi, (lt, ht)) for t_lo, t_hi, lt, ht in tide_spans]
+    for lo, hi, tides, tide_state in _apply_tide_gate(
+        _group(_active_hours(hour_map, sun, config.MIN_MODELS_AGREE)), gates
+    ):
+        lt, ht = tides
+        w = _window_from_span(
+            "entrance_reverse",
+            "Entrance reverse run (Boronia Ave)",
+            (lo, hi),
+            hour_map,
+            now,
+            config.ENTRANCE_REVERSE_TARGET_KN,
+            yellow_floor=config.ENTRANCE_REVERSE_YELLOW_KN,
+        )
+        if not config.ENTRANCE_REVERSE_TRUE_ARC.contains(w.direction_deg):
+            w.grade = downgrade(w.grade)
+            w.title_tags.append(f"off-angle {compass(w.direction_deg)}")
+        w.high_tide = ht.time.isoformat()
+        w.high_tide_m = _tide_height_cd(ht)
+        w.notes.append(f"low tide {lt.time:%H:%M}")
+        w.tide_state = tide_state
+        if tide_state == "off tide" and config.ENTRANCE_OFF_TIDE_DOWNGRADE:
+            # Same call as the standard entrance runs: the incoming-tide gate
+            # opened at 13:00 on 10 Aug while the wind was already firing from
+            # 09:30, so a hard gate here throws away the front of a blow.
+            w.grade = downgrade(
+                w.grade, config.ENTRANCE_OFF_TIDE_DOWNGRADE, floor="watch"
             )
-            if not config.ENTRANCE_REVERSE_TRUE_ARC.contains(w.direction_deg):
-                w.grade = downgrade(w.grade)
-                w.title_tags.append(f"off-angle {compass(w.direction_deg)}")
-            w.high_tide = ht.time.isoformat()
-            w.high_tide_m = _tide_height_cd(ht)
-            w.notes.append(f"low tide {lt.time:%H:%M}")
-            windows.append(w)
+            w.title_tags.append("off-tide")
+            w.notes.append("outside the run-in gate; worth a look on the odd tide")
+            if w.grade == "watch":
+                w.watch = "off tide"
+        windows.append(w)
+    # Near misses are computed against the real windows only, before the watch
+    # pass appends to `windows`. near_misses is the tuning record (spec 9) and
+    # a watch event covering the same hours must not delete its entry there;
+    # the two feed different consumers.
     misses.extend(
         _single_model_misses(
             "entrance_reverse",
@@ -598,6 +810,15 @@ def entrance_reverse_windows(
             windows,
             valid_spans=[(t_lo, t_hi) for t_lo, t_hi, _, _ in tide_spans],
         )
+    )
+    windows += watch_windows(
+        "entrance_reverse",
+        "Entrance reverse run (Boronia Ave)",
+        wind, sun, now,
+        config.ENTRANCE_REVERSE_WIND_ARC,
+        config.ENTRANCE_REVERSE_TARGET_KN,
+        windows,
+        yellow_floor=config.ENTRANCE_REVERSE_YELLOW_KN,
     )
     return windows, misses
 

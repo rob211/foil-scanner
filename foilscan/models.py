@@ -31,6 +31,29 @@ class MarineHour:
     sea_level_m: float
 
 
+@dataclass(frozen=True)
+class Tide:
+    """A tide extremum. `time` and `sea_level_m` are interpolated between the
+    hourly samples, so they are not tied to a sample boundary; `sample` is the
+    hour the extremum was detected on, kept for traceability."""
+
+    time: datetime
+    sea_level_m: float
+    sample: MarineHour
+
+
+def _vertex(y0: float, y1: float, y2: float) -> float:
+    """Offset in hours of a parabola's vertex from the middle of three evenly
+    spaced samples. Zero when the curve is flat or the fit is degenerate."""
+    denom = y0 - 2.0 * y1 + y2
+    if denom == 0:
+        return 0.0
+    offset = 0.5 * (y0 - y2) / denom
+    # A true interior extremum sits within half a step either side; anything
+    # further means the three points aren't bracketing a peak, so don't move.
+    return offset if -0.5 <= offset <= 0.5 else 0.0
+
+
 @dataclass
 class MarineForecast:
     fetched_at: datetime
@@ -44,25 +67,41 @@ class MarineForecast:
 
         raise SchemaError(f"no marine data for {t.isoformat()}")
 
-    def high_tides(self) -> list[MarineHour]:
-        """Local maxima of modelled sea level (spec 3.2). Hourly resolution,
-        so timing is +/- 30 min until calibrated."""
-        highs = []
-        s = self.hours
-        for i in range(1, len(s) - 1):
-            if s[i].sea_level_m > s[i - 1].sea_level_m and s[i].sea_level_m >= s[i + 1].sea_level_m:
-                highs.append(s[i])
-        return highs
+    def _extrema(self, want_high: bool) -> list[Tide]:
+        from datetime import timedelta
 
-    def low_tides(self) -> list[MarineHour]:
-        """Local minima of modelled sea level (spec 4.8). Hourly resolution,
-        so timing is +/- 30 min until calibrated."""
-        lows = []
+        from . import config
+
         s = self.hours
+        out: list[Tide] = []
+        offset = timedelta(minutes=config.TIDE_TIME_OFFSET_MIN)
         for i in range(1, len(s) - 1):
-            if s[i].sea_level_m < s[i - 1].sea_level_m and s[i].sea_level_m <= s[i + 1].sea_level_m:
-                lows.append(s[i])
-        return lows
+            a, b, c = s[i - 1].sea_level_m, s[i].sea_level_m, s[i + 1].sea_level_m
+            hit = (b > a and b >= c) if want_high else (b < a and b <= c)
+            if not hit:
+                continue
+            # Sub-hourly vertex: the hourly sample is only the bracket, the
+            # real peak is somewhere inside +/- 30 min of it (10 Aug 2026).
+            dx = _vertex(a, b, c)
+            level = b - 0.25 * (a - c) * dx
+            out.append(
+                Tide(
+                    time=s[i].time + timedelta(hours=dx) + offset,
+                    sea_level_m=level,
+                    sample=s[i],
+                )
+            )
+        return out
+
+    def high_tides(self) -> list[Tide]:
+        """Local maxima of modelled sea level (spec 3.2), interpolated to
+        sub-hourly times and shifted by config.TIDE_TIME_OFFSET_MIN."""
+        return self._extrema(want_high=True)
+
+    def low_tides(self) -> list[Tide]:
+        """Local minima of modelled sea level (spec 4.8), interpolated to
+        sub-hourly times and shifted by config.TIDE_TIME_OFFSET_MIN."""
+        return self._extrema(want_high=False)
 
 
 @dataclass
@@ -120,6 +159,12 @@ class Window:
     event_id: str | None = None
     # Individual launch spots when one window covers several (south ocean runs).
     spots: list[str] | None = None
+    # Why this only reached the watch tier ("one model only", "18 kn, needs
+    # 20"). None on a real window.
+    watch: str | None = None
+    # "in gate" | "off tide" for the tide-gated entrance families, None where
+    # the tide is irrelevant. Off-tide windows are downgraded, not deleted.
+    tide_state: str | None = None
 
     @property
     def foil_key(self) -> str:

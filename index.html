@@ -41,15 +41,21 @@
     --grade-yellow-bg: oklch(0.22 0.035 92);
     --grade-red: oklch(0.72 0.17 30);
     --grade-red-bg: oklch(0.21 0.04 30);
+    /* watch = the maybe band below yellow: deliberately colourless so it
+       reads as "look at this" rather than "go". */
+    --grade-watch: oklch(0.70 0.02 250);
+    --grade-watch-bg: oklch(0.20 0.01 250);
     /* Bold-fill verdict: grade colour becomes the surface when a window is
        live NOW, dark ink on top so the answer reads in beach glare. */
     --green-fill-1: oklch(0.68 0.16 152); --green-fill-2: oklch(0.57 0.15 152); --green-ink: oklch(0.15 0.05 152);
     --yellow-fill-1: oklch(0.87 0.13 95); --yellow-fill-2: oklch(0.79 0.14 92); --yellow-ink: oklch(0.24 0.05 92);
     --red-fill-1: oklch(0.68 0.17 33);   --red-fill-2: oklch(0.61 0.17 30);    --red-ink: oklch(0.13 0.05 30);
+    --watch-fill-1: oklch(0.72 0.02 250); --watch-fill-2: oklch(0.62 0.02 250); --watch-ink: oklch(0.16 0.01 250);
     /* per-grade panel (soon gradient top) and border line */
     --green-panel: oklch(0.24 0.045 152); --green-line: oklch(0.42 0.09 152);
     --yellow-panel: oklch(0.25 0.045 92); --yellow-line: oklch(0.44 0.08 92);
     --red-panel: oklch(0.24 0.05 30);     --red-line: oklch(0.42 0.10 30);
+    --watch-panel: oklch(0.22 0.012 250); --watch-line: oklch(0.40 0.02 250);
     --alarm-bg: oklch(0.40 0.15 29);
     --alarm-ink: oklch(0.98 0.01 31);
     --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -125,9 +131,11 @@
   #verdict.soon.green { background: linear-gradient(180deg, var(--green-panel), var(--grade-green-bg)); border-color: var(--grade-green) var(--green-line) var(--green-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06); }
   #verdict.soon.yellow { background: linear-gradient(180deg, var(--yellow-panel), var(--grade-yellow-bg)); border-color: var(--grade-yellow) var(--yellow-line) var(--yellow-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06); }
   #verdict.soon.red { background: linear-gradient(180deg, var(--red-panel), var(--grade-red-bg)); border-color: var(--grade-red) var(--red-line) var(--red-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06); }
+  #verdict.soon.watch { background: linear-gradient(180deg, var(--watch-panel), var(--grade-watch-bg)); border-color: var(--grade-watch) var(--watch-line) var(--watch-line); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.06); }
   #verdict.soon.green .word, #verdict.soon.green .daytag { color: var(--grade-green); }
   #verdict.soon.yellow .word, #verdict.soon.yellow .daytag { color: var(--grade-yellow); }
   #verdict.soon.red .word, #verdict.soon.red .daytag { color: var(--grade-red); }
+  #verdict.soon.watch .word, #verdict.soon.watch .daytag { color: var(--grade-watch); }
 
   /* live: grade colour fills, dark ink, NOW tag. A grounded drop shadow
      gives it lift without the ambient colour bloom the fill alone doesn't
@@ -138,6 +146,7 @@
   #verdict.live.green { background: linear-gradient(160deg, var(--green-fill-1), var(--green-fill-2)); box-shadow: 0 10px 28px -16px oklch(0 0 0 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--green-ink); }
   #verdict.live.yellow { background: linear-gradient(160deg, var(--yellow-fill-1), var(--yellow-fill-2)); box-shadow: 0 10px 28px -16px oklch(0 0 0 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.25); color: var(--yellow-ink); }
   #verdict.live.red { background: linear-gradient(160deg, var(--red-fill-1), var(--red-fill-2)); box-shadow: 0 10px 28px -16px oklch(0 0 0 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--red-ink); }
+  #verdict.live.watch { background: linear-gradient(160deg, var(--watch-fill-1), var(--watch-fill-2)); box-shadow: 0 10px 28px -16px oklch(0 0 0 / 0.6), inset 0 1px 0 oklch(1 0 0 / 0.2); color: var(--watch-ink); }
   #verdict.live .word, #verdict.live .what, #verdict.live .when { color: inherit; }
 
   /* Live observation tiles: BOM (#live) and the lake Holfuy station (#live-lake) */
@@ -184,6 +193,7 @@
   #week .dot.green { background: var(--grade-green); }
   #week .dot.yellow { background: transparent; border: 2px solid var(--grade-yellow); }
   #week .dot.red { width: 7px; height: 7px; background: var(--grade-red); border-radius: 1.5px; rotate: 45deg; }
+  #week .dot.watch { background: transparent; border: 1px dashed var(--grade-watch); }
   #week .day.today { border-color: var(--today-line); color: var(--ink); background: var(--surface-2); }
   #week .day.today .dow { color: var(--brass); }
   /* Selected takes precedence over the today treatment (a day can be both) -
@@ -229,6 +239,7 @@
   .chip.green { background: var(--grade-green); color: var(--green-ink); }
   .chip.yellow { background: var(--grade-yellow); color: var(--yellow-ink); }
   .chip.red { background: var(--grade-red); color: var(--red-ink); }
+  .chip.watch { background: transparent; color: var(--grade-watch); box-shadow: inset 0 0 0 1px var(--grade-watch); }
   .win .name { font-weight: 650; font-size: 0.95rem; }
   .win .meta { font-family: var(--font-mono); color: var(--muted); font-size: 0.82rem; margin-left: auto; text-align: right; flex: none; font-variant-numeric: tabular-nums; }
   .win .body { padding: 0.2rem 0.9rem 0.9rem; font-size: 0.9rem; border-top: 1px solid var(--line); }
@@ -304,6 +315,7 @@
   #how .g.green { color: var(--grade-green); }
   #how .g.yellow { color: var(--grade-yellow); }
   #how .g.red { color: var(--grade-red); }
+  #how .g.watch { color: var(--grade-watch); }
 
   footer { margin-top: 2.2rem; font-size: 0.78rem; color: var(--muted); }
   footer a { color: var(--brass); }
@@ -348,7 +360,7 @@
       <p class="hlabel">The triggers, spot by spot</p>
       <ul>
         <li><strong>Lake runs</strong>: 20 kn or more, and the wind direction picks the crossing: Oak Flats to Berkeley (S/SSW, 170&ndash;215&deg;), Kanahooka (SW/WSW, 215&ndash;260&deg;), Berkeley (W, 260&ndash;285&deg;). The rare NE run back to Oak Flats needs 25 kn.</li>
-        <li><strong>Lake Entrance</strong>: only in the 2 h after high tide (the run-out, not before). Fires on 0.8 m+ swell from the NE&ndash;E with light westerly or calm wind (graded on swell height), or on 18 kn+ NE wind alone.</li>
+        <li><strong>Lake Entrance</strong>: best in the 2 h after high tide (the run-out, not before). Fires on 0.8 m+ swell from the NE&ndash;E with light westerly or calm wind (graded on swell height), or on 18 kn+ NE wind alone. A window that lands outside the tide gate is <em>not</em> dropped &mdash; it drops one colour, gets an &ldquo;off-tide&rdquo; tag and still appears, because the entrance can work on the odd tide.</li>
         <li><strong>South ocean runs</strong>: 20 kn+ from the south (155&ndash;210&deg;). Swell size picks the runs: under 1 m all four are on (Bass Point, Hill 60, Boilers, Bellambi), 1&ndash;2 m of southerly swell narrows it to Bellambi red buoy and Hill 60, over 2 m it is Hill 60 only.</li>
         <li><strong>Hill 60 swell run</strong>: 2 m+ swell from the S/SSE/SE, no wind needed.</li>
         <li><strong>NE ocean runs</strong>: fires once the wind has already blown long enough to build the bump: 2 h at 15 kn+, or 3 h at 10 kn+. True NE (34&ndash;56&deg;) rates full; NNE or ENE drops one colour.</li>
@@ -360,7 +372,9 @@
       <p class="hlabel">Grades</p>
       <p>Each run has a target strength. <span class="g yellow">MAYBE</span> from 90% of target (worth watching), <span class="g green">ON</span> at target, <span class="g red">FIRING</span> from 25% over. Windows four or more days out carry a low-confidence flag.</p>
       <p class="hlabel">How the list is ordered</p>
-      <p>Windows run in start-time order. The big verdict up top is whatever is on right now, otherwise the next window coming. The week strip shows each day's strongest grades, up to three dots. From an hour before each window, the hourly live check compares real observations (BOM Bellambi; Holfuy on the lake) against the forecast: confirmed at 90% of target, called a miss under 70% once the window has started. Holfuy is also read every hour regardless of forecast, as a safety net: 22 kn+ live on the lake gets a calendar note, 25 kn+ a red "LAKE ALERT" event, even on a day nothing was forecast.</p>
+      <p>Windows run in start-time order. The big verdict up top is whatever is on right now, otherwise the next real window coming; a <span class="g watch">WATCH</span> only takes the headline when there is nothing else. The week strip shows each day's strongest grades, up to three dots.</p>
+      <p><strong>Watch</strong> is the maybe band: 25% under a trigger's yellow floor, or a single model calling it when two are needed. It is not a call to go, it is a prompt to look at the models. Watches do not get their own calendar events &mdash; each day's collect into one grey all-day <em>WATCH</em> entry alongside that day's near misses.</p>
+      <p>From an hour before each window, the live check compares real observations (BOM Bellambi; Holfuy on the lake) against the forecast: confirmed at 90% of target, called a miss under 70% once the window has started. Both stations are also read every poll regardless of forecast, as a safety net: live wind matching any run's direction and strength fires a timed red <em>WIND NOW</em> event with a popup, even when nothing at all was forecast &mdash; which is exactly when the forecast has busted. Observations are also diffed against what the models predicted for that hour, so a bust shows up here instead of just looking like a quiet day.</p>
       <p>Full rules with every threshold: <a href="https://github.com/rob211/foil-scanner/blob/main/docs/SPEC.md">SPEC.md</a>.</p>
     </div>
   </details>
@@ -378,8 +392,8 @@
 "use strict";
 const TZ = "Australia/Sydney";
 const STALE_HOURS = 8;
-const GRADE_WORD = { green: "ON", yellow: "MAYBE", red: "FIRING" };
-const GRADE_RANK = { yellow: 1, green: 2, red: 3 };
+const GRADE_WORD = { watch: "WATCH", green: "ON", yellow: "MAYBE", red: "FIRING" };
+const GRADE_RANK = { watch: 0, yellow: 1, green: 2, red: 3 };
 
 const fmtTime = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, hour: "numeric", minute: "2-digit" });
 const fmtDay = new Intl.DateTimeFormat("en-AU", { timeZone: TZ, weekday: "short", day: "numeric", month: "short" });
@@ -433,13 +447,22 @@ function alarm(title, detail) {
 }
 
 function verdictBlock(windows, now) {
-  const active = windows.find((w) => new Date(w.start) <= now && now < new Date(w.end));
-  const next = active || windows.find((w) => new Date(w.start) > now);
+  // Watch windows are maybes. They belong in the strip and the list, but the
+  // headline answer must never be a maybe while a real run exists - so pick
+  // from the real windows first and only fall back to watch when that is
+  // genuinely all there is.
+  const pick = (pool) =>
+    pool.find((w) => new Date(w.start) <= now && now < new Date(w.end)) ||
+    pool.find((w) => new Date(w.start) > now);
+  const runs = windows.filter((w) => w.grade !== "watch");
+  const next = pick(runs) || pick(windows);
+  const active = next && new Date(next.start) <= now && now < new Date(next.end);
   if (!next) {
     return `<div class="quiet">Nothing on this week.<br>The models found no windows that meet your triggers.</div>`;
   }
   const s = new Date(next.start), e = new Date(next.end);
   const live = !!active;
+  const why = next.watch ? ` &middot; ${esc(next.watch)}` : "";
   // live → grade fills the block (sunlight answer); soon → calmer panel, day forward.
   const tag = live
     ? `<span class="nowtag">Now</span>`
@@ -454,7 +477,7 @@ function verdictBlock(windows, now) {
       ${tag}
     </div>
     <div class="what">${esc(next.run_name)}</div>
-    <div class="when">${esc(strengthLabel(next))} &middot; ${esc(timing)}${tide}${conf}</div>
+    <div class="when">${esc(strengthLabel(next))} &middot; ${esc(timing)}${tide}${conf}${why}</div>
   </div>`;
 }
 
@@ -606,10 +629,29 @@ function render(data, liveData, now) {
   let html = "";
   const badSources = Object.entries(data.sources || {}).filter(([, s]) => !s.ok);
   if (ageH > STALE_HOURS) {
-    html += alarm("WATCH STALE", `Last successful check was ${ageH.toFixed(0)} h ago. Do not trust this page; check the Actions tab.`);
+    html += alarm("SCANNER STALE", `Last successful check was ${ageH.toFixed(0)} h ago. Do not trust this page; check the Actions tab.`);
   }
   if (badSources.length) {
     html += alarm("SOURCE PROBLEM", badSources.map(([n, s]) => `${n}: ${s.error || "failed"}`).join(" · "));
+  }
+
+  for (const a of (liveData && liveData.alerts) || []) {
+    html += alarm(
+      `WIND NOW: ${a.run_name}`,
+      `${a.speed_kn} kn at ${a.station}, over the ${a.threshold_kn} kn bar for this run. ` +
+        `Live observation, no forecast window behind it.${a.detail ? " " + a.detail : ""}`
+    );
+  }
+  for (const b of (liveData && liveData.bias) || []) {
+    if (!b.flagged) continue;
+    html += alarm(
+      "MODELS ARE OUT",
+      `${b.location}: ${b.observed_kn} kn observed at ${b.station} against ${b.forecast_kn} kn forecast ` +
+        `(${b.gap_kn > 0 ? "+" : ""}${b.gap_kn} kn). Treat this week's numbers with suspicion.`
+    );
+  }
+  for (const n of (liveData && liveData.notes) || []) {
+    if (n.startsWith("poll gap:")) html += alarm("LIVE CHECK LATE", n.slice(10).trim());
   }
 
   const liveMap = {};
