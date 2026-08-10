@@ -60,6 +60,20 @@ A single self-contained page (`index.html`) on GitHub Pages reads
 spread. Same loud-failure philosophy; a stale or broken scanner shows an
 alarm banner, never a calm page. Setup in [SETUP.md](SETUP.md).
 
+## Tide calibration
+
+The modelled tide is checked against the real Port Kembla gauge (IOC station
+`pkem`, 1 km from the marine point):
+
+```
+python scripts/calibrate_tide.py [days]
+```
+
+Read-only. It prints suggested values for `TIDE_TIME_OFFSET_MIN` and
+`TIDE_HEIGHT_OFFSET_M`; paste them into config with the date. Re-run it if the
+tide gates start looking off — the suggestion accounts for the offset already
+configured, so a healthy calibration reports back roughly what is set.
+
 ## Local dev
 
 ```

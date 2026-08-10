@@ -111,17 +111,33 @@ ENTRANCE_OFF_TIDE_DOWNGRADE = 1
 ENTRANCE_OFF_TIDE_TOLERANCE_H = 3.0
 # Modelled sea level is hourly, so a tide peak lands anywhere in a +/- 30 min
 # band around the sample - the 10 Aug entrance miss turned on exactly that
-# (gate closed 07:00, window opened 07:00). high_tides()/low_tides() now fit a
+# (gate closed 07:00, window opened 07:00). high_tides()/low_tides() fit a
 # parabola through the three samples around each extremum for a sub-hourly
-# time. This offset is then added on top, for calibration against a real BOM
-# Port Kembla prediction (spec section 10); positive means the model peaks
-# early and the real tide is later.
-TIDE_TIME_OFFSET_MIN = 0.0
-# Modelled sea level (Open-Meteo) is relative to mean sea level; tide tables are
-# relative to chart datum. Add this offset to report tide-table-comparable
-# heights. Default is the NSW open-coast figure (Sydney/Fort Denison ~0.925 m);
-# calibrate against a BOM Port Kembla tide reading and adjust (spec section 10).
-PORT_KEMBLA_MSL_ABOVE_CD_M = 0.95
+# time; this offset is then added on top.
+#
+# CALIBRATED 11 Aug 2026 against the real Port Kembla gauge (IOC station
+# "pkem", 1 km from the marine point), 14 days of 1-minute observations,
+# 27 matched high tides and 27 lows - see scripts/calibrate_tide.py:
+#
+#   highs: observed - model = +28 min (sd 9)
+#   lows:  observed - model = +32 min (sd 10)
+#
+# The model runs consistently early, so the real tide is later: positive.
+# The spread is small enough that this is a systematic bias, not noise.
+TIDE_TIME_OFFSET_MIN = 30.0
+# Added to the modelled sea level to report tide-table-comparable heights.
+#
+# Renamed from PORT_KEMBLA_MSL_ABOVE_CD_M, which named a physical quantity
+# this constant no longer holds. It was the NSW open-coast MSL-above-chart-
+# datum figure (~0.95 m), used as a stand-in. Calibration showed Open-Meteo's
+# "MSL" sea level carries its own offset here - it averages +0.148 m over a
+# fortnight rather than 0 - so what the code actually needs is the combined
+# model-to-gauge-datum shift, not a textbook datum separation.
+#
+# CALIBRATED 11 Aug 2026 against IOC gauge "pkem" (see the note on
+# TIDE_TIME_OFFSET_MIN): observed minus model = +0.826 m over 54 matched
+# tides, sd 0.03 m. The old 0.95 over-reported every tide height by ~12 cm.
+TIDE_HEIGHT_OFFSET_M = 0.83
 ENTRANCE_M1_WIND_MAX_KN = 10.0
 ENTRANCE_M1_WIND_ARC = Arc(200, 340)
 ENTRANCE_M1_CALM_KN = 5.0

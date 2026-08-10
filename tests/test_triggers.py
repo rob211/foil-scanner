@@ -21,6 +21,19 @@ from foilscan.triggers import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _no_tide_calibration(request, monkeypatch):
+    """Tide rules are logic; TIDE_TIME_OFFSET_MIN is measured data that moves
+    whenever the gauge is re-read. Tests that assert exact gate clock times
+    would otherwise have to be rewritten after every recalibration, so the
+    offset is zeroed here and proved separately in
+    test_tide_offset_shifts_every_tide. Mark a test `real_tide_offset` to
+    opt out and see the configured value."""
+    if "real_tide_offset" in request.keywords:
+        return
+    monkeypatch.setattr(config, "TIDE_TIME_OFFSET_MIN", 0.0)
+
+
 def hours(rng, speed, deg):
     return {h: (speed, deg) for h in rng}
 
@@ -320,7 +333,7 @@ def test_entrance_mode1_needs_tide_overlap(sun):
     assert w.start == at(13) and w.end == at(15)
     assert w.high_tide == at(13).isoformat()
     # Height is the modelled sea level (0.0 at the peak here) plus the datum offset.
-    assert w.high_tide_m == config.PORT_KEMBLA_MSL_ABOVE_CD_M
+    assert w.high_tide_m == config.TIDE_HEIGHT_OFFSET_M
 
 
 def test_entrance_mode1_swell_direction_matters(sun):
@@ -573,3 +586,23 @@ def test_entrance_off_tide_survives_and_is_recorded(sun):
     assert [w.tide_state for w in windows] == ["off tide"]
     assert "off-tide" in windows[0].title_tags
     assert any(m.reason == "off_tide" for m in misses)
+
+
+def test_tide_offset_shifts_every_tide(monkeypatch):
+    # The calibrated offset (Open-Meteo runs ~30 min early at Port Kembla)
+    # must move highs and lows together, or the gates derived from them drift
+    # apart.
+    marine = mk_marine(1.0, 90, high_tide_hour=13)
+    monkeypatch.setattr(config, "TIDE_TIME_OFFSET_MIN", 0.0)
+    base = marine.high_tides()[0].time
+    monkeypatch.setattr(config, "TIDE_TIME_OFFSET_MIN", 30.0)
+    assert marine.high_tides()[0].time == base + timedelta(minutes=30)
+    monkeypatch.setattr(config, "TIDE_TIME_OFFSET_MIN", -45.0)
+    assert marine.high_tides()[0].time == base - timedelta(minutes=45)
+
+
+@pytest.mark.real_tide_offset
+def test_calibrated_offset_is_applied_by_default():
+    # Guards against the constant being reset to 0 without the note in
+    # config.py being revisited.
+    assert config.TIDE_TIME_OFFSET_MIN != 0.0

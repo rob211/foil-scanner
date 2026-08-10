@@ -56,7 +56,10 @@ https://marine-api.open-meteo.com/v1/marine
 
 - Swell rules use `swell_wave_*` (not total `wave_height`, which mixes in wind chop).
 - High tide times: find local maxima of `sea_level_height_msl` per day. The series is hourly, so a raw local maximum is only accurate to ±30 min; fit a parabola through the three samples bracketing each extremum and take its vertex for a sub-hourly time. That half hour decides gate membership at the edges (see 4.2).
-- This is modelled, not the official tide table, so calibration (section 10) compares it against the BOM Port Kembla tide predictions for a fortnight before it is trusted. Any residual bias goes in `config.TIDE_TIME_OFFSET_MIN`, applied on top of the interpolated time.
+- This is modelled, not the official tide table. **Calibrated 11 Aug 2026** against IOC Sea Level Monitoring station `pkem` — the real Port Kembla gauge, 1 km from `MARINE_POINT` — using 14 days of 1-minute observations and 54 matched tides (`scripts/calibrate_tide.py`, re-runnable):
+  - the model runs **~30 min early**: `TIDE_TIME_OFFSET_MIN = 30.0` (highs +28, lows +32, sd ~9)
+  - its "MSL" carries its own offset (+0.148 m mean over the fortnight), so the height constant is the combined **model-to-gauge-datum** shift, not a textbook datum separation: `TIDE_HEIGHT_OFFSET_M = 0.83` (was a 0.95 guess, over-reporting every height by ~12 cm)
+- Section 10's original plan was a fortnight of BOM tide predictions. The gauge gets the same answer from history in one run, and repeatably.
 
 ### 3.3 BOM observations (live verification, primary)
 
@@ -116,7 +119,7 @@ The tide is a penalty, not a veto (Rob, 10 Aug 2026: "don't let tide fully exclu
 
 This mattered: on 10 Aug 2026 wind and swell both qualified for 07:00–09:00 with 1.4 m of ENE swell, the gate ran to 07:00, the overlap was zero minutes, and a good morning produced no event and — because `entrance_windows` returned a hardcoded empty near-miss list — no record anywhere of why.
 
-`high_tide_m` on those windows is the modelled high-tide height referenced to chart datum (tide-table style): the Open-Meteo sea level (relative to mean sea level) plus `config.PORT_KEMBLA_MSL_ABOVE_CD_M`. It is modelled, not an official prediction, so treat it as approximate and calibrate the offset against a BOM Port Kembla tide reading (section 10).
+`high_tide_m` on those windows is the modelled high-tide height referenced to chart datum (tide-table style): the Open-Meteo sea level (relative to mean sea level) plus `config.TIDE_HEIGHT_OFFSET_M`. It is modelled, not an official prediction, so treat it as approximate and calibrate the offset against a BOM Port Kembla tide reading (section 10).
 
 Mode 1 (swell): wind 0-10 kn with a westerly component (direction 200-340), or under 5 kn from any direction; swell from 35-110 degrees (NE through E, ENE explicitly included) at 0.8 m or more.
 

@@ -405,7 +405,14 @@ def sync(
         # Google accepted but never rendered - letting the sweep collect them
         # is the cleanup.
         if key.startswith("live-alert:"):
-            continue
+            # Today's belong to the live job, which is still refreshing them,
+            # and no forecast window backs them so `desired` will never hold
+            # them. Older ones are dead weight: without this they accumulate
+            # on the calendar forever (10 Aug's 19:53 alerts were still
+            # sitting there the next morning).
+            parts = key.split(":")
+            if len(parts) >= 2 and parts[1] == generated_at.date().isoformat():
+                continue
         svc.events().delete(calendarId=cal_id, eventId=ev["id"]).execute()
         plan.append(f"deleted stale {key}: {ev.get('summary', '')}")
     return plan

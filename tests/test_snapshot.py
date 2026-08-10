@@ -32,7 +32,7 @@ def test_tide_reports_height_above_chart_datum():
     td = snapshot._tide_state(marine, at(10) + timedelta(minutes=30))
     expected_msl = snapshot._at_now(*snapshot._lerp_marine(marine, at(10) + timedelta(minutes=30)), "sea_level_m")
     assert td["height_cd_m"] == pytest.approx(
-        expected_msl + config.PORT_KEMBLA_MSL_ABOVE_CD_M
+        expected_msl + config.TIDE_HEIGHT_OFFSET_M
     )
 
 
