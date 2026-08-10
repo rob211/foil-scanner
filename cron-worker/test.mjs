@@ -9,7 +9,7 @@
 import { strict as assert } from "node:assert";
 import { test } from "node:test";
 
-import worker, { shouldDispatchLive } from "./src/index.js";
+import worker, { plan, shouldDispatchLive, shouldDispatchScan } from "./src/index.js";
 
 // AEST (UTC+10) in August, AEDT (UTC+11) in January. Both are whole-hour
 // offsets, so a UTC :00/:30 cron is always :00/:30 local.
@@ -74,4 +74,32 @@ test("an unset shared secret locks the endpoint rather than opening it", async (
     { GITHUB_REPO: "x/y" }
   );
   assert.equal(res.status, 403);
+});
+
+// --------------------------------------------------------------- scan gate
+
+test("scan fires every 2 h on the hour, in UTC", () => {
+  const utc = (h, m) => new Date(Date.UTC(2026, 7, 10, h, m));
+  assert.equal(shouldDispatchScan(utc(10, 0)), true);
+  assert.equal(shouldDispatchScan(utc(12, 0)), true);
+  assert.equal(shouldDispatchScan(utc(11, 0)), false); // odd hour
+  assert.equal(shouldDispatchScan(utc(10, 30)), false); // half past
+});
+
+test("scan stays evenly spaced across a DST changeover", () => {
+  // 5 Apr 2026, AEDT -> AEST. A local-time rule would double or skip a scan
+  // here; a UTC rule cannot.
+  const before = new Date(Date.UTC(2026, 3, 4, 16, 0));
+  const after = new Date(Date.UTC(2026, 3, 4, 18, 0));
+  assert.equal(shouldDispatchScan(before), true);
+  assert.equal(shouldDispatchScan(after), true);
+  assert.equal(shouldDispatchScan(new Date(Date.UTC(2026, 3, 4, 17, 0))), false);
+});
+
+test("a single tick can mean both workflows, or neither", () => {
+  // 10:00 UTC = 20:00 AEST: even hour and top of hour, so both.
+  assert.deepEqual(plan(new Date(Date.UTC(2026, 7, 10, 10, 0))), { live: true, scan: true });
+  // 18:30 UTC = 04:30 AEST: half past the hour, so scan is out, and 04:30
+  // local is before the daylight window, so live is too. Nothing due.
+  assert.deepEqual(plan(new Date(Date.UTC(2026, 7, 10, 18, 30))), { live: false, scan: false });
 });

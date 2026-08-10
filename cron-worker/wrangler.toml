@@ -9,17 +9,16 @@ compatibility_date = "2026-08-01"
 # want the manual POST endpoint reachable for debugging.
 workers_dev = false
 
-# Two independent schedules. The Worker decides which workflow each one means
-# (src/index.js LIVE_CRON / SCAN_CRON) - keep these strings in sync with it.
+# ONE schedule. The Worker works out from the clock which workflows a tick
+# means (src/index.js plan()); it does not branch on event.cron, because two
+# crons keyed off event.cron sent both dispatches at 11:00 UTC on 10 Aug 2026
+# when "7 */2 * * *" should not have run at all.
 #
 # Times are UTC. Sydney is a whole number of hours ahead in both AEST and
 # AEDT, so ":00 / :30 UTC" is always ":00 / :30 local" and the daylight gate
 # inside the Worker shifts with DST on its own.
 [triggers]
-crons = [
-  "*/30 * * * *",  # live: top of hour always, half past only in daylight
-  "7 */2 * * *",   # scan: every 2 h, offset off the repo's own :17 backstop
-]
+crons = ["*/30 * * * *"]
 
 [vars]
 GITHUB_REPO = "rob211/foil-scanner"

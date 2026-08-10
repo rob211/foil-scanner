@@ -16,8 +16,20 @@
  * concurrency group that serialises overlapping runs.
  */
 
-const LIVE_CRON = "*/30 * * * *";
-const SCAN_CRON = "7 */2 * * *";
+// One cron fires this Worker; which workflows that means is decided from the
+// clock, not from which expression Cloudflare says triggered it.
+//
+// It was two crons dispatched via `event.cron === SCAN_CRON`. On the first
+// live fire, 11:00 UTC, BOTH went out - but "7 */2 * * *" means minute 7 of
+// even hours, so it had no business running at 11:00 at all. Rather than
+// work out whose cron parser is right, nothing here depends on it: scan
+// fires on a whole even UTC hour, live on the existing daylight rule, and
+// event.cron is logged only so its real contents are on the record.
+//
+// Left unfixed this was not merely untidy - scan would have gone out on
+// every 30 minute tick, 48 runs a day against the 12 intended, and the live
+// job already bills a full Actions minute per run.
+const SCAN_EVERY_N_HOURS = 2;
 
 // Mirrors foilscan/config.py LIVE_FAST_POLL_{START,END}_HOUR. Kept here as
 // well as in Python so the no-op runs never start: live.py would exit
@@ -46,6 +58,21 @@ export function shouldDispatchLive(date) {
   const { hour, minute } = sydneyTime(date);
   if (minute < 30) return true;
   return hour >= FAST_POLL_START_HOUR && hour < FAST_POLL_END_HOUR;
+}
+
+/**
+ * Scan every SCAN_EVERY_N_HOURS, on the hour. Deliberately UTC: unlike the
+ * live gate this has nothing to do with when anyone is awake, and pinning it
+ * to UTC keeps the interval even across a DST changeover instead of
+ * producing a doubled or skipped scan on those two days a year.
+ */
+export function shouldDispatchScan(date) {
+  return date.getUTCMinutes() < 30 && date.getUTCHours() % SCAN_EVERY_N_HOURS === 0;
+}
+
+/** Everything one tick should do. */
+export function plan(date) {
+  return { live: shouldDispatchLive(date), scan: shouldDispatchScan(date) };
 }
 
 async function dispatch(workflow, env) {
@@ -82,18 +109,18 @@ async function dispatch(workflow, env) {
 export default {
   async scheduled(event, env, ctx) {
     const now = new Date(event.scheduledTime);
+    const { live, scan } = plan(now);
     const work = async () => {
-      if (event.cron === SCAN_CRON) {
-        console.log(JSON.stringify(await dispatch("scan.yml", env)));
+      // event.cron is recorded, never branched on - see the note at the top.
+      const log = { cron: event.cron, at: now.toISOString(), live, scan };
+      const results = [];
+      if (scan) results.push(await dispatch("scan.yml", env));
+      if (live) results.push(await dispatch("live.yml", env));
+      if (!results.length) {
+        console.log(JSON.stringify({ ...log, skipped: "nothing due this tick" }));
         return;
       }
-      if (!shouldDispatchLive(now)) {
-        console.log(
-          JSON.stringify({ skipped: "live", reason: "outside daylight half-hour tick" })
-        );
-        return;
-      }
-      console.log(JSON.stringify(await dispatch("live.yml", env)));
+      console.log(JSON.stringify({ ...log, dispatched: results.map((r) => r.workflow) }));
     };
     // waitUntil so a slow GitHub response cannot truncate the dispatch.
     ctx.waitUntil(work());
