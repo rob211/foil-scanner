@@ -10,6 +10,24 @@ from foilscan.models import Observation
 NOW = datetime(2026, 7, 6, 13, 0, tzinfo=config.TZ)
 
 
+@pytest.fixture(autouse=True)
+def _no_network_sun(monkeypatch):
+    """live.run() fetches sunrise/sunset to gate the alerts. Nothing in this
+    suite may touch the network, so every test gets a synthetic day: light
+    from 07:00 to 17:00, which puts NOW (13:00) inside it. Tests that care
+    about the gate call live.alerting_hours directly."""
+    from foilscan.models import SunTimes
+
+    days = {
+        (NOW + timedelta(days=d)).date(): (
+            (NOW + timedelta(days=d)).replace(hour=7),
+            (NOW + timedelta(days=d)).replace(hour=17),
+        )
+        for d in range(-1, 9)
+    }
+    monkeypatch.setattr(fetch, "fetch_sun", lambda now: SunTimes(days=days))
+
+
 def window(trigger_id="south_ocean", start_h=12, end_h=16):
     day = NOW.date().isoformat()
     return {
@@ -573,3 +591,39 @@ def test_alert_rows_stay_json_serialisable():
     json.dumps(payload)
     assert "obs" not in payload["alerts"][0]
     assert payload["alerts"][0]["station"] == "Bellambi"
+
+
+# ------------------------------------------------------- alert daylight gate
+
+def _sun(sunrise_h=7, sunset_h=17):
+    from foilscan.models import SunTimes
+
+    return SunTimes(
+        days={NOW.date(): (NOW.replace(hour=sunrise_h), NOW.replace(hour=sunset_h))}
+    )
+
+
+def test_no_alerts_after_dark():
+    # 26 kn on the lake at 21:00 is real wind and completely unrunnable, and
+    # the per-day alert key would mint a fresh 0-minute popup after midnight.
+    night = NOW.replace(hour=21)
+    assert live.alerting_hours(night, _sun()) is False
+    assert live.live_alerts(
+        night, obs(26.0, 275, station="Bellambi"), None, covered=set(), daylight=False
+    ) == []
+
+
+def test_alerts_fire_in_daylight():
+    noon = NOW.replace(hour=12)
+    assert live.alerting_hours(noon, _sun()) is True
+    alerts = live.live_alerts(
+        noon, obs(26.0, 275, station="Bellambi"), None, covered=set(), daylight=True
+    )
+    assert "lake_berkeley" in {a["trigger_id"] for a in alerts}
+
+
+def test_missing_sun_narrows_the_window_rather_than_alerting_all_night():
+    # Fallback is the fast-poll window, so the failure mode is a missed ping,
+    # never a 3am one.
+    assert live.alerting_hours(NOW.replace(hour=3), None) is False
+    assert live.alerting_hours(NOW.replace(hour=12), None) is True

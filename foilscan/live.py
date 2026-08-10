@@ -209,12 +209,34 @@ def alert_obs(
     return stronger(holfuy, bom)
 
 
+def alerting_hours(now: datetime, sun) -> bool:
+    """Whether a live alert is allowed to ring at all.
+
+    Every forecast trigger clips to daylight (spec 4); the live alerts did
+    not, and the alert key is per-day, so a blow running through midnight
+    minted a fresh alert - and a fresh 0-minute popup - at 3am (found the
+    evening of 10 Aug 2026, 26 kn on the lake well after dark).
+
+    A failed sun fetch falls back to the fast-poll window rather than
+    alerting around the clock. That is not a fabricated measurement, it is a
+    narrower notification window, so spec 8.1 is not in play: the failure
+    mode is a missed ping, never a 3am one.
+    """
+    if sun is not None:
+        try:
+            return sun.daylight(now)
+        except Exception:  # noqa: BLE001 - no entry for today, fall through
+            pass
+    return config.LIVE_FAST_POLL_START_HOUR <= now.hour < config.LIVE_FAST_POLL_END_HOUR
+
+
 def live_alerts(
     now: datetime,
     bom: Observation | None,
     holfuy: Observation | None,
     covered: set[str],
     tide_notes: dict[str, str] | None = None,
+    daylight: bool = True,
 ) -> list[dict]:
     """Live wind matching a trigger, with no forecast window behind it.
 
@@ -227,6 +249,8 @@ def live_alerts(
     calendar - those are the live-verification job's business, not the safety
     net's, and double-notifying is worse than not notifying."""
     out = []
+    if not daylight:
+        return out
     for tid, (threshold, arc, run_name, pref) in config.LIVE_ALERT_TRIGGERS.items():
         if tid in covered:
             continue
@@ -392,8 +416,18 @@ def run(now: datetime, dry_run: bool = False, data_dir: str = config.DATA_DIR) -
     # unconditionally at startup, so runs with nothing to do still don't
     # need calendar secrets configured (spec 8.9 / test_run_writes_live_json
     # _even_without_windows).
+    # Daylight gate for the alerts (spec 4 applies it to every forecast
+    # trigger; the live path skipped it). Best effort - a dead sun feed
+    # narrows the window, it does not silence the safety net.
+    sun = None
+    try:
+        sun = fetch.fetch_sun(now)
+    except Exception as exc:  # noqa: BLE001
+        notes.append(f"sunrise/sunset unavailable, alerting on clock hours only: {exc}")
+    daylight = alerting_hours(now, sun)
+
     covered = {w["trigger_id"] for w in todays}
-    alerts = live_alerts(now, bom, holfuy, covered)
+    alerts = live_alerts(now, bom, holfuy, covered, daylight=daylight)
     # Tide context, only when an entrance alert is actually going out - this
     # runs every 30 min all day and most polls have nothing to say. Best
     # effort either way: a dead marine feed must not stop a wind alert, it
