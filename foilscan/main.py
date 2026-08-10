@@ -122,11 +122,18 @@ def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
     expected = verdict.build_expected(now, {"lake": lake_wind, "ocean": ocean_wind})
 
     verdict.write(verdict.build(now, sources, windows, misses, expected), data_dir)
-    plan = gcal.sync(windows, now, source_notes, dry_run=dry_run, near_misses=misses)
-    for line in plan:
-        print(line)
-    # Re-write with event ids filled in by sync.
-    verdict.write(verdict.build(now, sources, windows, misses, expected), data_dir)
+    try:
+        plan = gcal.sync(windows, now, source_notes, dry_run=dry_run, near_misses=misses)
+        for line in plan:
+            print(line)
+    finally:
+        # Always re-write, even when sync raised. sync now finishes its pass
+        # and reports failures at the end, so some windows genuinely did get
+        # event ids - and without this they never reach disk, leaving the next
+        # live run unable to verify anything at all. Losing the ids for the
+        # events that worked was the whole failure the sync change existed to
+        # stop, one layer up.
+        verdict.write(verdict.build(now, sources, windows, misses, expected), data_dir)
 
     failed = [name for name, s in sources.items() if not s.ok]
     if failed:

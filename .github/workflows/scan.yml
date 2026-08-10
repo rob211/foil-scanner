@@ -2,12 +2,13 @@ name: scan
 
 on:
   schedule:
-    # Backstop for the Cloudflare Worker in cron-worker/, which dispatches
-    # this every 2 h at :07. Kept at 4-hourly here rather than removed: the
-    # live heartbeat fails the run once latest.json is 8 h old, so the
-    # backstop alone must still beat that cap even if GitHub sheds one.
+    # Backstop for the Cloudflare Worker in cron-worker/, which drives the
+    # real cadence. Back to 2-hourly, matching the Worker: this repo is
+    # public, so Actions is free and the 4-hourly thinning bought nothing.
+    # The live heartbeat fails the run once latest.json is 8 h old, and a
+    # 2 h backstop clears that even if GitHub sheds several in a row.
     # (GitHub sheds `schedule` heavily under load - see cron-worker/README.)
-    - cron: "17 */4 * * *"
+    - cron: "17 */2 * * *"
   workflow_dispatch: {}
 
 concurrency:

@@ -30,12 +30,15 @@ GitHub is the fix; the scanner code does not change.
 
 - Worker cron drives the real cadence: live every 30 min in daylight and
   hourly overnight, scan every 2 h.
-- The repo's own `schedule` blocks stay on as a **sparse backstop** (live
-  3-hourly, scan 4-hourly) so a dead Worker degrades the cadence rather than
-  stopping it. `live.py`'s `poll_gap_note` reports the degraded cadence.
+- The repo's own `schedule` blocks stay on as a backstop (live hourly, scan
+  2-hourly) so a dead Worker degrades the cadence rather than stopping it.
+  `live.py`'s `poll_gap_note` reports the degraded cadence. They were thinner
+  until an audit found the reasoning behind that was wrong: the repo is
+  public, where Actions is free and unmetered.
 - The daylight gate is applied **in the Worker**, not just in `live.py`. The
   Python gate exits in milliseconds, but GitHub bills a whole minute per run
-  regardless, so gating at the trigger is what actually saves the minutes.
+  regardless, so gating at the trigger is what stops a runner being spent
+  on a job that will exit immediately.
 - Over-triggering is safe by design: `ensure_alert` keeps an existing alert's
   start and reminder so it cannot re-notify, `sync` is diff-based, and both
   workflows share a `concurrency` group that serialises overlapping runs.
