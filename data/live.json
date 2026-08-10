@@ -1,19 +1,19 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-10T19:52:14.645835+10:00",
+  "generated_at": "2026-08-10T21:01:08.466069+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-10T19:38:00+10:00",
-    "speed_kn": 21.1,
-    "gust_kn": 36.2,
+    "time": "2026-08-10T20:30:00+10:00",
+    "speed_kn": 20.0,
+    "gust_kn": 38.9,
     "dir_deg": 270.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-10T19:51:31+10:00",
-    "speed_kn": 27.7,
-    "gust_kn": 35.5,
-    "dir_deg": 278.0
+    "time": "2026-08-10T20:59:30+10:00",
+    "speed_kn": 26.3,
+    "gust_kn": 37.4,
+    "dir_deg": 276.0
   },
   "checks": [],
   "alerts": [
@@ -21,46 +21,44 @@
       "trigger_id": "lake_berkeley",
       "run_name": "Berkeley run",
       "station": "Lake Illawarra",
-      "speed_kn": 27.7,
-      "dir_deg": 278.0,
+      "speed_kn": 26.3,
+      "dir_deg": 276.0,
       "threshold_kn": 18.0,
       "detail": "",
       "foil_key": "live-alert:2026-08-10:lake_berkeley",
-      "created": true
+      "created": false
     },
     {
       "trigger_id": "entrance_reverse",
       "run_name": "Entrance reverse run (Boronia Ave)",
       "station": "Lake Illawarra",
-      "speed_kn": 27.7,
-      "dir_deg": 278.0,
+      "speed_kn": 26.3,
+      "dir_deg": 276.0,
       "threshold_kn": 20.0,
       "detail": "Run-in gate today: 12:53-16:33.",
       "foil_key": "live-alert:2026-08-10:entrance_reverse",
-      "created": true
+      "created": false
     }
   ],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 27.7,
-      "forecast_kn": 13.0,
-      "gap_kn": 14.7,
+      "observed_kn": 26.3,
+      "forecast_kn": 15.7,
+      "gap_kn": 10.6,
       "flagged": true
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 21.1,
-      "forecast_kn": 12.8,
-      "gap_kn": 8.3,
-      "flagged": true
+      "observed_kn": 20.0,
+      "forecast_kn": 14.7,
+      "gap_kn": 5.3,
+      "flagged": false
     }
   ],
   "notes": [
-    "poll gap: 94 min since the last live check (18:17); GitHub shed scheduled runs, live alerts could be that late",
-    "MODEL BUST (lake): observed 28 kn vs forecast 13 kn at Lake Illawarra",
-    "MODEL BUST (ocean): observed 21 kn vs forecast 13 kn at Bellambi"
+    "MODEL BUST (lake): observed 26 kn vs forecast 16 kn at Lake Illawarra"
   ]
 }
