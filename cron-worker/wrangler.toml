@@ -1,0 +1,29 @@
+name = "foil-scanner-cron"
+main = "src/index.js"
+compatibility_date = "2026-08-01"
+
+# Two independent schedules. The Worker decides which workflow each one means
+# (src/index.js LIVE_CRON / SCAN_CRON) - keep these strings in sync with it.
+#
+# Times are UTC. Sydney is a whole number of hours ahead in both AEST and
+# AEDT, so ":00 / :30 UTC" is always ":00 / :30 local" and the daylight gate
+# inside the Worker shifts with DST on its own.
+[triggers]
+crons = [
+  "*/30 * * * *",  # live: top of hour always, half past only in daylight
+  "7 */2 * * *",   # scan: every 2 h, offset off the repo's own :17 backstop
+]
+
+[vars]
+GITHUB_REPO = "rob211/foil-scanner"
+GITHUB_REF = "main"
+
+# Secrets, set with `wrangler secret put` - never in this file:
+#   GITHUB_TOKEN        fine-grained PAT, repo rob211/foil-scanner,
+#                       permission "Actions: Read and write". Nothing else.
+#   CRON_SHARED_SECRET  guards the manual POST endpoint (any long random
+#                       string); the endpoint can start CI jobs that write to
+#                       a real calendar.
+
+[observability]
+enabled = true

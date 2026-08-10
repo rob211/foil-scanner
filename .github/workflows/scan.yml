@@ -2,10 +2,12 @@ name: scan
 
 on:
   schedule:
-    # Every 2 h at :17 (UTC). Deliberately frequent: GitHub sheds scheduled
-    # runs, and at 6-hourly a single skip breached the 8 h stale cap. At 2 h
-    # GitHub has to skip several in a row before the live heartbeat trips.
-    - cron: "17 */2 * * *"
+    # Backstop for the Cloudflare Worker in cron-worker/, which dispatches
+    # this every 2 h at :07. Kept at 4-hourly here rather than removed: the
+    # live heartbeat fails the run once latest.json is 8 h old, so the
+    # backstop alone must still beat that cap even if GitHub sheds one.
+    # (GitHub sheds `schedule` heavily under load - see cron-worker/README.)
+    - cron: "17 */4 * * *"
   workflow_dispatch: {}
 
 concurrency:
