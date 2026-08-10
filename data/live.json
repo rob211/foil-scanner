@@ -1,37 +1,49 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-11T07:31:10.819958+10:00",
+  "generated_at": "2026-08-11T08:00:42.880170+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-11T07:09:00+10:00",
-    "speed_kn": 15.1,
-    "gust_kn": 25.9,
+    "time": "2026-08-11T07:44:00+10:00",
+    "speed_kn": 13.0,
+    "gust_kn": 21.1,
     "dir_deg": 225.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-11T07:29:32+10:00",
-    "speed_kn": 15.0,
-    "gust_kn": 18.0,
-    "dir_deg": 265.0
+    "time": "2026-08-11T07:59:33+10:00",
+    "speed_kn": 19.0,
+    "gust_kn": 21.4,
+    "dir_deg": 251.0
   },
   "checks": [],
-  "alerts": [],
+  "alerts": [
+    {
+      "trigger_id": "lake_kanahooka",
+      "run_name": "Kanahooka run",
+      "station": "Lake Illawarra",
+      "speed_kn": 19.0,
+      "dir_deg": 251.0,
+      "threshold_kn": 18.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-08-11:lake_kanahooka",
+      "created": true
+    }
+  ],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 15.0,
-      "forecast_kn": 11.5,
-      "gap_kn": 3.5,
+      "observed_kn": 19.0,
+      "forecast_kn": 11.4,
+      "gap_kn": 7.6,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 15.1,
+      "observed_kn": 13.0,
       "forecast_kn": 12.7,
-      "gap_kn": 2.4,
+      "gap_kn": 0.3,
       "flagged": false
     }
   ],
