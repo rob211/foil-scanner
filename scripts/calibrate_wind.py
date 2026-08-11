@@ -44,14 +44,19 @@ DECISION_KN = 15.0
 
 def observation_history(days: int) -> list[dict]:
     """Every distinct live.json ever committed, newest first in git order."""
+    # cwd pinned to the repo, not inherited. The history lives in this
+    # checkout's git log, so running from anywhere else found no commits -
+    # the same shape of bug as the absolute path calibrate_tide.py carried.
+    repo = Path(__file__).resolve().parent.parent
     shas = subprocess.run(
         ["git", "log", "--format=%H", f"--since={days} days ago", "--", "data/live.json"],
-        capture_output=True, text=True, check=True,
+        capture_output=True, text=True, check=True, cwd=repo,
     ).stdout.split()
     seen, rows = set(), []
     for sha in shas:
         blob = subprocess.run(
-            ["git", "show", f"{sha}:data/live.json"], capture_output=True, text=True
+            ["git", "show", f"{sha}:data/live.json"],
+            capture_output=True, text=True, cwd=repo,
         ).stdout
         if not blob.strip():
             continue
