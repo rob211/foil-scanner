@@ -171,15 +171,36 @@ def build(now: datetime) -> list[str]:
     if model_lines:
         out += ["", "WIND (models, median for this hour)"] + model_lines
 
+    wave = grab(lambda: fetch.fetch_wave(now), "wave buoy")
     if marine is not None:
         sw = _swell_now(marine, now)
         out += [
             "",
-            "SWELL (offshore of the entrance)",
-            f"  {sw['height_m']:.2f} m from {compass(sw['dir_deg'])} "
+            "SWELL",
+            f"  modelled   {sw['height_m']:.2f} m from {compass(sw['dir_deg'])} "
             f"({sw['dir_deg']:.0f}), {sw['period_s']:.1f} s period"
             + (f"   {sw['trend']}" if sw["trend"] else ""),
         ]
+        if wave is not None:
+            where = (f"{compass(wave.dir_deg)} ({wave.dir_deg:.0f})"
+                     if wave.dir_deg is not None else "direction n/a")
+            off = ""
+            if wave.dir_deg is not None:
+                from .triggers import ang_diff
+
+                off = f"   {ang_diff(wave.dir_deg, sw['dir_deg']):.0f} deg off the model"
+            out.append(
+                f"  measured   {wave.hs_m:.2f} m from {where}"
+                + (f", {wave.peak_period_s:.1f} s peak" if wave.peak_period_s else "")
+                + f"   {wave.station} {wave.time:%H:%M}{off}"
+            )
+            out.append(
+                "             (measured is the whole sea, so it sits above the "
+                "modelled swell whenever there is chop)"
+            )
+    elif wave is not None:
+        out += ["", "SWELL (measured only, the model is unavailable)",
+                f"  {wave.hs_m:.2f} m, {wave.station} {wave.time:%H:%M}"]
 
         td = _tide_state(marine, now)
         out += [

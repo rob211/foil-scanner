@@ -19,6 +19,7 @@ from .models import (
     MarineHour,
     Observation,
     SunTimes,
+    WaveObservation,
     WindForecast,
 )
 
@@ -205,6 +206,55 @@ def fetch_wind(location, now: datetime) -> WindForecast:
     return WindForecast(location_key=location.key, fetched_at=now, models=models)
 
 
+def fetch_wave(now: datetime) -> WaveObservation:
+    """Latest sea state from the Port Kembla wave buoy (spec 3.6).
+
+    The feed carries about a week of hourly readings keyed by local
+    timestamp, with each parameter under a numeric id. Trailing hours can be
+    present-but-empty, so the newest COMPLETE reading is taken rather than
+    the last key.
+    """
+    source = f"MHL {config.WAVE_STATION} wave buoy"
+    payload = get_json(config.WAVE_URL)
+    readings = _require(payload, "readings", source)
+    if not isinstance(readings, dict) or not readings:
+        raise SchemaError(f"{source}: no readings in the feed")
+
+    newest = None
+    for stamp, row in readings.items():
+        if not isinstance(row, dict) or row.get(config.WAVE_PARAM_HS) is None:
+            continue
+        try:
+            t = datetime.strptime(stamp, "%Y-%m-%d %H:%M:%S").replace(tzinfo=config.TZ)
+        except ValueError as exc:
+            raise SchemaError(f"{source}: unreadable timestamp {stamp!r}") from exc
+        if newest is None or t > newest[0]:
+            newest = (t, row)
+    if newest is None:
+        raise SchemaError(f"{source}: every reading is missing a wave height")
+
+    t, row = newest
+    age_min = (now - t).total_seconds() / 60
+    if age_min > config.WAVE_MAX_AGE_MIN:
+        raise StaleDataError(
+            f"{source}: newest reading is {age_min:.0f} min old "
+            f"(cap {config.WAVE_MAX_AGE_MIN})"
+        )
+
+    def optional(key, lo, hi, what):
+        v = row.get(key)
+        return None if v is None else _check_range(v, lo, hi, what, source)
+
+    return WaveObservation(
+        station=config.WAVE_STATION,
+        time=t,
+        hs_m=_check_range(row[config.WAVE_PARAM_HS], 0, 15, "Hs m", source),
+        hmax_m=optional(config.WAVE_PARAM_HMAX, 0, 30, "Hmax m"),
+        dir_deg=optional(config.WAVE_PARAM_DIR, 0, 360, "wave direction"),
+        peak_period_s=optional(config.WAVE_PARAM_TP, 0, 30, "peak period s"),
+    )
+
+
 def fetch_sun(now: datetime) -> SunTimes:
     # Astronomy does not vary by model, so one plain call at the lake point
     # serves every location (they are within ~20 km).
@@ -278,13 +328,16 @@ def fetch_marine(now: datetime) -> MarineForecast:
     return MarineForecast(fetched_at=now, hours=hours)
 
 
-def fetch_bom(now: datetime) -> Observation:
-    source = "BOM observations"
+def fetch_bom(now: datetime, station: str | None = None) -> Observation:
+    """A BOM station from the IDN60801 product. Defaults to Bellambi, the
+    station every decision is currently made on."""
+    station = station or config.BOM_STATION_BELLAMBI
+    source = f"BOM observations ({station})"
     headers = {"User-Agent": config.BROWSER_UA}
     try:
-        payload = get_json(config.BOM_JSON_URL, headers=headers)
+        payload = get_json(config.bom_url(station), headers=headers)
     except FetchError:
-        payload = get_json(config.BOM_JSON_URL_FALLBACK, headers=headers)
+        payload = get_json(config.bom_url(station, fallback=True), headers=headers)
 
     obs = _require(_require(payload, "observations", source), "data", source)
     if not obs:

@@ -120,6 +120,24 @@ class SunTimes:
 
 
 @dataclass(frozen=True)
+class WaveObservation:
+    """Real sea state from the Port Kembla wave buoy.
+
+    `hs` is significant wave height for the WHOLE sea, not a swell partition,
+    so it is not the same quantity as the model's swell_wave_height and sits
+    above it whenever there is wind chop. `direction` is the dominant
+    direction, likewise for the whole sea.
+    """
+
+    station: str
+    time: datetime
+    hs_m: float
+    hmax_m: float | None
+    dir_deg: float | None
+    peak_period_s: float | None
+
+
+@dataclass(frozen=True)
 class Observation:
     station: str
     time: datetime

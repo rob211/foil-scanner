@@ -84,6 +84,38 @@ https://api.holfuy.com/live/?s=366&pw=<HOLFUY_KEY>&m=JSON&tu=C&su=knots
 - Known bias: this station reads roughly 10% high. Multiply speed and gust by 0.9 before comparing to any threshold, and show both raw and corrected values in output.
 - `HOLFUY_KEY` is an optional secret. If it is not configured, the scanner must say so explicitly in the verdict JSON and in event descriptions ("lake live check: Holfuy key not configured, BOM only"). Absence is allowed; silence is not.
 
+### 3.6 Port Kembla wave buoy (live verification, swell)
+
+MHL station PTKMOW, about 10 km from `MARINE_POINT`. The station page has no
+documented API; `config.WAVE_URL` is the JSON its own charts read. Roughly a
+week of hourly readings keyed by local timestamp, each parameter under a
+numeric id (`WAVE_PARAM_*`).
+
+- `Hs` is significant wave height for the **whole sea**, not a swell
+  partition, so it sits above the model's `swell_wave_height` whenever there
+  is chop. Only a **shortfall** against the forecast is evidence of a bad
+  window; an excess is expected and means nothing.
+- Trailing hours can be present-but-empty, so take the newest **complete**
+  reading rather than the last key.
+- Direction and period drop out sometimes. Height alone is still useful, so
+  they are optional while height is required.
+
+**It verifies nothing.** It is shown in `snapshot` for a person to read and
+decides no window, deliberately.
+
+The buoy reports ONE dominant direction for the whole sea, and this coast
+runs mixed swells. On 11 Aug 2026 an ENE train gave way to a southerly
+through the day and the buoy's direction thrashed 78 → 280 → 109 → 165 → 130
+→ 186 while `Hs` barely moved. Verifying a window against that scored **zero
+true positives and eleven false negatives** over 167 hours — it would have
+killed good entrance windows on exactly the days worth having. The height
+check fared no better: `Hs` never once fell below the modelled swell, because
+it is the whole sea and cannot be smaller than one of its own components.
+
+A person reading two numbers side by side can see a mixed sea for what it is.
+A threshold cannot, and the model's swell partition already handles the case
+better than a single dominant direction does.
+
 ### 3.5 Freshness rules
 
 Every source snapshot records `fetched_at` and the newest data timestamp inside it. Staleness is a failure (section 8):
@@ -93,6 +125,7 @@ Every source snapshot records `fetched_at` and the newest data timestamp inside 
 | Open-Meteo forecast/marine | time axis must include now and reach at least 5 days ahead (the axis starts at local midnight, so a start-of-axis check is wrong) |
 | BOM observation | 45 minutes |
 | Holfuy observation (when key configured) | 30 minutes |
+| Port Kembla wave buoy | `WAVE_MAX_AGE_MIN` (hourly feed, and it lags) |
 
 ## 4. Trigger definitions
 

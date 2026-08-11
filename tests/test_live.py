@@ -1020,3 +1020,4 @@ def test_moderate_onshore_is_pending_not_a_miss():
 def test_strong_onshore_is_the_only_live_miss():
     state, line = live.status_for(_swell_window(), obs(28.0, 90), NOW)
     assert state == "miss" and "too strong" in line
+
