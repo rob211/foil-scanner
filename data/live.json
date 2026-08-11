@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-11T16:10:43.332219+10:00",
+  "generated_at": "2026-08-11T16:30:27.774070+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-08-11T16:00:00+10:00",
@@ -10,16 +10,16 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-11T16:09:36+10:00",
+    "time": "2026-08-11T16:29:36+10:00",
     "speed_kn": 19.9,
-    "gust_kn": 21.9,
-    "dir_deg": 250.0
+    "gust_kn": 22.9,
+    "dir_deg": 243.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-11T16:00:00+10:00",
-    "speed_kn": 16.2,
-    "gust_kn": 23.8,
+    "time": "2026-08-11T16:20:00+10:00",
+    "speed_kn": 14.0,
+    "gust_kn": 22.1,
     "dir_deg": 270.0
   },
   "checks": [],
@@ -29,7 +29,7 @@
       "run_name": "Kanahooka / Berkeley",
       "station": "Lake Illawarra",
       "speed_kn": 19.9,
-      "dir_deg": 250.0,
+      "dir_deg": 243.0,
       "threshold_kn": 18.0,
       "detail": "",
       "foil_key": "live-alert:2026-08-11:lake",
@@ -54,7 +54,7 @@
       "flagged": false
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
     "MODEL BUST (lake): observed 20 kn vs forecast 12 kn at Lake Illawarra"
   ]
