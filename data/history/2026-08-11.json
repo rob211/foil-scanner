@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-11T14:18:14.834035+10:00",
+  "generated_at": "2026-08-11T14:46:44.113786+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-11T14:18:15.263273+10:00",
+      "fetched_at": "2026-08-11T14:46:44.930651+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-11T14:18:15.692883+10:00",
+      "fetched_at": "2026-08-11T14:46:45.588939+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-11T14:18:16.094689+10:00",
+      "fetched_at": "2026-08-11T14:46:50.320276+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-11T14:18:16.497200+10:00",
+      "fetched_at": "2026-08-11T14:46:51.013430+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-11T14:18:16.963629+10:00",
+      "fetched_at": "2026-08-11T14:46:51.711396+10:00",
       "detail": null,
       "error": null
     },
@@ -207,8 +207,12 @@
         "ECMWF": 20.9,
         "ICON": 19.9
       },
-      "title_tags": [],
-      "notes": [],
+      "title_tags": [
+        "2 of 4 models"
+      ],
+      "notes": [
+        "only 2 of 4 models reached the trigger; the others did not see it"
+      ],
       "swell_m": null,
       "swell_dir_deg": null,
       "high_tide": null,
