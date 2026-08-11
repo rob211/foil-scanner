@@ -188,7 +188,7 @@ Mode 1 (swell): swell from 35-110 degrees (NE through E, ENE explicitly included
 | unfavourable but under `ENTRANCE_WIND_NO_GO_KN` | **watch** — the swell and tide are still there, the wind is merely wrong |
 | unfavourable **and** over `ENTRANCE_WIND_NO_GO_KN` | no go |
 
-Only the pair together deletes a window: a hard offshore grooms a swell face, a hard onshore ruins it. `ENTRANCE_WIND_NO_GO_KN` is the one number here that was estimated rather than measured.
+Only the pair together deletes a window: a hard offshore grooms a swell face, a hard onshore ruins it. `ENTRANCE_WIND_NO_GO_KN` is Rob's number (20 kn), set 11 Aug 2026 in place of an estimate.
 
 A window can be a watch for more than one reason — onshore wind *and* the wrong tide — and reports both.
 

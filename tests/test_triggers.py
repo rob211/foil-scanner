@@ -734,3 +734,16 @@ def test_no_go_applies_to_the_reverse_run_too(sun):
     windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
     assert [w for w in windows if w.grade != "watch"] == []
 
+
+
+def test_the_entrance_no_go_sits_exactly_where_rob_put_it(sun):
+    # 20 kn onshore, his number. Just under is a watch, at or over is gone.
+    marine = mk_marine(0.9, 90, high_tide_hour=13)
+    for speed, expect in ((19.0, "watch"), (20.0, None), (24.0, None)):
+        wind = mk_wind(hours(range(0, 24), speed, 90), location_key="entrance")
+        got = [w for w in entrance_windows(wind, marine, sun, NOW)[0]
+               if w.trigger_id == "entrance_swell"]
+        if expect is None:
+            assert got == [], f"{speed} kn onshore should be a no-go"
+        else:
+            assert got and all(w.grade == expect for w in got), speed
