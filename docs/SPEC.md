@@ -355,6 +355,30 @@ The prime directive: this scanner must never quietly show a calm week because so
 5. Calibration fortnight: compare modelled high-tide times against BOM Port Kembla tide predictions, sanity-check the Holfuy 0.9 factor against BOM on a windy lake day, eyeball events against Windguru and WillyWeather, and tune coordinates or thresholds. Log findings in the repo.
 6. Later: GitHub Pages dashboard reading `data/latest.json` and `data/history/`. Nothing in phases 1-5 may assume the calendar is the only consumer.
 
+## 13. Model bias
+
+The wind models are not calibrated against the stations, and measurement says
+they should be. `scripts/calibrate_wind.py` compares every committed
+observation against the archived forecast for the same hour and reports what
+a correction would be. It applies nothing: the decision is deliberately not
+automatic.
+
+First run, 11 Aug 2026, 5 weeks, 91 lake hours and 384 coast hours:
+
+- observed minus forecast, median +4.0 kn (lake) and +3.9 kn (coast)
+- the model was **never** high by `BIAS_FLAG_KN` or more, in 475 hours
+- it saturates: with the lake truly at 18-28 kn the model median was 13.0,
+  against a yellow floor of 18 and a watch floor of 15. A genuine lake day
+  produced neither a window nor a watch.
+- lake fits a multiplier (~1.57x), coast a flat offset (~+3.9 kn) - the
+  script prefers the simpler form unless a more complex one is meaningfully
+  better, or it would recommend two parameters where a constant serves
+
+Before any of this is applied it needs a second season. Fitting a multiplier
+to 25 windy hours in one winter will overshoot, and overshooting fires green
+days that are not - which is worse than the current miss, because a missed
+day costs nothing and a false green costs a drive.
+
 ## 12. Snapshot command
 
 `python -m foilscan snapshot` is a read-only report of current conditions:
