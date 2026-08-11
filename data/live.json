@@ -1,47 +1,59 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-11T14:30:28.372245+10:00",
+  "generated_at": "2026-08-11T14:45:34.570288+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-11T14:00:00+10:00",
-    "speed_kn": 10.8,
-    "gust_kn": 21.1,
+    "time": "2026-08-11T14:30:00+10:00",
+    "speed_kn": 15.1,
+    "gust_kn": 25.9,
     "dir_deg": 247.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-11T14:29:34+10:00",
-    "speed_kn": 17.5,
-    "gust_kn": 20.4,
-    "dir_deg": 272.0
+    "time": "2026-08-11T14:43:34+10:00",
+    "speed_kn": 18.4,
+    "gust_kn": 24.3,
+    "dir_deg": 265.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-11T14:17:00+10:00",
-    "speed_kn": 17.3,
-    "gust_kn": 24.8,
+    "time": "2026-08-11T14:30:00+10:00",
+    "speed_kn": 15.1,
+    "gust_kn": 23.8,
     "dir_deg": 270.0
   },
   "checks": [],
-  "alerts": [],
+  "alerts": [
+    {
+      "trigger_id": "lake_west",
+      "run_name": "Kanahooka / Berkeley",
+      "station": "Lake Illawarra",
+      "speed_kn": 18.4,
+      "dir_deg": 265.0,
+      "threshold_kn": 18.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-08-11:lake",
+      "created": true
+    }
+  ],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 17.5,
+      "observed_kn": 18.4,
       "forecast_kn": 14.1,
-      "gap_kn": 3.4,
+      "gap_kn": 4.3,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 10.8,
+      "observed_kn": 15.1,
       "forecast_kn": 14.8,
-      "gap_kn": -4.0,
+      "gap_kn": 0.3,
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": []
 }
