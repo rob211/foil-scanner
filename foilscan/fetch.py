@@ -117,6 +117,19 @@ def _check_range(value: float, lo: float, hi: float, what: str, source: str) -> 
     return float(value)
 
 
+def apply_bias(location_key: str, value: float) -> float:
+    """Correct a model wind value for the measured bias at that location.
+
+    Uncorrected, the models never once reached the lake's 18 kn floor across
+    15 hours the lake genuinely blew that hard (11 Aug 2026 calibration).
+    config.WIND_BIAS carries the form and the number, and the reasoning.
+    """
+    form, amount = config.WIND_BIAS[location_key]
+    corrected = value * amount if form == "scale" else value + amount
+    # An offset must not manufacture wind out of a calm.
+    return max(0.0, corrected)
+
+
 def fetch_wind(location, now: datetime) -> WindForecast:
     source = f"open-meteo wind ({location.key})"
     payload = get_json(
@@ -155,12 +168,23 @@ def fetch_wind(location, now: datetime) -> WindForecast:
                         f"{source}: model {model_id} has null data at {t.isoformat()}"
                     )
                 continue
+            # Range-check the raw response - that check exists to validate
+            # what the API sent - then correct. The correction is applied
+            # here, on ingest, so triggers, expected_today and the snapshot
+            # cannot disagree about what the models said.
+            speed = _check_range(s, 0, 80, "wind speed kn", source)
+            gust = _check_range(g, 0, 120, "gust kn", source)
             series.append(
                 HourWind(
                     time=t,
-                    speed_kn=_check_range(s, 0, 80, "wind speed kn", source),
+                    speed_kn=apply_bias(location.key, speed),
                     dir_deg=_check_range(d, 0, 360, "wind direction", source),
-                    gust_kn=_check_range(g, 0, 120, "gust kn", source),
+                    # Gust takes the same correction as speed. The bias was
+                    # measured on speed alone, so this is an assumption - but
+                    # correcting one and not the other would let a corrected
+                    # speed exceed its own raw gust, which reads as nonsense
+                    # wherever both are shown.
+                    gust_kn=apply_bias(location.key, gust),
                 )
             )
         if not series:

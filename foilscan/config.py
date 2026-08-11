@@ -310,6 +310,45 @@ BIAS_FLAG_KN = 8.0
 # GitHub returns the expiry on every response as the
 # github-authentication-token-expiration header, so the Worker passes it
 # through on each dispatch and the live job escalates as it approaches.
+# Model wind correction, applied on ingest (fetch.fetch_wind) so triggers,
+# expected_today and the snapshot all see the same numbers.
+#
+# CALIBRATED 11 Aug 2026 from 5 weeks against both stations - see
+# scripts/calibrate_wind.py. Uncorrected, the models NEVER once reached the
+# lake's 18 kn floor on any of the 15 hours the lake genuinely blew that
+# hard: 0% recall, which is the entire reason runs were being missed.
+#
+# Backtested at the 18 kn floor, choosing on precision because a false green
+# costs a drive while a missed day costs nothing:
+#
+#   lake   x1.45  precision 73%  recall 73%   (x1.57 was 63/80 - more recall,
+#                                              more false calls; x1.35 was
+#                                              worse on both)
+#   ocean  +3.9   precision 67%  recall 17%   at the run floor, and 66/40 at
+#                                              the watch floor against 2% raw
+#
+# The ocean gets an offset, not a multiplier, deliberately: every multiplier
+# tried there sat near 50% precision, which is a coin toss, and the measured
+# fit for that site is additive anyway.
+#
+# The entrance shares the lake's model grid cell (they return identical data,
+# 671/671 model-hours), so it takes the lake's correction. There is no
+# station at the entrance to verify that against - it is the weakest link
+# here, and the first thing to revisit if entrance events start over-firing.
+#
+# Note this cuts both ways. Entrance mode 1 and Baysurf want LIGHT wind, so
+# correcting upward makes them fire less, not more. That is the same fact
+# pointing the other way: if the model under-reads, days that looked light
+# were not.
+#
+# Rob's call to apply this on one winter: the lake's wind season IS winter,
+# so the sample is the relevant one rather than a biased slice.
+WIND_BIAS = {
+    "lake": ("scale", 1.45),
+    "entrance": ("scale", 1.45),
+    "ocean": ("offset", 3.9),
+}
+
 PAT_WARN_DAYS = 14.0
 # Inside this, the run fails outright: a red run, GitHub's failure email and
 # a SCANNER BROKEN event, which are the loudest channels available and are
@@ -403,6 +442,16 @@ def validate() -> None:
             raise ConfigError(f"live alert station for {tid} must be lake|coast|either")
         if not group:
             raise ConfigError(f"live alert group for {tid} must name a body of water")
+
+    for key, (form, value) in WIND_BIAS.items():
+        if form not in ("scale", "offset"):
+            raise ConfigError(f"wind bias for {key} must be scale or offset")
+        if form == "scale" and not 0.5 <= value <= 3.0:
+            raise ConfigError(f"wind bias scale for {key} is implausible: {value}")
+        if form == "offset" and abs(value) > 20:
+            raise ConfigError(f"wind bias offset for {key} is implausible: {value}")
+    if {l.key for l in WIND_LOCATIONS} - set(WIND_BIAS):
+        raise ConfigError("every wind location needs a bias entry, even a no-op")
 
     if not 0 < PAT_FAIL_DAYS < PAT_WARN_DAYS:
         raise ConfigError("PAT fail threshold must sit inside the warning window")
