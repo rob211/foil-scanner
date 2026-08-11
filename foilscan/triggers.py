@@ -220,6 +220,34 @@ def watch_windows(
     return out
 
 
+def flag_thin_consensus(windows: list[Window]) -> list[Window]:
+    """Mark windows carried by the bare minimum number of models.
+
+    config.MIN_MODELS_AGREE is 2 of 4 and stays there - the point is not to
+    demand more agreement, it is to stop a 2/4 window looking identical to a
+    4/4 one. On 11 Aug the green lake call rested on ECMWF and ICON alone
+    while GFS and UKMO never reached the floor; it happened to be right, but
+    nothing on the calendar said it was a thinner call than the grade
+    implied.
+
+    Watch windows are left alone: they already carry their own reason, and
+    saying "2 of 4 models" beside "1 of 4 models only" reads as a
+    contradiction.
+    """
+    total = len(config.MODELS)
+    for w in windows:
+        if w.grade == "watch" or w.models_agreeing != config.MIN_MODELS_AGREE:
+            continue
+        if total <= config.MIN_MODELS_AGREE:
+            continue          # nothing to be thin about
+        w.title_tags.append(f"{w.models_agreeing} of {total} models")
+        w.notes.append(
+            f"only {w.models_agreeing} of {total} models reached the trigger; "
+            "the others did not see it"
+        )
+    return windows
+
+
 # ---------------------------------------------------------------- families
 
 def lake_windows(

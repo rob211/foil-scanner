@@ -280,6 +280,7 @@ Watch windows do not get their own calendar events. Each day's collect into one 
 - Strength for colour grading is the median across the agreeing models at the window's peak hour.
 - The event description lists each model's numbers so the spread is visible.
 - Single-model hits are recorded in the verdict JSON (for the dashboard and for tuning) but create no calendar event.
+- A window carried by exactly `MIN_MODELS_AGREE` models is tagged `"N of M models"` on the event title and the dashboard, and says so in its notes. The threshold is not being raised — the point is that a 2/4 window should not look identical to a 4/4 one. Watch windows are exempt: they already carry their own reason, and "2 of 4 models" beside "1 of 4 models only" reads as a contradiction.
 - Days 5-7 of the horizon get a "low confidence, long range" line in the description.
 
 ## 6. Colour grading
