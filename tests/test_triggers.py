@@ -51,7 +51,7 @@ def test_lake_south_names_oak_flats_run(sun):
 
 
 def test_lake_direction_picks_crossing(sun):
-    for deg, trigger in [(250, "lake_kanahooka"), (275, "lake_berkeley")]:
+    for deg, trigger in [(250, "lake_west"), (275, "lake_west")]:
         wind = mk_wind(hours(range(10, 13), 22, deg), location_key="lake")
         windows, _ = lake_windows(wind, sun, NOW)
         assert [w.trigger_id for w in windows] == [trigger]
@@ -704,3 +704,4 @@ def test_no_go_applies_to_the_reverse_run_too(sun):
     wind = mk_wind(spec, location_key="entrance")
     windows, _ = entrance_reverse_windows(wind, marine, sun, NOW)
     assert [w for w in windows if w.grade != "watch"] == []
+

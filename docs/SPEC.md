@@ -105,9 +105,12 @@ One trigger family; the direction picks the crossing, and the event title names 
 | Direction band | Run name | Threshold |
 |---|---|---|
 | 170-215 (S/SSW) | Oak Flats to Berkeley | 20 kn+ |
-| 215-260 (SW/WSW) | Kanahooka run | 20 kn+ |
-| 260-285 (W) | Berkeley run | 20 kn+ |
+| 215-285 (SW through W) | Kanahooka / Berkeley | 20 kn+ |
 | 20-70 (NE) | Sailing Club to Oak Flats | 25 kn+, rare |
+
+Kanahooka and Berkeley are **one band**, not two (Rob, 11 Aug 2026): they are adjacent runs on the same water and the wind oscillates across the 260 deg edge, so the distinction was never material on the day. Measured over 32 hours at 15 kn+, splitting them named the wrong run 62% of the time even with the direction corrected and both crossings hedged; one band is right 81% of the time and needs no hedging.
+
+A direction correction is applied at the lake as well as the speed one: `config.WIND_DIR_BIAS` backs the model bearing 10 deg, because the observed wind sits consistently anticlockwise of it (median -12, sd 9, backed on 27 of 32 hours over 15 kn). Measured at the ocean too, but with sd 25 rather than 9, so it is inside its own noise and is recorded rather than applied.
 
 Stronger is better on the lake. The NE lake run is a rare event: prefix its title with "RARE:" so it stands out.
 

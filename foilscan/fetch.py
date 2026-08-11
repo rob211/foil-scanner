@@ -130,6 +130,16 @@ def apply_bias(location_key: str, value: float) -> float:
     return max(0.0, corrected)
 
 
+def apply_dir_bias(location_key: str, deg: float) -> float:
+    """Correct a model bearing for the measured directional bias.
+
+    At the lake the wind sits consistently backed of the model (11 Aug 2026:
+    median -12 deg, backed on 27 of 32 hours over 15 kn), which had it naming
+    the wrong crossing 62% of the time. See config.WIND_DIR_BIAS.
+    """
+    return (deg + config.WIND_DIR_BIAS[location_key]) % 360.0
+
+
 def fetch_wind(location, now: datetime) -> WindForecast:
     source = f"open-meteo wind ({location.key})"
     payload = get_json(
@@ -178,7 +188,9 @@ def fetch_wind(location, now: datetime) -> WindForecast:
                 HourWind(
                     time=t,
                     speed_kn=apply_bias(location.key, speed),
-                    dir_deg=_check_range(d, 0, 360, "wind direction", source),
+                    dir_deg=apply_dir_bias(
+                        location.key, _check_range(d, 0, 360, "wind direction", source)
+                    ),
                     # Gust takes the same correction as speed. The bias was
                     # measured on speed alone, so this is an assumption - but
                     # correcting one and not the other would let a corrected

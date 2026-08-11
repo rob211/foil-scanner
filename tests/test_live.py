@@ -107,7 +107,7 @@ def test_pending_not_miss_before_window_starts():
 
 
 def test_lake_prefers_holfuy():
-    w = window(trigger_id="lake_kanahooka")
+    w = window(trigger_id="lake_west")
     holfuy = obs(20, 250, station="Holfuy")
     picked, note = live.pick_obs(w, obs(15, 250, station="BOM"), holfuy)
     assert picked is holfuy and note is None
@@ -199,10 +199,10 @@ def test_sync_does_not_delete_todays_lake_alert(monkeypatch):
     # cron, regardless of whether the wind was still blowing. broken:* must
     # still be swept (that is how it self-heals on the next good scan).
     existing = {
-        "live-alert:2026-07-06:lake_kanahooka": {
+        "live-alert:2026-07-06:lake_west": {
             "id": "ev-lake",
             "summary": "LAKE ALERT: 27 kn at Holfuy",
-            "extendedProperties": {"private": {"foil_key": "live-alert:2026-07-06:lake_kanahooka"}},
+            "extendedProperties": {"private": {"foil_key": "live-alert:2026-07-06:lake_west"}},
         },
         "broken:2026-07-06": {
             "id": "ev-broken",
@@ -242,7 +242,7 @@ def test_relevant_windows_selects_near_now():
         "windows": [
             window(start_h=12, end_h=16),  # in progress
             window(trigger_id="ne_ocean", start_h=14, end_h=16),  # within 1 h
-            {**window(trigger_id="lake_berkeley", start_h=8, end_h=10)},  # done
+            {**window(trigger_id="lake_west", start_h=8, end_h=10)},  # done
         ]
     }
     got = [w["trigger_id"] for w in live.relevant_windows(latest, NOW)]
@@ -422,7 +422,7 @@ def test_run_holfuy_failure_without_lake_window_is_soft(tmp_path, monkeypatch):
 
 
 def test_run_holfuy_failure_with_live_lake_window_raises(tmp_path, monkeypatch):
-    data_dir = _latest_on_disk(tmp_path, [window(trigger_id="lake_kanahooka", start_h=12, end_h=16)])
+    data_dir = _latest_on_disk(tmp_path, [window(trigger_id="lake_west", start_h=12, end_h=16)])
     monkeypatch.setenv("HOLFUY_KEY", "testkey")
     monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(12.0, 157.5, station="Bellambi"))
 
@@ -451,7 +451,7 @@ def test_run_bom_failure_still_publishes_obsless_live_json(tmp_path, monkeypatch
 
 # ---------------------------------------------------------- watch digest
 
-def _watch_window(start_h=10, run_name="Kanahooka run", trigger_id="lake_kanahooka"):
+def _watch_window(start_h=10, run_name="Kanahooka / Berkeley", trigger_id="lake_west"):
     from foilscan.models import Window
 
     return Window(
@@ -471,14 +471,14 @@ def _watch_window(start_h=10, run_name="Kanahooka run", trigger_id="lake_kanahoo
 
 def test_watch_windows_become_one_digest_not_events(monkeypatch):
     plan = gcal.sync(
-        [_watch_window(10), _watch_window(14, "Berkeley run", "lake_berkeley")],
+        [_watch_window(10), _watch_window(14, "Berkeley run", "lake_west")],
         NOW,
         [],
         dry_run=True,
     )
     assert len(plan) == 1
     assert "watch:" in plan[0]
-    assert "Kanahooka run" in plan[0] and "Berkeley run" in plan[0]
+    assert "Kanahooka / Berkeley" in plan[0] and "Berkeley run" in plan[0]
 
 
 def test_watch_digest_is_a_valid_all_day_range():
@@ -512,7 +512,7 @@ def test_real_windows_are_not_folded_into_the_digest():
     from foilscan.models import Window
 
     real = Window(
-        trigger_id="lake_kanahooka", run_name="Kanahooka run",
+        trigger_id="lake_west", run_name="Kanahooka / Berkeley",
         start=NOW.replace(hour=10), end=NOW.replace(hour=12), grade="green",
         peak_time=NOW.replace(hour=10), peak_median_kn=22.0, direction_deg=240.0,
         models_agreeing=3, model_values={"ICON": 22.0},
@@ -629,7 +629,7 @@ def test_watch_windows_are_not_live_verified():
     latest = {
         "windows": [
             {
-                "trigger_id": "lake_kanahooka",
+                "trigger_id": "lake_west",
                 "grade": "watch",
                 "start": NOW.replace(hour=12).isoformat(),
                 "end": NOW.replace(hour=16).isoformat(),
@@ -679,7 +679,7 @@ def test_alerts_fire_in_daylight():
     alerts = live.live_alerts(
         noon, obs(26.0, 275, station="Bellambi"), None, covered=set(), daylight=True
     )
-    assert "lake_berkeley" in {a["trigger_id"] for a in alerts}
+    assert "lake_west" in {a["trigger_id"] for a in alerts}
 
 
 def test_missing_sun_narrows_the_window_rather_than_alerting_all_night():
@@ -722,14 +722,14 @@ def _managed(monkeypatch, existing):
 
 
 def test_todays_live_alert_survives_a_scan(monkeypatch):
-    today = f"live-alert:{NOW.date().isoformat()}:lake_kanahooka"
+    today = f"live-alert:{NOW.date().isoformat()}:lake_west"
     deleted = _managed(monkeypatch, {today: "WIND NOW: Kanahooka"})
     gcal.sync([], NOW, [])
     assert today not in deleted
 
 
 def test_yesterdays_live_alert_is_swept(monkeypatch):
-    old = f"live-alert:{(NOW - timedelta(days=1)).date().isoformat()}:lake_berkeley"
+    old = f"live-alert:{(NOW - timedelta(days=1)).date().isoformat()}:lake_west"
     deleted = _managed(monkeypatch, {old: "WIND NOW!!: Berkeley run 26 kn W"})
     gcal.sync([], NOW, [])
     assert old in deleted
@@ -806,7 +806,7 @@ def test_sync_finishes_the_pass_when_one_event_fails(monkeypatch):
 
     def win(h):
         return Window(
-            trigger_id="lake_kanahooka", run_name="Kanahooka run",
+            trigger_id="lake_west", run_name="Kanahooka / Berkeley",
             start=NOW.replace(hour=h), end=NOW.replace(hour=h + 1), grade="green",
             peak_time=NOW.replace(hour=h), peak_median_kn=22.0, direction_deg=240.0,
             models_agreeing=3, model_values={"ICON": 22.0},
@@ -839,8 +839,8 @@ def test_sync_finishes_the_pass_when_one_event_fails(monkeypatch):
 def test_one_bad_window_does_not_kill_the_other_live_checks(tmp_path, monkeypatch):
     good = window(trigger_id="south_ocean")
     good["event_id"] = "ev-good"
-    bad = dict(good, trigger_id="lake_kanahooka",
-               foil_key="lake_kanahooka:bad", event_id=None)   # never synced
+    bad = dict(good, trigger_id="lake_west",
+               foil_key="lake_west:bad", event_id=None)   # never synced
     data_dir = _latest_on_disk(tmp_path, windows=[bad, good])
 
     monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(22.0, 180, station="Bellambi"))
@@ -880,7 +880,7 @@ def test_verdict_reaches_disk_even_when_sync_fails(tmp_path, monkeypatch):
     from foilscan.models import Window
 
     w = Window(
-        trigger_id="lake_kanahooka", run_name="Kanahooka run",
+        trigger_id="lake_west", run_name="Kanahooka / Berkeley",
         start=NOW.replace(hour=10), end=NOW.replace(hour=12), grade="green",
         peak_time=NOW.replace(hour=10), peak_median_kn=22.0, direction_deg=240.0,
         models_agreeing=3, model_values={"ICON": 22.0},

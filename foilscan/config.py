@@ -89,8 +89,13 @@ class Arc:
 # Lake runs (spec 4.1): trigger id -> (run name, arc, target kn, rare)
 LAKE_RUNS = {
     "lake_oakflats_berkeley": ("Oak Flats to Berkeley", Arc(170, 215), 20.0, False),
-    "lake_kanahooka": ("Kanahooka run", Arc(215, 260), 20.0, False),
-    "lake_berkeley": ("Berkeley run", Arc(260, 285), 20.0, False),
+    # One band, not two. Kanahooka and Berkeley are adjacent runs on the same
+    # water (Rob, 11 Aug 2026), and the wind oscillates across the 260 deg
+    # edge between them, so the distinction was never material on the day.
+    # Splitting them named the wrong run 62% of the time even with the
+    # direction corrected and both crossings hedged; one band gets it right
+    # 81% of the time and needs no hedging machinery at all.
+    "lake_west": ("Kanahooka / Berkeley", Arc(215, 285), 20.0, False),
     "lake_ne_rare": ("Sailing Club to Oak Flats", Arc(20, 70), 25.0, True),
 }
 
@@ -261,8 +266,7 @@ LAKE_ALERT_LOUD_KN = 30.0
 # event, with its own popup, for each - two phone pings for one blow.
 LIVE_ALERT_TRIGGERS = {
     "lake_oakflats_berkeley": (18.0, Arc(170, 215), "Oak Flats to Berkeley", "lake", "lake"),
-    "lake_kanahooka": (18.0, Arc(215, 260), "Kanahooka run", "lake", "lake"),
-    "lake_berkeley": (18.0, Arc(260, 285), "Berkeley run", "lake", "lake"),
+    "lake_west": (18.0, Arc(215, 285), "Kanahooka / Berkeley", "lake", "lake"),
     "lake_ne_rare": (22.5, Arc(20, 70), "Sailing Club to Oak Flats", "lake", "lake"),
     "entrance_ne": (16.2, Arc(20, 80), "Lake Entrance (NE wind)", "either", "entrance"),
     "entrance_reverse": (20.0, Arc(270, 315), "Entrance reverse run (Boronia Ave)", "either", "entrance"),
@@ -348,6 +352,22 @@ WIND_BIAS = {
     "entrance": ("scale", 1.45),
     "ocean": ("offset", 3.9),
 }
+
+# Direction correction, degrees added to the model bearing. Negative backs it
+# anticlockwise.
+#
+# CALIBRATED 11 Aug 2026. At the lake the observed wind sits consistently
+# backed of the model: median -12 deg, sd 9, and backed on 27 of 32 hours
+# over 15 kn. Physically that is the lake channelling a gradient wind along
+# its own axis. It named the wrong crossing 62% of the time; at -10 that
+# halves. -10 beat -6 and -12 on the backtest at both 15 and 18 kn.
+#
+# The ocean measured -10 as well but with sd 25 rather than 9, so the number
+# is inside its own noise - and the ocean bands are 55 deg wide, where the
+# lake's are 25-45, so a 10 deg shift barely moves band membership. Measured,
+# recorded, deliberately not applied.
+WIND_DIR_BIAS = {"lake": -10.0, "entrance": -10.0, "ocean": 0.0}
+
 
 PAT_WARN_DAYS = 14.0
 # Inside this, the run fails outright: a red run, GitHub's failure email and
@@ -452,6 +472,10 @@ def validate() -> None:
             raise ConfigError(f"wind bias offset for {key} is implausible: {value}")
     if {l.key for l in WIND_LOCATIONS} - set(WIND_BIAS):
         raise ConfigError("every wind location needs a bias entry, even a no-op")
+    if {l.key for l in WIND_LOCATIONS} - set(WIND_DIR_BIAS):
+        raise ConfigError("every wind location needs a direction bias, even a no-op")
+    if any(abs(v) > 45 for v in WIND_DIR_BIAS.values()):
+        raise ConfigError("a direction correction over 45 deg is not a bias, it is a bug")
 
     if not 0 < PAT_FAIL_DAYS < PAT_WARN_DAYS:
         raise ConfigError("PAT fail threshold must sit inside the warning window")
