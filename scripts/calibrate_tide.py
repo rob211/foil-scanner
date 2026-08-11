@@ -120,6 +120,10 @@ def match(model, observed, label):
           f"sd {st.pstdev(hts):.3f}")
     return st.median(diffs), st.median(hts)
 
+# Past these, what is measured no longer matches what is applied.
+DRIFT_MIN = 15.0
+DRIFT_M = 0.10
+
 th, hh = match(mod_highs, obs_highs, "HIGH TIDES")
 tl, hl = match(mod_lows, obs_lows, "LOW TIDES")
 if th is not None and tl is not None:
@@ -132,5 +136,19 @@ if th is not None and tl is not None:
     print(f"=> TIDE_TIME_OFFSET_MIN  suggestion: "
           f"{config.TIDE_TIME_OFFSET_MIN + residual:+.0f}  "
           f"(configured: {config.TIDE_TIME_OFFSET_MIN:+.0f})")
-    print(f"=> TIDE_HEIGHT_OFFSET_M  suggestion: {st.median([hh, hl]):+.3f}  "
+    height = st.median([hh, hl])
+    print(f"=> TIDE_HEIGHT_OFFSET_M  suggestion: {height:+.3f}  "
           f"(configured: {config.TIDE_HEIGHT_OFFSET_M})")
+
+    drifted = []
+    if abs(residual) > DRIFT_MIN:
+        drifted.append(f"tide timing residual {residual:+.0f} min")
+    if abs(height - config.TIDE_HEIGHT_OFFSET_M) > DRIFT_M:
+        drifted.append(
+            f"tide height {height:+.3f} against a configured "
+            f"{config.TIDE_HEIGHT_OFFSET_M}"
+        )
+    if "--check" in sys.argv and drifted:
+        # Non-zero so a scheduled run goes red and emails.
+        print("\nDRIFTED: " + "; ".join(drifted), file=sys.stderr)
+        sys.exit(1)

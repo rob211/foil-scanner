@@ -138,6 +138,9 @@ def fits(rows: list[tuple[float, float]]) -> dict:
 # coast picked `linear` over `offset` by 0.01 kn of residual - fitting noise,
 # and recommending a two-parameter correction where a constant does the job.
 SIMPLICITY_MARGIN = 0.05
+# Past this, what is measured no longer matches what is applied.
+DRIFT_LIMIT = 0.15
+drifted: list[str] = []
 
 
 def choose(f: dict) -> str:
@@ -179,9 +182,11 @@ def report(label, const, rows) -> None:
     # prints is what WIND_BIAS should be, not a residual to add to it.
     measured = f["scale"] if form == "scale" else f["offset"]
     drift = abs(measured - amount) / amount if amount else float("inf")
-    if drift > 0.15:
-        print(f"     DRIFT: measured {measured:.2f} against a configured "
-              f"{amount:.2f} - worth revisiting")
+    if drift > DRIFT_LIMIT:
+        msg = (f"{const}: measured {measured:.2f} against a configured "
+               f"{amount:.2f} ({drift:.0%} off)")
+        drifted.append(msg)
+        print(f"     DRIFT: {msg} - worth revisiting")
 
     decisive = [(o, fc) for o, fc in rows if o >= DECISION_KN]
     print(f"  at decision strength (observed {DECISION_KN:.0f} kn+): n={len(decisive)}")
@@ -199,7 +204,9 @@ def report(label, const, rows) -> None:
 
 
 def main() -> int:
-    days = int(sys.argv[1]) if len(sys.argv) > 1 else 60
+    args = [a for a in sys.argv[1:] if a != "--check"]
+    check = "--check" in sys.argv
+    days = int(args[0]) if args else 60
     rows = observation_history(days)
     if not rows:
         print("no committed live.json history in that window")
@@ -221,6 +228,11 @@ def main() -> int:
     print("\nThese are absolute, not residuals: the archive is raw and the")
     print("correction is applied on ingest, so re-running cannot compound it.")
     print("Re-run across a summer before trusting the numbers year-round.")
+    if check and drifted:
+        # Non-zero so a scheduled run goes red and emails, rather than
+        # printing a warning into a log nobody opens.
+        print("\nDRIFTED: " + "; ".join(drifted), file=sys.stderr)
+        return 1
     return 0
 
 

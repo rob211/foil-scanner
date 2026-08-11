@@ -483,6 +483,13 @@ and it is the first thing to revisit if entrance events over-fire.
 correcting upward makes them fire less, not more. Same fact, other direction:
 if the model under-reads, days that looked light were not.
 
+A weekly workflow runs both calibration scripts with `--check`, which exits
+non-zero on drift — a red run and GitHub's failure email. Drift in a
+correction is silent by nature, and nothing in this system is allowed to fail
+quietly. The workflow needs `fetch-depth: 0`, because `calibrate_wind.py`
+reads its observation history out of the git log of `data/live.json` and the
+default shallow clone has none of it.
+
 `scripts/calibrate_wind.py` reports absolute values, not residuals - the
 archive it compares against is raw and the correction is applied on ingest,
 so re-running cannot compound it. It flags drift over 15% against what is
