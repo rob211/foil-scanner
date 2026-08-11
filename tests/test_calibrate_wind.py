@@ -81,3 +81,28 @@ def test_every_reported_location_has_a_configured_bias():
 
     for loc in (config.LAKE, config.OCEAN):
         assert loc.key in config.WIND_BIAS
+
+
+def test_the_scripts_do_not_depend_on_the_working_directory():
+    # calibrate_tide.py carried one machine's absolute path and could not
+    # import foilscan in CI at all; calibrate_wind.py shelled out to git
+    # without pinning cwd and found no history. Both passed every time they
+    # were run by hand from the repo, and failed the first time a workflow
+    # ran them.
+    import subprocess
+    import tempfile
+    from pathlib import Path as P
+
+    scripts = P(__file__).resolve().parent.parent / "scripts"
+    for name in ("calibrate_tide.py", "calibrate_wind.py"):
+        src = (scripts / name).read_text()
+        assert "sys.path.insert(0, \"/" not in src, f"{name} has an absolute path"
+        assert "Path(__file__)" in src, f"{name} does not locate itself"
+    # And prove it, rather than only grepping for the shape of the bug.
+    with tempfile.TemporaryDirectory() as elsewhere:
+        out = subprocess.run(
+            [__import__("sys").executable, str(scripts / "calibrate_wind.py"), "--help"],
+            cwd=elsewhere, capture_output=True, text=True, timeout=60,
+        )
+        assert "No module named 'foilscan'" not in out.stderr
+        assert "returned non-zero exit status 128" not in out.stderr

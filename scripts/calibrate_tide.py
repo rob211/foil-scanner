@@ -21,7 +21,11 @@ lows (sd ~9), heights low by 0.826 m (sd 0.03).
 """
 import json, math, sys, statistics as st
 from datetime import datetime, timedelta, timezone
-sys.path.insert(0, "/home/rob/claude-workspace/foil-scanner")
+from pathlib import Path
+# Relative to this file, not an absolute path. This was hardcoded to one
+# machine's checkout and worked everywhere it was ever run by hand - until
+# the weekly workflow ran it in CI and it could not import foilscan at all.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from foilscan import config
 from foilscan.models import MarineForecast, MarineHour
 import requests
