@@ -208,3 +208,21 @@ def test_every_wind_location_has_a_bias_entry():
 
     for loc in config.WIND_LOCATIONS:
         assert fetch.apply_bias(loc.key, 10.0) > 0
+
+
+def test_direction_correction_backs_the_lake_and_leaves_the_ocean():
+    from foilscan import config, fetch
+
+    assert fetch.apply_dir_bias("lake", 264.0) == pytest.approx(254.0)
+    assert fetch.apply_dir_bias("entrance", 264.0) == pytest.approx(254.0)
+    # Measured at -10 too, but with sd 25 against the lake's 9 - inside its
+    # own noise, and the ocean bands are wide enough that it barely moves
+    # band membership. Recorded, not applied.
+    assert fetch.apply_dir_bias("ocean", 264.0) == pytest.approx(264.0)
+
+
+def test_direction_correction_wraps_through_north():
+    from foilscan import fetch
+
+    assert fetch.apply_dir_bias("lake", 5.0) == pytest.approx(355.0)
+    assert 0 <= fetch.apply_dir_bias("lake", 0.0) < 360

@@ -16,8 +16,7 @@ from .models import Observation
 # trigger_id -> (green-target kn, direction arc) for wind-verifiable events
 WIND_TARGETS = {
     "lake_oakflats_berkeley": (20.0, config.LAKE_RUNS["lake_oakflats_berkeley"][1]),
-    "lake_kanahooka": (20.0, config.LAKE_RUNS["lake_kanahooka"][1]),
-    "lake_berkeley": (20.0, config.LAKE_RUNS["lake_berkeley"][1]),
+    "lake_west": (20.0, config.LAKE_RUNS["lake_west"][1]),
     "lake_ne_rare": (25.0, config.LAKE_RUNS["lake_ne_rare"][1]),
     "entrance_ne": (config.ENTRANCE_M2_TARGET_KN, config.ENTRANCE_M2_WIND_ARC),
     # Missing since the reverse run was added (spec 4.8): the first live
