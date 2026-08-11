@@ -74,6 +74,27 @@ Read-only. It prints suggested values for `TIDE_TIME_OFFSET_MIN` and
 tide gates start looking off — the suggestion accounts for the offset already
 configured, so a healthy calibration reports back roughly what is set.
 
+## Wind calibration
+
+```
+python scripts/calibrate_wind.py [days]
+```
+
+Read-only, and **nothing applies its output**. It compares every observation
+ever committed in `data/live.json` against what the models actually said at
+the time (Open-Meteo's historical forecast archive, not a reanalysis), and
+prints what a correction would have to be.
+
+First run, 11 Aug 2026, 5 weeks: across 475 matched hours the models were
+never once high by 8 kn or more, and low by that much in one hour in six.
+They also saturate - when the lake truly blew 18-28 kn the model median sat
+at 13, against a yellow floor of 18 and a watch floor of 15. Lake fits a
+multiplier (about 1.57x), the coast a flat offset (about +3.9 kn).
+
+Re-run it across a different season before wiring anything in. A winter of
+W/NW gradient days is not a year, and a multiplier fitted to a handful of
+windy hours will overshoot - which means green days that are not.
+
 ## Local dev
 
 ```
