@@ -15,7 +15,17 @@ on:
     # and means a dead Worker degrades to hourly rather than to 3-hourly.
     # live.py's poll_gap_note still reports the degraded cadence.
     - cron: "23 * * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      token_expires_at:
+        description: >-
+          When the dispatching PAT expires. Set by the Cloudflare Worker from
+          GitHub's github-authentication-token-expiration header; only it
+          holds the token, so nothing else can measure this. Empty on a
+          manual or scheduled run, which the scanner treats as "unknown",
+          not as "fine".
+        required: false
+        type: string
 
 concurrency:
   # Per-workflow, NOT shared. A shared group meant scan and live collided
@@ -47,6 +57,7 @@ jobs:
           GCAL_SERVICE_ACCOUNT_JSON: ${{ secrets.GCAL_SERVICE_ACCOUNT_JSON }}
           FOIL_CALENDAR_ID: ${{ secrets.FOIL_CALENDAR_ID }}
           HOLFUY_KEY: ${{ secrets.HOLFUY_KEY }}
+          FOIL_TOKEN_EXPIRES_AT: ${{ inputs.token_expires_at }}
         # --force on a dispatched run: the Cloudflare Worker already applied
         # the cadence rule before asking, and re-applying it against the time
         # GitHub happens to start the job only ever drops ticks. The schedule

@@ -304,6 +304,18 @@ SCHEMA_VERSION = 2
 # compares each observation against it and writes the gap to live.json.
 BIAS_FLAG_KN = 8.0
 
+# The Cloudflare Worker's GitHub PAT expires, and an expired one is the
+# quietest failure in the system: dispatches simply stop, the schedule
+# backstop keeps the scanner alive at a reduced rate, and nothing says why.
+# GitHub returns the expiry on every response as the
+# github-authentication-token-expiration header, so the Worker passes it
+# through on each dispatch and the live job escalates as it approaches.
+PAT_WARN_DAYS = 14.0
+# Inside this, the run fails outright: a red run, GitHub's failure email and
+# a SCANNER BROKEN event, which are the loudest channels available and are
+# already proven. Better a fortnight of noise than a silent safety net.
+PAT_FAIL_DAYS = 3.0
+
 # Google Calendar rejects a description over 8192 characters with a 400, and
 # sync does not catch that, so one noisy day would take the whole calendar
 # sync down with it. 120 near misses already produced 9867 characters.
@@ -392,6 +404,8 @@ def validate() -> None:
         if not group:
             raise ConfigError(f"live alert group for {tid} must name a body of water")
 
+    if not 0 < PAT_FAIL_DAYS < PAT_WARN_DAYS:
+        raise ConfigError("PAT fail threshold must sit inside the warning window")
     if ALERT_DURATION_H <= 0 or ALERT_LEAD_S < 0 or ALERT_REMINDER_MINUTES < 0:
         raise ConfigError("live alert event timing must be non-negative and non-empty")
     if not 0 < ALERT_TAIL_H <= ALERT_DURATION_H <= ALERT_MAX_H:

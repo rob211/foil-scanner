@@ -91,6 +91,12 @@ function ghHeaders(env) {
 }
 
 /** True when this workflow already has a run created very recently. */
+/**
+ * GitHub returns the token's expiry on every response. Read it from the
+ * cheap GET we already make, so the POST can carry it as a dispatch input.
+ */
+let lastSeenExpiry = null;
+
 async function ranRecently(workflow, env) {
   try {
     const res = await fetch(
@@ -100,6 +106,8 @@ async function ranRecently(workflow, env) {
         `/actions/workflows/${workflow}/runs?per_page=1`,
       { headers: ghHeaders(env), signal: AbortSignal.timeout(GH_TIMEOUT_MS) }
     );
+    lastSeenExpiry =
+      res.headers.get("github-authentication-token-expiration") || lastSeenExpiry;
     if (!res.ok) return false;           // can't tell - dispatching twice
     const data = await res.json();       // beats not dispatching at all
     const last = data.workflow_runs && data.workflow_runs[0];
@@ -114,10 +122,15 @@ export async function dispatch(workflow, env) {
   if (await ranRecently(workflow, env)) {
     return { ok: true, workflow, skipped: "dispatched within the dedupe window" };
   }
+  const expiry = lastSeenExpiry;
   const url =
     `https://api.github.com/repos/${env.GITHUB_REPO}` +
     `/actions/workflows/${workflow}/dispatches`;
   let lastError;
+  // A credential rejection is not retryable, and throwing it from inside the
+  // loop's own try would just be caught and retried three times - burying the
+  // reason under what look like transport errors.
+  let fatal = null;
   // A dropped dispatch is the failure this Worker exists to prevent, so it is
   // worth a couple of retries before giving up.
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -125,12 +138,24 @@ export async function dispatch(workflow, env) {
       const res = await fetch(url, {
         method: "POST",
         headers: { ...ghHeaders(env), "Content-Type": "application/json" },
-        body: JSON.stringify({ ref: env.GITHUB_REF || "main" }),
+        body: JSON.stringify({
+          ref: env.GITHUB_REF || "main",
+          // Passed through so the scanner can escalate as the PAT ages. Only
+          // this Worker ever sees the token, and GitHub only reveals the
+          // expiry to whoever holds it, so nothing else could measure this.
+          inputs: expiry ? { token_expires_at: expiry } : {},
+        }),
         // Without this a hung subrequest burns the whole invocation and the
         // tick is lost, with the retry loop below never reached.
         signal: AbortSignal.timeout(GH_TIMEOUT_MS),
       });
-      if (res.status === 204) return { ok: true, workflow };
+      if (res.status === 401 || res.status === 403) {
+        fatal =
+          `GitHub rejected the token (HTTP ${res.status}) - it has probably ` +
+          "expired; roll it and run `wrangler secret put GITHUB_TOKEN`";
+        break;
+      }
+      if (res.status === 204) return { ok: true, workflow, expiry };
       // Never log the response body verbatim; it can echo request detail.
       lastError = `HTTP ${res.status}`;
     } catch (err) {
@@ -138,6 +163,7 @@ export async function dispatch(workflow, env) {
     }
     if (attempt < 2) await new Promise((r) => setTimeout(r, 2 ** attempt * 1000));
   }
+  if (fatal) throw new Error(fatal);
   throw new Error(`dispatch ${workflow} failed: ${lastError}`);
 }
 
