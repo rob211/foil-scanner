@@ -92,6 +92,12 @@ They also saturate - when the lake truly blew 18-28 kn the model median sat
 at 13, against a yellow floor of 18 and a watch floor of 15. Lake fits a
 multiplier (about 1.57x), the coast a flat offset (about +3.9 kn).
 
+A weekly GitHub Action (`.github/workflows/calibrate.yml`) re-runs both
+calibrations and **fails the run** when what it measures no longer matches
+what is applied, so drift arrives as an email rather than waiting for someone
+to remember. It changes nothing on its own; the constants stay a deliberate
+decision.
+
 Applied since 11 Aug 2026 as `config.WIND_BIAS` (lake and entrance x1.45,
 ocean +3.9), on ingest so everything downstream agrees. Backtested at 73%
 precision and 73% recall on the lake, against 0% recall uncorrected.
