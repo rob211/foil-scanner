@@ -606,7 +606,10 @@ def run(
         log.append("DRY RUN: not writing live.json")
     else:
         verdict.write_live(
-            verdict.build_live(now, bom, holfuy, checks, notes, alerts, bias),
+            verdict.build_live(
+                now, bom, holfuy, checks, notes, alerts, bias,
+                token_expires_at=config.env("FOIL_TOKEN_EXPIRES_AT", required=False),
+            ),
             data_dir,
         )
         if lake_rec is not None:
