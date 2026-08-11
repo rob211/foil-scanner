@@ -240,6 +240,9 @@
   .chip.yellow { background: var(--grade-yellow); color: var(--yellow-ink); }
   .chip.red { background: var(--grade-red); color: var(--red-ink); }
   .chip.watch { background: transparent; color: var(--grade-watch); box-shadow: inset 0 0 0 1px var(--grade-watch); }
+  /* A window carried by the bare minimum of models. Not a warning - the
+     grade is still earned - so it reads as a caveat, not an alarm. */
+  .thin { font-size: 0.78rem; color: var(--grade-yellow); white-space: nowrap; }
   .win .name { font-weight: 650; font-size: 0.95rem; }
   .win .meta { font-family: var(--font-mono); color: var(--muted); font-size: 0.82rem; margin-left: auto; text-align: right; flex: none; font-variant-numeric: tabular-nums; }
   .win .body { padding: 0.2rem 0.9rem 0.9rem; font-size: 0.9rem; border-top: 1px solid var(--line); }
@@ -372,7 +375,7 @@
       <p>Every strength above is compared against a <em>corrected</em> model reading, not the raw forecast. Measured against the stations over five weeks, the models never once reached the lake&rsquo;s 18 kn floor on a day it genuinely blew that hard &mdash; so the lake and entrance forecasts are scaled by 1.45 and the ocean lifted 3.9 kn before a trigger looks at them. The lake bearing is also backed 10&deg;: the wind there sits consistently anticlockwise of the model, which is the lake channelling a gradient wind along its own axis.</p>
       <p>Two things follow. <strong>Cross-checks will not match</strong>: Windguru and WillyWeather show the raw models, so this page will read several knots higher for the same hour, and that is the correction, not a disagreement. And <strong>the light-wind triggers fire less</strong> &mdash; Lake Entrance mode 1 and Baysurf both want calm, so lifting the numbers rules out days that only looked light.</p>
       <p class="hlabel">Every window must also pass</p>
-      <p>Daylight only (sunrise to sunset), and at least 2 of the 4 forecast models (GFS, ECMWF, ICON, UKMO) must meet the trigger for the same hours. Quoted strength is the median of the agreeing models at the window's peak. A lone model calling it is not a run, but it is not thrown away either: it becomes a <span class="g watch">WATCH</span> and a near miss.</p>
+      <p>Daylight only (sunrise to sunset), and at least 2 of the 4 forecast models (GFS, ECMWF, ICON, UKMO) must meet the trigger for the same hours. A window carried by exactly two is tagged <span class="thin">2 of 4 models</span> &mdash; the grade is still earned, but the other two models did not see it, so it is a thinner call than one the whole set agrees on. Quoted strength is the median of the agreeing models at the window's peak. A lone model calling it is not a run, but it is not thrown away either: it becomes a <span class="g watch">WATCH</span> and a near miss.</p>
       <p class="hlabel">Grades</p>
       <p>Each run has a target strength. <span class="g watch">WATCH</span> from about a sixth below the MAYBE floor, <span class="g yellow">MAYBE</span> from 90% of target (worth watching), <span class="g green">ON</span> at target, <span class="g red">FIRING</span> from 25% over. Windows four or more days out carry a low-confidence flag.</p>
       <p class="hlabel">What a green window is actually claiming</p>
@@ -589,7 +592,13 @@ function windowCard(w, now, liveMap, open) {
   rows.push(["Confidence", w.confidence]);
   const lc = liveMap[w.foil_key];
   rows.push(["Live check", lc ? `${lc.state}: ${lc.live_line}` : w.live_status]);
-  const tags = (w.title_tags || []).length ? `<span class="tags">${esc(w.title_tags.join(" · "))}</span>` : "";
+  // Minimum-consensus is pulled out of the tag list and styled separately:
+  // it says how much to trust the window, which the other tags do not.
+  const allTags = w.title_tags || [];
+  const thinTag = allTags.find((t) => /^\d+ of \d+ models$/.test(t));
+  const restTags = allTags.filter((t) => t !== thinTag);
+  const tags = restTags.length ? `<span class="tags">${esc(restTags.join(" · "))}</span>` : "";
+  const thin = thinTag ? `<span class="thin">${esc(thinTag)}</span>` : "";
   const tide = w.high_tide ? `<span class="tide">High tide ${esc(tideText(w))}</span>` : "";
   // South windows cover several launch spots; show each as its own chip.
   const spots = (w.spots || []).length ? `<span class="spots">${w.spots.map((sp) => `<span class="spot">${esc(sp)}</span>`).join("")}</span>` : "";
@@ -601,6 +610,7 @@ function windowCard(w, now, liveMap, open) {
       ${tide}
       ${spots}
       ${tags}
+      ${thin}
     </summary>
     <div class="body">
       <dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>

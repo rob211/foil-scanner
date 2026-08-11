@@ -14,6 +14,7 @@ from . import config, fetch, gcal, verdict
 from .models import SourceStatus
 from .triggers import (
     baysurf_windows,
+    flag_thin_consensus,
     entrance_reverse_windows,
     entrance_windows,
     hill60_windows,
@@ -101,6 +102,7 @@ def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
             skipped.append("ocean triggers skipped: wind or marine unavailable")
 
     windows.sort(key=lambda w: (w.start, w.trigger_id))
+    flag_thin_consensus(windows)
     if _identical(lake_wind, entrance_wind):
         # The lake and the entrance are 3 km apart and every model here is
         # 10-25 km resolution, so both points land in the same grid cell and

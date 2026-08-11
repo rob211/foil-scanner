@@ -747,3 +747,38 @@ def test_the_entrance_no_go_sits_exactly_where_rob_put_it(sun):
             assert got == [], f"{speed} kn onshore should be a no-go"
         else:
             assert got and all(w.grade == expect for w in got), speed
+
+
+# ----------------------------------------- thin consensus flag (11 Aug)
+
+def _win(agreeing, grade="green"):
+    from foilscan.models import Window
+
+    return Window(trigger_id="lake_west", run_name="Kanahooka / Berkeley",
+                  start=at(10), end=at(12), grade=grade, peak_time=at(10),
+                  peak_median_kn=22.0, direction_deg=250.0,
+                  models_agreeing=agreeing, model_values={"ICON": 22.0})
+
+
+def test_a_bare_minimum_window_is_flagged():
+    from foilscan.triggers import flag_thin_consensus
+
+    w = flag_thin_consensus([_win(config.MIN_MODELS_AGREE)])[0]
+    assert any("of 4 models" in t for t in w.title_tags)
+    assert any("the others did not see it" in n for n in w.notes)
+
+
+def test_a_well_agreed_window_is_not_flagged():
+    from foilscan.triggers import flag_thin_consensus
+
+    w = flag_thin_consensus([_win(4)])[0]
+    assert w.title_tags == [] and w.notes == []
+
+
+def test_a_watch_is_left_alone():
+    # It already carries its own reason; "2 of 4 models" beside "1 of 4
+    # models only" reads as a contradiction.
+    from foilscan.triggers import flag_thin_consensus
+
+    w = flag_thin_consensus([_win(config.MIN_MODELS_AGREE, grade="watch")])[0]
+    assert w.title_tags == []
