@@ -160,9 +160,9 @@ TIDE_HEIGHT_OFFSET_M = 0.83
 ENTRANCE_M1_WIND_MAX_KN = 10.0
 ENTRANCE_M1_WIND_ARC = Arc(200, 340)
 ENTRANCE_M1_CALM_KN = 5.0
-# ESTIMATE, not measured - the one number here Rob did not give. "Way too
-# strong" for onshore wind over a shallow entrance; dial it to taste.
-ENTRANCE_WIND_NO_GO_KN = 25.0
+# Rob's number (11 Aug 2026), replacing a 25.0 estimate of mine. The point
+# at which onshore wind over a shallow entrance calls it off.
+ENTRANCE_WIND_NO_GO_KN = 20.0
 ENTRANCE_M1_SWELL_ARC = Arc(35, 110)
 ENTRANCE_M1_SWELL_TARGET_M = 0.8
 ENTRANCE_M2_WIND_ARC = Arc(20, 80)
