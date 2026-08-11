@@ -361,13 +361,40 @@ def test_entrance_mode1_swell_direction_matters(sun):
 
 
 def test_entrance_mode1_wind_too_strong(sun):
-    # All 24 h, not just the daylight block: mk_wind's filler hours are 2 kn,
-    # which qualifies mode 1 through the calm clause and (now that off-tide
-    # windows survive) would put an unrelated window in the result.
-    wind = mk_wind(hours(range(0, 24), 14, 270), location_key="entrance")
+    # Onshore AND over the no-go: the only combination that deletes a swell
+    # window now. All 24 h, not just the daylight block - mk_wind's filler
+    # hours are 2 kn, which qualifies through the calm clause.
+    wind = mk_wind(hours(range(0, 24), 30, 90), location_key="entrance")
     marine = mk_marine(0.9, 90, high_tide_hour=13)
     windows, _ = entrance_windows(wind, marine, sun, NOW)
     assert windows == []
+
+
+def test_entrance_strong_offshore_is_still_a_run(sun):
+    # The entrance is open to the ocean and this is a swell run: a hard
+    # offshore grooms the face rather than ruining it, so it is not a no-go
+    # the way the same strength onshore would be.
+    wind = mk_wind(hours(range(0, 24), 22, 270), location_key="entrance")
+    marine = mk_marine(0.9, 90, high_tide_hour=13)
+    windows, _ = entrance_windows(wind, marine, sun, NOW)
+    swell = [w for w in windows if w.trigger_id == "entrance_swell"]
+    assert swell and all(w.grade != "watch" for w in swell)
+
+
+def test_entrance_unfavourable_wind_is_a_watch_not_a_deletion(sun):
+    # Rob, 11 Aug 2026: "it's not a wind only place, so that shouldn't be the
+    # golden gate holding it all back." Swell and tide are present; the wind
+    # is merely wrong.
+    wind = mk_wind(hours(range(0, 24), 16, 90), location_key="entrance")
+    marine = mk_marine(0.9, 90, high_tide_hour=13)
+    windows, _ = entrance_windows(wind, marine, sun, NOW)
+    swell = [w for w in windows if w.trigger_id == "entrance_swell"]
+    assert swell, "an onshore breeze deleted a swell window"
+    assert all(w.grade == "watch" for w in swell)
+    assert all("wind not favourable" in (w.watch or "") for w in swell)
+    # ...and a window that is also off-tide reports both reasons, not one.
+    both = [w for w in swell if w.tide_state == "workable"]
+    assert both and all("off tide" in w.watch for w in both)
 
 
 def test_entrance_mode2_strong_ne(sun):
@@ -628,7 +655,9 @@ def test_entrance_off_tide_survives_and_is_recorded(sun):
     # closes. It used to vanish with no near miss to explain it.
     # Every hour spelled out: mk_wind's 2 kn filler would itself qualify
     # mode 1 through the calm clause and blur the window boundary.
-    spec = {h: (14.0, 270.0) for h in range(24)}
+    # Filler must be unfavourable AND over the no-go now: 14 kn offshore is
+    # perfectly good conditions for a swell run.
+    spec = {h: (30.0, 90.0) for h in range(24)}
     spec.update({h: (6.0, 270.0) for h in range(9, 12)})
     wind = mk_wind(spec, location_key="entrance")
     marine = mk_marine(1.2, 70, high_tide_hour=7)
@@ -664,7 +693,7 @@ def test_entrance_no_go_in_the_last_hours_before_low(sun):
     # "Can still work on any tide except the last 4 hours before dead low -
     # water flow is too much." Low at 16:00 makes 12:00-16:00 a hard no.
     marine = _marine_low_then_high(low_hour=16, swell_m=1.2)
-    spec = {h: (14.0, 90.0) for h in range(24)}       # never qualifies
+    spec = {h: (30.0, 90.0) for h in range(24)}   # onshore and over the no-go       # never qualifies
     spec.update({h: (6.0, 270.0) for h in range(13, 16)})   # only inside the no-go
     wind = mk_wind(spec, location_key="entrance")
     windows, _ = entrance_windows(wind, marine, sun, NOW)
@@ -673,7 +702,7 @@ def test_entrance_no_go_in_the_last_hours_before_low(sun):
 
 def test_entrance_window_is_clipped_at_the_no_go_boundary(sun):
     marine = _marine_low_then_high(low_hour=16, swell_m=1.2)
-    spec = {h: (14.0, 90.0) for h in range(24)}
+    spec = {h: (30.0, 90.0) for h in range(24)}   # onshore and over the no-go
     spec.update({h: (6.0, 270.0) for h in range(10, 15)})   # straddles 12:00
     wind = mk_wind(spec, location_key="entrance")
     windows, _ = entrance_windows(wind, marine, sun, NOW)
@@ -685,7 +714,7 @@ def test_entrance_window_is_clipped_at_the_no_go_boundary(sun):
 def test_entrance_workable_tide_is_downgraded_not_dropped(sun):
     # Neither the run-out nor the no-go: the run is on, just not at its best.
     marine = _marine_low_then_high(low_hour=16, swell_m=1.2)  # no-go 12:00-16:00
-    spec = {h: (14.0, 90.0) for h in range(24)}
+    spec = {h: (30.0, 90.0) for h in range(24)}   # onshore and over the no-go
     spec.update({h: (6.0, 270.0) for h in range(8, 12)})
     wind = mk_wind(spec, location_key="entrance")
     windows, misses = entrance_windows(wind, marine, sun, NOW)

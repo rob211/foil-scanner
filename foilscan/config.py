@@ -146,9 +146,23 @@ TIDE_TIME_OFFSET_MIN = 30.0
 # TIDE_TIME_OFFSET_MIN): observed minus model = +0.826 m over 54 matched
 # tides, sd 0.03 m. The old 0.95 over-reported every tide height by ~12 cm.
 TIDE_HEIGHT_OFFSET_M = 0.83
+# Mode 1 is a SWELL run, and the entrance is open to the ocean - unlike the
+# lake, which has nothing but wind. So wind grades this trigger, it does not
+# gate it (Rob, 11 Aug 2026: "it's not a wind only place, so that shouldn't
+# be the golden gate holding it all back").
+#
+#   favourable  -> full rating: offshore (ENTRANCE_M1_WIND_ARC), or light
+#                  enough that direction stops mattering
+#   unfavourable-> a watch. Swell and tide are still there; the wind is just
+#                  wrong, and that is worth looking at rather than deleting
+#   too strong  -> no go, but only when it is unfavourable as well. Strong
+#                  offshore grooms a swell run; strong onshore ruins it
 ENTRANCE_M1_WIND_MAX_KN = 10.0
 ENTRANCE_M1_WIND_ARC = Arc(200, 340)
 ENTRANCE_M1_CALM_KN = 5.0
+# ESTIMATE, not measured - the one number here Rob did not give. "Way too
+# strong" for onshore wind over a shallow entrance; dial it to taste.
+ENTRANCE_WIND_NO_GO_KN = 25.0
 ENTRANCE_M1_SWELL_ARC = Arc(35, 110)
 ENTRANCE_M1_SWELL_TARGET_M = 0.8
 ENTRANCE_M2_WIND_ARC = Arc(20, 80)
@@ -445,6 +459,8 @@ def validate() -> None:
     if not 1 <= MIN_MODELS_WATCH <= MIN_MODELS_AGREE:
         raise ConfigError("watch consensus must be at least 1 and no stricter than a window")
 
+    if ENTRANCE_WIND_NO_GO_KN <= ENTRANCE_M1_WIND_MAX_KN:
+        raise ConfigError("the entrance no-go wind must sit above its light-wind ceiling")
     if ENTRANCE_OFF_TIDE_DOWNGRADE < 0:
         raise ConfigError("off-tide downgrade cannot be negative")
     if not 0 <= ENTRANCE_NO_GO_BEFORE_LOW_H < 6:
