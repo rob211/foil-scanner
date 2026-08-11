@@ -355,6 +355,36 @@ The prime directive: this scanner must never quietly show a calm week because so
 5. Calibration fortnight: compare modelled high-tide times against BOM Port Kembla tide predictions, sanity-check the Holfuy 0.9 factor against BOM on a windy lake day, eyeball events against Windguru and WillyWeather, and tune coordinates or thresholds. Log findings in the repo.
 6. Later: GitHub Pages dashboard reading `data/latest.json` and `data/history/`. Nothing in phases 1-5 may assume the calendar is the only consumer.
 
+## 14. Credential expiry
+
+The Worker's GitHub PAT expires, and an expired one is the quietest failure
+in the system: dispatches stop, the schedule backstop keeps the scanner alive
+at a reduced rate, and the only trace is a poll-gap note that reads like
+GitHub shedding runs rather than a credential to renew.
+
+Only the Worker holds the token, and GitHub reveals the expiry only to
+whoever holds it - as the `github-authentication-token-expiration` header on
+every response. So the Worker reads it from the run-list GET it already
+makes and forwards it as a `workflow_dispatch` input; `live.yml` puts it in
+`FOIL_TOKEN_EXPIRES_AT` and the live job escalates:
+
+| Time left | Effect |
+|---|---|
+| over `PAT_WARN_DAYS` | silent |
+| inside `PAT_WARN_DAYS` | a note in `live.json`, rendered as a `TOKEN EXPIRING` alarm on the dashboard |
+| inside `PAT_FAIL_DAYS`, or expired | the run fails: red run, failure email, `SCANNER BROKEN` event |
+
+`live.json` is written **before** the run is failed, so the warning reaches
+the dashboard rather than going down with the run.
+
+An absent value means the run came from the schedule backstop, which needs no
+PAT. That is "unknown", not "healthy", and is silent by design - the backstop
+is exactly the path that still works when the token is dead.
+
+A 401 or 403 from GitHub is not retried. Retrying a credential rejection
+gets the same answer three times and buries the reason under what look like
+transport errors.
+
 ## 13. Model bias
 
 The wind models are not calibrated against the stations, and measurement says

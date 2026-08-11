@@ -907,3 +907,64 @@ def test_verdict_reaches_disk_even_when_sync_fails(tmp_path, monkeypatch):
 
     on_disk = json.loads((tmp_path / "latest.json").read_text())
     assert on_disk["windows"][0]["event_id"] == "ev-that-synced-fine"
+
+
+# ------------------------------------------------------- PAT expiry alarm
+
+def _expiry_env(monkeypatch, value):
+    if value is None:
+        monkeypatch.delenv("FOIL_TOKEN_EXPIRES_AT", raising=False)
+    else:
+        monkeypatch.setenv("FOIL_TOKEN_EXPIRES_AT", value)
+
+
+def test_pat_expiry_is_silent_while_there_is_plenty_of_time(monkeypatch):
+    far = (NOW + timedelta(days=90)).strftime("%Y-%m-%d %H:%M:%S UTC")
+    _expiry_env(monkeypatch, far)
+    note, days = live.token_expiry_note(NOW)
+    assert note is None and days == pytest.approx(90, abs=1)
+
+
+def test_pat_expiry_warns_inside_the_window(monkeypatch):
+    soon = (NOW + timedelta(days=10)).strftime("%Y-%m-%d %H:%M:%S UTC")
+    _expiry_env(monkeypatch, soon)
+    note, days = live.token_expiry_note(NOW)
+    assert note is not None and "expires in 10 day" in note
+    assert "wrangler secret put" in note          # says how to fix it
+    assert config.PAT_FAIL_DAYS < days <= config.PAT_WARN_DAYS
+
+
+def test_an_expired_pat_says_so_plainly(monkeypatch):
+    gone = (NOW - timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S UTC")
+    _expiry_env(monkeypatch, gone)
+    note, days = live.token_expiry_note(NOW)
+    assert "EXPIRED" in note and days < 0
+
+
+def test_an_absent_expiry_is_unknown_not_healthy(monkeypatch):
+    # A scheduled backstop run carries no input. That means "nobody told us",
+    # which must not be reported as "the token is fine".
+    _expiry_env(monkeypatch, None)
+    assert live.token_expiry_note(NOW) == (None, None)
+
+
+def test_an_unreadable_expiry_is_reported_rather_than_ignored(monkeypatch):
+    _expiry_env(monkeypatch, "next Tuesday")
+    note, days = live.token_expiry_note(NOW)
+    assert note is not None and days is None
+
+
+def test_a_nearly_dead_pat_fails_the_run(tmp_path, monkeypatch):
+    # The loudest channels available are a red run, GitHub's failure email
+    # and a SCANNER BROKEN event; this reuses all three.
+    data_dir = _latest_on_disk(tmp_path)
+    _expiry_env(monkeypatch, (NOW + timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S UTC"))
+    monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(12.0, 157.5, station="Bellambi"))
+    monkeypatch.setattr(live.gcal, "ensure_alert", lambda *a, **k: True)
+
+    with pytest.raises(StaleDataError, match="PAT"):
+        live.run(NOW, dry_run=False, data_dir=data_dir)
+
+    # ...but live.json is written first, so the warning is on the dashboard
+    # rather than lost with the failing run.
+    assert any("PAT" in n for n in _live_json(tmp_path)["notes"])

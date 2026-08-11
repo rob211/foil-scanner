@@ -659,6 +659,9 @@ function render(data, liveData, now) {
   }
   for (const n of (liveData && liveData.notes) || []) {
     if (n.startsWith("poll gap:")) html += alarm("LIVE CHECK LATE", n.slice(10).trim());
+    // An expiring credential stops the Worker dispatching, which otherwise
+    // looks exactly like GitHub shedding runs. Name it so it gets renewed.
+    if (n.includes("GitHub PAT")) html += alarm("TOKEN EXPIRING", n);
   }
 
   const liveMap = {};

@@ -9,7 +9,16 @@ on:
     # 2 h backstop clears that even if GitHub sheds several in a row.
     # (GitHub sheds `schedule` heavily under load - see cron-worker/README.)
     - cron: "17 */2 * * *"
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      token_expires_at:
+        description: >-
+          Declared but unused here. The Worker sends the same inputs to both
+          workflows and GitHub rejects a dispatch carrying an input the
+          workflow does not declare, so this has to exist. The escalation
+          itself lives in the live job, which runs often enough to matter.
+        required: false
+        type: string
 
 concurrency:
   # Per-workflow, NOT shared. A shared group meant scan and live collided

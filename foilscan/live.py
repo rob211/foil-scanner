@@ -7,7 +7,7 @@ overnight, every 30 min during local daylight hours - see _should_run.
 from __future__ import annotations
 
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from . import config, fetch, gcal, verdict
 from .errors import CalendarError, StaleDataError
@@ -163,6 +163,47 @@ def _tide_notes(marine, now: datetime) -> dict[str, str]:
         "entrance_reverse": f"Run-in gate today: {fmt(_entrance_reverse_tide_spans(marine))}.",
         "entrance_ne": f"Run-out gate today: {fmt(_tide_spans(marine))}.",
     }
+
+
+def token_expiry_note(now: datetime) -> tuple[str | None, float | None]:
+    """How long the Worker's GitHub PAT has left, and how loudly to say so.
+
+    Returns (note, days_left). The Worker passes GitHub's
+    github-authentication-token-expiration header through as a dispatch
+    input; the workflow puts it in FOIL_TOKEN_EXPIRES_AT. Absent means this
+    run came from the schedule backstop, which needs no PAT - not that the
+    token is fine - so absence is silent by design.
+
+    An expired PAT stops dispatches dead while the backstop quietly carries
+    on at a reduced rate. Without this the only trace is a poll-gap note,
+    which reads like GitHub shedding runs rather than a credential to renew.
+    """
+    raw = config.env("FOIL_TOKEN_EXPIRES_AT", required=False)
+    if not raw:
+        return None, None
+    text = raw.strip().replace(" UTC", "+00:00")
+    try:
+        expires = datetime.fromisoformat(text)
+    except ValueError:
+        return f"could not read the token expiry {raw!r}", None
+    if expires.tzinfo is None:
+        expires = expires.replace(tzinfo=timezone.utc)
+    days = (expires - now).total_seconds() / 86400
+    if days <= 0:
+        return (
+            f"GitHub PAT EXPIRED {abs(days):.0f} day(s) ago "
+            f"({expires:%Y-%m-%d}); the Worker cannot dispatch - roll it at "
+            "github.com/settings/personal-access-tokens",
+            days,
+        )
+    if days <= config.PAT_WARN_DAYS:
+        return (
+            f"GitHub PAT expires in {days:.0f} day(s) ({expires:%Y-%m-%d}); "
+            "roll it at github.com/settings/personal-access-tokens and run "
+            "`wrangler secret put GITHUB_TOKEN`",
+            days,
+        )
+    return None, days
 
 
 def poll_gap_note(data_dir, now: datetime) -> str | None:
@@ -414,10 +455,14 @@ def run(
     latest = verdict.load_latest(data_dir)
     heartbeat(latest, now)
     gap = poll_gap_note(data_dir, now)
+    pat_note, pat_days = token_expiry_note(now)
     todays = relevant_windows(latest, now)
 
     log: list[str] = []
     notes: list[str] = [gap] if gap else []
+    if pat_note:
+        notes.append(pat_note)
+        log.append(pat_note)
     # BOM is fetched even with no window in play: the dashboard's live tile
     # wants an hourly reading all day. A failed fetch still publishes an
     # obs-less live.json so the dashboard can say why, then fails loudly.
@@ -570,6 +615,10 @@ def run(
             f"live.json: {bom.station} {bom.speed_kn:.0f} kn at {bom.time:%H:%M}, "
             f"{len(checks)} check(s)"
         )
+    if pat_days is not None and pat_days <= config.PAT_FAIL_DAYS:
+        # Everything else has finished and live.json is written, so the note
+        # is on the dashboard before this makes the run red (spec 8.9).
+        raise StaleDataError(pat_note)
     if not checked_ok:
         # Everything else finished first, but the run still fails loudly
         # (spec 8.9): a window that cannot be verified is a real problem.

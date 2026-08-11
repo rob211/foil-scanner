@@ -184,3 +184,36 @@ test("one workflow failing does not lose the other", async () => {
   assert.ok(blob.includes("scan.yml"), "the scan failure was not recorded");
   assert.ok(blob.includes("live.yml"), "the live dispatch was lost with it");
 });
+
+test("a rejected token fails immediately instead of retrying", async () => {
+  // Retrying a credential problem three times just gets the same answer
+  // three times, and buries the reason under transport-looking errors.
+  const calls = fakeFetch([
+    ["/runs?", () => new Response(JSON.stringify({ workflow_runs: [] }), { status: 200 })],
+    ["/dispatches", () => new Response("Bad credentials", { status: 401 })],
+  ]);
+  await assert.rejects(
+    () => dispatch("live.yml", ENV),
+    (err) => /expired/.test(String(err)) && /wrangler secret put/.test(String(err))
+  );
+  assert.equal(calls.filter((c) => c.method === "POST").length, 1, "it retried");
+});
+
+test("the token expiry is read from GitHub and passed on to the workflow", async () => {
+  // Only this Worker holds the token, and GitHub only tells the holder when
+  // it expires - so if it does not forward it, nothing can warn.
+  const bodies = [];
+  globalThis.fetch = async (url, init = {}) => {
+    if (String(url).includes("/runs?")) {
+      return new Response(JSON.stringify({ workflow_runs: [] }), {
+        status: 200,
+        headers: { "github-authentication-token-expiration": "2026-11-09 00:00:00 UTC" },
+      });
+    }
+    bodies.push(JSON.parse(init.body));
+    return new Response(null, { status: 204 });
+  };
+  const res = await dispatch("live.yml", ENV);
+  assert.equal(res.expiry, "2026-11-09 00:00:00 UTC");
+  assert.equal(bodies[0].inputs.token_expires_at, "2026-11-09 00:00:00 UTC");
+});

@@ -48,9 +48,11 @@ GitHub is the fix; the scanner code does not change.
 1. Create a **fine-grained** personal access token:
    - Repository access: only `rob211/foil-scanner`
    - Permissions: **Actions: Read and write**. Nothing else.
-   - Give it an expiry you will actually notice, and diarise the renewal - an
-     expired token is a silent trigger failure, caught only by the poll-gap
-     note.
+   - Give it whatever expiry you like. You no longer have to diarise it: the
+     Worker reads GitHub's `github-authentication-token-expiration` header
+     and forwards it to the scanner, which warns on the dashboard from
+     `PAT_WARN_DAYS` out and fails the run inside `PAT_FAIL_DAYS`. To renew,
+     roll the token and re-run `wrangler secret put GITHUB_TOKEN`.
 
 2. From this directory:
 
