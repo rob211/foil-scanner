@@ -38,7 +38,8 @@ Manual cross-checks (not used by the code):
 [Windguru](https://www.windguru.cz/768215),
 [WillyWeather](https://wind.willyweather.com.au/nsw/illawarra/wollongong-harbour.html),
 [BOM station page](https://www.bom.gov.au/products/IDN60801/IDN60801.94749.shtml),
-[Holfuy 366](https://holfuy.com/en/data/366).
+[Holfuy 366](https://holfuy.com/en/data/366),
+[Port Kembla wave buoy](https://mhl.nsw.gov.au/Station-PTKMOW).
 
 ## Snapshot
 

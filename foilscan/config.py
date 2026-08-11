@@ -228,14 +228,66 @@ BOM_MAX_AGE_MIN = 45
 HOLFUY_MAX_AGE_MIN = 30
 HEARTBEAT_MAX_AGE_H = 8.0
 
+# Port Kembla wave buoy (MHL station PTKMOW), ~10 km from MARINE_POINT. The
+# page at mhl.nsw.gov.au/Station-PTKMOW has no documented API; this is the
+# JSON its own charts read.
+#
+# CONTEXT ONLY - it is shown in `snapshot` and decides nothing, deliberately.
+#
+# It reports ONE dominant direction for the whole sea, and this coast runs
+# mixed swells: on 11 Aug 2026 an ENE train gave way to a southerly through
+# the day, and the buoy's direction thrashed 78 -> 280 -> 109 -> 165 -> 130
+# -> 186 while Hs barely moved. Verifying a window against that scored zero
+# true positives and eleven false negatives over 167 hours - it would have
+# killed good entrance windows on exactly the days worth having.
+#
+# The height check fared no better: buoy Hs never once fell below the
+# modelled swell, because Hs is the whole sea and cannot be smaller than one
+# of its own components.
+#
+# A person reading two numbers side by side can see a mixed sea for what it
+# is. A threshold cannot, and the model's swell partition already handles the
+# case better than the buoy's single dominant direction does.
+WAVE_URL = "https://mhl.nsw.gov.au/s3/www/stations/wave/PTKMOW.json"
+WAVE_STATION = "Port Kembla"
+# Parameter ids in that feed. Hs is the whole sea, not a swell partition.
+WAVE_PARAM_HS = "1033"
+WAVE_PARAM_HMAX = "1034"
+WAVE_PARAM_DIR = "1035"
+WAVE_PARAM_TP = "1036"
+# Hourly feed, and it lags. Generous enough not to cry wolf, tight enough
+# that a dead buoy is noticed within a session.
+WAVE_MAX_AGE_MIN = 180
+
 # Holfuy station 366 reads roughly 10% high (spec 3.4)
 HOLFUY_STATION = 366
 HOLFUY_CORRECTION = 0.9
 
 # https only: the plaintext first hop let a network MITM feed the pipeline
 # forged observations that reach the public calendar and repo (5 Jul review).
-BOM_JSON_URL = "https://www.bom.gov.au/fwo/IDN60801/IDN60801.94749.json"
-BOM_JSON_URL_FALLBACK = "https://reg.bom.gov.au/fwo/IDN60801/IDN60801.94749.json"
+BOM_STATION_BELLAMBI = "94749"
+# Port Kembla Harbour. About 4 km from the lake entrance where Bellambi is
+# 15, so it is the better station for the entrance triggers - eventually.
+#
+# RECORDED, NOT USED (11 Aug 2026). Rob: "southerly wind predictions from the
+# Port Kembla wind station are unreliable as it's hidden by the adjacent
+# hill." Only 6 southerly hours existed in the 4 days both feeds carry, and
+# they pointed the other way (Port Kembla reading 1.48x Bellambi), which at
+# n=6 is noise rather than a refutation. So it is logged alongside Bellambi
+# and decides nothing, until there are enough southerlies to measure the
+# shelter properly. That also finally gives the entrance a station of its
+# own, so its borrowed x1.45 wind correction can be checked rather than
+# assumed.
+BOM_STATION_PORT_KEMBLA = "95745"
+
+
+def bom_url(station: str, fallback: bool = False) -> str:
+    host = "reg.bom.gov.au" if fallback else "www.bom.gov.au"
+    return f"https://{host}/fwo/IDN60801/IDN60801.{station}.json"
+
+
+BOM_JSON_URL = bom_url(BOM_STATION_BELLAMBI)
+BOM_JSON_URL_FALLBACK = bom_url(BOM_STATION_BELLAMBI, fallback=True)
 
 # Live verification (spec 7)
 LIVE_CONFIRM_FACTOR = 0.9
@@ -495,6 +547,8 @@ def validate() -> None:
 
     if not 0 < PAT_FAIL_DAYS < PAT_WARN_DAYS:
         raise ConfigError("PAT fail threshold must sit inside the warning window")
+    if WAVE_MAX_AGE_MIN <= 0:
+        raise ConfigError("the wave buoy freshness cap must be positive")
     if ALERT_DURATION_H <= 0 or ALERT_LEAD_S < 0 or ALERT_REMINDER_MINUTES < 0:
         raise ConfigError("live alert event timing must be non-negative and non-empty")
     if not 0 < ALERT_TAIL_H <= ALERT_DURATION_H <= ALERT_MAX_H:

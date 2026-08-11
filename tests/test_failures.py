@@ -226,3 +226,58 @@ def test_direction_correction_wraps_through_north():
 
     assert fetch.apply_dir_bias("lake", 5.0) == pytest.approx(355.0)
     assert 0 <= fetch.apply_dir_bias("lake", 0.0) < 360
+
+
+# --------------------------------------------- Port Kembla wave buoy (3.6)
+
+def _wave_payload(stamp="2026-08-11 12:00:00", hs=1.92, extra=None):
+    row = {config.WAVE_PARAM_HS: hs, config.WAVE_PARAM_HMAX: 3.3,
+           config.WAVE_PARAM_DIR: 186.0, config.WAVE_PARAM_TP: 8.9}
+    if extra is not None:
+        row.update(extra)
+    return {"readings": {stamp: row}}
+
+
+def test_wave_buoy_reads_the_newest_complete_reading(monkeypatch):
+    # Trailing hours can be present but empty; the last key is not
+    # necessarily the last reading.
+    payload = {"readings": {
+        "2026-08-11 11:00:00": {config.WAVE_PARAM_HS: 1.5, config.WAVE_PARAM_DIR: 90.0},
+        "2026-08-11 12:00:00": {config.WAVE_PARAM_HS: 1.9, config.WAVE_PARAM_DIR: 186.0},
+        "2026-08-11 13:00:00": {config.WAVE_PARAM_HS: None},
+    }}
+    monkeypatch.setattr(fetch, "get_json", lambda *a, **k: payload)
+    got = fetch.fetch_wave(datetime(2026, 8, 11, 12, 30, tzinfo=config.TZ))
+    assert got.hs_m == 1.9 and got.dir_deg == 186.0
+
+
+def test_wave_buoy_staleness_is_a_failure(monkeypatch):
+    monkeypatch.setattr(fetch, "get_json", lambda *a, **k: _wave_payload())
+    with pytest.raises(StaleDataError):
+        fetch.fetch_wave(datetime(2026, 8, 11, 20, 0, tzinfo=config.TZ))
+
+
+def test_wave_buoy_rejects_an_impossible_height(monkeypatch):
+    monkeypatch.setattr(fetch, "get_json", lambda *a, **k: _wave_payload(hs=99.0))
+    with pytest.raises(SchemaError):
+        fetch.fetch_wave(datetime(2026, 8, 11, 12, 30, tzinfo=config.TZ))
+
+
+def test_wave_buoy_rejects_an_empty_feed(monkeypatch):
+    monkeypatch.setattr(fetch, "get_json", lambda *a, **k: {"readings": {}})
+    with pytest.raises(SchemaError):
+        fetch.fetch_wave(datetime(2026, 8, 11, 12, 30, tzinfo=config.TZ))
+
+
+def test_wave_buoy_rejects_an_unreadable_timestamp(monkeypatch):
+    monkeypatch.setattr(fetch, "get_json", lambda *a, **k: _wave_payload(stamp="whenever"))
+    with pytest.raises(SchemaError):
+        fetch.fetch_wave(datetime(2026, 8, 11, 12, 30, tzinfo=config.TZ))
+
+
+def test_wave_buoy_tolerates_missing_optional_fields(monkeypatch):
+    # Direction and period drop out sometimes; height alone is still useful.
+    payload = {"readings": {"2026-08-11 12:00:00": {config.WAVE_PARAM_HS: 1.2}}}
+    monkeypatch.setattr(fetch, "get_json", lambda *a, **k: payload)
+    got = fetch.fetch_wave(datetime(2026, 8, 11, 12, 30, tzinfo=config.TZ))
+    assert got.hs_m == 1.2 and got.dir_deg is None and got.peak_period_s is None

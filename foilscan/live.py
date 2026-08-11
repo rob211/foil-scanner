@@ -522,6 +522,17 @@ def run(
         notes.append(f"sunrise/sunset unavailable, alerting on clock hours only: {exc}")
     daylight = alerting_hours(now, sun)
 
+    # Logged every run, alongside Bellambi, and used for nothing yet. It is
+    # 4 km from the entrance where Bellambi is 15, so it should eventually be
+    # the entrance's station - but Rob's shelter caveat has to be measurable
+    # before anything depends on it. Best effort: this is data collection,
+    # not a decision, and it must never fail a run.
+    port_kembla = None
+    try:
+        port_kembla = fetch.fetch_bom(now, config.BOM_STATION_PORT_KEMBLA)
+    except Exception as exc:  # noqa: BLE001
+        notes.append(f"Port Kembla station unavailable (logging only): {exc}")
+
     covered = {w["trigger_id"] for w in todays}
     alerts = live_alerts(now, bom, holfuy, covered, daylight=daylight)
     # Tide context, only when an entrance alert is actually going out - this
@@ -614,6 +625,7 @@ def run(
             verdict.build_live(
                 now, bom, holfuy, checks, notes, alerts, bias,
                 token_expires_at=config.env("FOIL_TOKEN_EXPIRES_AT", required=False),
+                port_kembla=port_kembla,
             ),
             data_dir,
         )

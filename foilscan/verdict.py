@@ -128,6 +128,7 @@ def build_live(
     alerts: list[dict] | None = None,
     bias: list[dict] | None = None,
     token_expires_at: str | None = None,
+    port_kembla: Observation | None = None,
 ) -> dict:
     """The live contract: data/live.json. obs is None only when the BOM fetch
     failed (the reason is in notes); the run still exits non-zero."""
@@ -136,6 +137,10 @@ def build_live(
         "generated_at": now.isoformat(),
         "obs": _obs_dict(obs),
         "holfuy": _obs_dict(holfuy),
+        # Recorded so the shelter effect Rob describes can eventually be
+        # measured, and so the entrance gets a station of its own. Decides
+        # nothing yet - see config.BOM_STATION_PORT_KEMBLA.
+        "port_kembla": _obs_dict(port_kembla),
         "checks": checks,
         # Live wind that matched a trigger with no forecast window behind it.
         # `obs` is the Observation the decision was made on, carried in memory
