@@ -192,6 +192,8 @@ Only the pair together deletes a window: a hard offshore grooms a swell face, a 
 
 A window can be a watch for more than one reason — onshore wind *and* the wrong tide — and reports both.
 
+Swell of a useful size pointing **outside** the 35-110 band records a `swell_direction` near miss, once per day, quoting how far outside it is. This is the least visible way for the entrance to go quiet: swell, tide and wind can all be there and the sea is simply running from the wrong quarter, which nothing else caught — a single-model miss needs a model to have seen something, an off-tide miss needs a window to exist. The angle is what makes a run of them readable; a swell backing from 52 degrees out to 3 degrees out over a week is about to become a run.
+
 The live check follows the same shape: offshore or light confirms at any strength, onshore-but-moderate stays pending, and only onshore over the no-go is a miss.
 
 Mode 2 (strong NE, no swell needed): wind from 20-80 (NE/ENE) at 18 kn or more. Swell ignored in this mode.
