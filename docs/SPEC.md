@@ -144,7 +144,22 @@ This mattered: on 10 Aug 2026 wind and swell both qualified for 07:00–09:00 wi
 
 `high_tide_m` on those windows is the modelled high-tide height referenced to chart datum (tide-table style): the Open-Meteo sea level (relative to mean sea level) plus `config.TIDE_HEIGHT_OFFSET_M`. It is modelled, not an official prediction, so treat it as approximate and calibrate the offset against a BOM Port Kembla tide reading (section 10).
 
-Mode 1 (swell): wind 0-10 kn with a westerly component (direction 200-340), or under 5 kn from any direction; swell from 35-110 degrees (NE through E, ENE explicitly included) at 0.8 m or more.
+Mode 1 (swell): swell from 35-110 degrees (NE through E, ENE explicitly included) at 0.8 m or more.
+
+**Wind grades this mode, it does not gate it** (Rob, 11 Aug 2026). The entrance is open to the ocean, unlike the lake, which has nothing but wind — "it's not a wind only place, so that shouldn't be the golden gate holding it all back". So:
+
+| Wind | Result |
+|---|---|
+| offshore (`ENTRANCE_M1_WIND_ARC`, 200-340), any strength | full rating |
+| light enough that direction stops mattering (`ENTRANCE_M1_WIND_MAX_KN`) | full rating |
+| unfavourable but under `ENTRANCE_WIND_NO_GO_KN` | **watch** — the swell and tide are still there, the wind is merely wrong |
+| unfavourable **and** over `ENTRANCE_WIND_NO_GO_KN` | no go |
+
+Only the pair together deletes a window: a hard offshore grooms a swell face, a hard onshore ruins it. `ENTRANCE_WIND_NO_GO_KN` is the one number here that was estimated rather than measured.
+
+A window can be a watch for more than one reason — onshore wind *and* the wrong tide — and reports both.
+
+The live check follows the same shape: offshore or light confirms at any strength, onshore-but-moderate stays pending, and only onshore over the no-go is a miss.
 
 Mode 2 (strong NE, no swell needed): wind from 20-80 (NE/ENE) at 18 kn or more. Swell ignored in this mode.
 

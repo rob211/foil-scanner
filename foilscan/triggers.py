@@ -624,12 +624,20 @@ def entrance_windows(
     """Spec 4.2: both modes need daylight and the high-tide window."""
     windows: list[Window] = []
 
-    # Mode 1: light west (or near calm) wind, E/NE swell, graded on swell.
-    def m1_wind(hw):
+    # Mode 1: E/NE swell on the run-out, graded on swell. Wind sorts the
+    # result rather than deciding whether there is one - see the note on
+    # ENTRANCE_M1_WIND_MAX_KN.
+    def m1_favourable(hw):
         return (
-            hw.speed_kn <= config.ENTRANCE_M1_WIND_MAX_KN
-            and config.ENTRANCE_M1_WIND_ARC.contains(hw.dir_deg)
-        ) or hw.speed_kn < config.ENTRANCE_M1_CALM_KN
+            config.ENTRANCE_M1_WIND_ARC.contains(hw.dir_deg)
+            or hw.speed_kn <= config.ENTRANCE_M1_WIND_MAX_KN
+        )
+
+    def m1_wind(hw):
+        # Everything except unfavourable AND strong enough to ruin it. A
+        # light onshore is only a downgrade; a hard offshore still grooms the
+        # face. Only the pair together is a no-go.
+        return m1_favourable(hw) or hw.speed_kn < config.ENTRANCE_WIND_NO_GO_KN
 
     swell_floor = config.ENTRANCE_M1_SWELL_TARGET_M * config.YELLOW_FACTOR
     swell_ok = {
@@ -658,6 +666,11 @@ def entrance_windows(
         if grade is None:
             continue
         peak_models = m1_map[peak_time]
+        # Unfavourable wind makes it a watch, not a run: the swell and the
+        # tide are still there, so it is worth a look rather than a deletion.
+        wind_ok = any(m1_favourable(h) for h in peak_models.values())
+        if not wind_ok:
+            grade = "watch"
         offset = (start.date() - now.date()).days
         windows.append(
             Window(
@@ -683,6 +696,7 @@ def entrance_windows(
                 high_tide=ht.time.isoformat() if ht is not None else None,
                 high_tide_m=_tide_height_cd(ht) if ht is not None else None,
                 tide_state=tide_state,
+                watch=None if wind_ok else "wind not favourable for the swell",
                 confidence=(
                     "low (long range)"
                     if offset >= config.LOW_CONFIDENCE_FROM_DAY_OFFSET
@@ -727,7 +741,10 @@ def entrance_windows(
                 "runnable but not the preferred run-out (high tide to +2 h)"
             )
             if w.grade == "watch":
-                w.watch = "off tide"
+                # A window can be a watch for more than one reason - an
+                # onshore breeze AND the wrong tide - and overwriting here
+                # dropped whichever got there first.
+                w.watch = "; ".join(x for x in (w.watch, "off tide") if x)
 
     # Same window in both modes -> one event noting both (spec 4.2).
     merged: list[Window] = []

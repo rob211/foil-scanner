@@ -91,10 +91,16 @@ def status_for(
     if w["trigger_id"] == "hill60_swell":
         return "none", "no live wind check (swell event)"
     if w["trigger_id"] == "entrance_swell":
-        # Mode 1 needs the wind to stay light; that is all we can verify live.
-        if obs.speed_kn <= config.ENTRANCE_M1_WIND_MAX_KN * 1.25:
-            return "confirmed", f"wind staying light: {live}"
-        return "miss", f"wind too strong for mode 1: {live}"
+        # A swell run on an ocean-facing entrance: the live wind can only
+        # spoil it, never make it. Offshore is fine at any strength - it
+        # grooms the face - and light is fine from anywhere. Only an onshore
+        # blow hard enough to wreck it counts as a miss.
+        offshore = obs.dir_deg is not None and config.ENTRANCE_M1_WIND_ARC.contains(obs.dir_deg)
+        if offshore or obs.speed_kn <= config.ENTRANCE_M1_WIND_MAX_KN:
+            return "confirmed", f"wind favourable for the swell: {live}"
+        if obs.speed_kn >= config.ENTRANCE_WIND_NO_GO_KN:
+            return "miss", f"onshore and too strong for the swell: {live}"
+        return "pending", f"onshore but not wrecking it: {live}"
 
     if w["trigger_id"] == "baysurf":
         if obs.speed_kn <= config.BAYSURF_WIND_MAX_KN:

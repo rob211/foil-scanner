@@ -990,3 +990,33 @@ def test_a_backstop_run_records_no_expiry_rather_than_a_stale_one(tmp_path, monk
     monkeypatch.setattr(live.gcal, "ensure_alert", lambda *a, **k: True)
     live.run(NOW, dry_run=False, data_dir=data_dir)
     assert _live_json(tmp_path)["token_expires_at"] is None
+
+
+# ------------------------------ entrance swell: wind grades, does not gate
+
+def _swell_window():
+    w = window(trigger_id="entrance_swell")
+    return w
+
+
+def test_offshore_wind_confirms_a_swell_window_at_any_strength():
+    # It is a swell run on an ocean-facing entrance: a hard offshore grooms
+    # the face rather than ruining it.
+    state, line = live.status_for(_swell_window(), obs(22.0, 270), NOW)
+    assert state == "confirmed" and "favourable" in line
+
+
+def test_light_onshore_wind_still_confirms():
+    state, _ = live.status_for(_swell_window(), obs(8.0, 90), NOW)
+    assert state == "confirmed"
+
+
+def test_moderate_onshore_is_pending_not_a_miss():
+    # Wrong wind, but not enough of it to call the day off.
+    state, line = live.status_for(_swell_window(), obs(16.0, 90), NOW)
+    assert state == "pending" and "not wrecking" in line
+
+
+def test_strong_onshore_is_the_only_live_miss():
+    state, line = live.status_for(_swell_window(), obs(28.0, 90), NOW)
+    assert state == "miss" and "too strong" in line
