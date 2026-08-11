@@ -408,10 +408,33 @@ First run, 11 Aug 2026, 5 weeks, 91 lake hours and 384 coast hours:
   script prefers the simpler form unless a more complex one is meaningfully
   better, or it would recommend two parameters where a constant serves
 
-Before any of this is applied it needs a second season. Fitting a multiplier
-to 25 windy hours in one winter will overshoot, and overshooting fires green
-days that are not - which is worse than the current miss, because a missed
-day costs nothing and a false green costs a drive.
+**Applied 11 Aug 2026** (`config.WIND_BIAS`, in `fetch.fetch_wind` on ingest
+so triggers, `expected_today` and the snapshot cannot disagree). Rob's call:
+the lake's wind season *is* winter, so a winter sample is the relevant one
+rather than a biased slice.
+
+Backtested at the 18 kn floor, choosing on precision because a false green
+costs a drive while a missed day costs nothing:
+
+| Site | Applied | Precision | Recall |
+|---|---|---|---|
+| lake, entrance | `x1.45` | 73% | 73% |
+| ocean | `+3.9` | 67% | 17% (66% / 40% at the watch floor) |
+
+The ocean gets an offset rather than a multiplier deliberately: every
+multiplier tried there sat near 50% precision, a coin toss, and the measured
+fit for that site is additive anyway. The entrance shares the lake's grid
+cell so it takes the lake's number, unverified - there is no station there,
+and it is the first thing to revisit if entrance events over-fire.
+
+**This cuts both ways.** Entrance mode 1 and Baysurf want *light* wind, so
+correcting upward makes them fire less, not more. Same fact, other direction:
+if the model under-reads, days that looked light were not.
+
+`scripts/calibrate_wind.py` reports absolute values, not residuals - the
+archive it compares against is raw and the correction is applied on ingest,
+so re-running cannot compound it. It flags drift over 15% against what is
+configured. Re-run across a summer before trusting the numbers year-round.
 
 ## 12. Snapshot command
 

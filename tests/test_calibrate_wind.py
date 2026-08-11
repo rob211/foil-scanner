@@ -71,3 +71,13 @@ def test_missing_or_malformed_readings_are_skipped():
 
 def test_too_few_points_returns_nothing_rather_than_a_bogus_fit():
     assert cw.fits([(10.0, 8.0)]) == {}
+
+
+def test_every_reported_location_has_a_configured_bias():
+    # report() looks the location up in config.WIND_BIAS. A hand-written
+    # label once drifted from the key and only failed on the second site,
+    # after the first had already printed.
+    from foilscan import config
+
+    for loc in (config.LAKE, config.OCEAN):
+        assert loc.key in config.WIND_BIAS

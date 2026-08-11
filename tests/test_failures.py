@@ -156,3 +156,55 @@ def test_missing_env_is_config_error(monkeypatch):
     monkeypatch.delenv("FOIL_CALENDAR_ID", raising=False)
     with pytest.raises(ConfigError, match="FOIL_CALENDAR_ID"):
         config.env("FOIL_CALENDAR_ID")
+
+
+# ------------------------------------------------ model wind bias (11 Aug)
+
+def test_bias_scales_the_lake_and_offsets_the_ocean():
+    from foilscan import config, fetch
+
+    assert fetch.apply_bias("lake", 10.0) == pytest.approx(14.5)
+    assert fetch.apply_bias("entrance", 10.0) == pytest.approx(14.5)
+    assert fetch.apply_bias("ocean", 10.0) == pytest.approx(13.9)
+    # The entrance shares the lake's grid cell, so it must share its number.
+    assert config.WIND_BIAS["entrance"] == config.WIND_BIAS["lake"]
+
+
+def test_a_correction_never_produces_negative_wind():
+    from foilscan import fetch
+
+    # An offset does lift a modelled calm a little, which matches the
+    # stations - they rarely read a true zero. What it must never do is go
+    # below it, which a negative offset would.
+    assert fetch.apply_bias("ocean", 0.0) >= 0.0
+    assert fetch.apply_bias("lake", 0.0) == 0.0
+
+
+def test_the_correction_also_tightens_the_light_wind_triggers():
+    # Entrance mode 1 and Baysurf want light wind, so correcting upward makes
+    # them FIRE LESS, not more. That is the same fact pointing the other way:
+    # if the model under-reads, days that looked light were not.
+    from foilscan import config, fetch
+
+    # 10 Aug, entrance mode 1 at 07:00: ECMWF read 9.5 kn, under the 10 kn
+    # ceiling. Corrected it is over, and BOM measured ~20 kn that morning.
+    assert fetch.apply_bias("entrance", 9.5) > config.ENTRANCE_M1_WIND_MAX_KN
+
+
+def test_the_correction_lifts_a_real_lake_day_over_its_floor():
+    # The case the calibration exists for: on 10 Aug the models read ~12-13 kn
+    # at the lake while it genuinely blew over 20, so nothing fired - not even
+    # a watch. 18 kn is the lake's yellow floor.
+    from foilscan import config, fetch
+
+    assert fetch.apply_bias("lake", 12.5) >= 18.0
+    # ...without dragging an ordinary breeze over it as well.
+    assert fetch.apply_bias("lake", 9.0) < 15.0
+
+
+def test_every_wind_location_has_a_bias_entry():
+    # A location without one would raise a KeyError deep inside a fetch.
+    from foilscan import config, fetch
+
+    for loc in config.WIND_LOCATIONS:
+        assert fetch.apply_bias(loc.key, 10.0) > 0

@@ -171,7 +171,17 @@ def report(label, const, rows) -> None:
         ("linear", f"forecast x {f['slope']:.2f} {f['intercept']:+.1f}", f["linear_rms"]),
     ):
         print(f"    {name:<7} {desc:<26} rms {rms:5.2f} kn")
-    print(f"  -> best fit: {choose(f)}")
+    form, amount = config.WIND_BIAS[const]
+    live = f"{form} {amount}"
+    print(f"  -> best fit: {choose(f)}   |   currently applied: {live}")
+    # The archive is raw, and the correction is applied on ingest rather than
+    # here, so these numbers stay absolute rather than compounding: what this
+    # prints is what WIND_BIAS should be, not a residual to add to it.
+    measured = f["scale"] if form == "scale" else f["offset"]
+    drift = abs(measured - amount) / amount if amount else float("inf")
+    if drift > 0.15:
+        print(f"     DRIFT: measured {measured:.2f} against a configured "
+              f"{amount:.2f} - worth revisiting")
 
     decisive = [(o, fc) for o, fc in rows if o >= DECISION_KN]
     print(f"  at decision strength (observed {DECISION_KN:.0f} kn+): n={len(decisive)}")
@@ -200,16 +210,17 @@ def main() -> int:
     print(f"observation history: {len(rows)} snapshots, {stamps[0][:16]} -> {stamps[-1][:16]}")
     print(f"model archive: {start} -> {end}, median of {', '.join(config.MODELS.values())}")
 
-    for label, const, key, loc in (
-        ("LAKE   Holfuy 366 (0.9-corrected) vs the lake point",
-         "lake", "holfuy", config.LAKE),
-        ("COAST  BOM Bellambi vs the ocean point",
-         "coast", "obs", config.OCEAN),
+    # loc.key, not a hand-written string: the label and the config key drifted
+    # apart once already and only blew up on the second location.
+    for label, key, loc in (
+        ("LAKE   Holfuy 366 (0.9-corrected) vs the lake point", "holfuy", config.LAKE),
+        ("COAST  BOM Bellambi vs the ocean point", "obs", config.OCEAN),
     ):
-        report(label, const, paired(rows, key, model_hours(loc, start, end)))
+        report(label, loc.key, paired(rows, key, model_hours(loc, start, end)))
 
-    print("\nNothing applies these yet. Before wiring one in, re-run across a")
-    print("different season: a winter of W/NW gradient days is not a year.")
+    print("\nThese are absolute, not residuals: the archive is raw and the")
+    print("correction is applied on ingest, so re-running cannot compound it.")
+    print("Re-run across a summer before trusting the numbers year-round.")
     return 0
 
 
