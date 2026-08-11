@@ -375,7 +375,11 @@ makes and forwards it as a `workflow_dispatch` input; `live.yml` puts it in
 | inside `PAT_FAIL_DAYS`, or expired | the run fails: red run, failure email, `SCANNER BROKEN` event |
 
 `live.json` is written **before** the run is failed, so the warning reaches
-the dashboard rather than going down with the run.
+the dashboard rather than going down with the run. It also carries
+`token_expires_at` on every run, not only once the date is close: a healthy
+token that says nothing leaves "when does this expire" answerable only by
+going and looking, which is the habit this replaces. Null on a scheduled
+backstop run, which carries no token and so cannot know.
 
 An absent value means the run came from the schedule backstop, which needs no
 PAT. That is "unknown", not "healthy", and is silent by design - the backstop

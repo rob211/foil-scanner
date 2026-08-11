@@ -127,6 +127,7 @@ def build_live(
     notes: list[str],
     alerts: list[dict] | None = None,
     bias: list[dict] | None = None,
+    token_expires_at: str | None = None,
 ) -> dict:
     """The live contract: data/live.json. obs is None only when the BOM fetch
     failed (the reason is in notes); the run still exits non-zero."""
@@ -144,6 +145,12 @@ def build_live(
         # Observed minus forecast for this hour, so a model bust leaves a
         # trace instead of just an empty calendar.
         "bias": bias or [],
+        # When the Worker's PAT expires, recorded on every run and not only
+        # once it is close. Otherwise a healthy token is invisible and the
+        # only way to answer "when does this expire" is to go and look, which
+        # is the habit this is meant to replace. Null on a scheduled backstop
+        # run, which carries no token and so cannot know.
+        "token_expires_at": token_expires_at,
         "notes": notes,
     }
 

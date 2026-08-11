@@ -968,3 +968,25 @@ def test_a_nearly_dead_pat_fails_the_run(tmp_path, monkeypatch):
     # ...but live.json is written first, so the warning is on the dashboard
     # rather than lost with the failing run.
     assert any("PAT" in n for n in _live_json(tmp_path)["notes"])
+
+
+def test_the_token_expiry_is_recorded_even_when_healthy(tmp_path, monkeypatch):
+    # A healthy token that says nothing leaves "when does this expire?"
+    # answerable only by going and looking, which is the habit this replaces.
+    data_dir = _latest_on_disk(tmp_path)
+    _expiry_env(monkeypatch, "2026-11-09 00:00:00 UTC")
+    monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(12.0, 157.5, station="Bellambi"))
+    monkeypatch.setattr(live.gcal, "ensure_alert", lambda *a, **k: True)
+    live.run(NOW, dry_run=False, data_dir=data_dir)
+    got = _live_json(tmp_path)
+    assert got["token_expires_at"] == "2026-11-09 00:00:00 UTC"
+    assert not any("PAT" in n for n in got["notes"])   # healthy: recorded, not shouted
+
+
+def test_a_backstop_run_records_no_expiry_rather_than_a_stale_one(tmp_path, monkeypatch):
+    data_dir = _latest_on_disk(tmp_path)
+    _expiry_env(monkeypatch, None)
+    monkeypatch.setattr(fetch, "fetch_bom", lambda now: obs(12.0, 157.5, station="Bellambi"))
+    monkeypatch.setattr(live.gcal, "ensure_alert", lambda *a, **k: True)
+    live.run(NOW, dry_run=False, data_dir=data_dir)
+    assert _live_json(tmp_path)["token_expires_at"] is None
