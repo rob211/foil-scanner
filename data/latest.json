@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-12T12:46:13.251393+10:00",
+  "generated_at": "2026-08-12T14:00:47.721758+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-12T12:46:13.916624+10:00",
+      "fetched_at": "2026-08-12T14:00:48.245890+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-12T12:46:14.552385+10:00",
+      "fetched_at": "2026-08-12T14:00:48.867388+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-12T12:46:15.180063+10:00",
+      "fetched_at": "2026-08-12T14:00:49.579009+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-12T12:46:15.805664+10:00",
+      "fetched_at": "2026-08-12T14:00:50.165686+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-12T12:46:16.434064+10:00",
+      "fetched_at": "2026-08-12T14:00:50.771902+10:00",
       "detail": null,
       "error": null
     },
@@ -93,13 +93,13 @@
     },
     {
       "time": "2026-08-12T10:00:00+10:00",
-      "lake": 10.8,
-      "ocean": 10.9
+      "lake": 10.2,
+      "ocean": 11.3
     },
     {
       "time": "2026-08-12T11:00:00+10:00",
       "lake": 12.8,
-      "ocean": 12.8
+      "ocean": 13.0
     },
     {
       "time": "2026-08-12T12:00:00+10:00",
@@ -108,13 +108,13 @@
     },
     {
       "time": "2026-08-12T13:00:00+10:00",
-      "lake": 14.4,
-      "ocean": 13.9
+      "lake": 13.7,
+      "ocean": 13.8
     },
     {
       "time": "2026-08-12T14:00:00+10:00",
       "lake": 14.1,
-      "ocean": 13.8
+      "ocean": 14.2
     },
     {
       "time": "2026-08-12T15:00:00+10:00",
@@ -133,33 +133,33 @@
     },
     {
       "time": "2026-08-12T18:00:00+10:00",
-      "lake": 11.5,
+      "lake": 11.3,
       "ocean": 11.5
     },
     {
       "time": "2026-08-12T19:00:00+10:00",
-      "lake": 11.6,
+      "lake": 11.3,
       "ocean": 11.9
     },
     {
       "time": "2026-08-12T20:00:00+10:00",
-      "lake": 11.8,
-      "ocean": 12.7
+      "lake": 11.5,
+      "ocean": 12.4
     },
     {
       "time": "2026-08-12T21:00:00+10:00",
-      "lake": 12.7,
-      "ocean": 12.8
+      "lake": 12.6,
+      "ocean": 13.0
     },
     {
       "time": "2026-08-12T22:00:00+10:00",
-      "lake": 13.3,
-      "ocean": 13.4
+      "lake": 13.0,
+      "ocean": 13.7
     },
     {
       "time": "2026-08-12T23:00:00+10:00",
-      "lake": 13.9,
-      "ocean": 13.8
+      "lake": 14.0,
+      "ocean": 13.7
     }
   ],
   "windows": [
@@ -168,13 +168,13 @@
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-08-12",
       "start": "2026-08-12T12:00:00+10:00",
-      "end": "2026-08-12T14:00:00+10:00",
+      "end": "2026-08-12T13:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 17.0,
-      "direction_deg": 266.0,
+      "peak_median_kn": 17.3,
+      "direction_deg": 255.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 17.0
+        "ICON": 17.3
       },
       "title_tags": [],
       "notes": [],
@@ -194,14 +194,14 @@
       "trigger_id": "lake_west",
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-08-12",
-      "start": "2026-08-12T15:00:00+10:00",
-      "end": "2026-08-12T17:00:00+10:00",
+      "start": "2026-08-12T14:00:00+10:00",
+      "end": "2026-08-12T16:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 16.8,
-      "direction_deg": 250.0,
+      "peak_median_kn": 17.1,
+      "direction_deg": 251.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 16.8
+        "ICON": 17.1
       },
       "title_tags": [],
       "notes": [],
@@ -215,7 +215,7 @@
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_west:2026-08-12:15"
+      "foil_key": "lake_west:2026-08-12:14"
     },
     {
       "trigger_id": "entrance_swell",
@@ -224,13 +224,13 @@
       "start": "2026-08-18T07:00:00+10:00",
       "end": "2026-08-18T12:10:54.545455+10:00",
       "grade": "green",
-      "peak_median_kn": 2.8,
-      "direction_deg": 153.0,
+      "peak_median_kn": 3.3,
+      "direction_deg": 168.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 4.9,
         "ECMWF": 1.4,
-        "ICON": 2.5,
+        "ICON": 3.5,
         "UKMO": 3.0
       },
       "title_tags": [
@@ -258,13 +258,13 @@
       "start": "2026-08-18T12:10:54.545455+10:00",
       "end": "2026-08-18T14:10:54.545455+10:00",
       "grade": "red",
-      "peak_median_kn": 4.9,
-      "direction_deg": 107.0,
+      "peak_median_kn": 6.3,
+      "direction_deg": 108.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 7.7,
         "ECMWF": 5.7,
-        "ICON": 3.5,
+        "ICON": 7.0,
         "UKMO": 4.2
       },
       "title_tags": [],
