@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-13T05:30:30.144373+10:00",
+  "generated_at": "2026-08-13T05:31:48.418741+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-08-13T05:00:00+10:00",
@@ -42,7 +42,7 @@
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": [
     "MODEL BUST (lake): observed 20 kn vs forecast 12 kn at Lake Illawarra"
   ]
