@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-13T19:33:56.475642+10:00",
+  "generated_at": "2026-08-13T20:00:35.459314+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-13T19:33:56.894018+10:00",
+      "fetched_at": "2026-08-13T20:00:36.141507+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-13T19:33:57.475023+10:00",
+      "fetched_at": "2026-08-13T20:00:36.933157+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-13T19:33:57.974721+10:00",
+      "fetched_at": "2026-08-13T20:00:37.624277+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-13T19:33:58.475914+10:00",
+      "fetched_at": "2026-08-13T20:00:38.299825+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-13T19:33:58.937870+10:00",
+      "fetched_at": "2026-08-13T20:00:38.933885+10:00",
       "detail": null,
       "error": null
     },
@@ -123,13 +123,13 @@
     },
     {
       "time": "2026-08-13T16:00:00+10:00",
-      "lake": 4.6,
-      "ocean": 6.6
+      "lake": 4.3,
+      "ocean": 6.3
     },
     {
       "time": "2026-08-13T17:00:00+10:00",
       "lake": 3.8,
-      "ocean": 5.3
+      "ocean": 5.2
     },
     {
       "time": "2026-08-13T18:00:00+10:00",
@@ -144,11 +144,11 @@
     {
       "time": "2026-08-13T20:00:00+10:00",
       "lake": 6.5,
-      "ocean": 8.6
+      "ocean": 8.7
     },
     {
       "time": "2026-08-13T21:00:00+10:00",
-      "lake": 6.9,
+      "lake": 6.8,
       "ocean": 8.9
     },
     {
