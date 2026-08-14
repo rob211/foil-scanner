@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-14T18:00:51.760754+10:00",
+  "generated_at": "2026-08-14T19:28:28.330417+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-14T18:00:52.401344+10:00",
+      "fetched_at": "2026-08-14T19:28:28.985378+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-14T18:00:53.099197+10:00",
+      "fetched_at": "2026-08-14T19:28:29.722346+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-14T18:00:53.742411+10:00",
+      "fetched_at": "2026-08-14T19:28:30.403559+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-14T18:00:54.386574+10:00",
+      "fetched_at": "2026-08-14T19:28:31.057186+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-14T18:00:54.982637+10:00",
+      "fetched_at": "2026-08-14T19:28:31.695546+10:00",
       "detail": null,
       "error": null
     },
@@ -83,38 +83,38 @@
     },
     {
       "time": "2026-08-14T08:00:00+10:00",
-      "lake": 5.7,
-      "ocean": 7.3
+      "lake": 5.4,
+      "ocean": 7.1
     },
     {
       "time": "2026-08-14T09:00:00+10:00",
-      "lake": 3.3,
-      "ocean": 6.2
+      "lake": 2.3,
+      "ocean": 5.5
     },
     {
       "time": "2026-08-14T10:00:00+10:00",
-      "lake": 1.5,
-      "ocean": 5.6
+      "lake": 2.2,
+      "ocean": 5.8
     },
     {
       "time": "2026-08-14T11:00:00+10:00",
-      "lake": 2.7,
-      "ocean": 5.6
+      "lake": 3.3,
+      "ocean": 6.0
     },
     {
       "time": "2026-08-14T12:00:00+10:00",
       "lake": 5.4,
-      "ocean": 6.7
+      "ocean": 6.6
     },
     {
       "time": "2026-08-14T13:00:00+10:00",
       "lake": 7.5,
-      "ocean": 7.9
+      "ocean": 7.4
     },
     {
       "time": "2026-08-14T14:00:00+10:00",
       "lake": 8.1,
-      "ocean": 8.7
+      "ocean": 8.2
     },
     {
       "time": "2026-08-14T15:00:00+10:00",
@@ -123,12 +123,12 @@
     },
     {
       "time": "2026-08-14T16:00:00+10:00",
-      "lake": 5.8,
-      "ocean": 7.9
+      "lake": 5.7,
+      "ocean": 7.8
     },
     {
       "time": "2026-08-14T17:00:00+10:00",
-      "lake": 4.0,
+      "lake": 3.9,
       "ocean": 6.7
     },
     {
@@ -143,8 +143,8 @@
     },
     {
       "time": "2026-08-14T20:00:00+10:00",
-      "lake": 3.6,
-      "ocean": 6.3
+      "lake": 3.8,
+      "ocean": 6.4
     },
     {
       "time": "2026-08-14T21:00:00+10:00",
@@ -171,11 +171,11 @@
       "end": "2026-08-18T12:10:54.545455+10:00",
       "grade": "yellow",
       "peak_median_kn": 5.6,
-      "direction_deg": 257.0,
+      "direction_deg": 259.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 6.5,
-        "ECMWF": 2.0,
+        "ECMWF": 2.2,
         "ICON": 5.2,
         "UKMO": 5.9
       },
@@ -205,11 +205,11 @@
       "end": "2026-08-18T14:10:54.545455+10:00",
       "grade": "green",
       "peak_median_kn": 7.7,
-      "direction_deg": 107.0,
+      "direction_deg": 103.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 9.1,
-        "ECMWF": 3.6,
+        "ECMWF": 4.9,
         "ICON": 7.2,
         "UKMO": 8.1
       },
@@ -235,11 +235,11 @@
       "end": "2026-08-19T15:37:30+10:00",
       "grade": "yellow",
       "peak_median_kn": 9.2,
-      "direction_deg": 46.0,
+      "direction_deg": 50.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 12.5,
-        "ECMWF": 8.8,
+        "ECMWF": 7.4,
         "ICON": 8.8,
         "UKMO": 9.6
       },
@@ -269,11 +269,11 @@
       "end": "2026-08-20T11:00:00+10:00",
       "grade": "watch",
       "peak_median_kn": 4.9,
-      "direction_deg": 280.0,
+      "direction_deg": 279.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 4.6,
-        "ECMWF": 5.7,
+        "ECMWF": 6.4,
         "ICON": 4.8,
         "UKMO": 5.1
       },
