@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-15T03:12:30.948355+10:00",
+  "generated_at": "2026-08-15T04:00:30.861519+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-15T03:12:31.597044+10:00",
+      "fetched_at": "2026-08-15T04:00:31.589720+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-15T03:12:32.272780+10:00",
+      "fetched_at": "2026-08-15T04:00:33.484454+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-15T03:12:32.896650+10:00",
+      "fetched_at": "2026-08-15T04:00:35.221014+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-15T03:12:33.555306+10:00",
+      "fetched_at": "2026-08-15T04:00:36.771777+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-15T03:12:34.170312+10:00",
+      "fetched_at": "2026-08-15T04:00:37.236204+10:00",
       "detail": null,
       "error": null
     },
@@ -204,11 +204,11 @@
       "start": "2026-08-18T12:12:00+10:00",
       "end": "2026-08-18T14:12:00+10:00",
       "grade": "green",
-      "peak_median_kn": 6.9,
-      "direction_deg": 96.0,
+      "peak_median_kn": 7.2,
+      "direction_deg": 95.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 7.5,
+        "GFS": 9.1,
         "ECMWF": 5.9,
         "ICON": 6.2,
         "UKMO": 8.1
@@ -244,14 +244,6 @@
       "end": "2026-08-18T12:12:00+10:00",
       "reason": "off_tide",
       "detail": "runnable but outside the preferred run-out (12:12-14:12); kept as green"
-    },
-    {
-      "trigger_id": "ne_ocean",
-      "date": "2026-08-19",
-      "start": "2026-08-19T15:00:00+10:00",
-      "end": "2026-08-19T17:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['gfs_seamless'] sees it"
     }
   ]
 }
