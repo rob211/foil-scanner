@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-14T17:51:43.265519+10:00",
+  "generated_at": "2026-08-14T18:00:51.760754+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-14T17:51:44.048542+10:00",
+      "fetched_at": "2026-08-14T18:00:52.401344+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-14T17:51:44.719820+10:00",
+      "fetched_at": "2026-08-14T18:00:53.099197+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-14T17:51:45.352481+10:00",
+      "fetched_at": "2026-08-14T18:00:53.742411+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-14T17:51:45.993455+10:00",
+      "fetched_at": "2026-08-14T18:00:54.386574+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-14T17:51:46.642382+10:00",
+      "fetched_at": "2026-08-14T18:00:54.982637+10:00",
       "detail": null,
       "error": null
     },
@@ -93,32 +93,32 @@
     },
     {
       "time": "2026-08-14T10:00:00+10:00",
-      "lake": 1.7,
-      "ocean": 5.7
+      "lake": 1.5,
+      "ocean": 5.6
     },
     {
       "time": "2026-08-14T11:00:00+10:00",
-      "lake": 2.5,
+      "lake": 2.7,
       "ocean": 5.6
     },
     {
       "time": "2026-08-14T12:00:00+10:00",
-      "lake": 5.5,
-      "ocean": 6.8
+      "lake": 5.4,
+      "ocean": 6.7
     },
     {
       "time": "2026-08-14T13:00:00+10:00",
-      "lake": 7.2,
-      "ocean": 8.0
+      "lake": 7.5,
+      "ocean": 7.9
     },
     {
       "time": "2026-08-14T14:00:00+10:00",
-      "lake": 7.6,
-      "ocean": 8.6
+      "lake": 8.1,
+      "ocean": 8.7
     },
     {
       "time": "2026-08-14T15:00:00+10:00",
-      "lake": 7.2,
+      "lake": 7.4,
       "ocean": 8.6
     },
     {
@@ -134,7 +134,7 @@
     {
       "time": "2026-08-14T18:00:00+10:00",
       "lake": 2.2,
-      "ocean": 5.8
+      "ocean": 5.7
     },
     {
       "time": "2026-08-14T19:00:00+10:00",
@@ -148,13 +148,13 @@
     },
     {
       "time": "2026-08-14T21:00:00+10:00",
-      "lake": 5.2,
+      "lake": 5.4,
       "ocean": 6.2
     },
     {
       "time": "2026-08-14T22:00:00+10:00",
-      "lake": 5.7,
-      "ocean": 6.8
+      "lake": 5.9,
+      "ocean": 7.0
     },
     {
       "time": "2026-08-14T23:00:00+10:00",
@@ -170,14 +170,14 @@
       "start": "2026-08-18T07:00:00+10:00",
       "end": "2026-08-18T12:10:54.545455+10:00",
       "grade": "yellow",
-      "peak_median_kn": 5.9,
-      "direction_deg": 255.0,
+      "peak_median_kn": 5.6,
+      "direction_deg": 257.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 6.5,
         "ECMWF": 2.0,
         "ICON": 5.2,
-        "UKMO": 6.5
+        "UKMO": 5.9
       },
       "title_tags": [
         "off-tide"
@@ -204,14 +204,14 @@
       "start": "2026-08-18T12:10:54.545455+10:00",
       "end": "2026-08-18T14:10:54.545455+10:00",
       "grade": "green",
-      "peak_median_kn": 7.8,
-      "direction_deg": 111.0,
+      "peak_median_kn": 7.7,
+      "direction_deg": 107.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 9.1,
         "ECMWF": 3.6,
         "ICON": 7.2,
-        "UKMO": 8.4
+        "UKMO": 8.1
       },
       "title_tags": [],
       "notes": [],
@@ -234,14 +234,14 @@
       "start": "2026-08-19T14:00:00+10:00",
       "end": "2026-08-19T15:37:30+10:00",
       "grade": "yellow",
-      "peak_median_kn": 8.8,
-      "direction_deg": 47.0,
+      "peak_median_kn": 9.2,
+      "direction_deg": 46.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 12.5,
         "ECMWF": 8.8,
         "ICON": 8.8,
-        "UKMO": 5.4
+        "UKMO": 9.6
       },
       "title_tags": [
         "off-tide"
@@ -268,14 +268,14 @@
       "start": "2026-08-20T07:00:00+10:00",
       "end": "2026-08-20T11:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 4.7,
-      "direction_deg": 288.0,
+      "peak_median_kn": 4.9,
+      "direction_deg": 280.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 4.6,
         "ECMWF": 5.7,
         "ICON": 4.8,
-        "UKMO": 4.5
+        "UKMO": 5.1
       },
       "title_tags": [
         "off-tide"
