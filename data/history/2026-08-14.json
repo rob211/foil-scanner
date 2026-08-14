@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-14T09:03:48.581239+10:00",
+  "generated_at": "2026-08-14T10:00:35.546731+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-14T09:03:49.073047+10:00",
+      "fetched_at": "2026-08-14T10:00:35.996184+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-14T09:03:49.507661+10:00",
+      "fetched_at": "2026-08-14T10:00:36.712818+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-14T09:03:49.914005+10:00",
+      "fetched_at": "2026-08-14T10:00:37.443851+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-14T09:03:50.320423+10:00",
+      "fetched_at": "2026-08-14T10:00:38.087497+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-14T09:03:50.726859+10:00",
+      "fetched_at": "2026-08-14T10:00:38.457380+10:00",
       "detail": null,
       "error": null
     },
@@ -113,18 +113,18 @@
     },
     {
       "time": "2026-08-14T14:00:00+10:00",
-      "lake": 8.1,
+      "lake": 8.4,
       "ocean": 8.4
     },
     {
       "time": "2026-08-14T15:00:00+10:00",
-      "lake": 8.0,
+      "lake": 8.2,
       "ocean": 8.8
     },
     {
       "time": "2026-08-14T16:00:00+10:00",
       "lake": 6.5,
-      "ocean": 8.2
+      "ocean": 8.4
     },
     {
       "time": "2026-08-14T17:00:00+10:00",
@@ -133,13 +133,13 @@
     },
     {
       "time": "2026-08-14T18:00:00+10:00",
-      "lake": 2.8,
-      "ocean": 5.8
+      "lake": 2.5,
+      "ocean": 5.7
     },
     {
       "time": "2026-08-14T19:00:00+10:00",
-      "lake": 2.9,
-      "ocean": 5.8
+      "lake": 3.0,
+      "ocean": 6.0
     },
     {
       "time": "2026-08-14T20:00:00+10:00",
@@ -153,12 +153,12 @@
     },
     {
       "time": "2026-08-14T22:00:00+10:00",
-      "lake": 5.1,
+      "lake": 4.9,
       "ocean": 6.3
     },
     {
       "time": "2026-08-14T23:00:00+10:00",
-      "lake": 5.2,
+      "lake": 5.0,
       "ocean": 6.5
     }
   ],
@@ -167,7 +167,7 @@
     {
       "trigger_id": "ne_ocean",
       "date": "2026-08-20",
-      "start": "2026-08-20T17:00:00+10:00",
+      "start": "2026-08-20T15:00:00+10:00",
       "end": "2026-08-20T18:00:00+10:00",
       "reason": "single_model",
       "detail": "only ['gfs_seamless'] sees it"
