@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-17T10:00:45.423889+10:00",
+  "generated_at": "2026-08-17T11:55:45.984184+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-17T10:00:46.047372+10:00",
+      "fetched_at": "2026-08-17T11:55:46.520766+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-17T10:00:47.281636+10:00",
+      "fetched_at": "2026-08-17T11:55:47.083197+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-17T10:00:48.553986+10:00",
+      "fetched_at": "2026-08-17T11:55:47.721148+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-17T10:00:49.752311+10:00",
+      "fetched_at": "2026-08-17T11:55:48.302185+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-17T10:00:50.310217+10:00",
+      "fetched_at": "2026-08-17T11:55:48.800538+10:00",
       "detail": null,
       "error": null
     },
@@ -69,7 +69,7 @@
     {
       "time": "2026-08-17T05:00:00+10:00",
       "lake": 4.9,
-      "ocean": 7.1
+      "ocean": 7.0
     },
     {
       "time": "2026-08-17T06:00:00+10:00",
@@ -94,7 +94,7 @@
     {
       "time": "2026-08-17T10:00:00+10:00",
       "lake": 5.7,
-      "ocean": 7.4
+      "ocean": 7.7
     },
     {
       "time": "2026-08-17T11:00:00+10:00",
@@ -103,12 +103,12 @@
     },
     {
       "time": "2026-08-17T12:00:00+10:00",
-      "lake": 6.4,
-      "ocean": 8.6
+      "lake": 7.2,
+      "ocean": 8.9
     },
     {
       "time": "2026-08-17T13:00:00+10:00",
-      "lake": 7.3,
+      "lake": 7.5,
       "ocean": 9.1
     },
     {
@@ -123,38 +123,38 @@
     },
     {
       "time": "2026-08-17T16:00:00+10:00",
-      "lake": 6.6,
-      "ocean": 8.4
+      "lake": 6.7,
+      "ocean": 8.5
     },
     {
       "time": "2026-08-17T17:00:00+10:00",
-      "lake": 6.0,
+      "lake": 6.2,
       "ocean": 7.6
     },
     {
       "time": "2026-08-17T18:00:00+10:00",
+      "lake": 4.3,
+      "ocean": 6.6
+    },
+    {
+      "time": "2026-08-17T19:00:00+10:00",
+      "lake": 4.6,
+      "ocean": 6.6
+    },
+    {
+      "time": "2026-08-17T20:00:00+10:00",
       "lake": 4.1,
       "ocean": 6.4
     },
     {
-      "time": "2026-08-17T19:00:00+10:00",
-      "lake": 4.9,
-      "ocean": 6.8
-    },
-    {
-      "time": "2026-08-17T20:00:00+10:00",
-      "lake": 4.2,
-      "ocean": 6.4
-    },
-    {
       "time": "2026-08-17T21:00:00+10:00",
-      "lake": 3.6,
-      "ocean": 6.3
+      "lake": 3.1,
+      "ocean": 5.9
     },
     {
       "time": "2026-08-17T22:00:00+10:00",
-      "lake": 3.7,
-      "ocean": 6.5
+      "lake": 3.3,
+      "ocean": 6.3
     },
     {
       "time": "2026-08-17T23:00:00+10:00",
@@ -168,16 +168,16 @@
       "run_name": "Lake Entrance (swell)",
       "date": "2026-08-18",
       "start": "2026-08-18T07:00:00+10:00",
-      "end": "2026-08-18T10:00:00+10:00",
+      "end": "2026-08-18T13:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 2.0,
-      "direction_deg": 244.0,
+      "peak_median_kn": 1.6,
+      "direction_deg": 106.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 1.3,
-        "ECMWF": 1.4,
-        "ICON": 2.6,
-        "UKMO": 4.5
+        "GFS": 1.7,
+        "ECMWF": 0.6,
+        "ICON": 1.4,
+        "UKMO": 3.6
       },
       "title_tags": [
         "off-tide"
@@ -185,8 +185,8 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 0.98,
-      "swell_dir_deg": 107.0,
+      "swell_m": 0.96,
+      "swell_dir_deg": 108.0,
       "high_tide": "2026-08-18T12:16:21.818182+10:00",
       "high_tide_m": 1.33,
       "spots": null,
@@ -196,40 +196,6 @@
       "live_status": "pending",
       "event_id": "3lp0vfcplshaffv5s7ten2e45g",
       "foil_key": "entrance_swell:2026-08-18:07"
-    },
-    {
-      "trigger_id": "entrance_swell",
-      "run_name": "Lake Entrance (swell)",
-      "date": "2026-08-20",
-      "start": "2026-08-20T07:00:00+10:00",
-      "end": "2026-08-20T12:00:00+10:00",
-      "grade": "watch",
-      "peak_median_kn": 4.6,
-      "direction_deg": 323.0,
-      "models_agreeing": 4,
-      "model_values": {
-        "GFS": 4.5,
-        "ECMWF": 4.8,
-        "ICON": 6.5,
-        "UKMO": 2.3
-      },
-      "title_tags": [
-        "off-tide"
-      ],
-      "notes": [
-        "runnable but not the preferred run-out (high tide to +2 h)"
-      ],
-      "swell_m": 0.76,
-      "swell_dir_deg": 97.0,
-      "high_tide": "2026-08-20T13:53:20+10:00",
-      "high_tide_m": 1.34,
-      "spots": null,
-      "watch": "off tide",
-      "tide_state": "workable",
-      "confidence": "normal",
-      "live_status": "pending",
-      "event_id": null,
-      "foil_key": "entrance_swell:2026-08-20:07"
     }
   ],
   "near_misses": [
@@ -237,31 +203,15 @@
       "trigger_id": "entrance_swell",
       "date": "2026-08-18",
       "start": "2026-08-18T07:00:00+10:00",
-      "end": "2026-08-18T10:00:00+10:00",
+      "end": "2026-08-18T13:00:00+10:00",
       "reason": "off_tide",
       "detail": "runnable but outside the preferred run-out (12:16-14:16); kept as yellow"
-    },
-    {
-      "trigger_id": "entrance_swell",
-      "date": "2026-08-20",
-      "start": "2026-08-20T07:00:00+10:00",
-      "end": "2026-08-20T12:00:00+10:00",
-      "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (13:53-15:53); kept as watch"
     },
     {
       "trigger_id": "ne_ocean",
       "date": "2026-08-19",
       "start": "2026-08-19T16:00:00+10:00",
-      "end": "2026-08-19T18:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['gfs_seamless'] sees it"
-    },
-    {
-      "trigger_id": "ne_ocean",
-      "date": "2026-08-23",
-      "start": "2026-08-23T15:00:00+10:00",
-      "end": "2026-08-23T18:00:00+10:00",
+      "end": "2026-08-19T17:00:00+10:00",
       "reason": "single_model",
       "detail": "only ['gfs_seamless'] sees it"
     }
