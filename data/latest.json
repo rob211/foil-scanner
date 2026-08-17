@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-17T22:00:47.239517+10:00",
+  "generated_at": "2026-08-17T23:06:49.609497+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-17T22:00:47.848218+10:00",
+      "fetched_at": "2026-08-17T23:06:50.201650+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-17T22:00:48.760102+10:00",
+      "fetched_at": "2026-08-17T23:06:50.812338+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-17T22:00:49.719344+10:00",
+      "fetched_at": "2026-08-17T23:06:51.525842+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-17T22:00:50.680283+10:00",
+      "fetched_at": "2026-08-17T23:06:52.100823+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-17T22:00:51.166777+10:00",
+      "fetched_at": "2026-08-17T23:06:52.669335+10:00",
       "detail": null,
       "error": null
     },
@@ -168,16 +168,16 @@
       "run_name": "Lake Entrance (swell)",
       "date": "2026-08-18",
       "start": "2026-08-18T07:00:00+10:00",
-      "end": "2026-08-18T13:00:00+10:00",
+      "end": "2026-08-18T10:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 2.2,
-      "direction_deg": 190.0,
+      "peak_median_kn": 3.0,
+      "direction_deg": 255.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 1.4,
-        "ECMWF": 1.4,
-        "ICON": 2.9,
-        "UKMO": 3.6
+        "GFS": 3.0,
+        "ECMWF": 2.3,
+        "ICON": 3.0,
+        "UKMO": 5.9
       },
       "title_tags": [
         "off-tide"
@@ -185,8 +185,8 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 0.96,
-      "swell_dir_deg": 108.0,
+      "swell_m": 0.86,
+      "swell_dir_deg": 106.0,
       "high_tide": "2026-08-18T12:16:21.818182+10:00",
       "high_tide_m": 1.33,
       "spots": null,
@@ -196,6 +196,40 @@
       "live_status": "pending",
       "event_id": "3lp0vfcplshaffv5s7ten2e45g",
       "foil_key": "entrance_swell:2026-08-18:07"
+    },
+    {
+      "trigger_id": "entrance_swell",
+      "run_name": "Lake Entrance (swell)",
+      "date": "2026-08-19",
+      "start": "2026-08-19T10:00:00+10:00",
+      "end": "2026-08-19T11:00:00+10:00",
+      "grade": "yellow",
+      "peak_median_kn": 8.0,
+      "direction_deg": 348.0,
+      "models_agreeing": 4,
+      "model_values": {
+        "GFS": 7.5,
+        "ECMWF": 9.9,
+        "ICON": 8.4,
+        "UKMO": 4.8
+      },
+      "title_tags": [
+        "off-tide"
+      ],
+      "notes": [
+        "runnable but not the preferred run-out (high tide to +2 h)"
+      ],
+      "swell_m": 0.96,
+      "swell_dir_deg": 110.0,
+      "high_tide": "2026-08-19T13:06:00+10:00",
+      "high_tide_m": 1.33,
+      "spots": null,
+      "watch": null,
+      "tide_state": "workable",
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": "t8u1ud0pl19sf605cebpa8pnk4",
+      "foil_key": "entrance_swell:2026-08-19:10"
     }
   ],
   "near_misses": [
@@ -203,9 +237,17 @@
       "trigger_id": "entrance_swell",
       "date": "2026-08-18",
       "start": "2026-08-18T07:00:00+10:00",
-      "end": "2026-08-18T13:00:00+10:00",
+      "end": "2026-08-18T10:00:00+10:00",
       "reason": "off_tide",
       "detail": "runnable but outside the preferred run-out (12:16-14:16); kept as yellow"
+    },
+    {
+      "trigger_id": "entrance_swell",
+      "date": "2026-08-19",
+      "start": "2026-08-19T10:00:00+10:00",
+      "end": "2026-08-19T11:00:00+10:00",
+      "reason": "off_tide",
+      "detail": "runnable but outside the preferred run-out (13:06-15:06); kept as yellow"
     },
     {
       "trigger_id": "ne_ocean",
