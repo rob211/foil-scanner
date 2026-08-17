@@ -1,35 +1,47 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-17T18:30:46.622492+10:00",
+  "generated_at": "2026-08-17T19:00:45.828012+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-17T18:00:00+10:00",
-    "speed_kn": 10.8,
-    "gust_kn": 14.0,
-    "dir_deg": 157.5
+    "time": "2026-08-17T18:30:00+10:00",
+    "speed_kn": 13.0,
+    "gust_kn": 15.1,
+    "dir_deg": 180.0
   },
-  "holfuy": null,
+  "holfuy": {
+    "station": "Lake Illawarra",
+    "time": "2026-08-17T19:00:03+10:00",
+    "speed_kn": 9.7,
+    "gust_kn": 11.7,
+    "dir_deg": 128.0
+  },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-17T18:00:00+10:00",
+    "time": "2026-08-17T18:30:00+10:00",
     "speed_kn": 4.9,
-    "gust_kn": 9.2,
-    "dir_deg": 180.0
+    "gust_kn": 10.3,
+    "dir_deg": 202.5
   },
   "checks": [],
   "alerts": [],
   "bias": [
     {
+      "location": "lake",
+      "station": "Lake Illawarra",
+      "observed_kn": 9.7,
+      "forecast_kn": 3.8,
+      "gap_kn": 5.9,
+      "flagged": false
+    },
+    {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 10.8,
-      "forecast_kn": 6.8,
-      "gap_kn": 4.0,
+      "observed_kn": 13.0,
+      "forecast_kn": 6.6,
+      "gap_kn": 6.4,
       "flagged": false
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": [
-    "Holfuy fetch failed, lake safety-net check skipped this hour: GET https://api.holfuy.com/live/ failed after 3 attempts: HTTPSConnectionPool(host='api.holfuy.com', port=443): Max retries exceeded with url: /live/?s=366&pw=***&m=JSON&tu=C&su=knots&utc=1 (Caused by NameResolutionError(\"HTTPSConnection(host='api.holfuy.com', port=443): Failed to resolve 'api.holfuy.com' ([Errno -3] Temporary failure in name resolution)\"))"
-  ]
+  "notes": []
 }
