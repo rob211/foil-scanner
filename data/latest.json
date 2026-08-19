@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-19T21:00:42.114758+10:00",
+  "generated_at": "2026-08-19T22:00:47.098640+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-19T21:00:42.644151+10:00",
+      "fetched_at": "2026-08-19T22:00:48.082400+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-19T21:00:43.112076+10:00",
+      "fetched_at": "2026-08-19T22:00:49.547070+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-19T21:00:43.593090+10:00",
+      "fetched_at": "2026-08-19T22:00:51.416092+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-19T21:00:44.074425+10:00",
+      "fetched_at": "2026-08-19T22:00:52.953566+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-19T21:00:44.567767+10:00",
+      "fetched_at": "2026-08-19T22:00:53.512163+10:00",
       "detail": null,
       "error": null
     },
@@ -123,18 +123,18 @@
     },
     {
       "time": "2026-08-19T16:00:00+10:00",
-      "lake": 12.3,
-      "ocean": 11.1
+      "lake": 11.8,
+      "ocean": 10.8
     },
     {
       "time": "2026-08-19T17:00:00+10:00",
       "lake": 10.9,
-      "ocean": 10.2
+      "ocean": 10.1
     },
     {
       "time": "2026-08-19T18:00:00+10:00",
-      "lake": 7.5,
-      "ocean": 8.3
+      "lake": 7.2,
+      "ocean": 8.1
     },
     {
       "time": "2026-08-19T19:00:00+10:00",
@@ -143,8 +143,8 @@
     },
     {
       "time": "2026-08-19T20:00:00+10:00",
-      "lake": 5.9,
-      "ocean": 7.4
+      "lake": 6.0,
+      "ocean": 7.5
     },
     {
       "time": "2026-08-19T21:00:00+10:00",
@@ -228,39 +228,6 @@
       "foil_key": "entrance_swell:2026-08-19:13"
     },
     {
-      "trigger_id": "ne_ocean",
-      "run_name": "NE run (Easty / South Beach / Sandon)",
-      "date": "2026-08-23",
-      "start": "2026-08-23T17:00:00+10:00",
-      "end": "2026-08-23T18:00:00+10:00",
-      "grade": "yellow",
-      "peak_median_kn": 11.4,
-      "direction_deg": 37.0,
-      "models_agreeing": 2,
-      "model_values": {
-        "GFS": 11.4,
-        "UKMO": 11.5
-      },
-      "title_tags": [
-        "cross swell 0.9 m SSE",
-        "2 of 4 models"
-      ],
-      "notes": [
-        "only 2 of 4 models reached the trigger; the others did not see it"
-      ],
-      "swell_m": 0.9,
-      "swell_dir_deg": 160.0,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": null,
-      "tide_state": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": "3l5ticjspofm88edl4bekga2eo",
-      "foil_key": "ne_ocean:2026-08-23:17"
-    },
-    {
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-08-25",
@@ -268,10 +235,10 @@
       "end": "2026-08-25T08:00:00+10:00",
       "grade": "green",
       "peak_median_kn": 4.3,
-      "direction_deg": 278.0,
+      "direction_deg": 274.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 1.6,
+        "GFS": 3.2,
         "ECMWF": 4.8,
         "ICON": 4.1,
         "UKMO": 4.5
@@ -297,11 +264,11 @@
       "start": "2026-08-25T12:00:00+10:00",
       "end": "2026-08-25T18:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 4.3,
-      "direction_deg": 268.0,
+      "peak_median_kn": 4.1,
+      "direction_deg": 252.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 5.4,
+        "GFS": 4.9,
         "ECMWF": 3.3,
         "ICON": 6.2,
         "UKMO": 2.0
@@ -357,6 +324,14 @@
       "end": "2026-08-19T18:00:00+10:00",
       "reason": "single_model",
       "detail": "only ['gfs_seamless'] sees it"
+    },
+    {
+      "trigger_id": "ne_ocean",
+      "date": "2026-08-23",
+      "start": "2026-08-23T17:00:00+10:00",
+      "end": "2026-08-23T18:00:00+10:00",
+      "reason": "single_model",
+      "detail": "only ['ukmo_seamless'] sees it"
     }
   ]
 }
