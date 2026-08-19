@@ -1,51 +1,40 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-19T14:04:09.811234+10:00",
+  "generated_at": "2026-08-19T14:30:41.361714+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-19T13:30:00+10:00",
-    "speed_kn": 17.3,
+    "time": "2026-08-19T14:00:00+10:00",
+    "speed_kn": 16.2,
     "gust_kn": 18.9,
     "dir_deg": 45.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-19T14:04:10+10:00",
+    "time": "2026-08-19T14:30:40+10:00",
     "speed_kn": 16.0,
-    "gust_kn": 17.5,
-    "dir_deg": 36.0
+    "gust_kn": 18.0,
+    "dir_deg": 39.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-19T13:30:00+10:00",
-    "speed_kn": 11.9,
-    "gust_kn": 16.2,
+    "time": "2026-08-19T14:00:00+10:00",
+    "speed_kn": 13.0,
+    "gust_kn": 17.8,
     "dir_deg": 45.0
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-08-19:13",
       "state": "pending",
-      "live_line": "onshore but not wrecking it: 17 kn NE at 13:30 (Bellambi)"
+      "live_line": "onshore but not wrecking it: 16 kn NE at 14:00 (Bellambi)"
     }
   ],
   "alerts": [
     {
-      "trigger_id": "entrance_ne",
-      "run_name": "Lake Entrance (NE wind)",
-      "station": "Bellambi",
-      "speed_kn": 17.3,
-      "dir_deg": 45.0,
-      "threshold_kn": 16.2,
-      "detail": "Run-out gate today: 13:06-15:06.",
-      "foil_key": "live-alert:2026-08-19:entrance",
-      "created": false
-    },
-    {
       "trigger_id": "ne_ocean",
       "run_name": "NE ocean runs",
       "station": "Bellambi",
-      "speed_kn": 17.3,
+      "speed_kn": 16.2,
       "dir_deg": 45.0,
       "threshold_kn": 10.0,
       "detail": "",
@@ -65,12 +54,12 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 17.3,
+      "observed_kn": 16.2,
       "forecast_kn": 10.9,
-      "gap_kn": 6.4,
+      "gap_kn": 5.3,
       "flagged": false
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": []
 }
