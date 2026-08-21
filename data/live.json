@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-21T18:00:49.823938+10:00",
+  "generated_at": "2026-08-21T18:02:06.303981+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-08-21T17:30:00+10:00",
@@ -29,19 +29,19 @@
       "location": "lake",
       "station": "Lake Illawarra",
       "observed_kn": 3.4,
-      "forecast_kn": 6.8,
-      "gap_kn": -3.4,
+      "forecast_kn": 7.3,
+      "gap_kn": -3.9,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
       "observed_kn": 4.9,
-      "forecast_kn": 8.1,
-      "gap_kn": -3.2,
+      "forecast_kn": 9.2,
+      "gap_kn": -4.3,
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": []
 }
