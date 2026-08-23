@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-23T15:31:14.617163+10:00",
+  "generated_at": "2026-08-23T15:51:11.854562+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-23T15:00:00+10:00",
-    "speed_kn": 9.2,
-    "gust_kn": 13.0,
+    "time": "2026-08-23T15:30:00+10:00",
+    "speed_kn": 17.3,
+    "gust_kn": 20.0,
     "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-23T15:30:28+10:00",
-    "speed_kn": 17.5,
+    "time": "2026-08-23T15:50:28+10:00",
+    "speed_kn": 18.4,
     "gust_kn": 20.4,
-    "dir_deg": 39.0
+    "dir_deg": 30.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-23T15:00:00+10:00",
+    "time": "2026-08-23T15:30:00+10:00",
     "speed_kn": 11.9,
-    "gust_kn": 16.2,
+    "gust_kn": 17.3,
     "dir_deg": 45.0
   },
   "checks": [
     {
       "foil_key": "ne_ocean:2026-08-23:16",
-      "state": "pending",
-      "live_line": "9 kn NNE at 15:00 (Bellambi)"
+      "state": "confirmed",
+      "live_line": "17 kn NNE at 15:30 (Bellambi), forecast 11.3 kn"
     }
   ],
   "alerts": [
@@ -34,32 +34,34 @@
       "trigger_id": "entrance_ne",
       "run_name": "Lake Entrance (NE wind)",
       "station": "Lake Illawarra",
-      "speed_kn": 17.5,
-      "dir_deg": 39.0,
+      "speed_kn": 18.4,
+      "dir_deg": 30.0,
       "threshold_kn": 16.2,
       "detail": "Run-out gate today: 05:00-07:00, 17:00-19:00.",
       "foil_key": "live-alert:2026-08-23:entrance",
-      "created": true
+      "created": false
     }
   ],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 17.5,
+      "observed_kn": 18.4,
       "forecast_kn": 10.1,
-      "gap_kn": 7.4,
-      "flagged": false
+      "gap_kn": 8.3,
+      "flagged": true
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 9.2,
+      "observed_kn": 17.3,
       "forecast_kn": 10.1,
-      "gap_kn": -0.9,
+      "gap_kn": 7.2,
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": []
+  "token_expires_at": null,
+  "notes": [
+    "MODEL BUST (lake): observed 18 kn vs forecast 10 kn at Lake Illawarra"
+  ]
 }
