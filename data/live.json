@@ -1,60 +1,37 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-23T17:07:34.015380+10:00",
+  "generated_at": "2026-08-23T17:31:12.790791+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-23T16:30:00+10:00",
+    "time": "2026-08-23T17:00:00+10:00",
     "speed_kn": 17.3,
     "gust_kn": 21.1,
     "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-23T17:06:30+10:00",
-    "speed_kn": 17.0,
-    "gust_kn": 23.3,
-    "dir_deg": 19.0
+    "time": "2026-08-23T17:30:29+10:00",
+    "speed_kn": 18.0,
+    "gust_kn": 21.9,
+    "dir_deg": 18.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-23T16:30:00+10:00",
-    "speed_kn": 13.0,
-    "gust_kn": 17.8,
+    "time": "2026-08-23T17:00:00+10:00",
+    "speed_kn": 15.1,
+    "gust_kn": 20.0,
     "dir_deg": 45.0
   },
   "checks": [],
-  "alerts": [
-    {
-      "trigger_id": "entrance_ne",
-      "run_name": "Lake Entrance (NE wind)",
-      "station": "Bellambi",
-      "speed_kn": 17.3,
-      "dir_deg": 22.5,
-      "threshold_kn": 16.2,
-      "detail": "Run-out gate today: 05:00-07:00, 17:00-19:00.",
-      "foil_key": "live-alert:2026-08-23:entrance",
-      "created": false
-    },
-    {
-      "trigger_id": "ne_ocean",
-      "run_name": "NE ocean runs",
-      "station": "Bellambi",
-      "speed_kn": 17.3,
-      "dir_deg": 22.5,
-      "threshold_kn": 10.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-08-23:ocean",
-      "created": false
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 17.0,
+      "observed_kn": 18.0,
       "forecast_kn": 9.6,
-      "gap_kn": 7.4,
-      "flagged": false
+      "gap_kn": 8.4,
+      "flagged": true
     },
     {
       "location": "ocean",
@@ -65,6 +42,8 @@
       "flagged": false
     }
   ],
-  "token_expires_at": null,
-  "notes": []
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "notes": [
+    "MODEL BUST (lake): observed 18 kn vs forecast 10 kn at Lake Illawarra"
+  ]
 }
