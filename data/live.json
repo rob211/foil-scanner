@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-24T15:01:11.454562+10:00",
+  "generated_at": "2026-08-24T15:07:02.992843+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-08-24T14:30:00+10:00",
@@ -10,10 +10,10 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-24T15:00:35+10:00",
+    "time": "2026-08-24T15:06:34+10:00",
     "speed_kn": 16.6,
-    "gust_kn": 21.4,
-    "dir_deg": 33.0
+    "gust_kn": 19.0,
+    "dir_deg": 23.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
@@ -29,7 +29,7 @@
       "run_name": "Lake Entrance (NE wind)",
       "station": "Lake Illawarra",
       "speed_kn": 16.6,
-      "dir_deg": 33.0,
+      "dir_deg": 23.0,
       "threshold_kn": 16.2,
       "detail": "Run-out gate today: 05:45-07:45, 17:38-19:38.",
       "foil_key": "live-alert:2026-08-24:entrance",
@@ -54,6 +54,6 @@
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": []
 }
