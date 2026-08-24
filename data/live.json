@@ -1,45 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-24T17:01:11.859424+10:00",
+  "generated_at": "2026-08-24T17:31:15.280766+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-24T16:30:00+10:00",
-    "speed_kn": 18.9,
-    "gust_kn": 23.8,
+    "time": "2026-08-24T17:00:00+10:00",
+    "speed_kn": 16.2,
+    "gust_kn": 20.0,
     "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-24T17:00:34+10:00",
-    "speed_kn": 13.6,
-    "gust_kn": 15.0,
-    "dir_deg": 15.0
+    "time": "2026-08-24T17:30:35+10:00",
+    "speed_kn": 14.1,
+    "gust_kn": 16.6,
+    "dir_deg": 6.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-24T16:30:00+10:00",
-    "speed_kn": 15.1,
+    "time": "2026-08-24T17:00:00+10:00",
+    "speed_kn": 16.2,
     "gust_kn": 18.9,
     "dir_deg": 22.5
   },
   "checks": [],
   "alerts": [
     {
-      "trigger_id": "entrance_ne",
-      "run_name": "Lake Entrance (NE wind)",
-      "station": "Bellambi",
-      "speed_kn": 18.9,
-      "dir_deg": 22.5,
-      "threshold_kn": 16.2,
-      "detail": "Run-out gate today: 05:45-07:45, 17:38-19:38.",
-      "foil_key": "live-alert:2026-08-24:entrance",
-      "created": false
-    },
-    {
       "trigger_id": "ne_ocean",
       "run_name": "NE ocean runs",
       "station": "Bellambi",
-      "speed_kn": 18.9,
+      "speed_kn": 16.2,
       "dir_deg": 22.5,
       "threshold_kn": 10.0,
       "detail": "",
@@ -51,22 +40,20 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 13.6,
+      "observed_kn": 14.1,
       "forecast_kn": 8.4,
-      "gap_kn": 5.2,
+      "gap_kn": 5.7,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 18.9,
+      "observed_kn": 16.2,
       "forecast_kn": 9.5,
-      "gap_kn": 9.4,
-      "flagged": true
+      "gap_kn": 6.7,
+      "flagged": false
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": [
-    "MODEL BUST (ocean): observed 19 kn vs forecast 10 kn at Bellambi"
-  ]
+  "notes": []
 }
