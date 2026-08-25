@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-25T16:01:16.028271+10:00",
+  "generated_at": "2026-08-25T16:31:13.646218+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-25T15:30:00+10:00",
+    "time": "2026-08-25T16:00:00+10:00",
     "speed_kn": 10.3,
     "gust_kn": 14.0,
-    "dir_deg": 22.5
+    "dir_deg": 0.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-25T16:00:39+10:00",
-    "speed_kn": 4.4,
-    "gust_kn": 4.9,
-    "dir_deg": 161.0
+    "time": "2026-08-25T16:30:39+10:00",
+    "speed_kn": 4.9,
+    "gust_kn": 5.3,
+    "dir_deg": 160.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-25T15:30:00+10:00",
-    "speed_kn": 3.2,
+    "time": "2026-08-25T16:00:00+10:00",
+    "speed_kn": 2.2,
     "gust_kn": 4.9,
     "dir_deg": 0.0
   },
@@ -26,28 +26,16 @@
     {
       "foil_key": "entrance_swell:2026-08-25:11",
       "state": "pending",
-      "live_line": "onshore but not wrecking it: 10 kn NNE at 15:30 (Bellambi)"
+      "live_line": "onshore but not wrecking it: 10 kn N at 16:00 (Bellambi)"
     }
   ],
-  "alerts": [
-    {
-      "trigger_id": "ne_ocean",
-      "run_name": "NE ocean runs",
-      "station": "Bellambi",
-      "speed_kn": 10.3,
-      "dir_deg": 22.5,
-      "threshold_kn": 10.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-08-25:ocean",
-      "created": false
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 4.4,
-      "forecast_kn": 4.2,
+      "observed_kn": 4.9,
+      "forecast_kn": 4.7,
       "gap_kn": 0.2,
       "flagged": false
     },
@@ -55,8 +43,8 @@
       "location": "ocean",
       "station": "Bellambi",
       "observed_kn": 10.3,
-      "forecast_kn": 6.8,
-      "gap_kn": 3.5,
+      "forecast_kn": 7.1,
+      "gap_kn": 3.2,
       "flagged": false
     }
   ],
