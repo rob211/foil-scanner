@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-25T19:00:56.911388+10:00",
+  "generated_at": "2026-08-25T20:01:13.336393+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-25T19:00:57.370683+10:00",
+      "fetched_at": "2026-08-25T20:01:13.829076+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-25T19:00:57.845486+10:00",
+      "fetched_at": "2026-08-25T20:01:14.336382+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-25T19:00:58.307777+10:00",
+      "fetched_at": "2026-08-25T20:01:14.815914+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-25T19:00:58.780825+10:00",
+      "fetched_at": "2026-08-25T20:01:15.234197+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-25T19:00:59.204591+10:00",
+      "fetched_at": "2026-08-25T20:01:15.628720+10:00",
       "detail": null,
       "error": null
     },
@@ -138,8 +138,8 @@
     },
     {
       "time": "2026-08-25T19:00:00+10:00",
-      "lake": 4.2,
-      "ocean": 7.3
+      "lake": 4.4,
+      "ocean": 7.5
     },
     {
       "time": "2026-08-25T20:00:00+10:00",
@@ -153,13 +153,13 @@
     },
     {
       "time": "2026-08-25T22:00:00+10:00",
-      "lake": 3.7,
-      "ocean": 6.9
+      "lake": 3.8,
+      "ocean": 6.8
     },
     {
       "time": "2026-08-25T23:00:00+10:00",
-      "lake": 2.8,
-      "ocean": 6.8
+      "lake": 3.7,
+      "ocean": 6.6
     }
   ],
   "windows": [
@@ -171,7 +171,7 @@
       "end": "2026-08-25T18:00:00+10:00",
       "grade": "green",
       "peak_median_kn": 5.1,
-      "direction_deg": 340.0,
+      "direction_deg": 342.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 3.2,
