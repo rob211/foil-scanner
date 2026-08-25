@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-25T22:01:15.654040+10:00",
+  "generated_at": "2026-08-25T23:12:15.932330+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-25T22:01:16.115284+10:00",
+      "fetched_at": "2026-08-25T23:12:16.510080+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-25T22:01:16.560474+10:00",
+      "fetched_at": "2026-08-25T23:12:17.153372+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-25T22:01:16.988011+10:00",
+      "fetched_at": "2026-08-25T23:12:17.777717+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-25T22:01:17.396672+10:00",
+      "fetched_at": "2026-08-25T23:12:18.398355+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-25T22:01:17.783931+10:00",
+      "fetched_at": "2026-08-25T23:12:18.966201+10:00",
       "detail": null,
       "error": null
     },
@@ -103,7 +103,7 @@
     },
     {
       "time": "2026-08-25T12:00:00+10:00",
-      "lake": 3.5,
+      "lake": 3.6,
       "ocean": 6.3
     },
     {
@@ -113,28 +113,28 @@
     },
     {
       "time": "2026-08-25T14:00:00+10:00",
-      "lake": 4.6,
-      "ocean": 7.4
+      "lake": 4.3,
+      "ocean": 7.2
     },
     {
       "time": "2026-08-25T15:00:00+10:00",
-      "lake": 4.9,
-      "ocean": 8.0
+      "lake": 4.3,
+      "ocean": 7.5
     },
     {
       "time": "2026-08-25T16:00:00+10:00",
-      "lake": 5.1,
-      "ocean": 7.8
+      "lake": 4.3,
+      "ocean": 7.3
     },
     {
       "time": "2026-08-25T17:00:00+10:00",
-      "lake": 4.8,
-      "ocean": 8.0
+      "lake": 4.4,
+      "ocean": 7.8
     },
     {
       "time": "2026-08-25T18:00:00+10:00",
-      "lake": 4.1,
-      "ocean": 7.4
+      "lake": 3.9,
+      "ocean": 7.3
     },
     {
       "time": "2026-08-25T19:00:00+10:00",
@@ -143,18 +143,18 @@
     },
     {
       "time": "2026-08-25T20:00:00+10:00",
-      "lake": 3.2,
-      "ocean": 6.9
+      "lake": 3.3,
+      "ocean": 7.0
     },
     {
       "time": "2026-08-25T21:00:00+10:00",
-      "lake": 3.5,
-      "ocean": 7.2
+      "lake": 3.7,
+      "ocean": 7.3
     },
     {
       "time": "2026-08-25T22:00:00+10:00",
-      "lake": 3.5,
-      "ocean": 6.8
+      "lake": 3.8,
+      "ocean": 7.0
     },
     {
       "time": "2026-08-25T23:00:00+10:00",
@@ -167,17 +167,17 @@
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-08-25",
-      "start": "2026-08-25T11:54:00+10:00",
+      "start": "2026-08-25T11:53:20+10:00",
       "end": "2026-08-25T18:00:00+10:00",
-      "grade": "green",
-      "peak_median_kn": 5.1,
-      "direction_deg": 343.0,
+      "grade": "yellow",
+      "peak_median_kn": 4.4,
+      "direction_deg": 318.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 2.6,
-        "ECMWF": 6.2,
-        "ICON": 7.7,
-        "UKMO": 3.9
+        "GFS": 3.8,
+        "ECMWF": 4.6,
+        "ICON": 5.9,
+        "UKMO": 4.2
       },
       "title_tags": [
         "off-tide"
@@ -185,10 +185,10 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 1.02,
-      "swell_dir_deg": 59.0,
-      "high_tide": "2026-08-25T18:23:04.615385+10:00",
-      "high_tide_m": 1.62,
+      "swell_m": 0.94,
+      "swell_dir_deg": 60.0,
+      "high_tide": "2026-08-25T18:25:00+10:00",
+      "high_tide_m": 1.61,
       "spots": null,
       "watch": null,
       "tide_state": "workable",
@@ -202,10 +202,10 @@
     {
       "trigger_id": "entrance_swell",
       "date": "2026-08-25",
-      "start": "2026-08-25T11:54:00+10:00",
+      "start": "2026-08-25T11:53:20+10:00",
       "end": "2026-08-25T18:00:00+10:00",
       "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (18:23-20:23); kept as green"
+      "detail": "runnable but outside the preferred run-out (18:25-20:25); kept as yellow"
     },
     {
       "trigger_id": "ne_ocean",
