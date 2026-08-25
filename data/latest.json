@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-26T04:58:08.149590+10:00",
+  "generated_at": "2026-08-26T06:00:43.865369+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-26T04:58:08.550420+10:00",
+      "fetched_at": "2026-08-26T06:00:44.556672+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-26T04:58:08.947678+10:00",
+      "fetched_at": "2026-08-26T06:00:45.272347+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-26T04:58:09.454952+10:00",
+      "fetched_at": "2026-08-26T06:00:45.913843+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-26T04:58:09.842814+10:00",
+      "fetched_at": "2026-08-26T06:00:46.626795+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-26T04:58:10.232174+10:00",
+      "fetched_at": "2026-08-26T06:00:47.254769+10:00",
       "detail": null,
       "error": null
     },
@@ -44,62 +44,62 @@
     {
       "time": "2026-08-26T00:00:00+10:00",
       "lake": 3.7,
-      "ocean": 7.0
+      "ocean": 6.7
     },
     {
       "time": "2026-08-26T01:00:00+10:00",
       "lake": 4.0,
-      "ocean": 7.2
+      "ocean": 6.8
     },
     {
       "time": "2026-08-26T02:00:00+10:00",
-      "lake": 3.6,
-      "ocean": 7.7
+      "lake": 4.1,
+      "ocean": 6.9
     },
     {
       "time": "2026-08-26T03:00:00+10:00",
       "lake": 4.1,
-      "ocean": 8.0
+      "ocean": 7.0
     },
     {
       "time": "2026-08-26T04:00:00+10:00",
       "lake": 5.2,
-      "ocean": 8.1
+      "ocean": 7.8
     },
     {
       "time": "2026-08-26T05:00:00+10:00",
-      "lake": 5.7,
-      "ocean": 7.5
+      "lake": 5.5,
+      "ocean": 7.7
     },
     {
       "time": "2026-08-26T06:00:00+10:00",
-      "lake": 6.3,
+      "lake": 5.9,
       "ocean": 7.8
     },
     {
       "time": "2026-08-26T07:00:00+10:00",
-      "lake": 7.2,
-      "ocean": 8.4
+      "lake": 6.3,
+      "ocean": 7.8
     },
     {
       "time": "2026-08-26T08:00:00+10:00",
-      "lake": 8.1,
-      "ocean": 8.4
+      "lake": 7.0,
+      "ocean": 7.7
     },
     {
       "time": "2026-08-26T09:00:00+10:00",
-      "lake": 10.4,
-      "ocean": 10.2
+      "lake": 10.2,
+      "ocean": 10.1
     },
     {
       "time": "2026-08-26T10:00:00+10:00",
-      "lake": 11.4,
-      "ocean": 11.2
+      "lake": 12.2,
+      "ocean": 11.8
     },
     {
       "time": "2026-08-26T11:00:00+10:00",
-      "lake": 12.4,
-      "ocean": 12.4
+      "lake": 12.8,
+      "ocean": 12.6
     },
     {
       "time": "2026-08-26T12:00:00+10:00",
@@ -113,13 +113,13 @@
     },
     {
       "time": "2026-08-26T14:00:00+10:00",
-      "lake": 12.3,
-      "ocean": 12.1
+      "lake": 12.1,
+      "ocean": 11.9
     },
     {
       "time": "2026-08-26T15:00:00+10:00",
-      "lake": 11.7,
-      "ocean": 11.6
+      "lake": 11.5,
+      "ocean": 11.3
     },
     {
       "time": "2026-08-26T16:00:00+10:00",
@@ -167,14 +167,14 @@
       "trigger_id": "lake_oakflats_berkeley",
       "run_name": "Oak Flats to Berkeley",
       "date": "2026-08-26",
-      "start": "2026-08-26T11:00:00+10:00",
+      "start": "2026-08-26T10:00:00+10:00",
       "end": "2026-08-26T12:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 15.2,
-      "direction_deg": 181.0,
+      "peak_median_kn": 16.1,
+      "direction_deg": 187.0,
       "models_agreeing": 1,
       "model_values": {
-        "UKMO": 15.2
+        "UKMO": 16.1
       },
       "title_tags": [],
       "notes": [],
@@ -188,7 +188,7 @@
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_oakflats_berkeley:2026-08-26:11"
+      "foil_key": "lake_oakflats_berkeley:2026-08-26:10"
     }
   ],
   "near_misses": []
