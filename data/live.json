@@ -1,35 +1,47 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-25T14:01:10.973047+10:00",
+  "generated_at": "2026-08-25T14:07:58.215820+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-25T13:30:00+10:00",
-    "speed_kn": 9.2,
-    "gust_kn": 10.8,
+    "time": "2026-08-25T14:00:00+10:00",
+    "speed_kn": 10.3,
+    "gust_kn": 13.0,
     "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-25T14:00:37+10:00",
+    "time": "2026-08-25T14:06:37+10:00",
     "speed_kn": 0.5,
     "gust_kn": 0.5,
-    "dir_deg": 45.0
+    "dir_deg": 210.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-25T13:30:00+10:00",
-    "speed_kn": 4.9,
-    "gust_kn": 9.2,
-    "dir_deg": 0.0
+    "time": "2026-08-25T14:00:00+10:00",
+    "speed_kn": 7.0,
+    "gust_kn": 10.3,
+    "dir_deg": 22.5
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-08-25:11",
-      "state": "confirmed",
-      "live_line": "wind favourable for the swell: 9 kn NNE at 13:30 (Bellambi)"
+      "state": "pending",
+      "live_line": "onshore but not wrecking it: 10 kn NNE at 14:00 (Bellambi)"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    {
+      "trigger_id": "ne_ocean",
+      "run_name": "NE ocean runs",
+      "station": "Bellambi",
+      "speed_kn": 10.3,
+      "dir_deg": 22.5,
+      "threshold_kn": 10.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-08-25:ocean",
+      "created": false
+    }
+  ],
   "bias": [
     {
       "location": "lake",
@@ -42,14 +54,12 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 9.2,
+      "observed_kn": 10.3,
       "forecast_kn": 6.7,
-      "gap_kn": 2.5,
+      "gap_kn": 3.6,
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": [
-    "entrance_swell:2026-08-25:11: check failed: <HttpError 403 when requesting https://www.googleapis.com/calendar/v3/calendars/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/events/jjfuor5qefrt2ri7lm1leq97kg?alt=json returned \"Rate Limit Exceeded\". Details: \"[{'domain': 'usageLimits', 'reason': 'rateLimitExceeded', 'message': 'Rate Limit Exceeded'}]\">"
-  ]
+  "token_expires_at": null,
+  "notes": []
 }
