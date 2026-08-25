@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-25T19:01:10.635654+10:00",
+  "generated_at": "2026-08-25T19:04:03.614664+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-08-25T18:30:00+10:00",
@@ -28,7 +28,7 @@
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": [
     "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'"
   ]
