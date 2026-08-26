@@ -1,25 +1,25 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-26T13:01:11.465734+10:00",
+  "generated_at": "2026-08-26T13:29:12.345186+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-26T12:30:00+10:00",
-    "speed_kn": 20.0,
-    "gust_kn": 23.2,
+    "time": "2026-08-26T13:00:00+10:00",
+    "speed_kn": 21.1,
+    "gust_kn": 23.8,
     "dir_deg": 180.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-26T13:00:42+10:00",
-    "speed_kn": 13.1,
-    "gust_kn": 15.6,
-    "dir_deg": 178.0
+    "time": "2026-08-26T13:28:44+10:00",
+    "speed_kn": 19.0,
+    "gust_kn": 22.9,
+    "dir_deg": 158.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-26T12:30:00+10:00",
+    "time": "2026-08-26T13:00:00+10:00",
     "speed_kn": 8.1,
-    "gust_kn": 15.1,
+    "gust_kn": 17.3,
     "dir_deg": 202.5
   },
   "checks": [],
@@ -28,7 +28,7 @@
       "trigger_id": "lake_oakflats_berkeley",
       "run_name": "Oak Flats to Berkeley",
       "station": "Bellambi",
-      "speed_kn": 20.0,
+      "speed_kn": 21.1,
       "dir_deg": 180.0,
       "threshold_kn": 18.0,
       "detail": "",
@@ -39,7 +39,7 @@
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "station": "Bellambi",
-      "speed_kn": 20.0,
+      "speed_kn": 21.1,
       "dir_deg": 180.0,
       "threshold_kn": 18.0,
       "detail": "",
@@ -51,22 +51,22 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 13.1,
+      "observed_kn": 19.0,
       "forecast_kn": 12.2,
-      "gap_kn": 0.9,
+      "gap_kn": 6.8,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 20.0,
+      "observed_kn": 21.1,
       "forecast_kn": 11.9,
-      "gap_kn": 8.1,
+      "gap_kn": 9.2,
       "flagged": true
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": [
-    "MODEL BUST (ocean): observed 20 kn vs forecast 12 kn at Bellambi"
+    "MODEL BUST (ocean): observed 21 kn vs forecast 12 kn at Bellambi"
   ]
 }
