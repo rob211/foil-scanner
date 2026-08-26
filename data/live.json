@@ -1,70 +1,47 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-26T15:01:04.645172+10:00",
+  "generated_at": "2026-08-26T15:31:10.427126+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-08-26T14:30:00+10:00",
-    "speed_kn": 18.9,
-    "gust_kn": 22.1,
+    "time": "2026-08-26T15:00:00+10:00",
+    "speed_kn": 17.3,
+    "gust_kn": 18.9,
     "dir_deg": 180.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-08-26T15:00:43+10:00",
-    "speed_kn": 15.0,
-    "gust_kn": 17.5,
-    "dir_deg": 153.0
+    "time": "2026-08-26T15:30:45+10:00",
+    "speed_kn": 13.6,
+    "gust_kn": 16.0,
+    "dir_deg": 152.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-08-26T14:30:00+10:00",
+    "time": "2026-08-26T15:00:00+10:00",
     "speed_kn": 5.9,
-    "gust_kn": 15.1,
-    "dir_deg": 202.5
+    "gust_kn": 13.0,
+    "dir_deg": 180.0
   },
   "checks": [],
-  "alerts": [
-    {
-      "trigger_id": "lake_oakflats_berkeley",
-      "run_name": "Oak Flats to Berkeley",
-      "station": "Bellambi",
-      "speed_kn": 18.9,
-      "dir_deg": 180.0,
-      "threshold_kn": 18.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-08-26:lake",
-      "created": false
-    },
-    {
-      "trigger_id": "south_ocean",
-      "run_name": "South runs",
-      "station": "Bellambi",
-      "speed_kn": 18.9,
-      "dir_deg": 180.0,
-      "threshold_kn": 18.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-08-26:ocean",
-      "created": false
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 15.0,
+      "observed_kn": 13.6,
       "forecast_kn": 11.9,
-      "gap_kn": 3.1,
+      "gap_kn": 1.7,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 18.9,
+      "observed_kn": 17.3,
       "forecast_kn": 11.8,
-      "gap_kn": 7.1,
+      "gap_kn": 5.5,
       "flagged": false
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": []
 }
