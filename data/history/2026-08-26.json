@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-26T10:01:15.345489+10:00",
+  "generated_at": "2026-08-26T11:59:16.617717+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-26T10:01:15.909035+10:00",
+      "fetched_at": "2026-08-26T11:59:17.228644+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-26T10:01:16.469296+10:00",
+      "fetched_at": "2026-08-26T11:59:17.803690+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-26T10:01:17.038856+10:00",
+      "fetched_at": "2026-08-26T11:59:18.379757+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-26T10:01:17.616508+10:00",
+      "fetched_at": "2026-08-26T11:59:18.944726+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-26T10:01:18.191765+10:00",
+      "fetched_at": "2026-08-26T11:59:19.512665+10:00",
       "detail": null,
       "error": null
     },
@@ -64,77 +64,77 @@
     {
       "time": "2026-08-26T04:00:00+10:00",
       "lake": 4.9,
-      "ocean": 7.6
+      "ocean": 7.4
     },
     {
       "time": "2026-08-26T05:00:00+10:00",
-      "lake": 5.3,
-      "ocean": 7.5
+      "lake": 4.9,
+      "ocean": 7.3
     },
     {
       "time": "2026-08-26T06:00:00+10:00",
-      "lake": 6.5,
-      "ocean": 7.8
+      "lake": 6.1,
+      "ocean": 7.4
     },
     {
       "time": "2026-08-26T07:00:00+10:00",
-      "lake": 6.8,
-      "ocean": 7.6
+      "lake": 7.3,
+      "ocean": 8.0
     },
     {
       "time": "2026-08-26T08:00:00+10:00",
-      "lake": 7.5,
-      "ocean": 8.1
+      "lake": 8.6,
+      "ocean": 8.8
     },
     {
       "time": "2026-08-26T09:00:00+10:00",
-      "lake": 9.8,
-      "ocean": 10.1
+      "lake": 10.5,
+      "ocean": 10.6
     },
     {
       "time": "2026-08-26T10:00:00+10:00",
-      "lake": 12.0,
-      "ocean": 11.6
+      "lake": 11.6,
+      "ocean": 11.3
     },
     {
       "time": "2026-08-26T11:00:00+10:00",
-      "lake": 12.7,
-      "ocean": 12.2
+      "lake": 12.1,
+      "ocean": 11.8
     },
     {
       "time": "2026-08-26T12:00:00+10:00",
-      "lake": 12.6,
-      "ocean": 11.9
+      "lake": 12.1,
+      "ocean": 11.6
     },
     {
       "time": "2026-08-26T13:00:00+10:00",
-      "lake": 12.3,
-      "ocean": 12.0
-    },
-    {
-      "time": "2026-08-26T14:00:00+10:00",
       "lake": 12.2,
       "ocean": 11.9
     },
     {
+      "time": "2026-08-26T14:00:00+10:00",
+      "lake": 12.3,
+      "ocean": 11.9
+    },
+    {
       "time": "2026-08-26T15:00:00+10:00",
-      "lake": 11.2,
-      "ocean": 11.3
+      "lake": 11.7,
+      "ocean": 11.6
     },
     {
       "time": "2026-08-26T16:00:00+10:00",
-      "lake": 9.3,
-      "ocean": 10.4
+      "lake": 9.9,
+      "ocean": 10.8
     },
     {
       "time": "2026-08-26T17:00:00+10:00",
-      "lake": 8.0,
-      "ocean": 9.2
+      "lake": 7.9,
+      "ocean": 9.1
     },
     {
       "time": "2026-08-26T18:00:00+10:00",
-      "lake": 6.3,
-      "ocean": 8.1
+      "lake": 6.1,
+      "ocean": 7.9
     },
     {
       "time": "2026-08-26T19:00:00+10:00",
@@ -153,12 +153,12 @@
     },
     {
       "time": "2026-08-26T22:00:00+10:00",
-      "lake": 5.6,
+      "lake": 5.7,
       "ocean": 7.8
     },
     {
       "time": "2026-08-26T23:00:00+10:00",
-      "lake": 4.8,
+      "lake": 5.1,
       "ocean": 7.2
     }
   ],
@@ -168,10 +168,10 @@
       "run_name": "Oak Flats to Berkeley",
       "date": "2026-08-26",
       "start": "2026-08-26T10:00:00+10:00",
-      "end": "2026-08-26T12:00:00+10:00",
+      "end": "2026-08-26T14:00:00+10:00",
       "grade": "watch",
       "peak_median_kn": 16.1,
-      "direction_deg": 186.0,
+      "direction_deg": 185.0,
       "models_agreeing": 1,
       "model_values": {
         "UKMO": 16.1
