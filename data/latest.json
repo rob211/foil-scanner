@@ -1,41 +1,35 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-27T09:00:41.002846+10:00",
+  "generated_at": "2026-08-27T09:34:48.644213+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-27T09:00:41.511017+10:00",
+      "fetched_at": "2026-08-27T09:34:49.239533+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-27T09:00:42.000185+10:00",
+      "fetched_at": "2026-08-27T09:34:49.985899+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-27T09:00:42.495348+10:00",
+      "fetched_at": "2026-08-27T09:34:50.617096+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-27T09:00:42.982725+10:00",
+      "fetched_at": "2026-08-27T09:34:51.303738+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-27T09:00:43.412261+10:00",
+      "fetched_at": "2026-08-27T09:34:51.921507+10:00",
       "detail": null,
-      "error": null
-    },
-    "entrance_grid": {
-      "ok": true,
-      "fetched_at": null,
-      "detail": "entrance forecast identical to lake: same model grid cell, no entrance-specific signal",
       "error": null
     }
   },
@@ -64,7 +58,7 @@
     {
       "time": "2026-08-27T04:00:00+10:00",
       "lake": 2.2,
-      "ocean": 5.3
+      "ocean": 5.2
     },
     {
       "time": "2026-08-27T05:00:00+10:00",
@@ -104,7 +98,7 @@
     {
       "time": "2026-08-27T12:00:00+10:00",
       "lake": 2.8,
-      "ocean": 4.9
+      "ocean": 5.1
     },
     {
       "time": "2026-08-27T13:00:00+10:00",
@@ -119,17 +113,17 @@
     {
       "time": "2026-08-27T15:00:00+10:00",
       "lake": 8.0,
-      "ocean": 8.7
+      "ocean": 8.4
     },
     {
       "time": "2026-08-27T16:00:00+10:00",
       "lake": 5.6,
-      "ocean": 7.6
+      "ocean": 7.7
     },
     {
       "time": "2026-08-27T17:00:00+10:00",
       "lake": 4.1,
-      "ocean": 6.6
+      "ocean": 6.7
     },
     {
       "time": "2026-08-27T18:00:00+10:00",
