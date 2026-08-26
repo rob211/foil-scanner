@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-26T15:00:50.576931+10:00",
+  "generated_at": "2026-08-26T16:01:11.635346+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-26T15:00:51.153231+10:00",
+      "fetched_at": "2026-08-26T16:01:12.105802+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-26T15:00:51.748641+10:00",
+      "fetched_at": "2026-08-26T16:01:12.518821+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-26T15:00:52.320731+10:00",
+      "fetched_at": "2026-08-26T16:01:12.914854+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-26T15:00:52.885407+10:00",
+      "fetched_at": "2026-08-26T16:01:13.315802+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-26T15:00:53.448923+10:00",
+      "fetched_at": "2026-08-26T16:01:13.777328+10:00",
       "detail": null,
       "error": null
     },
@@ -133,8 +133,8 @@
     },
     {
       "time": "2026-08-26T18:00:00+10:00",
-      "lake": 5.5,
-      "ocean": 7.8
+      "lake": 5.7,
+      "ocean": 7.9
     },
     {
       "time": "2026-08-26T19:00:00+10:00",
@@ -143,23 +143,23 @@
     },
     {
       "time": "2026-08-26T20:00:00+10:00",
-      "lake": 6.2,
-      "ocean": 8.4
+      "lake": 6.4,
+      "ocean": 8.6
     },
     {
       "time": "2026-08-26T21:00:00+10:00",
-      "lake": 5.5,
-      "ocean": 7.9
+      "lake": 5.9,
+      "ocean": 8.2
     },
     {
       "time": "2026-08-26T22:00:00+10:00",
-      "lake": 5.7,
+      "lake": 5.6,
       "ocean": 7.5
     },
     {
       "time": "2026-08-26T23:00:00+10:00",
-      "lake": 5.1,
-      "ocean": 7.2
+      "lake": 4.8,
+      "ocean": 7.0
     }
   ],
   "windows": [
