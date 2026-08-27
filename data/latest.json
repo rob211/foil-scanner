@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-28T04:01:23.915934+10:00",
+  "generated_at": "2026-08-28T06:00:44.224188+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-28T04:01:24.583424+10:00",
+      "fetched_at": "2026-08-28T06:00:44.615247+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-28T04:01:25.300007+10:00",
+      "fetched_at": "2026-08-28T06:00:45.016183+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-28T04:01:26.058818+10:00",
+      "fetched_at": "2026-08-28T06:00:45.498752+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-28T04:01:26.741722+10:00",
+      "fetched_at": "2026-08-28T06:00:45.894651+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-28T04:01:27.440468+10:00",
+      "fetched_at": "2026-08-28T06:00:46.273374+10:00",
       "detail": null,
       "error": null
     },
@@ -53,7 +53,7 @@
     },
     {
       "time": "2026-08-28T02:00:00+10:00",
-      "lake": 5.3,
+      "lake": 5.4,
       "ocean": 7.2
     },
     {
@@ -63,67 +63,67 @@
     },
     {
       "time": "2026-08-28T04:00:00+10:00",
-      "lake": 5.7,
+      "lake": 6.0,
       "ocean": 7.5
     },
     {
       "time": "2026-08-28T05:00:00+10:00",
-      "lake": 5.9,
+      "lake": 6.1,
       "ocean": 7.7
     },
     {
       "time": "2026-08-28T06:00:00+10:00",
-      "lake": 6.0,
+      "lake": 6.2,
       "ocean": 7.8
     },
     {
       "time": "2026-08-28T07:00:00+10:00",
       "lake": 6.0,
-      "ocean": 7.9
+      "ocean": 7.8
     },
     {
       "time": "2026-08-28T08:00:00+10:00",
-      "lake": 4.6,
+      "lake": 4.8,
       "ocean": 7.2
     },
     {
       "time": "2026-08-28T09:00:00+10:00",
-      "lake": 3.7,
-      "ocean": 7.3
+      "lake": 3.8,
+      "ocean": 7.4
     },
     {
       "time": "2026-08-28T10:00:00+10:00",
-      "lake": 3.6,
-      "ocean": 6.5
+      "lake": 3.9,
+      "ocean": 6.9
     },
     {
       "time": "2026-08-28T11:00:00+10:00",
-      "lake": 4.5,
+      "lake": 4.6,
       "ocean": 7.0
     },
     {
       "time": "2026-08-28T12:00:00+10:00",
-      "lake": 6.4,
-      "ocean": 7.9
+      "lake": 7.5,
+      "ocean": 8.6
     },
     {
       "time": "2026-08-28T13:00:00+10:00",
-      "lake": 7.8,
-      "ocean": 8.7
+      "lake": 9.4,
+      "ocean": 9.3
     },
     {
       "time": "2026-08-28T14:00:00+10:00",
-      "lake": 9.1,
-      "ocean": 9.8
+      "lake": 10.8,
+      "ocean": 10.7
     },
     {
       "time": "2026-08-28T15:00:00+10:00",
-      "lake": 11.4,
-      "ocean": 11.5
+      "lake": 11.3,
+      "ocean": 11.6
     },
     {
       "time": "2026-08-28T16:00:00+10:00",
-      "lake": 12.8,
+      "lake": 12.5,
       "ocean": 12.2
     },
     {
@@ -133,28 +133,28 @@
     },
     {
       "time": "2026-08-28T18:00:00+10:00",
-      "lake": 6.9,
+      "lake": 7.2,
       "ocean": 9.1
     },
     {
       "time": "2026-08-28T19:00:00+10:00",
       "lake": 4.6,
-      "ocean": 8.0
+      "ocean": 7.6
     },
     {
       "time": "2026-08-28T20:00:00+10:00",
-      "lake": 4.4,
-      "ocean": 7.1
+      "lake": 4.3,
+      "ocean": 6.8
     },
     {
       "time": "2026-08-28T21:00:00+10:00",
       "lake": 5.4,
-      "ocean": 7.2
+      "ocean": 7.0
     },
     {
       "time": "2026-08-28T22:00:00+10:00",
-      "lake": 5.4,
-      "ocean": 7.1
+      "lake": 5.5,
+      "ocean": 7.0
     },
     {
       "time": "2026-08-28T23:00:00+10:00",
@@ -164,17 +164,17 @@
   ],
   "windows": [
     {
-      "trigger_id": "entrance_reverse",
-      "run_name": "Entrance reverse run (Boronia Ave)",
-      "date": "2026-09-03",
-      "start": "2026-09-03T09:00:00+10:00",
-      "end": "2026-09-03T18:00:00+10:00",
+      "trigger_id": "lake_west",
+      "run_name": "Kanahooka / Berkeley",
+      "date": "2026-09-02",
+      "start": "2026-09-02T13:00:00+10:00",
+      "end": "2026-09-02T16:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 21.5,
-      "direction_deg": 285.0,
+      "peak_median_kn": 16.7,
+      "direction_deg": 262.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 21.5
+        "ECMWF": 16.7
       },
       "title_tags": [],
       "notes": [],
@@ -188,20 +188,175 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "entrance_reverse:2026-09-03:09"
+      "foil_key": "lake_west:2026-09-02:13"
+    },
+    {
+      "trigger_id": "entrance_reverse",
+      "run_name": "Entrance reverse run (Boronia Ave)",
+      "date": "2026-09-03",
+      "start": "2026-09-03T08:00:00+10:00",
+      "end": "2026-09-03T10:00:00+10:00",
+      "grade": "watch",
+      "peak_median_kn": 19.3,
+      "direction_deg": 285.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 19.1,
+        "ICON": 19.4
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": "19 kn, needs 20",
+      "tide_state": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "entrance_reverse:2026-09-03:08"
+    },
+    {
+      "trigger_id": "lake_west",
+      "run_name": "Kanahooka / Berkeley",
+      "date": "2026-09-03",
+      "start": "2026-09-03T08:00:00+10:00",
+      "end": "2026-09-03T11:00:00+10:00",
+      "grade": "watch",
+      "peak_median_kn": 20.7,
+      "direction_deg": 281.0,
+      "models_agreeing": 1,
+      "model_values": {
+        "ECMWF": 20.7
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": "1 of 4 models only (needs 2)",
+      "tide_state": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "lake_west:2026-09-03:08"
+    },
+    {
+      "trigger_id": "entrance_reverse",
+      "run_name": "Entrance reverse run (Boronia Ave)",
+      "date": "2026-09-03",
+      "start": "2026-09-03T10:00:00+10:00",
+      "end": "2026-09-03T11:23:04.615385+10:00",
+      "grade": "yellow",
+      "peak_median_kn": 21.2,
+      "direction_deg": 282.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 21.0,
+        "ICON": 21.5
+      },
+      "title_tags": [
+        "off-angle WNW",
+        "2 of 4 models"
+      ],
+      "notes": [
+        "low tide 05:42",
+        "only 2 of 4 models reached the trigger; the others did not see it"
+      ],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": "2026-09-03T12:23:04.615385+10:00",
+      "high_tide_m": 1.65,
+      "spots": null,
+      "watch": null,
+      "tide_state": "preferred",
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "gj53lgtdpm52pc0lkinikgfr5k",
+      "foil_key": "entrance_reverse:2026-09-03:10"
     },
     {
       "trigger_id": "lake_west",
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-09-03",
       "start": "2026-09-03T11:00:00+10:00",
+      "end": "2026-09-03T16:00:00+10:00",
+      "grade": "green",
+      "peak_median_kn": 21.2,
+      "direction_deg": 282.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 21.0,
+        "ICON": 21.5
+      },
+      "title_tags": [
+        "2 of 4 models"
+      ],
+      "notes": [
+        "only 2 of 4 models reached the trigger; the others did not see it"
+      ],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": null,
+      "tide_state": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "hmaarg4aa60j32f59ch4fdjhro",
+      "foil_key": "lake_west:2026-09-03:11"
+    },
+    {
+      "trigger_id": "entrance_reverse",
+      "run_name": "Entrance reverse run (Boronia Ave)",
+      "date": "2026-09-03",
+      "start": "2026-09-03T11:23:04.615385+10:00",
+      "end": "2026-09-03T14:00:00+10:00",
+      "grade": "watch",
+      "peak_median_kn": 20.7,
+      "direction_deg": 280.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "ECMWF": 20.6,
+        "ICON": 20.9
+      },
+      "title_tags": [
+        "off-angle W",
+        "off-tide"
+      ],
+      "notes": [
+        "low tide 05:42",
+        "runnable but not the preferred run-in"
+      ],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": "2026-09-03T12:23:04.615385+10:00",
+      "high_tide_m": 1.65,
+      "spots": null,
+      "watch": "off tide",
+      "tide_state": "workable",
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "entrance_reverse:2026-09-03:11"
+    },
+    {
+      "trigger_id": "entrance_reverse",
+      "run_name": "Entrance reverse run (Boronia Ave)",
+      "date": "2026-09-03",
+      "start": "2026-09-03T14:00:00+10:00",
       "end": "2026-09-03T18:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 19.6,
-      "direction_deg": 280.0,
+      "peak_median_kn": 20.0,
+      "direction_deg": 283.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 19.6
+        "ICON": 20.0
       },
       "title_tags": [],
       "notes": [],
@@ -215,25 +370,8 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_west:2026-09-03:11"
+      "foil_key": "entrance_reverse:2026-09-03:14"
     }
   ],
-  "near_misses": [
-    {
-      "trigger_id": "lake_west",
-      "date": "2026-09-03",
-      "start": "2026-09-03T11:00:00+10:00",
-      "end": "2026-09-03T18:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
-    {
-      "trigger_id": "entrance_reverse",
-      "date": "2026-09-03",
-      "start": "2026-09-03T10:00:00+10:00",
-      "end": "2026-09-03T15:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    }
-  ]
+  "near_misses": []
 }
