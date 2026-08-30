@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-08-30T10:21:33.606166+10:00",
+  "generated_at": "2026-08-30T12:00:39.991792+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-08-30T10:21:34.143054+10:00",
+      "fetched_at": "2026-08-30T12:00:40.482253+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-08-30T10:21:34.743835+10:00",
+      "fetched_at": "2026-08-30T12:00:40.993609+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-08-30T10:21:35.294435+10:00",
+      "fetched_at": "2026-08-30T12:00:41.451618+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-08-30T10:21:35.835521+10:00",
+      "fetched_at": "2026-08-30T12:00:41.902774+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-08-30T10:21:36.385456+10:00",
+      "fetched_at": "2026-08-30T12:00:42.320730+10:00",
       "detail": null,
       "error": null
     },
@@ -58,108 +58,108 @@
     },
     {
       "time": "2026-08-30T03:00:00+10:00",
-      "lake": 5.2,
+      "lake": 4.8,
       "ocean": 6.7
     },
     {
       "time": "2026-08-30T04:00:00+10:00",
-      "lake": 5.7,
+      "lake": 4.8,
       "ocean": 6.8
     },
     {
       "time": "2026-08-30T05:00:00+10:00",
-      "lake": 5.7,
-      "ocean": 7.2
+      "lake": 5.2,
+      "ocean": 7.1
     },
     {
       "time": "2026-08-30T06:00:00+10:00",
-      "lake": 5.7,
+      "lake": 6.0,
       "ocean": 7.3
     },
     {
       "time": "2026-08-30T07:00:00+10:00",
-      "lake": 5.1,
-      "ocean": 6.8
+      "lake": 5.7,
+      "ocean": 7.0
     },
     {
       "time": "2026-08-30T08:00:00+10:00",
-      "lake": 3.4,
-      "ocean": 5.8
-    },
-    {
-      "time": "2026-08-30T09:00:00+10:00",
-      "lake": 2.2,
-      "ocean": 5.5
-    },
-    {
-      "time": "2026-08-30T10:00:00+10:00",
-      "lake": 3.6,
+      "lake": 3.7,
       "ocean": 6.2
     },
     {
+      "time": "2026-08-30T09:00:00+10:00",
+      "lake": 1.6,
+      "ocean": 5.2
+    },
+    {
+      "time": "2026-08-30T10:00:00+10:00",
+      "lake": 3.2,
+      "ocean": 6.0
+    },
+    {
       "time": "2026-08-30T11:00:00+10:00",
-      "lake": 5.3,
-      "ocean": 7.2
+      "lake": 5.2,
+      "ocean": 7.0
     },
     {
       "time": "2026-08-30T12:00:00+10:00",
-      "lake": 6.6,
-      "ocean": 8.0
+      "lake": 6.7,
+      "ocean": 7.5
     },
     {
       "time": "2026-08-30T13:00:00+10:00",
-      "lake": 7.3,
-      "ocean": 8.3
+      "lake": 7.4,
+      "ocean": 8.1
     },
     {
       "time": "2026-08-30T14:00:00+10:00",
-      "lake": 7.2,
-      "ocean": 8.4
+      "lake": 6.9,
+      "ocean": 8.3
     },
     {
       "time": "2026-08-30T15:00:00+10:00",
-      "lake": 6.5,
-      "ocean": 8.0
+      "lake": 6.2,
+      "ocean": 7.9
     },
     {
       "time": "2026-08-30T16:00:00+10:00",
-      "lake": 5.2,
-      "ocean": 7.2
+      "lake": 5.4,
+      "ocean": 7.3
     },
     {
       "time": "2026-08-30T17:00:00+10:00",
-      "lake": 3.9,
-      "ocean": 6.7
+      "lake": 4.5,
+      "ocean": 6.8
     },
     {
       "time": "2026-08-30T18:00:00+10:00",
-      "lake": 2.2,
+      "lake": 2.1,
       "ocean": 5.1
     },
     {
       "time": "2026-08-30T19:00:00+10:00",
       "lake": 2.4,
-      "ocean": 5.3
+      "ocean": 5.4
     },
     {
       "time": "2026-08-30T20:00:00+10:00",
-      "lake": 3.0,
-      "ocean": 5.9
+      "lake": 3.6,
+      "ocean": 6.3
     },
     {
       "time": "2026-08-30T21:00:00+10:00",
-      "lake": 3.4,
-      "ocean": 6.0
+      "lake": 3.9,
+      "ocean": 6.3
     },
     {
       "time": "2026-08-30T22:00:00+10:00",
-      "lake": 3.0,
-      "ocean": 5.8
+      "lake": 3.8,
+      "ocean": 6.1
     },
     {
       "time": "2026-08-30T23:00:00+10:00",
-      "lake": 3.3,
-      "ocean": 6.0
+      "lake": 3.9,
+      "ocean": 6.4
     }
   ],
   "windows": [
@@ -170,11 +170,11 @@
       "start": "2026-09-02T13:00:00+10:00",
       "end": "2026-09-02T15:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 15.9,
-      "direction_deg": 261.0,
+      "peak_median_kn": 15.8,
+      "direction_deg": 262.0,
       "models_agreeing": 2,
       "model_values": {
-        "ECMWF": 16.2,
+        "ECMWF": 15.9,
         "ICON": 15.7
       },
       "title_tags": [],
