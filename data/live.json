@@ -1,23 +1,23 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-01T15:00:33.354428+10:00",
+  "generated_at": "2026-09-01T15:21:33.049861+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-01T14:30:00+10:00",
-    "speed_kn": 16.2,
-    "gust_kn": 18.9,
-    "dir_deg": 45.0
+    "time": "2026-09-01T15:00:00+10:00",
+    "speed_kn": 17.3,
+    "gust_kn": 20.0,
+    "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-01T14:59:09+10:00",
-    "speed_kn": 11.7,
-    "gust_kn": 14.6,
-    "dir_deg": 50.0
+    "time": "2026-09-01T15:21:09+10:00",
+    "speed_kn": 12.6,
+    "gust_kn": 15.0,
+    "dir_deg": 48.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-01T14:30:00+10:00",
+    "time": "2026-09-01T15:00:00+10:00",
     "speed_kn": 11.9,
     "gust_kn": 17.3,
     "dir_deg": 45.0
@@ -25,11 +25,22 @@
   "checks": [],
   "alerts": [
     {
+      "trigger_id": "entrance_ne",
+      "run_name": "Lake Entrance (NE wind)",
+      "station": "Bellambi",
+      "speed_kn": 17.3,
+      "dir_deg": 22.5,
+      "threshold_kn": 16.2,
+      "detail": "Run-out gate today: 10:48-12:48, 23:00-01:00.",
+      "foil_key": "live-alert:2026-09-01:entrance",
+      "created": false
+    },
+    {
       "trigger_id": "ne_ocean",
       "run_name": "NE ocean runs",
       "station": "Bellambi",
-      "speed_kn": 16.2,
-      "dir_deg": 45.0,
+      "speed_kn": 17.3,
+      "dir_deg": 22.5,
       "threshold_kn": 10.0,
       "detail": "",
       "foil_key": "live-alert:2026-09-01:ocean",
@@ -40,20 +51,20 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 11.7,
+      "observed_kn": 12.6,
       "forecast_kn": 7.9,
-      "gap_kn": 3.8,
+      "gap_kn": 4.7,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 16.2,
+      "observed_kn": 17.3,
       "forecast_kn": 10.8,
-      "gap_kn": 5.4,
+      "gap_kn": 6.5,
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": []
 }
