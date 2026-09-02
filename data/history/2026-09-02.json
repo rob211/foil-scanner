@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-02T16:00:32.796636+10:00",
+  "generated_at": "2026-09-02T18:00:29.134645+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-02T16:00:33.776083+10:00",
+      "fetched_at": "2026-09-02T18:00:29.423996+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-02T16:00:35.318867+10:00",
+      "fetched_at": "2026-09-02T18:01:28.044704+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-02T16:00:36.394416+10:00",
+      "fetched_at": "2026-09-02T18:01:28.131161+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-02T16:00:37.622752+10:00",
+      "fetched_at": "2026-09-02T18:01:33.183350+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-02T16:00:38.235131+10:00",
+      "fetched_at": "2026-09-02T18:01:33.572393+10:00",
       "detail": null,
       "error": null
     },
@@ -89,22 +89,22 @@
     {
       "time": "2026-09-02T09:00:00+10:00",
       "lake": 7.0,
-      "ocean": 9.8
+      "ocean": 9.6
     },
     {
       "time": "2026-09-02T10:00:00+10:00",
-      "lake": 8.3,
-      "ocean": 10.6
+      "lake": 7.8,
+      "ocean": 10.2
     },
     {
       "time": "2026-09-02T11:00:00+10:00",
-      "lake": 10.4,
-      "ocean": 11.9
+      "lake": 9.8,
+      "ocean": 11.3
     },
     {
       "time": "2026-09-02T12:00:00+10:00",
       "lake": 12.8,
-      "ocean": 13.3
+      "ocean": 12.8
     },
     {
       "time": "2026-09-02T13:00:00+10:00",
@@ -114,17 +114,17 @@
     {
       "time": "2026-09-02T14:00:00+10:00",
       "lake": 14.9,
-      "ocean": 14.2
+      "ocean": 14.4
     },
     {
       "time": "2026-09-02T15:00:00+10:00",
-      "lake": 13.1,
-      "ocean": 12.9
+      "lake": 13.4,
+      "ocean": 13.2
     },
     {
       "time": "2026-09-02T16:00:00+10:00",
-      "lake": 10.6,
-      "ocean": 10.9
+      "lake": 10.4,
+      "ocean": 11.4
     },
     {
       "time": "2026-09-02T17:00:00+10:00",
@@ -133,8 +133,8 @@
     },
     {
       "time": "2026-09-02T18:00:00+10:00",
-      "lake": 6.2,
-      "ocean": 8.4
+      "lake": 6.6,
+      "ocean": 8.7
     },
     {
       "time": "2026-09-02T19:00:00+10:00",
@@ -148,17 +148,17 @@
     },
     {
       "time": "2026-09-02T21:00:00+10:00",
-      "lake": 5.6,
-      "ocean": 7.8
+      "lake": 5.4,
+      "ocean": 7.7
     },
     {
       "time": "2026-09-02T22:00:00+10:00",
-      "lake": 5.9,
-      "ocean": 8.1
+      "lake": 5.7,
+      "ocean": 8.0
     },
     {
       "time": "2026-09-02T23:00:00+10:00",
-      "lake": 5.9,
+      "lake": 5.7,
       "ocean": 8.3
     }
   ],
@@ -167,7 +167,7 @@
       "trigger_id": "lake_west",
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-09-02",
-      "start": "2026-09-02T12:00:00+10:00",
+      "start": "2026-09-02T13:00:00+10:00",
       "end": "2026-09-02T15:00:00+10:00",
       "grade": "watch",
       "peak_median_kn": 16.5,
@@ -189,20 +189,21 @@
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_west:2026-09-02:12"
+      "foil_key": "lake_west:2026-09-02:13"
     },
     {
       "trigger_id": "lake_west",
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-09-03",
-      "start": "2026-09-03T11:00:00+10:00",
+      "start": "2026-09-03T12:00:00+10:00",
       "end": "2026-09-03T18:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 17.5,
-      "direction_deg": 263.0,
-      "models_agreeing": 1,
+      "peak_median_kn": 17.4,
+      "direction_deg": 257.0,
+      "models_agreeing": 2,
       "model_values": {
-        "ICON": 17.5
+        "ICON": 17.5,
+        "UKMO": 17.3
       },
       "title_tags": [],
       "notes": [],
@@ -211,12 +212,12 @@
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
-      "watch": "1 of 4 models only (needs 2)",
+      "watch": "17 kn, needs 18",
       "tide_state": null,
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_west:2026-09-03:11"
+      "foil_key": "lake_west:2026-09-03:12"
     },
     {
       "trigger_id": "entrance_reverse",
@@ -225,11 +226,11 @@
       "start": "2026-09-05T11:00:00+10:00",
       "end": "2026-09-05T14:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 21.5,
-      "direction_deg": 271.0,
+      "peak_median_kn": 24.6,
+      "direction_deg": 280.0,
       "models_agreeing": 1,
       "model_values": {
-        "ECMWF": 21.5
+        "ECMWF": 24.6
       },
       "title_tags": [],
       "notes": [],
@@ -249,14 +250,14 @@
       "trigger_id": "lake_west",
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-09-05",
-      "start": "2026-09-05T12:00:00+10:00",
-      "end": "2026-09-05T16:00:00+10:00",
+      "start": "2026-09-05T13:00:00+10:00",
+      "end": "2026-09-05T15:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 21.8,
-      "direction_deg": 277.0,
+      "peak_median_kn": 24.6,
+      "direction_deg": 280.0,
       "models_agreeing": 1,
       "model_values": {
-        "ECMWF": 21.8
+        "ECMWF": 24.6
       },
       "title_tags": [],
       "notes": [],
@@ -270,20 +271,20 @@
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_west:2026-09-05:12"
+      "foil_key": "lake_west:2026-09-05:13"
     },
     {
       "trigger_id": "entrance_reverse",
       "run_name": "Entrance reverse run (Boronia Ave)",
       "date": "2026-09-05",
       "start": "2026-09-05T14:00:00+10:00",
-      "end": "2026-09-05T15:00:00+10:00",
+      "end": "2026-09-05T16:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 22.0,
-      "direction_deg": 282.0,
+      "peak_median_kn": 23.1,
+      "direction_deg": 284.0,
       "models_agreeing": 2,
       "model_values": {
-        "ECMWF": 21.8,
+        "ECMWF": 23.9,
         "ICON": 22.2
       },
       "title_tags": [
@@ -310,16 +311,16 @@
       "trigger_id": "entrance_reverse",
       "run_name": "Entrance reverse run (Boronia Ave)",
       "date": "2026-09-05",
-      "start": "2026-09-05T15:00:00+10:00",
+      "start": "2026-09-05T16:00:00+10:00",
       "end": "2026-09-05T18:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 19.9,
-      "direction_deg": 286.0,
+      "peak_median_kn": 18.7,
+      "direction_deg": 293.0,
       "models_agreeing": 3,
       "model_values": {
-        "ECMWF": 19.9,
-        "ICON": 21.3,
-        "UKMO": 19.1
+        "ECMWF": 16.7,
+        "ICON": 18.7,
+        "UKMO": 22.6
       },
       "title_tags": [],
       "notes": [],
@@ -328,43 +329,38 @@
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
-      "watch": "20 kn, needs 20",
+      "watch": "19 kn, needs 20",
       "tide_state": null,
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "entrance_reverse:2026-09-05:15"
+      "foil_key": "entrance_reverse:2026-09-05:16"
     },
     {
       "trigger_id": "lake_west",
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-09-05",
       "start": "2026-09-05T16:00:00+10:00",
-      "end": "2026-09-05T17:00:00+10:00",
-      "grade": "green",
-      "peak_median_kn": 20.7,
-      "direction_deg": 277.0,
-      "models_agreeing": 2,
+      "end": "2026-09-05T18:00:00+10:00",
+      "grade": "watch",
+      "peak_median_kn": 18.1,
+      "direction_deg": 273.0,
+      "models_agreeing": 1,
       "model_values": {
-        "GFS": 18.1,
-        "UKMO": 23.3
+        "GFS": 18.1
       },
-      "title_tags": [
-        "2 of 4 models"
-      ],
-      "notes": [
-        "only 2 of 4 models reached the trigger; the others did not see it"
-      ],
+      "title_tags": [],
+      "notes": [],
       "swell_m": null,
       "swell_dir_deg": null,
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
-      "watch": null,
+      "watch": "1 of 4 models only (needs 2)",
       "tide_state": null,
       "confidence": "normal",
       "live_status": "pending",
-      "event_id": "629600549kip07r3vif2rc7ves",
+      "event_id": null,
       "foil_key": "lake_west:2026-09-05:16"
     },
     {
@@ -372,13 +368,13 @@
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-09-06",
       "start": "2026-09-06T07:00:00+10:00",
-      "end": "2026-09-06T08:00:00+10:00",
+      "end": "2026-09-06T09:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 15.1,
-      "direction_deg": 254.0,
+      "peak_median_kn": 18.7,
+      "direction_deg": 244.0,
       "models_agreeing": 1,
       "model_values": {
-        "ECMWF": 15.1
+        "ECMWF": 18.7
       },
       "title_tags": [],
       "notes": [],
@@ -397,12 +393,28 @@
   ],
   "near_misses": [
     {
-      "trigger_id": "ne_ocean",
-      "date": "2026-09-08",
-      "start": "2026-09-08T17:00:00+10:00",
-      "end": "2026-09-08T18:00:00+10:00",
+      "trigger_id": "lake_west",
+      "date": "2026-09-05",
+      "start": "2026-09-05T13:00:00+10:00",
+      "end": "2026-09-05T15:00:00+10:00",
       "reason": "single_model",
-      "detail": "only ['ukmo_seamless'] sees it"
+      "detail": "only ['ecmwf_ifs025'] sees it"
+    },
+    {
+      "trigger_id": "lake_west",
+      "date": "2026-09-05",
+      "start": "2026-09-05T16:00:00+10:00",
+      "end": "2026-09-05T17:00:00+10:00",
+      "reason": "single_model",
+      "detail": "only ['gfs_seamless'] sees it"
+    },
+    {
+      "trigger_id": "lake_west",
+      "date": "2026-09-06",
+      "start": "2026-09-06T07:00:00+10:00",
+      "end": "2026-09-06T08:00:00+10:00",
+      "reason": "single_model",
+      "detail": "only ['ecmwf_ifs025'] sees it"
     }
   ]
 }
