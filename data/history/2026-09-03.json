@@ -1,10 +1,10 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-03T06:00:32.226946+10:00",
+  "generated_at": "2026-09-03T07:04:37.175977+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-03T06:00:32.302649+10:00",
+      "fetched_at": "2026-09-03T07:04:58.820807+10:00",
       "detail": null,
       "error": null
     },
@@ -12,7 +12,7 @@
       "ok": false,
       "fetched_at": null,
       "detail": null,
-      "error": "FetchError: GET https://api.open-meteo.com/v1/forecast failed after 3 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
+      "error": "FetchError: GET https://api.open-meteo.com/v1/forecast failed after 3 attempts: 500 Server Error: Internal Server Error for url: https://api.open-meteo.com/v1/forecast?latitude=-34.53&longitude=150.84&hourly=wind_speed_10m%2Cwind_direction_10m%2Cwind_gusts_10m&models=gfs_seamless%2Cecmwf_ifs025%2Cicon_seamless%2Cukmo_seamless&wind_speed_unit=kn&timezone=Australia%2FSydney&forecast_days=7"
     },
     "open_meteo_wind_entrance": {
       "ok": false,
@@ -24,11 +24,11 @@
       "ok": false,
       "fetched_at": null,
       "detail": null,
-      "error": "FetchError: GET https://api.open-meteo.com/v1/forecast failed after 3 attempts: 503 Server Error: Service Unavailable for url: https://api.open-meteo.com/v1/forecast?latitude=-34.43&longitude=150.92&hourly=wind_speed_10m%2Cwind_direction_10m%2Cwind_gusts_10m&models=gfs_seamless%2Cecmwf_ifs025%2Cicon_seamless%2Cukmo_seamless&wind_speed_unit=kn&timezone=Australia%2FSydney&forecast_days=7"
+      "error": "FetchError: GET https://api.open-meteo.com/v1/forecast failed after 3 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-03T06:04:12.358294+10:00",
+      "fetched_at": "2026-09-03T07:07:09.478135+10:00",
       "detail": null,
       "error": null
     }
