@@ -1,26 +1,26 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-03T12:30:34.332383+10:00",
+  "generated_at": "2026-09-03T13:00:29.714303+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-03T12:08:00+10:00",
+    "time": "2026-09-03T12:30:00+10:00",
     "speed_kn": 15.1,
-    "gust_kn": 25.9,
+    "gust_kn": 24.8,
     "dir_deg": 270.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-03T12:29:16+10:00",
-    "speed_kn": 23.3,
-    "gust_kn": 26.3,
-    "dir_deg": 272.0
+    "time": "2026-09-03T12:59:16+10:00",
+    "speed_kn": 18.4,
+    "gust_kn": 19.9,
+    "dir_deg": 265.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-03T12:00:00+10:00",
-    "speed_kn": 21.1,
-    "gust_kn": 30.2,
-    "dir_deg": 270.0
+    "time": "2026-09-03T12:49:00+10:00",
+    "speed_kn": 15.1,
+    "gust_kn": 27.0,
+    "dir_deg": 292.5
   },
   "checks": [],
   "alerts": [
@@ -28,22 +28,11 @@
       "trigger_id": "lake_west",
       "run_name": "Kanahooka / Berkeley",
       "station": "Lake Illawarra",
-      "speed_kn": 23.3,
-      "dir_deg": 272.0,
+      "speed_kn": 18.4,
+      "dir_deg": 265.0,
       "threshold_kn": 18.0,
       "detail": "",
       "foil_key": "live-alert:2026-09-03:lake",
-      "created": false
-    },
-    {
-      "trigger_id": "entrance_reverse",
-      "run_name": "Entrance reverse run (Boronia Ave)",
-      "station": "Lake Illawarra",
-      "speed_kn": 23.3,
-      "dir_deg": 272.0,
-      "threshold_kn": 20.0,
-      "detail": "Run-in gate today: 07:43-11:23, 21:06-23:52.",
-      "foil_key": "live-alert:2026-09-03:entrance",
       "created": false
     }
   ],
@@ -51,17 +40,17 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 23.3,
-      "forecast_kn": 16.7,
-      "gap_kn": 6.6,
+      "observed_kn": 18.4,
+      "forecast_kn": 16.2,
+      "gap_kn": 2.2,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
       "observed_kn": 15.1,
-      "forecast_kn": 15.7,
-      "gap_kn": -0.6,
+      "forecast_kn": 15.2,
+      "gap_kn": -0.1,
       "flagged": false
     }
   ],
