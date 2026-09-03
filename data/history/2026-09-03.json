@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-03T22:00:33.221863+10:00",
+  "generated_at": "2026-09-03T22:50:18.606579+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-03T22:00:33.721419+10:00",
+      "fetched_at": "2026-09-03T22:50:19.308044+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-03T22:00:34.487604+10:00",
+      "fetched_at": "2026-09-03T22:50:19.957483+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-03T22:00:35.981609+10:00",
+      "fetched_at": "2026-09-03T22:50:20.569632+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-03T22:00:38.019367+10:00",
+      "fetched_at": "2026-09-03T22:50:21.188294+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-03T22:00:38.404985+10:00",
+      "fetched_at": "2026-09-03T22:50:21.805679+10:00",
       "detail": null,
       "error": null
     },
@@ -244,7 +244,7 @@
       "swell_m": null,
       "swell_dir_deg": null,
       "high_tide": "2026-09-05T14:38:10.909091+10:00",
-      "high_tide_m": 1.74,
+      "high_tide_m": 1.75,
       "spots": null,
       "watch": "off tide",
       "tide_state": "workable",
