@@ -1,46 +1,35 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-05T12:30:32.887178+10:00",
+  "generated_at": "2026-09-05T13:00:28.233445+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-05T12:00:00+10:00",
-    "speed_kn": 17.8,
+    "time": "2026-09-05T12:30:00+10:00",
+    "speed_kn": 16.2,
     "gust_kn": 20.0,
-    "dir_deg": 22.5
+    "dir_deg": 45.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-05T12:29:25+10:00",
-    "speed_kn": 14.6,
-    "gust_kn": 17.0,
-    "dir_deg": 25.0
+    "time": "2026-09-05T12:59:25+10:00",
+    "speed_kn": 13.1,
+    "gust_kn": 14.6,
+    "dir_deg": 46.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-05T12:00:00+10:00",
-    "speed_kn": 13.0,
+    "time": "2026-09-05T12:30:00+10:00",
+    "speed_kn": 11.9,
     "gust_kn": 16.2,
     "dir_deg": 45.0
   },
   "checks": [],
   "alerts": [
     {
-      "trigger_id": "entrance_ne",
-      "run_name": "Lake Entrance (NE wind)",
-      "station": "Bellambi",
-      "speed_kn": 17.8,
-      "dir_deg": 22.5,
-      "threshold_kn": 16.2,
-      "detail": "Run-out gate today: 02:17-04:17, 14:38-16:38.",
-      "foil_key": "live-alert:2026-09-05:entrance",
-      "created": false
-    },
-    {
       "trigger_id": "ne_ocean",
       "run_name": "NE ocean runs",
       "station": "Bellambi",
-      "speed_kn": 17.8,
-      "dir_deg": 22.5,
+      "speed_kn": 16.2,
+      "dir_deg": 45.0,
       "threshold_kn": 10.0,
       "detail": "",
       "foil_key": "live-alert:2026-09-05:ocean",
@@ -51,17 +40,17 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 14.6,
-      "forecast_kn": 11.0,
-      "gap_kn": 3.6,
+      "observed_kn": 13.1,
+      "forecast_kn": 10.3,
+      "gap_kn": 2.8,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 17.8,
-      "forecast_kn": 11.9,
-      "gap_kn": 5.9,
+      "observed_kn": 16.2,
+      "forecast_kn": 12.1,
+      "gap_kn": 4.1,
       "flagged": false
     }
   ],
