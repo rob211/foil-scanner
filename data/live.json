@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-06T09:00:26.648797+10:00",
+  "generated_at": "2026-09-06T09:06:24.326491+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-09-06T08:30:00+10:00",
@@ -10,10 +10,10 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-06T08:59:29+10:00",
-    "speed_kn": 18.0,
-    "gust_kn": 20.4,
-    "dir_deg": 246.0
+    "time": "2026-09-06T09:05:29+10:00",
+    "speed_kn": 16.0,
+    "gust_kn": 18.0,
+    "dir_deg": 243.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
@@ -23,26 +23,14 @@
     "dir_deg": 270.0
   },
   "checks": [],
-  "alerts": [
-    {
-      "trigger_id": "lake_west",
-      "run_name": "Kanahooka / Berkeley",
-      "station": "Lake Illawarra",
-      "speed_kn": 18.0,
-      "dir_deg": 246.0,
-      "threshold_kn": 18.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-09-06:lake",
-      "created": true
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 18.0,
+      "observed_kn": 16.0,
       "forecast_kn": 11.8,
-      "gap_kn": 6.2,
+      "gap_kn": 4.2,
       "flagged": false
     },
     {
@@ -54,6 +42,6 @@
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": []
 }
