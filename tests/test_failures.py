@@ -101,6 +101,30 @@ def test_stale_bom_raises(monkeypatch):
         fetch.fetch_bom(NOW)
 
 
+def test_bom_tolerates_one_dropped_reading(monkeypatch):
+    """Bellambi publishes every 30 min. A single skipped observation puts the
+    latest reading ~60-65 min out, which is a healthy station, not a dead one -
+    it killed three live runs under the old 45-minute cap."""
+    payload = bom_payload(NOW - timedelta(minutes=65))
+    monkeypatch.setattr(fetch, "get_json", lambda *a, **k: payload)
+    obs = fetch.fetch_bom(NOW)
+    assert obs.speed_kn > 0
+
+
+def test_bom_still_rejects_two_dropped_readings(monkeypatch):
+    """Two in a row is a station in actual trouble, and must still fail loud."""
+    payload = bom_payload(NOW - timedelta(minutes=95))
+    monkeypatch.setattr(fetch, "get_json", lambda *a, **k: payload)
+    with pytest.raises(StaleDataError, match="min old"):
+        fetch.fetch_bom(NOW)
+
+
+def test_bom_cap_clears_the_publish_cadence():
+    """The cap must keep margin over the 30-minute cadence rather than sit
+    just above it, which is how the old value guaranteed its own failure."""
+    assert config.BOM_MAX_AGE_MIN >= 2 * 30 + 10
+
+
 def test_bom_converts_kmh_to_knots(monkeypatch):
     payload = bom_payload(NOW - timedelta(minutes=10))
     monkeypatch.setattr(fetch, "get_json", lambda *a, **k: payload)
