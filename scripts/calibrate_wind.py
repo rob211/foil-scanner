@@ -107,6 +107,26 @@ def paired(rows, key, model) -> list[tuple[float, float]]:
     return [(st.median(v), model[t]) for t, v in sorted(by_hour.items())]
 
 
+def paired_with_dir(rows, key, model) -> list[tuple[float, float, float]]:
+    """paired(), but carrying the observed bearing so the fit can be split by
+    wind direction. Same hourly-median rule."""
+    by_hour: dict[datetime, tuple[list[float], list[float]]] = {}
+    for d in rows:
+        o = d.get(key)
+        if not o or o.get("speed_kn") is None or not o.get("time"):
+            continue
+        if o.get("dir_deg") is None:
+            continue
+        t = datetime.fromisoformat(o["time"]).replace(minute=0, second=0, microsecond=0)
+        if t in model:
+            speeds, dirs = by_hour.setdefault(t, ([], []))
+            speeds.append(o["speed_kn"])
+            dirs.append(o["dir_deg"])
+    return [
+        (st.median(sp), model[t], st.median(dr)) for t, (sp, dr) in sorted(by_hour.items())
+    ]
+
+
 def fits(rows: list[tuple[float, float]]) -> dict:
     """Both plausible shapes, and which one explains more.
 
@@ -208,6 +228,49 @@ def report(label, const, rows) -> None:
         print("    and a multiplier fitted here will overshoot - green days that are not.")
 
 
+# Below this a bearing has too little strong wind behind it to say anything;
+# a scale fitted on light air describes light air.
+BEARING_MIN_STRONG = 15
+
+
+def bearing_report(rows3: list[tuple[float, float, float]]) -> None:
+    """Does each lake run's own arc want its own multiplier?
+
+    One scale for the whole lake is an assumption, not a measurement. The
+    physical story behind the correction is the lake channelling a gradient
+    wind along its own axis, and channelling is a function of direction - so
+    if the assumption is going to break, it breaks here.
+
+    Reporting only. It changes no constant and fails no run; the sample that
+    would settle it does not exist yet. Printed every week so that when summer
+    fills the NE arc in, the answer is already on the page.
+    """
+    if not rows3:
+        return
+    print("\n  per-bearing fit (one lake scale is an assumption, not a measurement)")
+    bands = [(name, arc) for _, (name, arc, _, _) in config.LAKE_RUNS.items()]
+    covered = set()
+    for name, arc in bands:
+        band = [(o, f) for o, f, d in rows3 if arc.contains(d)]
+        covered |= {id(r) for r in rows3 if arc.contains(r[2])}
+        strong = sum(1 for o, _ in band if o >= DECISION_KN)
+        label = f"{name} ({arc.lo:.0f}-{arc.hi:.0f})"
+        if len(band) < 2 or strong < BEARING_MIN_STRONG:
+            print(f"    {label:<38} n={len(band):<4} {strong:>2} strong hr(s)"
+                  f" - too thin to fit")
+            continue
+        f = fits(band)
+        print(f"    {label:<38} n={len(band):<4} {strong:>2} strong hrs"
+              f"  -> x{f['scale']:.2f}")
+    rest = [(o, f) for o, f, d in rows3 if not any(a.contains(d) for _, a in bands)]
+    if len(rest) >= 2:
+        f = fits(rest)
+        print(f"    {'outside every run arc':<38} n={len(rest):<4}"
+              f"    -> x{f['scale']:.2f}")
+    applied = config.WIND_BIAS["lake"][1]
+    print(f"    currently applied across all of them: x{applied:.2f}")
+
+
 def main() -> int:
     args = [a for a in sys.argv[1:] if a != "--check"]
     check = "--check" in sys.argv
@@ -228,7 +291,10 @@ def main() -> int:
         ("LAKE   Holfuy 366 (0.9-corrected) vs the lake point", "holfuy", config.LAKE),
         ("COAST  BOM Bellambi vs the ocean point", "obs", config.OCEAN),
     ):
-        report(label, loc.key, paired(rows, key, model_hours(loc, start, end)))
+        model = model_hours(loc, start, end)
+        report(label, loc.key, paired(rows, key, model))
+        if loc.key == "lake":
+            bearing_report(paired_with_dir(rows, key, model))
 
     print("\nThese are absolute, not residuals: the archive is raw and the")
     print("correction is applied on ingest, so re-running cannot compound it.")
