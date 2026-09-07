@@ -886,7 +886,7 @@ def test_verdict_reaches_disk_even_when_sync_fails(tmp_path, monkeypatch):
         models_agreeing=3, model_values={"ICON": 22.0},
     )
 
-    def boom(windows, now, notes, dry_run=False, near_misses=None):
+    def boom(windows, now, notes, dry_run=False, near_misses=None, complete=True):
         windows[0].event_id = "ev-that-synced-fine"   # this one worked
         raise gcal.CalendarError("1 calendar operation(s) failed")
 
