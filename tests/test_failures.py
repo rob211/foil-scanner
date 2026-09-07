@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta, timezone
 
 import pytest
+import requests
 
 from foilscan import config, fetch
 from foilscan.errors import ConfigError, FetchError, SchemaError, StaleDataError
@@ -73,9 +74,107 @@ def test_http_failure_becomes_fetch_error(monkeypatch):
 
     monkeypatch.setattr(fetch.requests, "get", boom)
     monkeypatch.setattr(fetch._time, "sleep", lambda s: None)
-    with pytest.raises(FetchError, match="after 3 attempts"):
+    with pytest.raises(FetchError, match=f"after {config.HTTP_RETRIES} attempts"):
         fetch.get_json("https://example.invalid/x")
     assert calls["n"] == config.HTTP_RETRIES
+
+
+class FakeResponse:
+    """Just enough of requests' surface for the retry policy."""
+
+    def __init__(self, status, headers=None, body=None):
+        self.status_code = status
+        self.headers = headers or {}
+        self._body = body
+
+    def raise_for_status(self):
+        if self.status_code >= 400:
+            exc = requests.HTTPError(f"{self.status_code} error")
+            exc.response = self
+            raise exc
+
+    def json(self):
+        if self._body is None:
+            raise ValueError("Expecting value: line 1 column 1 (char 0)")
+        return self._body
+
+
+def responder(monkeypatch, *responses):
+    """Serve the given responses in order, then repeat the last. Records
+    every sleep so the backoff can be asserted without waiting."""
+    calls = {"n": 0}
+    slept: list[float] = []
+    seq = list(responses)
+
+    def get(*a, **k):
+        r = seq[min(calls["n"], len(seq) - 1)]
+        calls["n"] += 1
+        return r
+
+    monkeypatch.setattr(fetch.requests, "get", get)
+    monkeypatch.setattr(fetch._time, "sleep", slept.append)
+    return calls, slept
+
+
+def test_a_client_error_is_not_retried(monkeypatch):
+    """A 404 says the same thing five times; spending 30s on it helps nobody."""
+    calls, slept = responder(monkeypatch, FakeResponse(404))
+    with pytest.raises(FetchError, match="after 1 attempt"):
+        fetch.get_json("https://example.invalid/x")
+    assert calls["n"] == 1
+    assert slept == []
+
+
+def test_a_server_error_is_retried(monkeypatch):
+    """503 and 500 are exactly what Open-Meteo returned on 15 Aug and 2 Sep."""
+    calls, _ = responder(monkeypatch, FakeResponse(503))
+    with pytest.raises(FetchError):
+        fetch.get_json("https://example.invalid/x")
+    assert calls["n"] == config.HTTP_RETRIES
+
+
+def test_an_unparseable_body_is_retried(monkeypatch):
+    """An HTML error page served with a 200 - "Expecting value: line 1
+    column 1" - failed two scans in September and is transient."""
+    calls, _ = responder(monkeypatch, FakeResponse(200, body=None))
+    with pytest.raises(FetchError):
+        fetch.get_json("https://example.invalid/x")
+    assert calls["n"] == config.HTTP_RETRIES
+
+
+def test_it_recovers_once_the_source_comes_back(monkeypatch):
+    ok = FakeResponse(200, body={"hourly": {}})
+    responder(monkeypatch, FakeResponse(503), FakeResponse(500), ok)
+    assert fetch.get_json("https://example.invalid/x") == {"hourly": {}}
+
+
+def test_the_retry_budget_outlasts_a_wobble(monkeypatch):
+    """The point of the change: seconds of patience, not three."""
+    _, slept = responder(monkeypatch, FakeResponse(503))
+    with pytest.raises(FetchError):
+        fetch.get_json("https://example.invalid/x")
+    assert sum(slept) > 20
+    assert all(s <= config.HTTP_BACKOFF_MAX_S + config.HTTP_BACKOFF_JITTER_S
+               for s in slept)
+
+
+def test_retry_after_wins_over_our_guess(monkeypatch):
+    """The server knows when it will be back; we are guessing."""
+    _, slept = responder(
+        monkeypatch, FakeResponse(429, headers={"Retry-After": "5"})
+    )
+    with pytest.raises(FetchError):
+        fetch.get_json("https://example.invalid/x")
+    assert slept == [5.0] * (config.HTTP_RETRIES - 1)
+
+
+def test_an_unparseable_retry_after_falls_back_to_backoff(monkeypatch):
+    _, slept = responder(
+        monkeypatch, FakeResponse(503, headers={"Retry-After": "Wed, 21 Oct"})
+    )
+    with pytest.raises(FetchError):
+        fetch.get_json("https://example.invalid/x")
+    assert slept and slept != [0.0] * len(slept)
 
 
 def bom_payload(when):

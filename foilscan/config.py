@@ -448,7 +448,21 @@ WATCH_DIGEST_MAX_LINES = 40
 WATCH_DIGEST_MAX_CHARS = 6000
 
 HTTP_TIMEOUT_S = 30
-HTTP_RETRIES = 3
+# 3 attempts backing off 1s then 2s gave the retry loop three seconds of
+# patience in total, which is not enough to outlast a normal API wobble. Every
+# one of the nine scan failures between 15 Aug and 6 Sep 2026 was Open-Meteo
+# being briefly unwell - read timeouts, 500s, 503s, and HTML error pages that
+# surfaced as "Expecting value: line 1 column 1" - and on 2 Sep the same
+# window failed four times in five hours.
+#
+# 5 attempts backing off 2/4/8/16s spends ~30s waiting instead of 3s. Worst
+# case a dead source now costs ~3 min rather than ~90s; a scan has no deadline
+# tighter than that and a late verdict beats a missing one.
+HTTP_RETRIES = 5
+HTTP_BACKOFF_MAX_S = 20
+# Every location fetch fires within a second of the others, so without jitter
+# five sources retry in lockstep and hit a struggling API as one burst.
+HTTP_BACKOFF_JITTER_S = 1.0
 # BOM rejects default library user agents with 403 (spec 3.3).
 BROWSER_UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
