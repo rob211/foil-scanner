@@ -367,8 +367,21 @@ def sync(
     source_notes: list[str],
     dry_run: bool = False,
     near_misses: list | None = None,
+    complete: bool = True,
 ) -> list[str]:
-    """Returns a plan log. Fills window.event_id on the way through."""
+    """Returns a plan log. Fills window.event_id on the way through.
+
+    `complete` is False when a source failed this pass. The windows that were
+    computed are still trustworthy - they came from the sources that answered -
+    so they are still created and patched. What stops is everything that reads
+    an ABSENCE as news: the stale sweep and the watch digests. A skipped source
+    removes a whole family of triggers from `windows` (main.py skips the ocean
+    group wholesale when the ocean wind fetch fails), and the sweep cannot tell
+    "this run is over" from "nobody asked". On 6 Sep 2026 a 30-second Open-Meteo
+    timeout deleted a real Hill 60 run off the calendar that way.
+
+    Deferring costs at most one cycle: the next healthy pass sweeps normally.
+    """
     plan: list[str] = []
     # Watch windows do not get their own timed events; they are collected into
     # one all-day digest per day so the maybes never crowd out the real runs.
@@ -377,13 +390,24 @@ def sync(
     desired = {w.foil_key: w for w in runs}
     if len(desired) != len(runs):
         raise CalendarError("duplicate foil_key among computed windows")
-    digests = watch_digest_bodies(watches, near_misses or [], generated_at)
+    # A digest is rewritten wholesale from the watches in hand, so a partial
+    # pass would quietly republish it minus the families that never ran.
+    # Yesterday's complete digest beats today's truncated one.
+    digests = (
+        watch_digest_bodies(watches, near_misses or [], generated_at)
+        if complete
+        else {}
+    )
 
     if dry_run:
         for key, w in sorted(desired.items()):
             plan.append(f"DRY RUN would ensure: [{w.grade}] {title_for(w)} ({key})")
         for key, body in sorted(digests.items()):
             plan.append(f"DRY RUN would ensure: [watch] {body['summary']} ({key})")
+        if not complete:
+            plan.append(
+                "DRY RUN partial pass: digests and the stale sweep would be skipped"
+            )
         return plan
 
     svc = service()
@@ -427,6 +451,20 @@ def sync(
             plan.append(f"updated {key}: {body['summary']}")
         else:
             plan.append(f"unchanged {key}")
+
+    if not complete:
+        # Not "nothing to delete" - "no way to tell". Say so in the plan so the
+        # Actions log shows the sweep was declined rather than silently empty.
+        if existing:
+            plan.append(
+                f"partial pass: kept {len(existing)} unmatched event(s), "
+                "stale sweep deferred to the next complete run"
+            )
+        if failed:
+            raise CalendarError(
+                f"{len(failed)} calendar operation(s) failed: " + "; ".join(failed[:5])
+            )
+        return plan
 
     for key, ev in existing.items():
         # Anything left is stale, including recovered broken:* flags - but

@@ -123,9 +123,20 @@ def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
     # trace when the models bust (spec 9, added 10 Aug 2026).
     expected = verdict.build_expected(now, {"lake": lake_wind, "ocean": ocean_wind})
 
+    # Computed before the sync, not after: sync has to know whether an absent
+    # window means "no longer on" or "never evaluated". Same list either way.
+    failed = [name for name, s in sources.items() if not s.ok]
+
     verdict.write(verdict.build(now, sources, windows, misses, expected), data_dir)
     try:
-        plan = gcal.sync(windows, now, source_notes, dry_run=dry_run, near_misses=misses)
+        plan = gcal.sync(
+            windows,
+            now,
+            source_notes,
+            dry_run=dry_run,
+            near_misses=misses,
+            complete=not failed,
+        )
         for line in plan:
             print(line)
     finally:
@@ -137,7 +148,6 @@ def scan(now: datetime, dry_run: bool, data_dir: str) -> int:
         # stop, one layer up.
         verdict.write(verdict.build(now, sources, windows, misses, expected), data_dir)
 
-    failed = [name for name, s in sources.items() if not s.ok]
     if failed:
         reason = "sources failed: " + ", ".join(failed)
         print(f"RUN FAILED (partial): {reason}", file=sys.stderr)
