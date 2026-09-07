@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-07T22:00:27.406437+10:00",
+  "generated_at": "2026-09-07T22:35:56.684282+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-07T22:00:27.525643+10:00",
+      "fetched_at": "2026-09-07T22:35:57.277091+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-07T22:00:27.673411+10:00",
+      "fetched_at": "2026-09-07T22:35:57.861933+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-07T22:00:27.922624+10:00",
+      "fetched_at": "2026-09-07T22:35:58.515396+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-07T22:00:28.088705+10:00",
+      "fetched_at": "2026-09-07T22:35:59.097112+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-07T22:00:28.560088+10:00",
+      "fetched_at": "2026-09-07T22:35:59.718374+10:00",
       "detail": null,
       "error": null
     },
@@ -270,33 +270,6 @@
       "live_status": "pending",
       "event_id": null,
       "foil_key": "lake_oakflats_berkeley:2026-09-09:13"
-    },
-    {
-      "trigger_id": "hill60_swell",
-      "run_name": "Hill 60 swell run",
-      "date": "2026-09-10",
-      "start": "2026-09-10T16:00:00+10:00",
-      "end": "2026-09-10T18:00:00+10:00",
-      "grade": "yellow",
-      "peak_median_kn": 0.0,
-      "direction_deg": 161.0,
-      "models_agreeing": 0,
-      "model_values": {},
-      "title_tags": [],
-      "notes": [
-        "swell event, wind not required"
-      ],
-      "swell_m": 1.86,
-      "swell_dir_deg": 161.0,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": null,
-      "tide_state": null,
-      "confidence": "normal",
-      "live_status": "pending",
-      "event_id": "h5aq0nfue2mq1j1f7jlc27vchs",
-      "foil_key": "hill60_swell:2026-09-10:16"
     }
   ],
   "near_misses": [
