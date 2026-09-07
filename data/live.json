@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-07T10:00:27.279383+10:00",
+  "generated_at": "2026-09-07T10:04:39.036978+10:00",
   "obs": null,
   "holfuy": null,
   "port_kembla": null,
@@ -9,6 +9,6 @@
   "bias": [],
   "token_expires_at": null,
   "notes": [
-    "BOM fetch failed: BOM observations (94749) (Bellambi): latest reading is 60 min old, cap is 45 min"
+    "BOM fetch failed: BOM observations (94749) (Bellambi): latest reading is 65 min old, cap is 45 min"
   ]
 }
