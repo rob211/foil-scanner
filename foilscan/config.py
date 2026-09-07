@@ -224,7 +224,16 @@ SWELL_CROSS_KILL_M = 1.0
 
 # Freshness caps (spec 3.5)
 FORECAST_MIN_HORIZON_DAYS = 5
-BOM_MAX_AGE_MIN = 45
+# Bellambi (94749) publishes every 30 min, so a 45-minute cap left 15 minutes
+# of slack and one dropped reading was not a risk but an arithmetic certainty:
+# the gap becomes 60 min and the run dies. It did on 24 Aug and twice on 7 Sep
+# 2026 (60, 61 and 65 min old) - each time the station was healthy and had
+# simply skipped a single observation.
+#
+# 75 min clears one missed reading with headroom and still catches two in a
+# row, which is a station in actual trouble. Longer outages are the job of
+# HEARTBEAT_MAX_AGE_H, not of this cap.
+BOM_MAX_AGE_MIN = 75
 HOLFUY_MAX_AGE_MIN = 30
 HEARTBEAT_MAX_AGE_H = 8.0
 
