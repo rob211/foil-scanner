@@ -5,6 +5,7 @@ outside physical range means a unit or schema problem upstream, so it fails.
 """
 from __future__ import annotations
 
+import random as _random
 import re
 import time as _time
 from datetime import date, datetime, timedelta, timezone
@@ -48,6 +49,45 @@ def clean_label(value: object, cap: int = 60) -> str:
     return " ".join(text.split())[:cap]
 
 
+# Transport-level failures (timeout, reset, a truncated body, an HTML error
+# page that fails to parse as JSON) carry no status and are all worth another
+# go. With a status, only the ones that mean "busy, not broken" are.
+_RETRYABLE_STATUS = frozenset({408, 425, 429, 500, 502, 503, 504})
+
+
+def _status_of(exc: Exception) -> int | None:
+    return getattr(getattr(exc, "response", None), "status_code", None)
+
+
+def _retryable(exc: Exception) -> bool:
+    status = _status_of(exc)
+    return status is None or status in _RETRYABLE_STATUS
+
+
+def _retry_after_s(exc: Exception) -> float | None:
+    """Honour a server's own Retry-After over our guess - it knows when it
+    will be back and we do not."""
+    headers = getattr(getattr(exc, "response", None), "headers", None) or {}
+    raw = headers.get("Retry-After")
+    if raw is None:
+        return None
+    try:
+        # The HTTP-date form exists but no source here sends it; treat an
+        # unparseable value as absent rather than guessing at a date.
+        return max(0.0, float(str(raw).strip()))
+    except (TypeError, ValueError):
+        return None
+
+
+def _backoff_s(attempt: int, exc: Exception) -> float:
+    """Exponential, capped, jittered - unless the server named a delay."""
+    named = _retry_after_s(exc)
+    if named is not None:
+        return min(named, config.HTTP_BACKOFF_MAX_S)
+    base = min(2 ** (attempt + 1), config.HTTP_BACKOFF_MAX_S)
+    return base + _random.uniform(0, config.HTTP_BACKOFF_JITTER_S)
+
+
 def get_json(
     url: str,
     params: dict | None = None,
@@ -61,7 +101,9 @@ def get_json(
     gcal.write_broken_event (found 2026-08-04 review: a Holfuy network
     failure during a live lake window could have leaked HOLFUY_KEY there)."""
     last = None
+    tries = 0
     for attempt in range(config.HTTP_RETRIES):
+        tries = attempt + 1
         try:
             resp = requests.get(
                 url, params=params, headers=headers, timeout=config.HTTP_TIMEOUT_S
@@ -70,9 +112,13 @@ def get_json(
             return resp.json()
         except Exception as exc:  # noqa: BLE001 - re-raised as FetchError below
             last = exc
+            # A 404 or a 400 will say the same thing five times. Only wait on
+            # the failures that plausibly clear on their own.
+            if not _retryable(exc):
+                break
             if attempt < config.HTTP_RETRIES - 1:
-                _time.sleep(2**attempt)
-    msg = f"GET {url} failed after {config.HTTP_RETRIES} attempts: {last}"
+                _time.sleep(_backoff_s(attempt, exc))
+    msg = f"GET {url} failed after {tries} attempt{'' if tries == 1 else 's'}: {last}"
     for key in redact:
         value = (params or {}).get(key)
         if value:
