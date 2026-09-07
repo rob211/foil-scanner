@@ -1,47 +1,14 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-07T09:30:26.531483+10:00",
-  "obs": {
-    "station": "Bellambi",
-    "time": "2026-09-07T09:00:00+10:00",
-    "speed_kn": 4.9,
-    "gust_kn": 5.9,
-    "dir_deg": 45.0
-  },
-  "holfuy": {
-    "station": "Lake Illawarra",
-    "time": "2026-09-07T09:29:34+10:00",
-    "speed_kn": 0.5,
-    "gust_kn": 0.5,
-    "dir_deg": 67.0
-  },
-  "port_kembla": {
-    "station": "Port Kembla Harbour",
-    "time": "2026-09-07T09:00:00+10:00",
-    "speed_kn": 4.9,
-    "gust_kn": 7.0,
-    "dir_deg": 22.5
-  },
+  "generated_at": "2026-09-07T10:00:27.279383+10:00",
+  "obs": null,
+  "holfuy": null,
+  "port_kembla": null,
   "checks": [],
   "alerts": [],
-  "bias": [
-    {
-      "location": "lake",
-      "station": "Lake Illawarra",
-      "observed_kn": 0.5,
-      "forecast_kn": 4.1,
-      "gap_kn": -3.6,
-      "flagged": false
-    },
-    {
-      "location": "ocean",
-      "station": "Bellambi",
-      "observed_kn": 4.9,
-      "forecast_kn": 7.4,
-      "gap_kn": -2.5,
-      "flagged": false
-    }
-  ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": []
+  "bias": [],
+  "token_expires_at": null,
+  "notes": [
+    "BOM fetch failed: BOM observations (94749) (Bellambi): latest reading is 60 min old, cap is 45 min"
+  ]
 }
