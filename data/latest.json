@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-09T07:10:56.085623+10:00",
+  "generated_at": "2026-09-09T08:01:16.917556+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-09T07:10:56.648653+10:00",
+      "fetched_at": "2026-09-09T08:01:17.387087+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-09T07:10:57.208192+10:00",
+      "fetched_at": "2026-09-09T08:01:17.853062+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-09T07:10:57.798141+10:00",
+      "fetched_at": "2026-09-09T08:01:18.322163+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-09T07:10:58.365484+10:00",
+      "fetched_at": "2026-09-09T08:01:18.775107+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-09T07:10:58.945509+10:00",
+      "fetched_at": "2026-09-09T08:01:19.213724+10:00",
       "detail": null,
       "error": null
     },
@@ -63,43 +63,43 @@
     },
     {
       "time": "2026-09-09T04:00:00+10:00",
-      "lake": 5.6,
-      "ocean": 7.5
+      "lake": 5.5,
+      "ocean": 7.4
     },
     {
       "time": "2026-09-09T05:00:00+10:00",
-      "lake": 5.4,
+      "lake": 5.3,
       "ocean": 7.6
     },
     {
       "time": "2026-09-09T06:00:00+10:00",
-      "lake": 5.8,
+      "lake": 5.7,
       "ocean": 7.8
     },
     {
       "time": "2026-09-09T07:00:00+10:00",
       "lake": 4.8,
-      "ocean": 7.5
+      "ocean": 7.4
     },
     {
       "time": "2026-09-09T08:00:00+10:00",
-      "lake": 4.5,
+      "lake": 4.3,
       "ocean": 7.7
     },
     {
       "time": "2026-09-09T09:00:00+10:00",
-      "lake": 10.4,
-      "ocean": 9.4
+      "lake": 9.1,
+      "ocean": 9.0
     },
     {
       "time": "2026-09-09T10:00:00+10:00",
-      "lake": 12.3,
-      "ocean": 11.8
+      "lake": 12.1,
+      "ocean": 11.7
     },
     {
       "time": "2026-09-09T11:00:00+10:00",
-      "lake": 14.1,
-      "ocean": 12.5
+      "lake": 13.8,
+      "ocean": 12.2
     },
     {
       "time": "2026-09-09T12:00:00+10:00",
@@ -108,58 +108,58 @@
     },
     {
       "time": "2026-09-09T13:00:00+10:00",
-      "lake": 13.1,
-      "ocean": 12.8
+      "lake": 13.4,
+      "ocean": 13.0
     },
     {
       "time": "2026-09-09T14:00:00+10:00",
-      "lake": 16.5,
-      "ocean": 14.4
+      "lake": 15.7,
+      "ocean": 14.2
     },
     {
       "time": "2026-09-09T15:00:00+10:00",
-      "lake": 17.8,
+      "lake": 18.0,
       "ocean": 15.8
     },
     {
       "time": "2026-09-09T16:00:00+10:00",
-      "lake": 15.2,
-      "ocean": 14.3
+      "lake": 15.0,
+      "ocean": 14.2
     },
     {
       "time": "2026-09-09T17:00:00+10:00",
-      "lake": 15.3,
-      "ocean": 14.3
+      "lake": 16.1,
+      "ocean": 14.2
     },
     {
       "time": "2026-09-09T18:00:00+10:00",
-      "lake": 14.2,
-      "ocean": 13.9
-    },
-    {
-      "time": "2026-09-09T19:00:00+10:00",
-      "lake": 14.9,
+      "lake": 15.9,
       "ocean": 14.0
     },
     {
+      "time": "2026-09-09T19:00:00+10:00",
+      "lake": 15.9,
+      "ocean": 13.9
+    },
+    {
       "time": "2026-09-09T20:00:00+10:00",
-      "lake": 15.4,
+      "lake": 16.2,
       "ocean": 14.2
     },
     {
       "time": "2026-09-09T21:00:00+10:00",
-      "lake": 15.4,
-      "ocean": 14.2
+      "lake": 15.6,
+      "ocean": 14.3
     },
     {
       "time": "2026-09-09T22:00:00+10:00",
-      "lake": 13.6,
-      "ocean": 13.1
+      "lake": 13.8,
+      "ocean": 13.2
     },
     {
       "time": "2026-09-09T23:00:00+10:00",
-      "lake": 12.1,
-      "ocean": 11.8
+      "lake": 12.8,
+      "ocean": 12.2
     }
   ],
   "windows": [
@@ -221,15 +221,14 @@
       "trigger_id": "lake_oakflats_berkeley",
       "run_name": "Oak Flats to Berkeley",
       "date": "2026-09-09",
-      "start": "2026-09-09T16:00:00+10:00",
-      "end": "2026-09-09T18:00:00+10:00",
+      "start": "2026-09-09T14:00:00+10:00",
+      "end": "2026-09-09T15:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 17.6,
-      "direction_deg": 171.0,
-      "models_agreeing": 2,
+      "peak_median_kn": 15.2,
+      "direction_deg": 172.0,
+      "models_agreeing": 1,
       "model_values": {
-        "GFS": 15.8,
-        "UKMO": 19.4
+        "ICON": 15.2
       },
       "title_tags": [],
       "notes": [],
@@ -238,7 +237,35 @@
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
-      "watch": "18 kn, needs 18",
+      "watch": "1 of 4 models only (needs 2)",
+      "tide_state": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "lake_oakflats_berkeley:2026-09-09:14"
+    },
+    {
+      "trigger_id": "lake_oakflats_berkeley",
+      "run_name": "Oak Flats to Berkeley",
+      "date": "2026-09-09",
+      "start": "2026-09-09T16:00:00+10:00",
+      "end": "2026-09-09T18:00:00+10:00",
+      "grade": "watch",
+      "peak_median_kn": 16.9,
+      "direction_deg": 172.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "GFS": 15.2,
+        "UKMO": 18.6
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": "17 kn, needs 18",
       "tide_state": null,
       "confidence": "normal",
       "live_status": "pending",
@@ -252,13 +279,13 @@
       "start": "2026-09-13T16:00:00+10:00",
       "end": "2026-09-13T18:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 7.6,
-      "direction_deg": 63.0,
+      "peak_median_kn": 7.1,
+      "direction_deg": 65.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 5.4,
         "ECMWF": 7.4,
-        "ICON": 7.8,
+        "ICON": 6.8,
         "UKMO": 14.4
       },
       "title_tags": [
