@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-10T10:15:57.713433+10:00",
+  "generated_at": "2026-09-10T12:00:38.125556+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-10T10:15:58.335881+10:00",
+      "fetched_at": "2026-09-10T12:00:38.198123+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-10T10:15:58.975861+10:00",
+      "fetched_at": "2026-09-10T12:00:38.284582+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-10T10:15:59.601922+10:00",
+      "fetched_at": "2026-09-10T12:00:38.358712+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-10T10:16:00.217178+10:00",
+      "fetched_at": "2026-09-10T12:00:38.446389+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-10T10:16:00.846061+10:00",
+      "fetched_at": "2026-09-10T12:00:38.828345+10:00",
       "detail": null,
       "error": null
     },
@@ -53,82 +53,82 @@
     },
     {
       "time": "2026-09-10T02:00:00+10:00",
-      "lake": 9.0,
-      "ocean": 10.0
-    },
-    {
-      "time": "2026-09-10T03:00:00+10:00",
-      "lake": 9.0,
+      "lake": 8.6,
       "ocean": 9.8
     },
     {
-      "time": "2026-09-10T04:00:00+10:00",
-      "lake": 8.7,
-      "ocean": 9.6
+      "time": "2026-09-10T03:00:00+10:00",
+      "lake": 8.6,
+      "ocean": 9.5
     },
     {
-      "time": "2026-09-10T05:00:00+10:00",
-      "lake": 8.8,
+      "time": "2026-09-10T04:00:00+10:00",
+      "lake": 8.0,
       "ocean": 9.2
     },
     {
+      "time": "2026-09-10T05:00:00+10:00",
+      "lake": 7.9,
+      "ocean": 9.1
+    },
+    {
       "time": "2026-09-10T06:00:00+10:00",
-      "lake": 8.8,
+      "lake": 8.6,
       "ocean": 9.3
     },
     {
       "time": "2026-09-10T07:00:00+10:00",
-      "lake": 8.3,
-      "ocean": 9.0
+      "lake": 8.4,
+      "ocean": 9.2
     },
     {
       "time": "2026-09-10T08:00:00+10:00",
-      "lake": 8.4,
+      "lake": 8.0,
       "ocean": 9.1
     },
     {
       "time": "2026-09-10T09:00:00+10:00",
-      "lake": 9.4,
+      "lake": 8.8,
       "ocean": 9.7
     },
     {
       "time": "2026-09-10T10:00:00+10:00",
-      "lake": 9.5,
-      "ocean": 10.4
+      "lake": 9.6,
+      "ocean": 9.9
     },
     {
       "time": "2026-09-10T11:00:00+10:00",
-      "lake": 10.1,
-      "ocean": 10.9
+      "lake": 10.2,
+      "ocean": 10.8
     },
     {
       "time": "2026-09-10T12:00:00+10:00",
-      "lake": 10.7,
-      "ocean": 11.0
+      "lake": 11.0,
+      "ocean": 11.1
     },
     {
       "time": "2026-09-10T13:00:00+10:00",
-      "lake": 11.7,
-      "ocean": 11.6
+      "lake": 12.2,
+      "ocean": 11.8
     },
     {
       "time": "2026-09-10T14:00:00+10:00",
-      "lake": 11.7,
-      "ocean": 11.7
+      "lake": 12.0,
+      "ocean": 12.1
     },
     {
       "time": "2026-09-10T15:00:00+10:00",
-      "lake": 11.7,
-      "ocean": 11.8
+      "lake": 11.2,
+      "ocean": 11.7
     },
     {
       "time": "2026-09-10T16:00:00+10:00",
       "lake": 10.7,
-      "ocean": 11.3
+      "ocean": 11.2
     },
     {
       "time": "2026-09-10T17:00:00+10:00",
-      "lake": 9.1,
+      "lake": 9.3,
       "ocean": 10.2
     },
     {
@@ -144,22 +144,22 @@
     {
       "time": "2026-09-10T20:00:00+10:00",
       "lake": 5.3,
-      "ocean": 7.3
+      "ocean": 7.2
     },
     {
       "time": "2026-09-10T21:00:00+10:00",
-      "lake": 5.9,
-      "ocean": 7.0
+      "lake": 5.5,
+      "ocean": 6.9
     },
     {
       "time": "2026-09-10T22:00:00+10:00",
       "lake": 6.2,
-      "ocean": 7.4
+      "ocean": 7.2
     },
     {
       "time": "2026-09-10T23:00:00+10:00",
-      "lake": 6.5,
-      "ocean": 7.8
+      "lake": 6.4,
+      "ocean": 7.5
     }
   ],
   "windows": [
@@ -171,11 +171,11 @@
       "end": "2026-09-13T18:00:00+10:00",
       "grade": "yellow",
       "peak_median_kn": 9.4,
-      "direction_deg": 65.0,
+      "direction_deg": 61.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 10.2,
-        "ECMWF": 5.4,
+        "ECMWF": 5.7,
         "ICON": 9.3,
         "UKMO": 9.6
       },
@@ -209,7 +209,7 @@
       "models_agreeing": 4,
       "model_values": {
         "GFS": 5.8,
-        "ECMWF": 7.4,
+        "ECMWF": 7.2,
         "ICON": 6.2,
         "UKMO": 5.7
       },
@@ -238,12 +238,12 @@
       "start": "2026-09-14T10:04:17.142857+10:00",
       "end": "2026-09-14T12:04:17.142857+10:00",
       "grade": "yellow",
-      "peak_median_kn": 5.9,
-      "direction_deg": 332.0,
+      "peak_median_kn": 6.8,
+      "direction_deg": 334.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 4.8,
-        "ECMWF": 7.0,
+        "ECMWF": 9.0,
         "ICON": 8.8,
         "UKMO": 2.8
       },
@@ -398,7 +398,7 @@
     {
       "trigger_id": "ne_ocean",
       "date": "2026-09-12",
-      "start": "2026-09-12T17:00:00+10:00",
+      "start": "2026-09-12T16:00:00+10:00",
       "end": "2026-09-12T18:00:00+10:00",
       "reason": "single_model",
       "detail": "only ['ukmo_seamless'] sees it"
