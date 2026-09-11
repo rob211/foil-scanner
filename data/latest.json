@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-11T15:00:37.879404+10:00",
+  "generated_at": "2026-09-11T16:01:15.528268+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-11T15:00:37.948788+10:00",
+      "fetched_at": "2026-09-11T16:01:16.114197+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-11T15:00:38.028763+10:00",
+      "fetched_at": "2026-09-11T16:01:16.685131+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-11T15:00:38.100597+10:00",
+      "fetched_at": "2026-09-11T16:01:17.295084+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-11T15:00:38.176514+10:00",
+      "fetched_at": "2026-09-11T16:01:17.854214+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-11T15:00:38.553151+10:00",
+      "fetched_at": "2026-09-11T16:01:18.482235+10:00",
       "detail": null,
       "error": null
     },
@@ -113,23 +113,23 @@
     },
     {
       "time": "2026-09-11T14:00:00+10:00",
-      "lake": 9.6,
+      "lake": 9.9,
       "ocean": 8.9
     },
     {
       "time": "2026-09-11T15:00:00+10:00",
-      "lake": 9.9,
-      "ocean": 9.6
+      "lake": 9.5,
+      "ocean": 9.3
     },
     {
       "time": "2026-09-11T16:00:00+10:00",
-      "lake": 8.6,
-      "ocean": 9.1
+      "lake": 8.4,
+      "ocean": 8.9
     },
     {
       "time": "2026-09-11T17:00:00+10:00",
       "lake": 6.7,
-      "ocean": 8.4
+      "ocean": 8.3
     },
     {
       "time": "2026-09-11T18:00:00+10:00",
@@ -170,11 +170,11 @@
       "start": "2026-09-13T16:00:00+10:00",
       "end": "2026-09-13T18:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 7.7,
+      "peak_median_kn": 7.2,
       "direction_deg": 52.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 7.4,
+        "GFS": 6.5,
         "ECMWF": 3.9,
         "ICON": 8.0,
         "UKMO": 8.4
@@ -205,7 +205,7 @@
       "end": "2026-09-14T10:07:30+10:00",
       "grade": "yellow",
       "peak_median_kn": 5.7,
-      "direction_deg": 289.0,
+      "direction_deg": 288.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 5.7,
@@ -239,10 +239,10 @@
       "end": "2026-09-14T12:07:30+10:00",
       "grade": "yellow",
       "peak_median_kn": 7.2,
-      "direction_deg": 340.0,
+      "direction_deg": 339.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 5.1,
+        "GFS": 4.9,
         "ECMWF": 8.8,
         "ICON": 8.6,
         "UKMO": 5.9
@@ -268,11 +268,11 @@
       "start": "2026-09-14T17:00:00+10:00",
       "end": "2026-09-14T18:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 4.9,
-      "direction_deg": 352.0,
+      "peak_median_kn": 6.9,
+      "direction_deg": 338.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 2.0,
+        "GFS": 8.1,
         "ECMWF": 4.1,
         "ICON": 5.7,
         "UKMO": 8.4
@@ -302,11 +302,11 @@
       "start": "2026-09-15T06:00:00+10:00",
       "end": "2026-09-15T10:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 5.7,
-      "direction_deg": 250.0,
+      "peak_median_kn": 5.9,
+      "direction_deg": 252.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 5.9,
+        "GFS": 6.4,
         "ECMWF": 6.5,
         "ICON": 3.2,
         "UKMO": 5.4
@@ -388,12 +388,13 @@
       "run_name": "South runs",
       "date": "2026-09-16",
       "start": "2026-09-16T09:00:00+10:00",
-      "end": "2026-09-16T16:00:00+10:00",
+      "end": "2026-09-16T14:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 16.7,
-      "direction_deg": 193.0,
-      "models_agreeing": 1,
+      "peak_median_kn": 16.0,
+      "direction_deg": 197.0,
+      "models_agreeing": 2,
       "model_values": {
+        "GFS": 15.3,
         "ICON": 16.7
       },
       "title_tags": [],
@@ -403,7 +404,7 @@
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
-      "watch": "1 of 4 models only (needs 2)",
+      "watch": "16 kn, needs 18",
       "tide_state": null,
       "confidence": "low (long range)",
       "live_status": "pending",
