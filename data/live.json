@@ -1,25 +1,25 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-12T14:31:14.504491+10:00",
+  "generated_at": "2026-09-12T15:01:16.749421+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-12T14:00:00+10:00",
-    "speed_kn": 15.1,
-    "gust_kn": 17.3,
+    "time": "2026-09-12T14:30:00+10:00",
+    "speed_kn": 11.9,
+    "gust_kn": 15.1,
     "dir_deg": 45.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-12T14:29:56+10:00",
-    "speed_kn": 18.0,
-    "gust_kn": 20.9,
-    "dir_deg": 37.0
+    "time": "2026-09-12T14:59:56+10:00",
+    "speed_kn": 18.4,
+    "gust_kn": 23.3,
+    "dir_deg": 38.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-12T14:00:00+10:00",
-    "speed_kn": 10.3,
-    "gust_kn": 15.1,
+    "time": "2026-09-12T14:30:00+10:00",
+    "speed_kn": 11.9,
+    "gust_kn": 17.3,
     "dir_deg": 45.0
   },
   "checks": [],
@@ -28,8 +28,8 @@
       "trigger_id": "entrance_ne",
       "run_name": "Lake Entrance (NE wind)",
       "station": "Lake Illawarra",
-      "speed_kn": 18.0,
-      "dir_deg": 37.0,
+      "speed_kn": 18.4,
+      "dir_deg": 38.0,
       "threshold_kn": 16.2,
       "detail": "Run-out gate today: 08:52-10:52, 20:56-22:56.",
       "foil_key": "live-alert:2026-09-12:entrance",
@@ -39,7 +39,7 @@
       "trigger_id": "ne_ocean",
       "run_name": "NE ocean runs",
       "station": "Bellambi",
-      "speed_kn": 15.1,
+      "speed_kn": 11.9,
       "dir_deg": 45.0,
       "threshold_kn": 10.0,
       "detail": "",
@@ -51,17 +51,17 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 18.0,
-      "forecast_kn": 12.2,
-      "gap_kn": 5.8,
+      "observed_kn": 18.4,
+      "forecast_kn": 12.8,
+      "gap_kn": 5.6,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 15.1,
-      "forecast_kn": 10.4,
-      "gap_kn": 4.7,
+      "observed_kn": 11.9,
+      "forecast_kn": 11.0,
+      "gap_kn": 0.9,
       "flagged": false
     }
   ],
