@@ -1,25 +1,25 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-12T15:01:16.749421+10:00",
+  "generated_at": "2026-09-12T15:31:14.015615+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-12T14:30:00+10:00",
+    "time": "2026-09-12T15:00:00+10:00",
     "speed_kn": 11.9,
-    "gust_kn": 15.1,
-    "dir_deg": 45.0
+    "gust_kn": 16.2,
+    "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-12T14:59:56+10:00",
-    "speed_kn": 18.4,
-    "gust_kn": 23.3,
-    "dir_deg": 38.0
+    "time": "2026-09-12T15:29:55+10:00",
+    "speed_kn": 19.0,
+    "gust_kn": 21.4,
+    "dir_deg": 21.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-12T14:30:00+10:00",
+    "time": "2026-09-12T15:00:00+10:00",
     "speed_kn": 11.9,
-    "gust_kn": 17.3,
+    "gust_kn": 16.2,
     "dir_deg": 45.0
   },
   "checks": [],
@@ -28,8 +28,8 @@
       "trigger_id": "entrance_ne",
       "run_name": "Lake Entrance (NE wind)",
       "station": "Lake Illawarra",
-      "speed_kn": 18.4,
-      "dir_deg": 38.0,
+      "speed_kn": 19.0,
+      "dir_deg": 21.0,
       "threshold_kn": 16.2,
       "detail": "Run-out gate today: 08:52-10:52, 20:56-22:56.",
       "foil_key": "live-alert:2026-09-12:entrance",
@@ -40,7 +40,7 @@
       "run_name": "NE ocean runs",
       "station": "Bellambi",
       "speed_kn": 11.9,
-      "dir_deg": 45.0,
+      "dir_deg": 22.5,
       "threshold_kn": 10.0,
       "detail": "",
       "foil_key": "live-alert:2026-09-12:ocean",
@@ -51,9 +51,9 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 18.4,
+      "observed_kn": 19.0,
       "forecast_kn": 12.8,
-      "gap_kn": 5.6,
+      "gap_kn": 6.2,
       "flagged": false
     },
     {
