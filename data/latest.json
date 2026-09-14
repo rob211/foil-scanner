@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-14T21:00:48.094185+10:00",
+  "generated_at": "2026-09-14T22:01:21.183474+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-14T21:00:48.650036+10:00",
+      "fetched_at": "2026-09-14T22:01:21.683284+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-14T21:00:49.216835+10:00",
+      "fetched_at": "2026-09-14T22:01:22.177912+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-14T21:00:49.793619+10:00",
+      "fetched_at": "2026-09-14T22:01:22.632897+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-14T21:00:50.488085+10:00",
+      "fetched_at": "2026-09-14T22:01:23.046650+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-14T21:00:51.051954+10:00",
+      "fetched_at": "2026-09-14T22:01:23.505252+10:00",
       "detail": null,
       "error": null
     },
@@ -128,18 +128,18 @@
     },
     {
       "time": "2026-09-14T17:00:00+10:00",
-      "lake": 4.6,
-      "ocean": 7.0
+      "lake": 4.8,
+      "ocean": 7.2
     },
     {
       "time": "2026-09-14T18:00:00+10:00",
-      "lake": 3.8,
-      "ocean": 6.5
+      "lake": 4.1,
+      "ocean": 6.7
     },
     {
       "time": "2026-09-14T19:00:00+10:00",
-      "lake": 3.2,
-      "ocean": 6.8
+      "lake": 2.9,
+      "ocean": 6.7
     },
     {
       "time": "2026-09-14T20:00:00+10:00",
@@ -149,7 +149,7 @@
     {
       "time": "2026-09-14T21:00:00+10:00",
       "lake": 4.9,
-      "ocean": 7.4
+      "ocean": 7.5
     },
     {
       "time": "2026-09-14T22:00:00+10:00",
@@ -158,8 +158,8 @@
     },
     {
       "time": "2026-09-14T23:00:00+10:00",
-      "lake": 5.5,
-      "ocean": 7.8
+      "lake": 5.6,
+      "ocean": 7.9
     }
   ],
   "windows": [
@@ -234,11 +234,11 @@
       "start": "2026-09-14T16:18:27.692308+10:00",
       "end": "2026-09-14T18:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 4.6,
-      "direction_deg": 28.0,
+      "peak_median_kn": 4.8,
+      "direction_deg": 29.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 4.6,
+        "GFS": 5.1,
         "ECMWF": 4.3,
         "ICON": 8.4,
         "UKMO": 4.5
@@ -268,11 +268,11 @@
       "start": "2026-09-15T06:00:00+10:00",
       "end": "2026-09-15T10:41:32.307692+10:00",
       "grade": "yellow",
-      "peak_median_kn": 4.9,
-      "direction_deg": 289.0,
+      "peak_median_kn": 4.3,
+      "direction_deg": 290.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 5.4,
+        "GFS": 4.2,
         "ECMWF": 3.9,
         "ICON": 6.7,
         "UKMO": 4.5
@@ -303,10 +303,10 @@
       "end": "2026-09-15T12:00:00+10:00",
       "grade": "yellow",
       "peak_median_kn": 5.9,
-      "direction_deg": 213.0,
+      "direction_deg": 192.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 3.3,
+        "GFS": 2.5,
         "ECMWF": 5.7,
         "ICON": 6.1,
         "UKMO": 6.8
@@ -329,14 +329,14 @@
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "date": "2026-09-15",
-      "start": "2026-09-15T16:00:00+10:00",
+      "start": "2026-09-15T17:00:00+10:00",
       "end": "2026-09-15T18:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 16.3,
+      "peak_median_kn": 16.0,
       "direction_deg": 178.0,
       "models_agreeing": 1,
       "model_values": {
-        "GFS": 16.3
+        "GFS": 16.0
       },
       "title_tags": [],
       "notes": [],
@@ -350,7 +350,7 @@
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "south_ocean:2026-09-15:16"
+      "foil_key": "south_ocean:2026-09-15:17"
     },
     {
       "trigger_id": "lake_oakflats_berkeley",
