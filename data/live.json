@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-16T11:01:19.358956+10:00",
+  "generated_at": "2026-09-16T11:31:17.778076+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-16T10:34:00+10:00",
-    "speed_kn": 25.9,
-    "gust_kn": 34.0,
+    "time": "2026-09-16T11:00:00+10:00",
+    "speed_kn": 22.1,
+    "gust_kn": 30.2,
     "dir_deg": 180.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-16T11:00:14+10:00",
-    "speed_kn": 23.9,
-    "gust_kn": 28.2,
-    "dir_deg": 148.0
+    "time": "2026-09-16T11:30:14+10:00",
+    "speed_kn": 24.3,
+    "gust_kn": 31.6,
+    "dir_deg": 145.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-16T10:35:00+10:00",
-    "speed_kn": 9.2,
-    "gust_kn": 17.3,
+    "time": "2026-09-16T11:00:00+10:00",
+    "speed_kn": 10.8,
+    "gust_kn": 23.2,
     "dir_deg": 202.5
   },
   "checks": [
     {
       "foil_key": "lake_oakflats_berkeley:2026-09-16:09",
       "state": "miss",
-      "live_line": "24 kn SSE at 11:00 (Lake Illawarra) vs forecast 21.8 kn"
+      "live_line": "24 kn SE at 11:30 (Lake Illawarra) vs forecast 21.8 kn"
     }
   ],
   "alerts": [
@@ -34,7 +34,7 @@
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "station": "Bellambi",
-      "speed_kn": 25.9,
+      "speed_kn": 22.1,
       "dir_deg": 180.0,
       "threshold_kn": 18.0,
       "detail": "",
@@ -46,22 +46,20 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 23.9,
+      "observed_kn": 24.3,
       "forecast_kn": 16.9,
-      "gap_kn": 7.0,
+      "gap_kn": 7.4,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 25.9,
+      "observed_kn": 22.1,
       "forecast_kn": 15.2,
-      "gap_kn": 10.7,
-      "flagged": true
+      "gap_kn": 6.9,
+      "flagged": false
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": [
-    "MODEL BUST (ocean): observed 26 kn vs forecast 15 kn at Bellambi"
-  ]
+  "notes": []
 }
