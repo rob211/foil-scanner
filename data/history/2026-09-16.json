@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-16T17:42:40.324721+10:00",
+  "generated_at": "2026-09-16T18:00:39.623424+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-16T17:42:40.923754+10:00",
+      "fetched_at": "2026-09-16T18:00:40.198561+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-16T17:42:41.755925+10:00",
+      "fetched_at": "2026-09-16T18:00:40.754429+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-16T17:42:42.501763+10:00",
+      "fetched_at": "2026-09-16T18:00:41.321592+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-16T17:42:43.116445+10:00",
+      "fetched_at": "2026-09-16T18:00:41.884809+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-16T17:42:43.706909+10:00",
+      "fetched_at": "2026-09-16T18:00:42.465488+10:00",
       "detail": null,
       "error": null
     },
@@ -68,8 +68,8 @@
     },
     {
       "time": "2026-09-16T05:00:00+10:00",
-      "lake": 10.2,
-      "ocean": 10.4
+      "lake": 10.1,
+      "ocean": 10.3
     },
     {
       "time": "2026-09-16T06:00:00+10:00",
@@ -93,13 +93,13 @@
     },
     {
       "time": "2026-09-16T10:00:00+10:00",
-      "lake": 17.2,
-      "ocean": 15.3
+      "lake": 17.5,
+      "ocean": 15.6
     },
     {
       "time": "2026-09-16T11:00:00+10:00",
-      "lake": 17.1,
-      "ocean": 15.3
+      "lake": 17.2,
+      "ocean": 15.4
     },
     {
       "time": "2026-09-16T12:00:00+10:00",
@@ -344,11 +344,11 @@
       "start": "2026-09-19T06:00:00+10:00",
       "end": "2026-09-19T12:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 17.3,
+      "peak_median_kn": 20.7,
       "direction_deg": 248.0,
       "models_agreeing": 1,
       "model_values": {
-        "ECMWF": 17.3
+        "ECMWF": 20.7
       },
       "title_tags": [],
       "notes": [],
@@ -500,5 +500,14 @@
       "foil_key": "south_ocean:2026-09-22:16"
     }
   ],
-  "near_misses": []
+  "near_misses": [
+    {
+      "trigger_id": "lake_west",
+      "date": "2026-09-19",
+      "start": "2026-09-19T06:00:00+10:00",
+      "end": "2026-09-19T09:00:00+10:00",
+      "reason": "single_model",
+      "detail": "only ['ecmwf_ifs025'] sees it"
+    }
+  ]
 }
