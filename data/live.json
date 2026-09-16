@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-16T16:11:04.371385+10:00",
+  "generated_at": "2026-09-16T16:31:14.033605+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-09-16T16:00:00+10:00",
@@ -10,10 +10,10 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-16T16:10:16+10:00",
-    "speed_kn": 22.9,
-    "gust_kn": 26.7,
-    "dir_deg": 131.0
+    "time": "2026-09-16T16:30:15+10:00",
+    "speed_kn": 24.3,
+    "gust_kn": 28.7,
+    "dir_deg": 117.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
@@ -26,7 +26,7 @@
     {
       "foil_key": "lake_oakflats_berkeley:2026-09-16:09",
       "state": "miss",
-      "live_line": "23 kn SE at 16:10 (Lake Illawarra) vs forecast 21.1 kn"
+      "live_line": "24 kn ESE at 16:30 (Lake Illawarra) vs forecast 21.1 kn"
     }
   ],
   "alerts": [
@@ -46,9 +46,9 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 22.9,
+      "observed_kn": 24.3,
       "forecast_kn": 16.8,
-      "gap_kn": 6.1,
+      "gap_kn": 7.5,
       "flagged": false
     },
     {
@@ -60,7 +60,7 @@
       "flagged": true
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
     "MODEL BUST (ocean): observed 27 kn vs forecast 15 kn at Bellambi"
   ]
