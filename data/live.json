@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-16T13:31:14.909093+10:00",
+  "generated_at": "2026-09-16T14:01:18.399299+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-16T13:00:00+10:00",
-    "speed_kn": 24.8,
-    "gust_kn": 30.8,
+    "time": "2026-09-16T13:45:00+10:00",
+    "speed_kn": 30.2,
+    "gust_kn": 37.3,
     "dir_deg": 180.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-16T13:30:14+10:00",
-    "speed_kn": 31.6,
-    "gust_kn": 36.5,
-    "dir_deg": 129.0
+    "time": "2026-09-16T14:00:15+10:00",
+    "speed_kn": 30.6,
+    "gust_kn": 35.0,
+    "dir_deg": 138.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-16T13:00:00+10:00",
+    "time": "2026-09-16T13:30:00+10:00",
     "speed_kn": 10.8,
-    "gust_kn": 21.1,
+    "gust_kn": 23.8,
     "dir_deg": 180.0
   },
   "checks": [
     {
       "foil_key": "lake_oakflats_berkeley:2026-09-16:09",
       "state": "miss",
-      "live_line": "32 kn SE at 13:30 (Lake Illawarra) vs forecast 21.3 kn"
+      "live_line": "31 kn SE at 14:00 (Lake Illawarra) vs forecast 21.3 kn"
     }
   ],
   "alerts": [
@@ -34,7 +34,7 @@
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "station": "Bellambi",
-      "speed_kn": 24.8,
+      "speed_kn": 30.2,
       "dir_deg": 180.0,
       "threshold_kn": 18.0,
       "detail": "",
@@ -46,23 +46,23 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 31.6,
-      "forecast_kn": 17.5,
-      "gap_kn": 14.1,
+      "observed_kn": 30.6,
+      "forecast_kn": 18.1,
+      "gap_kn": 12.5,
       "flagged": true
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 24.8,
-      "forecast_kn": 15.6,
-      "gap_kn": 9.2,
+      "observed_kn": 30.2,
+      "forecast_kn": 15.8,
+      "gap_kn": 14.4,
       "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "MODEL BUST (lake): observed 32 kn vs forecast 18 kn at Lake Illawarra",
-    "MODEL BUST (ocean): observed 25 kn vs forecast 16 kn at Bellambi"
+    "MODEL BUST (lake): observed 31 kn vs forecast 18 kn at Lake Illawarra",
+    "MODEL BUST (ocean): observed 30 kn vs forecast 16 kn at Bellambi"
   ]
 }
