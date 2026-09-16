@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-16T15:00:39.189287+10:00",
+  "generated_at": "2026-09-16T16:01:16.966452+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-16T15:00:39.791012+10:00",
+      "fetched_at": "2026-09-16T16:01:17.500772+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-16T15:00:40.389918+10:00",
+      "fetched_at": "2026-09-16T16:01:18.055562+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-16T15:00:40.978601+10:00",
+      "fetched_at": "2026-09-16T16:01:18.563175+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-16T15:00:41.547200+10:00",
+      "fetched_at": "2026-09-16T16:01:19.133753+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-16T15:00:42.128985+10:00",
+      "fetched_at": "2026-09-16T16:01:19.648326+10:00",
       "detail": null,
       "error": null
     },
@@ -93,8 +93,8 @@
     },
     {
       "time": "2026-09-16T10:00:00+10:00",
-      "lake": 17.4,
-      "ocean": 15.4
+      "lake": 17.2,
+      "ocean": 15.2
     },
     {
       "time": "2026-09-16T11:00:00+10:00",
@@ -103,13 +103,13 @@
     },
     {
       "time": "2026-09-16T12:00:00+10:00",
-      "lake": 17.5,
-      "ocean": 15.3
+      "lake": 17.8,
+      "ocean": 15.5
     },
     {
       "time": "2026-09-16T13:00:00+10:00",
-      "lake": 17.5,
-      "ocean": 15.6
+      "lake": 17.9,
+      "ocean": 15.8
     },
     {
       "time": "2026-09-16T14:00:00+10:00",
@@ -118,48 +118,48 @@
     },
     {
       "time": "2026-09-16T15:00:00+10:00",
-      "lake": 18.4,
+      "lake": 18.3,
       "ocean": 15.8
     },
     {
       "time": "2026-09-16T16:00:00+10:00",
-      "lake": 16.5,
-      "ocean": 14.9
+      "lake": 16.8,
+      "ocean": 15.2
     },
     {
       "time": "2026-09-16T17:00:00+10:00",
-      "lake": 15.6,
-      "ocean": 13.9
+      "lake": 15.9,
+      "ocean": 14.2
     },
     {
       "time": "2026-09-16T18:00:00+10:00",
-      "lake": 13.6,
-      "ocean": 12.4
+      "lake": 14.1,
+      "ocean": 12.8
     },
     {
       "time": "2026-09-16T19:00:00+10:00",
-      "lake": 12.8,
-      "ocean": 12.1
+      "lake": 13.0,
+      "ocean": 12.2
     },
     {
       "time": "2026-09-16T20:00:00+10:00",
-      "lake": 11.9,
-      "ocean": 11.6
-    },
-    {
-      "time": "2026-09-16T21:00:00+10:00",
-      "lake": 12.1,
+      "lake": 12.0,
       "ocean": 11.7
     },
     {
+      "time": "2026-09-16T21:00:00+10:00",
+      "lake": 12.3,
+      "ocean": 11.9
+    },
+    {
       "time": "2026-09-16T22:00:00+10:00",
-      "lake": 11.9,
-      "ocean": 11.5
+      "lake": 12.3,
+      "ocean": 11.8
     },
     {
       "time": "2026-09-16T23:00:00+10:00",
       "lake": 12.0,
-      "ocean": 11.3
+      "ocean": 11.4
     }
   ],
   "windows": [
@@ -310,7 +310,7 @@
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-09-19",
       "start": "2026-09-19T06:00:00+10:00",
-      "end": "2026-09-19T09:00:00+10:00",
+      "end": "2026-09-19T12:00:00+10:00",
       "grade": "watch",
       "peak_median_kn": 17.3,
       "direction_deg": 248.0,
@@ -331,6 +331,33 @@
       "live_status": "pending",
       "event_id": null,
       "foil_key": "lake_west:2026-09-19:06"
+    },
+    {
+      "trigger_id": "lake_west",
+      "run_name": "Kanahooka / Berkeley",
+      "date": "2026-09-19",
+      "start": "2026-09-19T14:00:00+10:00",
+      "end": "2026-09-19T18:00:00+10:00",
+      "grade": "watch",
+      "peak_median_kn": 16.7,
+      "direction_deg": 255.0,
+      "models_agreeing": 1,
+      "model_values": {
+        "GFS": 16.7
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": "1 of 4 models only (needs 2)",
+      "tide_state": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "lake_west:2026-09-19:14"
     },
     {
       "trigger_id": "south_ocean",
