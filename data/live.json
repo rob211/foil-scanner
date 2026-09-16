@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-16T10:31:20.171285+10:00",
+  "generated_at": "2026-09-16T10:31:50.101245+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-09-16T10:17:00+10:00",
@@ -60,6 +60,6 @@
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": []
 }
