@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-17T22:01:03.181258+10:00",
+  "generated_at": "2026-09-17T23:29:35.904706+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-17T22:01:03.772851+10:00",
+      "fetched_at": "2026-09-17T23:29:36.559265+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-17T22:01:04.295267+10:00",
+      "fetched_at": "2026-09-17T23:29:37.200967+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-17T22:01:04.812372+10:00",
+      "fetched_at": "2026-09-17T23:29:37.850732+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-17T22:01:05.362125+10:00",
+      "fetched_at": "2026-09-17T23:29:38.500622+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-17T22:01:05.880582+10:00",
+      "fetched_at": "2026-09-17T23:29:39.138858+10:00",
       "detail": null,
       "error": null
     },
@@ -123,13 +123,13 @@
     },
     {
       "time": "2026-09-17T16:00:00+10:00",
-      "lake": 8.8,
-      "ocean": 9.4
+      "lake": 8.9,
+      "ocean": 9.5
     },
     {
       "time": "2026-09-17T17:00:00+10:00",
-      "lake": 5.7,
-      "ocean": 7.5
+      "lake": 5.9,
+      "ocean": 7.6
     },
     {
       "time": "2026-09-17T18:00:00+10:00",
@@ -138,22 +138,22 @@
     },
     {
       "time": "2026-09-17T19:00:00+10:00",
-      "lake": 3.4,
+      "lake": 2.9,
       "ocean": 5.8
     },
     {
       "time": "2026-09-17T20:00:00+10:00",
-      "lake": 4.4,
+      "lake": 4.2,
       "ocean": 6.6
     },
     {
       "time": "2026-09-17T21:00:00+10:00",
-      "lake": 4.9,
-      "ocean": 7.3
+      "lake": 4.8,
+      "ocean": 7.2
     },
     {
       "time": "2026-09-17T22:00:00+10:00",
-      "lake": 5.3,
+      "lake": 5.4,
       "ocean": 7.5
     },
     {
@@ -164,44 +164,17 @@
   ],
   "windows": [
     {
-      "trigger_id": "hill60_swell",
-      "run_name": "Hill 60 swell run",
-      "date": "2026-09-17",
-      "start": "2026-09-17T06:00:00+10:00",
-      "end": "2026-09-17T09:00:00+10:00",
-      "grade": "yellow",
-      "peak_median_kn": 0.0,
-      "direction_deg": 160.0,
-      "models_agreeing": 0,
-      "model_values": {},
-      "title_tags": [],
-      "notes": [
-        "swell event, wind not required"
-      ],
-      "swell_m": 1.86,
-      "swell_dir_deg": 160.0,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": null,
-      "tide_state": null,
-      "confidence": "normal",
-      "live_status": "pending",
-      "event_id": "cbck0j47btb7eilulbhb171aeg",
-      "foil_key": "hill60_swell:2026-09-17:06"
-    },
-    {
       "trigger_id": "lake_west",
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-09-19",
       "start": "2026-09-19T06:00:00+10:00",
       "end": "2026-09-19T09:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 19.3,
-      "direction_deg": 248.0,
+      "peak_median_kn": 20.4,
+      "direction_deg": 249.0,
       "models_agreeing": 1,
       "model_values": {
-        "ECMWF": 19.3
+        "ECMWF": 20.4
       },
       "title_tags": [],
       "notes": [],
@@ -299,40 +272,6 @@
       "foil_key": "south_ocean:2026-09-21:14"
     },
     {
-      "trigger_id": "entrance_swell",
-      "run_name": "Lake Entrance (swell)",
-      "date": "2026-09-23",
-      "start": "2026-09-23T13:00:00+10:00",
-      "end": "2026-09-23T18:00:00+10:00",
-      "grade": "watch",
-      "peak_median_kn": 11.7,
-      "direction_deg": 37.0,
-      "models_agreeing": 4,
-      "model_values": {
-        "GFS": 10.0,
-        "ECMWF": 10.3,
-        "ICON": 13.0,
-        "UKMO": 14.9
-      },
-      "title_tags": [
-        "off-tide"
-      ],
-      "notes": [
-        "runnable but not the preferred run-out (high tide to +2 h)"
-      ],
-      "swell_m": 0.82,
-      "swell_dir_deg": 109.0,
-      "high_tide": "2026-09-23T17:41:32.307692+10:00",
-      "high_tide_m": 1.53,
-      "spots": null,
-      "watch": "wind not favourable for the swell; off tide",
-      "tide_state": "workable",
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": null,
-      "foil_key": "entrance_swell:2026-09-23:13"
-    },
-    {
       "trigger_id": "ne_ocean",
       "run_name": "NE run (Easty / South Beach / Sandon)",
       "date": "2026-09-23",
@@ -353,8 +292,8 @@
       "notes": [
         "only 2 of 4 models reached the trigger; the others did not see it"
       ],
-      "swell_m": 0.82,
-      "swell_dir_deg": 110.0,
+      "swell_m": 0.78,
+      "swell_dir_deg": 115.0,
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
@@ -382,14 +321,6 @@
       "end": "2026-09-23T17:00:00+10:00",
       "reason": "single_model",
       "detail": "only ['ukmo_seamless'] sees it"
-    },
-    {
-      "trigger_id": "entrance_swell",
-      "date": "2026-09-23",
-      "start": "2026-09-23T13:00:00+10:00",
-      "end": "2026-09-23T18:00:00+10:00",
-      "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (17:41-19:41); kept as watch"
     }
   ]
 }
