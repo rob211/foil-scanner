@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-17T21:00:45.320403+10:00",
+  "generated_at": "2026-09-17T22:01:03.181258+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-17T21:00:45.996104+10:00",
+      "fetched_at": "2026-09-17T22:01:03.772851+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-17T21:00:46.635835+10:00",
+      "fetched_at": "2026-09-17T22:01:04.295267+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-17T21:00:47.252670+10:00",
+      "fetched_at": "2026-09-17T22:01:04.812372+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-17T21:00:47.871047+10:00",
+      "fetched_at": "2026-09-17T22:01:05.362125+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-17T21:00:48.507600+10:00",
+      "fetched_at": "2026-09-17T22:01:05.880582+10:00",
       "detail": null,
       "error": null
     },
@@ -133,8 +133,8 @@
     },
     {
       "time": "2026-09-17T18:00:00+10:00",
-      "lake": 3.1,
-      "ocean": 5.7
+      "lake": 3.0,
+      "ocean": 5.5
     },
     {
       "time": "2026-09-17T19:00:00+10:00",
@@ -143,18 +143,18 @@
     },
     {
       "time": "2026-09-17T20:00:00+10:00",
-      "lake": 4.6,
+      "lake": 4.4,
       "ocean": 6.6
     },
     {
       "time": "2026-09-17T21:00:00+10:00",
-      "lake": 5.1,
-      "ocean": 7.4
+      "lake": 4.9,
+      "ocean": 7.3
     },
     {
       "time": "2026-09-17T22:00:00+10:00",
-      "lake": 5.1,
-      "ocean": 7.4
+      "lake": 5.3,
+      "ocean": 7.5
     },
     {
       "time": "2026-09-17T23:00:00+10:00",
@@ -224,11 +224,11 @@
       "start": "2026-09-19T17:00:00+10:00",
       "end": "2026-09-19T18:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 15.8,
-      "direction_deg": 259.0,
+      "peak_median_kn": 15.2,
+      "direction_deg": 260.0,
       "models_agreeing": 1,
       "model_values": {
-        "GFS": 15.8
+        "GFS": 15.2
       },
       "title_tags": [],
       "notes": [],
@@ -248,14 +248,14 @@
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "date": "2026-09-21",
-      "start": "2026-09-21T12:00:00+10:00",
-      "end": "2026-09-21T14:00:00+10:00",
+      "start": "2026-09-21T11:00:00+10:00",
+      "end": "2026-09-21T12:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 16.9,
-      "direction_deg": 155.0,
+      "peak_median_kn": 16.0,
+      "direction_deg": 169.0,
       "models_agreeing": 1,
       "model_values": {
-        "GFS": 16.9
+        "GFS": 16.0
       },
       "title_tags": [],
       "notes": [],
@@ -269,7 +269,34 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "south_ocean:2026-09-21:12"
+      "foil_key": "south_ocean:2026-09-21:11"
+    },
+    {
+      "trigger_id": "south_ocean",
+      "run_name": "South runs",
+      "date": "2026-09-21",
+      "start": "2026-09-21T14:00:00+10:00",
+      "end": "2026-09-21T15:00:00+10:00",
+      "grade": "watch",
+      "peak_median_kn": 15.2,
+      "direction_deg": 156.0,
+      "models_agreeing": 1,
+      "model_values": {
+        "GFS": 15.2
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": "1 of 4 models only (needs 2)",
+      "tide_state": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "south_ocean:2026-09-21:14"
     },
     {
       "trigger_id": "entrance_swell",
@@ -278,11 +305,11 @@
       "start": "2026-09-23T13:00:00+10:00",
       "end": "2026-09-23T18:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 12.4,
-      "direction_deg": 39.0,
+      "peak_median_kn": 11.7,
+      "direction_deg": 37.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 11.7,
+        "GFS": 10.0,
         "ECMWF": 10.3,
         "ICON": 13.0,
         "UKMO": 14.9
