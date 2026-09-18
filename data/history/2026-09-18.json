@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-18T18:00:39.239838+10:00",
+  "generated_at": "2026-09-18T20:01:05.166521+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-18T18:00:39.836655+10:00",
+      "fetched_at": "2026-09-18T20:01:05.626659+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-18T18:00:40.953306+10:00",
+      "fetched_at": "2026-09-18T20:01:06.081029+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-18T18:00:42.129664+10:00",
+      "fetched_at": "2026-09-18T20:01:06.557881+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-18T18:00:42.760273+10:00",
+      "fetched_at": "2026-09-18T20:01:07.030630+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-18T18:00:43.141173+10:00",
+      "fetched_at": "2026-09-18T20:01:07.512690+10:00",
       "detail": null,
       "error": null
     },
@@ -124,7 +124,7 @@
     {
       "time": "2026-09-18T16:00:00+10:00",
       "lake": 5.4,
-      "ocean": 6.2
+      "ocean": 5.8
     },
     {
       "time": "2026-09-18T17:00:00+10:00",
@@ -133,33 +133,33 @@
     },
     {
       "time": "2026-09-18T18:00:00+10:00",
-      "lake": 4.9,
-      "ocean": 8.9
+      "lake": 5.0,
+      "ocean": 8.6
     },
     {
       "time": "2026-09-18T19:00:00+10:00",
-      "lake": 6.5,
-      "ocean": 10.8
+      "lake": 6.2,
+      "ocean": 10.6
     },
     {
       "time": "2026-09-18T20:00:00+10:00",
-      "lake": 7.5,
-      "ocean": 11.5
+      "lake": 7.7,
+      "ocean": 11.4
     },
     {
       "time": "2026-09-18T21:00:00+10:00",
-      "lake": 7.8,
+      "lake": 8.0,
       "ocean": 12.6
     },
     {
       "time": "2026-09-18T22:00:00+10:00",
-      "lake": 8.6,
+      "lake": 8.9,
       "ocean": 13.2
     },
     {
       "time": "2026-09-18T23:00:00+10:00",
-      "lake": 9.9,
-      "ocean": 13.7
+      "lake": 10.5,
+      "ocean": 13.9
     }
   ],
   "windows": [
@@ -272,55 +272,26 @@
       "foil_key": "south_ocean:2026-09-21:14"
     },
     {
-      "trigger_id": "south_ocean",
-      "run_name": "South runs",
-      "date": "2026-09-22",
-      "start": "2026-09-22T12:00:00+10:00",
-      "end": "2026-09-22T13:00:00+10:00",
-      "grade": "watch",
-      "peak_median_kn": 15.3,
-      "direction_deg": 155.0,
-      "models_agreeing": 1,
-      "model_values": {
-        "ICON": 15.3
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": null,
-      "swell_dir_deg": null,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": "1 of 4 models only (needs 2)",
-      "tide_state": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": null,
-      "foil_key": "south_ocean:2026-09-22:12"
-    },
-    {
       "trigger_id": "ne_ocean",
       "run_name": "NE run (Easty / South Beach / Sandon)",
       "date": "2026-09-23",
       "start": "2026-09-23T14:00:00+10:00",
       "end": "2026-09-23T18:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 13.2,
-      "direction_deg": 44.0,
-      "models_agreeing": 2,
+      "peak_median_kn": 12.6,
+      "direction_deg": 45.0,
+      "models_agreeing": 3,
       "model_values": {
-        "GFS": 10.6,
-        "UKMO": 15.8
+        "GFS": 11.1,
+        "ICON": 12.6,
+        "UKMO": 14.4
       },
       "title_tags": [
-        "cross swell 0.9 m ESE",
-        "2 of 4 models"
+        "cross swell 0.9 m ESE"
       ],
-      "notes": [
-        "only 2 of 4 models reached the trigger; the others did not see it"
-      ],
+      "notes": [],
       "swell_m": 0.92,
-      "swell_dir_deg": 115.0,
+      "swell_dir_deg": 117.0,
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
