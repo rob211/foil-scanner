@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-18T15:00:38.858434+10:00",
+  "generated_at": "2026-09-18T16:01:02.572539+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-09-18T15:00:39.246941+10:00",
+      "fetched_at": "2026-09-18T16:01:03.246196+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-09-18T15:00:39.676233+10:00",
+      "fetched_at": "2026-09-18T16:01:03.942328+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-09-18T15:00:40.160519+10:00",
+      "fetched_at": "2026-09-18T16:01:04.638221+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-09-18T15:00:40.547101+10:00",
+      "fetched_at": "2026-09-18T16:01:05.325845+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-09-18T15:00:40.931396+10:00",
+      "fetched_at": "2026-09-18T16:01:05.969691+10:00",
       "detail": null,
       "error": null
     },
@@ -98,7 +98,7 @@
     },
     {
       "time": "2026-09-18T11:00:00+10:00",
-      "lake": 6.7,
+      "lake": 6.6,
       "ocean": 7.5
     },
     {
@@ -134,7 +134,7 @@
     {
       "time": "2026-09-18T18:00:00+10:00",
       "lake": 4.9,
-      "ocean": 8.3
+      "ocean": 8.4
     },
     {
       "time": "2026-09-18T19:00:00+10:00",
@@ -143,7 +143,7 @@
     },
     {
       "time": "2026-09-18T20:00:00+10:00",
-      "lake": 7.8,
+      "lake": 7.5,
       "ocean": 11.4
     },
     {
@@ -158,7 +158,7 @@
     },
     {
       "time": "2026-09-18T23:00:00+10:00",
-      "lake": 9.3,
+      "lake": 9.2,
       "ocean": 14.0
     }
   ],
@@ -197,11 +197,10 @@
       "start": "2026-09-21T10:00:00+10:00",
       "end": "2026-09-21T12:00:00+10:00",
       "grade": "watch",
-      "peak_median_kn": 17.1,
-      "direction_deg": 161.0,
-      "models_agreeing": 2,
+      "peak_median_kn": 15.8,
+      "direction_deg": 155.0,
+      "models_agreeing": 1,
       "model_values": {
-        "GFS": 18.5,
         "UKMO": 15.8
       },
       "title_tags": [],
@@ -211,7 +210,7 @@
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
-      "watch": "17 kn, needs 18",
+      "watch": "1 of 4 models only (needs 2)",
       "tide_state": null,
       "confidence": "normal",
       "live_status": "pending",
@@ -279,20 +278,18 @@
       "start": "2026-09-23T14:00:00+10:00",
       "end": "2026-09-23T18:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 12.6,
-      "direction_deg": 48.0,
-      "models_agreeing": 2,
+      "peak_median_kn": 12.0,
+      "direction_deg": 47.0,
+      "models_agreeing": 3,
       "model_values": {
+        "GFS": 10.6,
         "ECMWF": 12.0,
         "UKMO": 13.2
       },
       "title_tags": [
-        "cross swell 0.9 m ESE",
-        "2 of 4 models"
+        "cross swell 0.9 m ESE"
       ],
-      "notes": [
-        "only 2 of 4 models reached the trigger; the others did not see it"
-      ],
+      "notes": [],
       "swell_m": 0.92,
       "swell_dir_deg": 115.0,
       "high_tide": null,
@@ -313,10 +310,10 @@
       "end": "2026-09-23T18:00:00+10:00",
       "grade": "yellow",
       "peak_median_kn": 11.0,
-      "direction_deg": 24.0,
+      "direction_deg": 31.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 4.2,
+        "GFS": 9.6,
         "ECMWF": 10.2,
         "ICON": 11.9,
         "UKMO": 14.1
@@ -347,10 +344,10 @@
       "end": "2026-09-24T08:13:50.769231+10:00",
       "grade": "green",
       "peak_median_kn": 6.7,
-      "direction_deg": 329.0,
+      "direction_deg": 328.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 5.1,
+        "GFS": 4.6,
         "ECMWF": 7.0,
         "ICON": 7.7,
         "UKMO": 6.5
@@ -376,11 +373,11 @@
       "start": "2026-09-24T12:13:50.769231+10:00",
       "end": "2026-09-24T18:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 8.7,
-      "direction_deg": 19.0,
+      "peak_median_kn": 12.0,
+      "direction_deg": 30.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 2.9,
+        "GFS": 12.3,
         "ECMWF": 5.8,
         "ICON": 11.6,
         "UKMO": 12.6
@@ -407,25 +404,25 @@
       "trigger_id": "ne_ocean",
       "run_name": "NE run (Easty / South Beach / Sandon)",
       "date": "2026-09-24",
-      "start": "2026-09-24T17:00:00+10:00",
+      "start": "2026-09-24T15:00:00+10:00",
       "end": "2026-09-24T18:00:00+10:00",
       "grade": "yellow",
-      "peak_median_kn": 11.1,
-      "direction_deg": 35.0,
+      "peak_median_kn": 13.5,
+      "direction_deg": 45.0,
       "models_agreeing": 2,
       "model_values": {
-        "ICON": 10.1,
-        "UKMO": 12.1
+        "GFS": 14.2,
+        "UKMO": 12.8
       },
       "title_tags": [
-        "cross swell 0.9 m ENE",
         "2 of 4 models"
       ],
       "notes": [
+        "aligned swell 0.8 m ENE",
         "only 2 of 4 models reached the trigger; the others did not see it"
       ],
-      "swell_m": 0.92,
-      "swell_dir_deg": 68.0,
+      "swell_m": 0.82,
+      "swell_dir_deg": 69.0,
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
@@ -433,8 +430,8 @@
       "tide_state": null,
       "confidence": "low (long range)",
       "live_status": "pending",
-      "event_id": "b7v5gpdnd89i30kdeqbe8ou1hk",
-      "foil_key": "ne_ocean:2026-09-24:17"
+      "event_id": "upl6gs56j76sa80oou3d3145lo",
+      "foil_key": "ne_ocean:2026-09-24:15"
     }
   ],
   "near_misses": [
@@ -469,14 +466,6 @@
       "end": "2026-09-24T18:00:00+10:00",
       "reason": "off_tide",
       "detail": "runnable but outside the preferred run-out (18:28-20:28); kept as yellow"
-    },
-    {
-      "trigger_id": "south_ocean",
-      "date": "2026-09-21",
-      "start": "2026-09-21T11:00:00+10:00",
-      "end": "2026-09-21T12:00:00+10:00",
-      "reason": "single_model",
-      "detail": "only ['gfs_seamless'] sees it"
     }
   ]
 }
