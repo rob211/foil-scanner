@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-21T16:30:29.492333+10:00",
+  "generated_at": "2026-09-21T16:33:42.347645+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-09-21T16:00:00+10:00",
@@ -10,10 +10,10 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-21T16:28:37+10:00",
-    "speed_kn": 21.9,
-    "gust_kn": 27.2,
-    "dir_deg": 126.0
+    "time": "2026-09-21T16:32:36+10:00",
+    "speed_kn": 19.9,
+    "gust_kn": 23.3,
+    "dir_deg": 115.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
@@ -25,6 +25,17 @@
   "checks": [],
   "alerts": [
     {
+      "trigger_id": "lake_oakflats_berkeley",
+      "run_name": "Oak Flats to Berkeley",
+      "station": "Bellambi",
+      "speed_kn": 21.1,
+      "dir_deg": 180.0,
+      "threshold_kn": 18.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-09-21:lake",
+      "created": false
+    },
+    {
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "station": "Bellambi",
@@ -32,16 +43,17 @@
       "dir_deg": 180.0,
       "threshold_kn": 18.0,
       "detail": "",
-      "foil_key": "live-alert:2026-09-21:ocean"
+      "foil_key": "live-alert:2026-09-21:ocean",
+      "created": false
     }
   ],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 21.9,
+      "observed_kn": 19.9,
       "forecast_kn": 16.5,
-      "gap_kn": 5.4,
+      "gap_kn": 3.4,
       "flagged": false
     },
     {
@@ -53,8 +65,6 @@
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": [
-    "live alert event failed for south_ocean: <HttpError 503 when requesting https://www.googleapis.com/calendar/v3/calendars/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/events/j9tdb7r4h5vps08a5sbb4d2hnc?alt=json returned \"Backend Error\". Details: \"[{'domain': 'global', 'reason': 'backendError', 'message': 'Backend Error'}]\">"
-  ]
+  "token_expires_at": null,
+  "notes": []
 }
