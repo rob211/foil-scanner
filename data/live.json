@@ -1,24 +1,24 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-24T15:04:18.146043+10:00",
+  "generated_at": "2026-09-24T15:30:29.701122+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-24T14:30:00+10:00",
-    "speed_kn": 10.8,
-    "gust_kn": 14.0,
-    "dir_deg": 0.0
+    "time": "2026-09-24T15:00:00+10:00",
+    "speed_kn": 15.1,
+    "gust_kn": 21.1,
+    "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-24T15:02:48+10:00",
-    "speed_kn": 21.4,
-    "gust_kn": 25.3,
-    "dir_deg": 332.0
+    "time": "2026-09-24T15:28:48+10:00",
+    "speed_kn": 19.9,
+    "gust_kn": 22.9,
+    "dir_deg": 344.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-24T14:30:00+10:00",
-    "speed_kn": 11.9,
+    "time": "2026-09-24T15:00:00+10:00",
+    "speed_kn": 13.0,
     "gust_kn": 17.3,
     "dir_deg": 22.5
   },
@@ -26,12 +26,12 @@
     {
       "foil_key": "entrance_swell:2026-09-24:12",
       "state": "pending",
-      "live_line": "onshore but not wrecking it: 11 kn N at 14:30 (Bellambi)"
+      "live_line": "onshore but not wrecking it: 15 kn NNE at 15:00 (Bellambi)"
     },
     {
       "foil_key": "ne_ocean:2026-09-24:15",
-      "state": "miss",
-      "live_line": "11 kn N at 14:30 (Bellambi) vs forecast 13.7 kn"
+      "state": "confirmed",
+      "live_line": "15 kn NNE at 15:00 (Bellambi), forecast 13.7 kn"
     }
   ],
   "alerts": [],
@@ -39,22 +39,20 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 21.4,
+      "observed_kn": 19.9,
       "forecast_kn": 13.2,
-      "gap_kn": 8.2,
-      "flagged": true
+      "gap_kn": 6.7,
+      "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 10.8,
+      "observed_kn": 15.1,
       "forecast_kn": 11.2,
-      "gap_kn": -0.4,
+      "gap_kn": 3.9,
       "flagged": false
     }
   ],
-  "token_expires_at": null,
-  "notes": [
-    "MODEL BUST (lake): observed 21 kn vs forecast 13 kn at Lake Illawarra"
-  ]
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "notes": []
 }
