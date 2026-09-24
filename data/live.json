@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-24T12:30:26.704891+10:00",
+  "generated_at": "2026-09-24T13:00:30.247741+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-24T12:00:00+10:00",
-    "speed_kn": 5.9,
-    "gust_kn": 7.0,
-    "dir_deg": 22.5
+    "time": "2026-09-24T12:30:00+10:00",
+    "speed_kn": 7.0,
+    "gust_kn": 9.2,
+    "dir_deg": 0.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-24T12:28:48+10:00",
-    "speed_kn": 13.1,
+    "time": "2026-09-24T12:58:48+10:00",
+    "speed_kn": 15.6,
     "gust_kn": 16.6,
-    "dir_deg": 351.0
+    "dir_deg": 350.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-24T12:00:00+10:00",
-    "speed_kn": 5.9,
-    "gust_kn": 9.2,
+    "time": "2026-09-24T12:30:00+10:00",
+    "speed_kn": 8.1,
+    "gust_kn": 10.3,
     "dir_deg": 22.5
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-09-24:12",
       "state": "confirmed",
-      "live_line": "wind favourable for the swell: 6 kn NNE at 12:00 (Bellambi)"
+      "live_line": "wind favourable for the swell: 7 kn N at 12:30 (Bellambi)"
     }
   ],
   "alerts": [],
@@ -34,17 +34,17 @@
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 13.1,
-      "forecast_kn": 10.8,
-      "gap_kn": 2.3,
+      "observed_kn": 15.6,
+      "forecast_kn": 12.2,
+      "gap_kn": 3.4,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 5.9,
-      "forecast_kn": 10.0,
-      "gap_kn": -4.1,
+      "observed_kn": 7.0,
+      "forecast_kn": 10.8,
+      "gap_kn": -3.8,
       "flagged": false
     }
   ],
