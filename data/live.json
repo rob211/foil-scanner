@@ -1,62 +1,50 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-25T12:00:26.481110+10:00",
+  "generated_at": "2026-09-25T12:30:25.808631+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-25T11:30:00+10:00",
-    "speed_kn": 14.0,
-    "gust_kn": 17.3,
-    "dir_deg": 22.5
+    "time": "2026-09-25T12:00:00+10:00",
+    "speed_kn": 10.3,
+    "gust_kn": 14.0,
+    "dir_deg": 0.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-25T11:58:52+10:00",
-    "speed_kn": 15.0,
-    "gust_kn": 17.5,
+    "time": "2026-09-25T12:28:52+10:00",
+    "speed_kn": 15.6,
+    "gust_kn": 17.0,
     "dir_deg": 344.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-25T11:30:00+10:00",
-    "speed_kn": 11.9,
-    "gust_kn": 17.3,
-    "dir_deg": 45.0
+    "time": "2026-09-25T12:00:00+10:00",
+    "speed_kn": 10.8,
+    "gust_kn": 15.1,
+    "dir_deg": 22.5
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-09-25:12",
       "state": "pending",
-      "live_line": "onshore but not wrecking it: 14 kn NNE at 11:30 (Bellambi)"
+      "live_line": "onshore but not wrecking it: 10 kn N at 12:00 (Bellambi)"
     }
   ],
-  "alerts": [
-    {
-      "trigger_id": "ne_ocean",
-      "run_name": "NE ocean runs",
-      "station": "Bellambi",
-      "speed_kn": 14.0,
-      "dir_deg": 22.5,
-      "threshold_kn": 10.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-09-25:ocean",
-      "created": false
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 15.0,
-      "forecast_kn": 8.5,
-      "gap_kn": 6.5,
+      "observed_kn": 15.6,
+      "forecast_kn": 8.2,
+      "gap_kn": 7.4,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 14.0,
-      "forecast_kn": 8.3,
-      "gap_kn": 5.7,
+      "observed_kn": 10.3,
+      "forecast_kn": 8.1,
+      "gap_kn": 2.2,
       "flagged": false
     }
   ],
