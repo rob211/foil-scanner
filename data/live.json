@@ -1,56 +1,73 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-26T12:31:23.984572+10:00",
+  "generated_at": "2026-09-26T13:01:25.172489+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-26T12:00:00+10:00",
-    "speed_kn": 15.1,
-    "gust_kn": 17.3,
+    "time": "2026-09-26T12:30:00+10:00",
+    "speed_kn": 17.3,
+    "gust_kn": 18.9,
     "dir_deg": 67.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-26T12:30:58+10:00",
-    "speed_kn": 0.0,
-    "gust_kn": 0.0,
-    "dir_deg": 0.0
+    "time": "2026-09-26T13:00:58+10:00",
+    "speed_kn": 8.7,
+    "gust_kn": 9.7,
+    "dir_deg": 36.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-26T12:00:00+10:00",
+    "time": "2026-09-26T12:30:00+10:00",
     "speed_kn": 7.0,
     "gust_kn": 10.8,
     "dir_deg": 45.0
   },
-  "checks": [],
+  "checks": [
+    {
+      "foil_key": "entrance_swell:2026-09-26:13",
+      "state": "pending",
+      "live_line": "onshore but not wrecking it: 17 kn ENE at 12:30 (Bellambi)"
+    }
+  ],
   "alerts": [
+    {
+      "trigger_id": "entrance_ne",
+      "run_name": "Lake Entrance (NE wind)",
+      "station": "Bellambi",
+      "speed_kn": 17.3,
+      "dir_deg": 67.5,
+      "threshold_kn": 16.2,
+      "detail": "Run-out gate today: 07:40-09:40, 19:44-21:44.",
+      "foil_key": "live-alert:2026-09-26:entrance",
+      "created": true
+    },
     {
       "trigger_id": "ne_ocean",
       "run_name": "NE ocean runs",
       "station": "Bellambi",
-      "speed_kn": 15.1,
+      "speed_kn": 17.3,
       "dir_deg": 67.5,
       "threshold_kn": 10.0,
       "detail": "",
       "foil_key": "live-alert:2026-09-26:ocean",
-      "created": true
+      "created": false
     }
   ],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
-      "observed_kn": 0.0,
-      "forecast_kn": 6.7,
-      "gap_kn": -6.7,
+      "observed_kn": 8.7,
+      "forecast_kn": 6.3,
+      "gap_kn": 2.4,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 15.1,
-      "forecast_kn": 11.1,
-      "gap_kn": 4.0,
+      "observed_kn": 17.3,
+      "forecast_kn": 9.7,
+      "gap_kn": 7.6,
       "flagged": false
     }
   ],
