@@ -1,29 +1,52 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-09-30T11:31:23.947207+10:00",
+  "generated_at": "2026-09-30T12:01:32.778868+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-09-30T11:00:00+10:00",
-    "speed_kn": 10.8,
-    "gust_kn": 15.1,
-    "dir_deg": 0.0
+    "time": "2026-09-30T11:30:00+10:00",
+    "speed_kn": 17.3,
+    "gust_kn": 20.0,
+    "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-09-30T11:31:14+10:00",
+    "time": "2026-09-30T12:01:13+10:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-09-30T11:00:00+10:00",
-    "speed_kn": 10.3,
-    "gust_kn": 15.1,
+    "time": "2026-09-30T11:30:00+10:00",
+    "speed_kn": 11.9,
+    "gust_kn": 17.3,
     "dir_deg": 45.0
   },
   "checks": [],
-  "alerts": [],
+  "alerts": [
+    {
+      "trigger_id": "entrance_ne",
+      "run_name": "Lake Entrance (NE wind)",
+      "station": "Bellambi",
+      "speed_kn": 17.3,
+      "dir_deg": 22.5,
+      "threshold_kn": 16.2,
+      "detail": "Run-out gate today: 10:18-12:18, 22:47-00:47.",
+      "foil_key": "live-alert:2026-09-30:entrance",
+      "created": true
+    },
+    {
+      "trigger_id": "ne_ocean",
+      "run_name": "NE ocean runs",
+      "station": "Bellambi",
+      "speed_kn": 17.3,
+      "dir_deg": 22.5,
+      "threshold_kn": 10.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-09-30:ocean",
+      "created": true
+    }
+  ],
   "bias": [
     {
       "location": "lake",
@@ -36,12 +59,14 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 10.8,
-      "forecast_kn": 8.5,
-      "gap_kn": 2.3,
-      "flagged": false
+      "observed_kn": 17.3,
+      "forecast_kn": 8.4,
+      "gap_kn": 8.9,
+      "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": []
+  "notes": [
+    "MODEL BUST (ocean): observed 17 kn vs forecast 8 kn at Bellambi"
+  ]
 }
