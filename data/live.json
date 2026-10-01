@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-01T23:01:49.285963+10:00",
+  "generated_at": "2026-10-01T23:08:05.198367+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-10-01T22:30:00+10:00",
@@ -10,7 +10,7 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-01T23:00:32+10:00",
+    "time": "2026-10-01T23:06:32+10:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
