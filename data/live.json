@@ -1,35 +1,47 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-01T09:58:48.425964+10:00",
+  "generated_at": "2026-10-01T10:31:15.863858+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-01T09:30:00+10:00",
-    "speed_kn": 9.2,
-    "gust_kn": 14.0,
-    "dir_deg": 337.5
+    "time": "2026-10-01T10:00:00+10:00",
+    "speed_kn": 10.3,
+    "gust_kn": 13.0,
+    "dir_deg": 67.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-01T09:57:17+10:00",
+    "time": "2026-10-01T10:29:18+10:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-10-01T09:30:00+10:00",
-    "speed_kn": 3.2,
-    "gust_kn": 5.9,
-    "dir_deg": 22.5
+    "time": "2026-10-01T10:00:00+10:00",
+    "speed_kn": 3.8,
+    "gust_kn": 10.8,
+    "dir_deg": 67.5
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-10-01:06",
-      "state": "confirmed",
-      "live_line": "wind favourable for the swell: 9 kn NNW at 09:30 (Bellambi)"
+      "state": "pending",
+      "live_line": "onshore but not wrecking it: 10 kn ENE at 10:00 (Bellambi)"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    {
+      "trigger_id": "ne_ocean",
+      "run_name": "NE ocean runs",
+      "station": "Bellambi",
+      "speed_kn": 10.3,
+      "dir_deg": 67.5,
+      "threshold_kn": 10.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-10-01:ocean",
+      "created": true
+    }
+  ],
   "bias": [
     {
       "location": "lake",
@@ -42,12 +54,12 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 9.2,
+      "observed_kn": 10.3,
       "forecast_kn": 6.7,
-      "gap_kn": 2.5,
+      "gap_kn": 3.6,
       "flagged": false
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": []
 }
