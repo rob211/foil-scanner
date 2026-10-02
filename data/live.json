@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-03T09:05:17.234669+10:00",
+  "generated_at": "2026-10-03T09:31:23.134745+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-03T08:30:00+10:00",
-    "speed_kn": 0.0,
-    "gust_kn": 0.0,
-    "dir_deg": null
+    "time": "2026-10-03T09:00:00+10:00",
+    "speed_kn": 5.9,
+    "gust_kn": 8.1,
+    "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-03T09:04:38+10:00",
+    "time": "2026-10-03T09:30:38+10:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-10-03T08:30:00+10:00",
-    "speed_kn": 1.1,
-    "gust_kn": 2.2,
-    "dir_deg": 67.5
+    "time": "2026-10-03T09:00:00+10:00",
+    "speed_kn": 2.2,
+    "gust_kn": 3.8,
+    "dir_deg": 90.0
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-10-03:06",
       "state": "confirmed",
-      "live_line": "wind favourable for the swell: 0 kn at 08:30 (Bellambi)"
+      "live_line": "wind favourable for the swell: 6 kn NNE at 09:00 (Bellambi)"
     }
   ],
   "alerts": [],
@@ -42,14 +42,12 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 0.0,
+      "observed_kn": 5.9,
       "forecast_kn": 9.3,
-      "gap_kn": -9.3,
-      "flagged": true
+      "gap_kn": -3.4,
+      "flagged": false
     }
   ],
-  "token_expires_at": null,
-  "notes": [
-    "MODEL BUST (ocean): observed 0 kn vs forecast 9 kn at Bellambi"
-  ]
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "notes": []
 }
