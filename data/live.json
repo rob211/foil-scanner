@@ -1,37 +1,37 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-02T11:01:33.894589+10:00",
+  "generated_at": "2026-10-02T11:31:19.122415+10:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-02T10:30:00+10:00",
+    "time": "2026-10-02T11:00:00+10:00",
     "speed_kn": 3.2,
-    "gust_kn": 5.9,
-    "dir_deg": 45.0
+    "gust_kn": 3.8,
+    "dir_deg": 90.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-02T11:00:35+10:00",
+    "time": "2026-10-02T11:30:35+10:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-10-02T10:30:00+10:00",
-    "speed_kn": 5.9,
-    "gust_kn": 9.2,
+    "time": "2026-10-02T11:00:00+10:00",
+    "speed_kn": 4.9,
+    "gust_kn": 7.0,
     "dir_deg": 135.0
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-10-02:06",
       "state": "confirmed",
-      "live_line": "wind favourable for the swell: 3 kn NE at 10:30 (Bellambi)"
+      "live_line": "wind favourable for the swell: 3 kn E at 11:00 (Bellambi)"
     },
     {
       "foil_key": "entrance_swell:2026-10-02:12",
       "state": "confirmed",
-      "live_line": "wind favourable for the swell: 3 kn NE at 10:30 (Bellambi)"
+      "live_line": "wind favourable for the swell: 3 kn E at 11:00 (Bellambi)"
     }
   ],
   "alerts": [],
@@ -54,5 +54,7 @@
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": []
+  "notes": [
+    "entrance_swell:2026-10-02:12: check failed: <HttpError 503 when requesting https://www.googleapis.com/calendar/v3/calendars/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/events/ojahkr8gcg670bo26dg8b97h70?alt=json returned \"Backend Error\". Details: \"[{'domain': 'global', 'reason': 'backendError', 'message': 'Backend Error'}]\">"
+  ]
 }
