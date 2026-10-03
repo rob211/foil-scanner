@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-03T18:00:37.650487+10:00",
+  "generated_at": "2026-10-03T20:01:16.985446+10:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-10-03T18:00:38.271847+10:00",
+      "fetched_at": "2026-10-03T20:01:17.140180+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-10-03T18:00:38.915466+10:00",
+      "fetched_at": "2026-10-03T20:01:17.259505+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-10-03T18:00:39.541801+10:00",
+      "fetched_at": "2026-10-03T20:01:17.369463+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-10-03T18:00:40.167113+10:00",
+      "fetched_at": "2026-10-03T20:01:17.489880+10:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-10-03T18:00:40.775490+10:00",
+      "fetched_at": "2026-10-03T20:01:17.899679+10:00",
       "detail": null,
       "error": null
     },
@@ -123,43 +123,43 @@
     },
     {
       "time": "2026-10-03T16:00:00+10:00",
-      "lake": 6.9,
-      "ocean": 8.8
+      "lake": 7.5,
+      "ocean": 8.9
     },
     {
       "time": "2026-10-03T17:00:00+10:00",
-      "lake": 4.6,
-      "ocean": 7.1
+      "lake": 4.8,
+      "ocean": 7.2
     },
     {
       "time": "2026-10-03T18:00:00+10:00",
-      "lake": 6.3,
-      "ocean": 8.2
+      "lake": 6.7,
+      "ocean": 7.8
     },
     {
       "time": "2026-10-03T19:00:00+10:00",
-      "lake": 7.2,
-      "ocean": 8.2
+      "lake": 7.5,
+      "ocean": 8.9
     },
     {
       "time": "2026-10-03T20:00:00+10:00",
       "lake": 6.2,
-      "ocean": 8.2
+      "ocean": 7.4
     },
     {
       "time": "2026-10-03T21:00:00+10:00",
-      "lake": 3.9,
-      "ocean": 6.6
+      "lake": 4.8,
+      "ocean": 6.8
     },
     {
       "time": "2026-10-03T22:00:00+10:00",
-      "lake": 3.4,
-      "ocean": 6.6
+      "lake": 3.8,
+      "ocean": 6.7
     },
     {
       "time": "2026-10-03T23:00:00+10:00",
       "lake": 4.2,
-      "ocean": 6.5
+      "ocean": 6.7
     }
   ],
   "windows": [
@@ -234,13 +234,13 @@
       "start": "2026-10-03T15:16:21.818182+10:00",
       "end": "2026-10-03T16:24:00+10:00",
       "grade": "green",
-      "peak_median_kn": 6.9,
-      "direction_deg": 17.0,
+      "peak_median_kn": 7.5,
+      "direction_deg": 24.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 7.7,
         "ECMWF": 3.3,
-        "ICON": 6.1,
+        "ICON": 7.2,
         "UKMO": 8.7
       },
       "title_tags": [
@@ -269,12 +269,12 @@
       "end": "2026-10-04T14:27:41.538462+11:00",
       "grade": "green",
       "peak_median_kn": 8.6,
-      "direction_deg": 269.0,
+      "direction_deg": 270.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 7.0,
         "ECMWF": 8.4,
-        "ICON": 11.3,
+        "ICON": 11.5,
         "UKMO": 8.7
       },
       "title_tags": [
@@ -302,13 +302,13 @@
       "start": "2026-10-04T14:27:41.538462+11:00",
       "end": "2026-10-04T16:27:41.538462+11:00",
       "grade": "green",
-      "peak_median_kn": 10.5,
-      "direction_deg": 115.0,
+      "peak_median_kn": 10.7,
+      "direction_deg": 113.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 10.2,
         "ECMWF": 7.8,
-        "ICON": 10.9,
+        "ICON": 11.2,
         "UKMO": 14.4
       },
       "title_tags": [],
@@ -332,13 +332,13 @@
       "start": "2026-10-04T16:27:41.538462+11:00",
       "end": "2026-10-04T17:36:00+11:00",
       "grade": "yellow",
-      "peak_median_kn": 7.4,
-      "direction_deg": 116.0,
+      "peak_median_kn": 7.6,
+      "direction_deg": 114.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 6.7,
         "ECMWF": 7.7,
-        "ICON": 7.1,
+        "ICON": 7.5,
         "UKMO": 12.2
       },
       "title_tags": [
@@ -367,12 +367,12 @@
       "end": "2026-10-05T15:38:34.285714+11:00",
       "grade": "yellow",
       "peak_median_kn": 7.8,
-      "direction_deg": 76.0,
+      "direction_deg": 73.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 7.8,
         "ECMWF": 6.4,
-        "ICON": 10.0,
+        "ICON": 8.3,
         "UKMO": 7.8
       },
       "title_tags": [
@@ -401,12 +401,12 @@
       "end": "2026-10-05T17:38:34.285714+11:00",
       "grade": "green",
       "peak_median_kn": 5.9,
-      "direction_deg": 75.0,
+      "direction_deg": 77.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 6.1,
         "ECMWF": 5.7,
-        "ICON": 7.8,
+        "ICON": 6.7,
         "UKMO": 5.1
       },
       "title_tags": [],
@@ -427,14 +427,14 @@
       "trigger_id": "lake_west",
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-10-06",
-      "start": "2026-10-06T12:00:00+11:00",
-      "end": "2026-10-06T16:00:00+11:00",
+      "start": "2026-10-06T13:00:00+11:00",
+      "end": "2026-10-06T17:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 16.1,
-      "direction_deg": 241.0,
+      "peak_median_kn": 16.5,
+      "direction_deg": 252.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 16.1
+        "ECMWF": 16.5
       },
       "title_tags": [],
       "notes": [],
@@ -448,7 +448,7 @@
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_west:2026-10-06:12"
+      "foil_key": "lake_west:2026-10-06:13"
     },
     {
       "trigger_id": "hill60_swell",
@@ -481,14 +481,14 @@
       "trigger_id": "lake_oakflats_berkeley",
       "run_name": "Oak Flats to Berkeley",
       "date": "2026-10-07",
-      "start": "2026-10-07T09:00:00+11:00",
+      "start": "2026-10-07T08:00:00+11:00",
       "end": "2026-10-07T17:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 19.7,
-      "direction_deg": 178.0,
+      "peak_median_kn": 17.8,
+      "direction_deg": 181.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 19.7
+        "ICON": 17.8
       },
       "title_tags": [],
       "notes": [],
@@ -502,20 +502,20 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_oakflats_berkeley:2026-10-07:09"
+      "foil_key": "lake_oakflats_berkeley:2026-10-07:08"
     },
     {
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "date": "2026-10-07",
-      "start": "2026-10-07T10:00:00+11:00",
-      "end": "2026-10-07T16:00:00+11:00",
+      "start": "2026-10-07T12:00:00+11:00",
+      "end": "2026-10-07T14:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 16.0,
-      "direction_deg": 179.0,
+      "peak_median_kn": 15.2,
+      "direction_deg": 181.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 16.0
+        "ICON": 15.2
       },
       "title_tags": [],
       "notes": [],
@@ -529,18 +529,10 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "south_ocean:2026-10-07:10"
+      "foil_key": "south_ocean:2026-10-07:12"
     }
   ],
   "near_misses": [
-    {
-      "trigger_id": "lake_oakflats_berkeley",
-      "date": "2026-10-07",
-      "start": "2026-10-07T10:00:00+11:00",
-      "end": "2026-10-07T15:00:00+11:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
     {
       "trigger_id": "entrance_swell",
       "date": "2026-10-06",
