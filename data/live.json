@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-03T12:01:25.642353+10:00",
+  "generated_at": "2026-10-03T12:06:43.032483+10:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-10-03T11:30:00+10:00",
@@ -10,7 +10,7 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-03T12:00:38+10:00",
+    "time": "2026-10-03T12:06:40+10:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
@@ -48,7 +48,7 @@
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": [
     "MODEL BUST (lake): observed 0 kn vs forecast 12 kn at Lake Illawarra"
   ]
