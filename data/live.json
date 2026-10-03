@@ -1,14 +1,35 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-04T03:01:46.881914+11:00",
-  "obs": null,
+  "generated_at": "2026-10-04T04:01:39.522473+11:00",
+  "obs": {
+    "station": "Bellambi",
+    "time": "2026-10-04T03:30:00+11:00",
+    "speed_kn": 3.2,
+    "gust_kn": 3.8,
+    "dir_deg": 247.5
+  },
   "holfuy": null,
-  "port_kembla": null,
+  "port_kembla": {
+    "station": "Port Kembla Harbour",
+    "time": "2026-10-04T03:30:00+11:00",
+    "speed_kn": 1.1,
+    "gust_kn": 3.2,
+    "dir_deg": 202.5
+  },
   "checks": [],
   "alerts": [],
-  "bias": [],
-  "token_expires_at": null,
+  "bias": [
+    {
+      "location": "ocean",
+      "station": "Bellambi",
+      "observed_kn": 3.2,
+      "forecast_kn": 8.1,
+      "gap_kn": -4.9,
+      "flagged": false
+    }
+  ],
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "BOM fetch failed: BOM observations (94749) (Bellambi): latest reading is 92 min old, cap is 75 min"
+    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'"
   ]
 }
