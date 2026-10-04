@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-05T09:23:00.315865+11:00",
+  "generated_at": "2026-10-05T09:31:12.475003+11:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-10-05T09:00:00+11:00",
@@ -10,7 +10,7 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-05T09:22:00+11:00",
+    "time": "2026-10-05T09:30:00+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
@@ -48,6 +48,6 @@
       "flagged": false
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": []
 }
