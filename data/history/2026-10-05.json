@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-05T02:22:57.783358+11:00",
+  "generated_at": "2026-10-05T03:00:41.027561+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-10-05T02:22:58.394669+11:00",
+      "fetched_at": "2026-10-05T03:00:41.587654+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-10-05T02:22:59.007751+11:00",
+      "fetched_at": "2026-10-05T03:00:42.154692+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-10-05T02:22:59.575148+11:00",
+      "fetched_at": "2026-10-05T03:00:42.739607+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-10-05T02:23:00.159873+11:00",
+      "fetched_at": "2026-10-05T03:00:43.294432+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-10-05T02:23:00.720342+11:00",
+      "fetched_at": "2026-10-05T03:00:43.863227+11:00",
       "detail": null,
       "error": null
     },
@@ -48,13 +48,13 @@
     },
     {
       "time": "2026-10-05T01:00:00+11:00",
-      "lake": 2.6,
-      "ocean": 5.7
+      "lake": 2.2,
+      "ocean": 5.5
     },
     {
       "time": "2026-10-05T02:00:00+11:00",
-      "lake": 3.2,
-      "ocean": 5.6
+      "lake": 3.1,
+      "ocean": 5.7
     },
     {
       "time": "2026-10-05T03:00:00+11:00",
@@ -68,53 +68,53 @@
     },
     {
       "time": "2026-10-05T05:00:00+11:00",
-      "lake": 4.3,
+      "lake": 4.5,
       "ocean": 6.6
     },
     {
       "time": "2026-10-05T06:00:00+11:00",
-      "lake": 3.8,
-      "ocean": 6.4
+      "lake": 3.9,
+      "ocean": 6.2
     },
     {
       "time": "2026-10-05T07:00:00+11:00",
-      "lake": 3.3,
+      "lake": 3.4,
       "ocean": 5.9
     },
     {
       "time": "2026-10-05T08:00:00+11:00",
-      "lake": 3.1,
-      "ocean": 6.0
+      "lake": 3.2,
+      "ocean": 6.1
     },
     {
       "time": "2026-10-05T09:00:00+11:00",
+      "lake": 2.8,
+      "ocean": 5.7
+    },
+    {
+      "time": "2026-10-05T10:00:00+11:00",
       "lake": 3.3,
       "ocean": 6.2
     },
     {
-      "time": "2026-10-05T10:00:00+11:00",
-      "lake": 2.6,
-      "ocean": 5.3
-    },
-    {
       "time": "2026-10-05T11:00:00+11:00",
-      "lake": 4.1,
+      "lake": 4.2,
       "ocean": 6.8
     },
     {
       "time": "2026-10-05T12:00:00+11:00",
-      "lake": 6.1,
-      "ocean": 8.0
+      "lake": 5.9,
+      "ocean": 7.5
     },
     {
       "time": "2026-10-05T13:00:00+11:00",
-      "lake": 8.5,
-      "ocean": 8.3
+      "lake": 8.0,
+      "ocean": 8.0
     },
     {
       "time": "2026-10-05T14:00:00+11:00",
       "lake": 8.0,
-      "ocean": 7.2
+      "ocean": 7.5
     },
     {
       "time": "2026-10-05T15:00:00+11:00",
@@ -123,17 +123,17 @@
     },
     {
       "time": "2026-10-05T16:00:00+11:00",
-      "lake": 6.3,
+      "lake": 6.1,
       "ocean": 7.0
     },
     {
       "time": "2026-10-05T17:00:00+11:00",
-      "lake": 6.8,
+      "lake": 6.9,
       "ocean": 7.5
     },
     {
       "time": "2026-10-05T18:00:00+11:00",
-      "lake": 5.7,
+      "lake": 5.6,
       "ocean": 7.0
     },
     {
@@ -143,23 +143,23 @@
     },
     {
       "time": "2026-10-05T20:00:00+11:00",
-      "lake": 2.5,
-      "ocean": 5.6
+      "lake": 2.2,
+      "ocean": 5.5
     },
     {
       "time": "2026-10-05T21:00:00+11:00",
-      "lake": 3.5,
+      "lake": 3.0,
       "ocean": 5.9
     },
     {
       "time": "2026-10-05T22:00:00+11:00",
-      "lake": 3.5,
-      "ocean": 6.2
+      "lake": 3.3,
+      "ocean": 5.9
     },
     {
       "time": "2026-10-05T23:00:00+11:00",
-      "lake": 3.6,
-      "ocean": 6.7
+      "lake": 3.8,
+      "ocean": 6.6
     }
   ],
   "windows": [
@@ -170,13 +170,13 @@
       "start": "2026-10-05T10:06:00+11:00",
       "end": "2026-10-05T16:40:00+11:00",
       "grade": "yellow",
-      "peak_median_kn": 4.1,
-      "direction_deg": 5.0,
+      "peak_median_kn": 4.2,
+      "direction_deg": 7.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 4.2,
         "ECMWF": 4.1,
-        "ICON": 3.8,
+        "ICON": 5.5,
         "UKMO": 4.2
       },
       "title_tags": [
@@ -204,13 +204,13 @@
       "start": "2026-10-05T16:40:00+11:00",
       "end": "2026-10-05T18:40:00+11:00",
       "grade": "green",
-      "peak_median_kn": 6.8,
-      "direction_deg": 67.0,
+      "peak_median_kn": 6.9,
+      "direction_deg": 65.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 4.3,
         "ECMWF": 8.0,
-        "ICON": 6.1,
+        "ICON": 6.2,
         "UKMO": 7.5
       },
       "title_tags": [],
@@ -259,13 +259,13 @@
       "run_name": "Oak Flats to Berkeley",
       "date": "2026-10-07",
       "start": "2026-10-07T07:00:00+11:00",
-      "end": "2026-10-07T19:00:00+11:00",
+      "end": "2026-10-07T18:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 19.6,
-      "direction_deg": 188.0,
+      "peak_median_kn": 20.0,
+      "direction_deg": 173.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 19.6
+        "ICON": 20.0
       },
       "title_tags": [],
       "notes": [],
@@ -286,13 +286,13 @@
       "run_name": "South runs",
       "date": "2026-10-07",
       "start": "2026-10-07T07:00:00+11:00",
-      "end": "2026-10-07T16:00:00+11:00",
+      "end": "2026-10-07T17:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 16.4,
-      "direction_deg": 185.0,
+      "peak_median_kn": 16.6,
+      "direction_deg": 175.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 16.4
+        "ICON": 16.6
       },
       "title_tags": [],
       "notes": [],
@@ -309,14 +309,14 @@
       "foil_key": "south_ocean:2026-10-07:07"
     },
     {
-      "trigger_id": "entrance_reverse",
-      "run_name": "Entrance reverse run (Boronia Ave)",
+      "trigger_id": "lake_west",
+      "run_name": "Kanahooka / Berkeley",
       "date": "2026-10-11",
-      "start": "2026-10-11T12:00:00+11:00",
-      "end": "2026-10-11T13:00:00+11:00",
+      "start": "2026-10-11T13:00:00+11:00",
+      "end": "2026-10-11T16:00:00+11:00",
       "grade": "watch",
       "peak_median_kn": 16.8,
-      "direction_deg": 287.0,
+      "direction_deg": 273.0,
       "models_agreeing": 1,
       "model_values": {
         "ICON": 16.8
@@ -333,20 +333,20 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "entrance_reverse:2026-10-11:12"
+      "foil_key": "lake_west:2026-10-11:13"
     },
     {
-      "trigger_id": "lake_west",
-      "run_name": "Kanahooka / Berkeley",
+      "trigger_id": "entrance_reverse",
+      "run_name": "Entrance reverse run (Boronia Ave)",
       "date": "2026-10-11",
-      "start": "2026-10-11T13:00:00+11:00",
+      "start": "2026-10-11T14:00:00+11:00",
       "end": "2026-10-11T15:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 15.8,
-      "direction_deg": 280.0,
+      "peak_median_kn": 16.8,
+      "direction_deg": 273.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 15.8
+        "ICON": 16.8
       },
       "title_tags": [],
       "notes": [],
@@ -360,23 +360,15 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_west:2026-10-11:13"
+      "foil_key": "entrance_reverse:2026-10-11:14"
     }
   ],
   "near_misses": [
     {
       "trigger_id": "lake_oakflats_berkeley",
       "date": "2026-10-07",
-      "start": "2026-10-07T07:00:00+11:00",
-      "end": "2026-10-07T11:00:00+11:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
-    {
-      "trigger_id": "lake_oakflats_berkeley",
-      "date": "2026-10-07",
-      "start": "2026-10-07T12:00:00+11:00",
-      "end": "2026-10-07T15:00:00+11:00",
+      "start": "2026-10-07T09:00:00+11:00",
+      "end": "2026-10-07T16:00:00+11:00",
       "reason": "single_model",
       "detail": "only ['icon_seamless'] sees it"
     },
