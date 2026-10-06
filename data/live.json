@@ -1,29 +1,52 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-07T06:01:29.857518+11:00",
+  "generated_at": "2026-10-07T06:31:14.494268+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-07T05:30:00+11:00",
+    "time": "2026-10-07T06:00:00+11:00",
     "speed_kn": 18.9,
-    "gust_kn": 25.9,
+    "gust_kn": 23.8,
     "dir_deg": 202.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-07T06:00:09+11:00",
+    "time": "2026-10-07T06:30:09+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-10-07T05:30:00+11:00",
+    "time": "2026-10-07T06:00:00+11:00",
     "speed_kn": 10.3,
-    "gust_kn": 17.8,
-    "dir_deg": 202.5
+    "gust_kn": 21.1,
+    "dir_deg": 225.0
   },
   "checks": [],
-  "alerts": [],
+  "alerts": [
+    {
+      "trigger_id": "lake_oakflats_berkeley",
+      "run_name": "Oak Flats to Berkeley",
+      "station": "Bellambi",
+      "speed_kn": 18.9,
+      "dir_deg": 202.5,
+      "threshold_kn": 18.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-10-07:lake",
+      "created": true
+    },
+    {
+      "trigger_id": "south_ocean",
+      "run_name": "South runs",
+      "station": "Bellambi",
+      "speed_kn": 18.9,
+      "dir_deg": 202.5,
+      "threshold_kn": 18.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-10-07:ocean",
+      "created": true
+    }
+  ],
   "bias": [
     {
       "location": "lake",
