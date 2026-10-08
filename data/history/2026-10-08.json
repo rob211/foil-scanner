@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-08T10:06:37.317376+11:00",
+  "generated_at": "2026-10-08T11:01:18.321916+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-10-08T10:06:37.860721+11:00",
+      "fetched_at": "2026-10-08T11:01:19.008282+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-10-08T10:06:38.422245+11:00",
+      "fetched_at": "2026-10-08T11:01:19.999737+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-10-08T10:06:39.130098+11:00",
+      "fetched_at": "2026-10-08T11:01:21.196747+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-10-08T10:06:39.825927+11:00",
+      "fetched_at": "2026-10-08T11:01:22.366682+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-10-08T10:06:40.643849+11:00",
+      "fetched_at": "2026-10-08T11:01:22.934172+11:00",
       "detail": null,
       "error": null
     },
@@ -68,12 +68,12 @@
     },
     {
       "time": "2026-10-08T05:00:00+11:00",
-      "lake": 6.4,
+      "lake": 6.5,
       "ocean": 7.8
     },
     {
       "time": "2026-10-08T06:00:00+11:00",
-      "lake": 6.5,
+      "lake": 6.7,
       "ocean": 7.7
     },
     {
@@ -83,8 +83,8 @@
     },
     {
       "time": "2026-10-08T08:00:00+11:00",
-      "lake": 6.4,
-      "ocean": 7.4
+      "lake": 6.5,
+      "ocean": 7.5
     },
     {
       "time": "2026-10-08T09:00:00+11:00",
@@ -98,13 +98,13 @@
     },
     {
       "time": "2026-10-08T11:00:00+11:00",
-      "lake": 6.1,
-      "ocean": 7.9
+      "lake": 6.3,
+      "ocean": 8.1
     },
     {
       "time": "2026-10-08T12:00:00+11:00",
-      "lake": 5.8,
-      "ocean": 7.7
+      "lake": 6.6,
+      "ocean": 7.9
     },
     {
       "time": "2026-10-08T13:00:00+11:00",
@@ -123,7 +123,7 @@
     },
     {
       "time": "2026-10-08T16:00:00+11:00",
-      "lake": 10.0,
+      "lake": 9.6,
       "ocean": 10.2
     },
     {
@@ -133,17 +133,17 @@
     },
     {
       "time": "2026-10-08T18:00:00+11:00",
-      "lake": 6.7,
-      "ocean": 8.8
+      "lake": 6.9,
+      "ocean": 8.9
     },
     {
       "time": "2026-10-08T19:00:00+11:00",
-      "lake": 5.0,
-      "ocean": 7.5
+      "lake": 4.8,
+      "ocean": 7.3
     },
     {
       "time": "2026-10-08T20:00:00+11:00",
-      "lake": 4.0,
+      "lake": 3.9,
       "ocean": 6.7
     },
     {
@@ -302,42 +302,14 @@
       "trigger_id": "lake_oakflats_berkeley",
       "run_name": "Oak Flats to Berkeley",
       "date": "2026-10-14",
-      "start": "2026-10-14T13:00:00+11:00",
-      "end": "2026-10-14T15:00:00+11:00",
+      "start": "2026-10-14T14:00:00+11:00",
+      "end": "2026-10-14T17:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 16.2,
+      "peak_median_kn": 15.5,
       "direction_deg": 170.0,
-      "models_agreeing": 2,
-      "model_values": {
-        "GFS": 17.0,
-        "UKMO": 15.5
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": null,
-      "swell_dir_deg": null,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": "16 kn, needs 18",
-      "tide_state": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": null,
-      "foil_key": "lake_oakflats_berkeley:2026-10-14:13"
-    },
-    {
-      "trigger_id": "south_ocean",
-      "run_name": "South runs",
-      "date": "2026-10-14",
-      "start": "2026-10-14T13:00:00+11:00",
-      "end": "2026-10-14T18:00:00+11:00",
-      "grade": "watch",
-      "peak_median_kn": 15.6,
-      "direction_deg": 181.0,
       "models_agreeing": 1,
       "model_values": {
-        "GFS": 15.6
+        "UKMO": 15.5
       },
       "title_tags": [],
       "notes": [],
@@ -351,7 +323,34 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "south_ocean:2026-10-14:13"
+      "foil_key": "lake_oakflats_berkeley:2026-10-14:14"
+    },
+    {
+      "trigger_id": "south_ocean",
+      "run_name": "South runs",
+      "date": "2026-10-14",
+      "start": "2026-10-14T15:00:00+11:00",
+      "end": "2026-10-14T18:00:00+11:00",
+      "grade": "watch",
+      "peak_median_kn": 15.4,
+      "direction_deg": 166.0,
+      "models_agreeing": 1,
+      "model_values": {
+        "UKMO": 15.4
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": "1 of 4 models only (needs 2)",
+      "tide_state": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "south_ocean:2026-10-14:15"
     }
   ],
   "near_misses": [
