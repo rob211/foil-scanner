@@ -1,25 +1,25 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-08T19:01:24.324584+11:00",
+  "generated_at": "2026-10-08T19:31:14.748427+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-08T18:30:00+11:00",
-    "speed_kn": 9.2,
+    "time": "2026-10-08T19:00:00+11:00",
+    "speed_kn": 8.1,
     "gust_kn": 10.8,
     "dir_deg": 157.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-08T19:00:16+11:00",
+    "time": "2026-10-08T19:30:16+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-10-08T18:30:00+11:00",
-    "speed_kn": 3.8,
-    "gust_kn": 8.1,
+    "time": "2026-10-08T19:00:00+11:00",
+    "speed_kn": 3.2,
+    "gust_kn": 5.9,
     "dir_deg": 157.5
   },
   "checks": [],
@@ -36,9 +36,9 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 9.2,
+      "observed_kn": 8.1,
       "forecast_kn": 7.5,
-      "gap_kn": 1.7,
+      "gap_kn": 0.6,
       "flagged": false
     }
   ],
