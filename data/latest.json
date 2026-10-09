@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-09T11:01:00.255838+11:00",
+  "generated_at": "2026-10-09T11:24:27.734809+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-10-09T11:01:00.440467+11:00",
+      "fetched_at": "2026-10-09T11:24:28.487344+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-10-09T11:01:08.873538+11:00",
+      "fetched_at": "2026-10-09T11:24:29.164681+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-10-09T11:02:16.079783+11:00",
+      "fetched_at": "2026-10-09T11:24:30.065013+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-10-09T11:02:26.307534+11:00",
+      "fetched_at": "2026-10-09T11:24:30.969119+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-10-09T11:02:26.810334+11:00",
+      "fetched_at": "2026-10-09T11:24:31.516241+11:00",
       "detail": null,
       "error": null
     },
@@ -233,14 +233,14 @@
       },
       "title_tags": [
         "off-angle ENE",
-        "cross swell 0.7 m ESE",
+        "cross swell 0.8 m SE",
         "2 of 4 models"
       ],
       "notes": [
         "only 2 of 4 models reached the trigger; the others did not see it"
       ],
-      "swell_m": 0.68,
-      "swell_dir_deg": 117.0,
+      "swell_m": 0.76,
+      "swell_dir_deg": 125.0,
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
@@ -358,33 +358,6 @@
       "live_status": "pending",
       "event_id": null,
       "foil_key": "south_ocean:2026-10-14:12"
-    },
-    {
-      "trigger_id": "hill60_swell",
-      "run_name": "Hill 60 swell run",
-      "date": "2026-10-15",
-      "start": "2026-10-15T17:00:00+11:00",
-      "end": "2026-10-15T20:00:00+11:00",
-      "grade": "green",
-      "peak_median_kn": 0.0,
-      "direction_deg": 142.0,
-      "models_agreeing": 0,
-      "model_values": {},
-      "title_tags": [],
-      "notes": [
-        "swell event, wind not required"
-      ],
-      "swell_m": 2.02,
-      "swell_dir_deg": 142.0,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": null,
-      "tide_state": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": "imnm0jbnc6nleciab67hh0j5cg",
-      "foil_key": "hill60_swell:2026-10-15:17"
     }
   ],
   "near_misses": [
