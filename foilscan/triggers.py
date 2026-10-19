@@ -816,6 +816,7 @@ def entrance_windows(
     ) + _single_model_misses(
         "entrance_ne", m2_map, sun, merged, valid_spans=valid,
     )
+    misses.extend(_wrong_swell_direction(marine, sun, now))
     for w in merged:
         if w.tide_state == "workable" and w.high_tide is not None:
             misses.append(
@@ -834,6 +835,60 @@ def entrance_windows(
                 )
             )
     return merged, misses
+
+
+def _wrong_swell_direction(
+    marine: MarineForecast, sun: SunTimes, now: datetime
+) -> list[NearMiss]:
+    """Swell of a useful size, pointing the wrong way (spec 4.2).
+
+    The entrance can be quiet for the least visible reason of all: there is
+    swell, there is a tide, the wind is fine, and it is simply running from
+    the wrong quarter. Nothing else records that - single-model misses need a
+    model to have seen something, and off-tide misses need a window to exist -
+    so the day produced no window and no explanation.
+
+    Reported once per DAY, not once an hour and not once per tide phase. A
+    swell pointing the wrong way is not a tide problem, so splitting the day
+    around the no-go produced two entries describing one condition - and a
+    week of southerly swell filled the list with the same sentence twelve
+    times over.
+    """
+    floor = config.ENTRANCE_M1_SWELL_TARGET_M * config.YELLOW_FACTOR
+    wrong = [
+        h.time
+        for h in marine.hours
+        if h.swell_m >= floor
+        and not config.ENTRANCE_M1_SWELL_ARC.contains(h.swell_dir_deg)
+        and h.time.date() in sun.days
+        and sun.daylight(h.time)
+    ]
+    arc = config.ENTRANCE_M1_SWELL_ARC
+    by_day: dict = {}
+    for t in sorted(wrong):
+        by_day.setdefault(t.date(), []).append(t)
+    out = []
+    for day, times in by_day.items():
+        hours = [marine.at(t) for t in times]
+        # The biggest swell of the day: the one that came closest to being
+        # worth something, and the one whose angle is worth quoting.
+        best = max(hours, key=lambda h: h.swell_m)
+        off = ang_diff(best.swell_dir_deg, arc.lo if best.swell_dir_deg < arc.lo else arc.hi)
+        out.append(
+            NearMiss(
+                trigger_id="entrance_swell",
+                date=day.isoformat(),
+                start=times[0].isoformat(),
+                end=(times[-1] + HOUR).isoformat(),
+                reason="swell_direction",
+                detail=(
+                    f"{best.swell_m:.1f} m swell from {compass(best.swell_dir_deg)} "
+                    f"({best.swell_dir_deg:.0f} deg), {off:.0f} deg outside the "
+                    f"{arc.lo:.0f}-{arc.hi:.0f} band"
+                ),
+            )
+        )
+    return out
 
 
 def _entrance_reverse_tide_spans(

@@ -782,3 +782,49 @@ def test_a_watch_is_left_alone():
 
     w = flag_thin_consensus([_win(config.MIN_MODELS_AGREE, grade="watch")])[0]
     assert w.title_tags == []
+
+
+# ------------------------------- wrong swell direction near miss (12 Aug)
+
+def _wrong_dir_misses(sun, swell_m, swell_dir):
+    # Wind that never qualifies, so the only thing under test is the swell.
+    wind = mk_wind(hours(range(0, 24), 30, 90), location_key="entrance")
+    marine = mk_marine(swell_m, swell_dir, high_tide_hour=13)
+    _, misses = entrance_windows(wind, marine, sun, NOW)
+    return [m for m in misses if m.reason == "swell_direction"]
+
+
+def test_swell_of_a_useful_size_pointing_the_wrong_way_is_recorded(sun):
+    # The least visible way for the entrance to go quiet: swell, tide and
+    # wind are all there and it is simply running from the wrong quarter.
+    # Nothing else caught that - a single-model miss needs a model to have
+    # seen something, an off-tide miss needs a window to exist.
+    got = _wrong_dir_misses(sun, 1.1, 162.0)
+    assert len(got) == 1
+    assert "SSE" in got[0].detail and "outside the 35-110 band" in got[0].detail
+
+
+def test_it_quotes_how_far_outside_the_band(sun):
+    # The angle is what makes a week of these readable: a swell backing from
+    # 52 deg out to 3 deg out is about to become a run.
+    assert "52 deg outside" in _wrong_dir_misses(sun, 1.1, 162.0)[0].detail
+    assert "3 deg outside" in _wrong_dir_misses(sun, 1.1, 113.0)[0].detail
+
+
+def test_swell_inside_the_band_is_not_a_miss(sun):
+    assert _wrong_dir_misses(sun, 1.1, 70.0) == []
+
+
+def test_swell_too_small_to_matter_is_not_a_miss(sun):
+    # Nothing was lost, so there is nothing to explain.
+    assert _wrong_dir_misses(sun, 0.3, 162.0) == []
+
+
+def test_one_entry_per_day_not_per_hour(sun):
+    # A wrong-facing swell is not a tide problem, so splitting the day around
+    # the no-go produced two entries for one condition, and a week of
+    # southerly swell filled the list with the same sentence twelve times.
+    got = _wrong_dir_misses(sun, 1.1, 162.0)
+    assert len(got) == 1
+    m = got[0]
+    assert m.start[:10] == m.end[:10] == m.date
