@@ -422,9 +422,61 @@ BIAS_FLAG_KN = 8.0
 #
 # Rob's call to apply this on one winter: the lake's wind season IS winter,
 # so the sample is the relevant one rather than a biased slice.
+#
+# ---------------------------------------------------------------------------
+# LAKE RECALIBRATED 7 Sep 2026: 1.45 -> 1.65. The ocean offset is unchanged
+# (measured 3.6 against a configured 3.9, 8% off, inside the drift limit).
+#
+# The 11 Aug figure was fitted on 8 days of lake observation - Holfuy readings
+# only start appearing in live.json on 4 Aug, so the "5 weeks" above describes
+# the coast history, not the lake pairing. There are now 35 days and 1398
+# readings, roughly ten times the evidence, and they do not agree with 1.45.
+#
+# The measurement is stable rather than a slice that happened to land well:
+#
+#     last 14 days  n=328   x1.64
+#     last 21 days  n=487   x1.66
+#     last 30 days  n=685   x1.66
+#     everything    n=722   x1.66   95% CI 1.61-1.71
+#
+# 1.45 sits outside that interval. Fitted on W/SW alone - the only bearing
+# with real strong-wind hours behind it (68 over 15 kn, 39 over the 18 kn
+# floor) - it is x1.65 independently, so the number is not an artifact of
+# pooling directions. The other arcs cannot answer yet: S has 2 hours over
+# 15 kn and NE has 7.
+#
+# Backtested the way 11 Aug chose, on precision first, counting real sessions
+# (2+ consecutive hours over the 18 kn floor inside a lake arc) across 35 days:
+#
+#     x1.45   called 3   caught 3 of 7   0 false
+#     x1.65   called 5   caught 5 of 7   0 false
+#     x1.80   called 6   caught 5 of 7   1 false
+#
+# So this buys recall without spending precision, which is why it does not
+# conflict with the rule above that a false green costs a drive. False calls
+# do not appear until about x1.80, and the fit is nowhere near there.
+#
+# Not taken from the script's "at decision strength" table, which reads x1.90.
+# Conditioning on the observed side selects for hours where the observation
+# noise ran high and overstates the correction; conditioning on the forecast
+# side understates it the same way (x1.54). Only the unconditioned fit is
+# unbiased, and that is the 1.66 above. 1.65 over 1.66 for no better reason
+# than that a fitted constant does not deserve three significant figures.
+#
+# STILL OPEN, and the reason this is a revisit rather than a settled answer:
+# the correction looks direction-dependent (NW x1.46, N/NE x1.91 against W/SW
+# x1.65), and the summer regime is NE seabreezes, of which this sample holds
+# three strong hours. The open question is not the value of the lake scale but
+# whether ONE lake scale is the right shape at all. calibrate_wind.py now
+# prints the per-bearing breakdown so that answers itself once summer fills
+# the NE bucket in; there is nowhere near enough data to fit it today.
+# ---------------------------------------------------------------------------
 WIND_BIAS = {
-    "lake": ("scale", 1.45),
-    "entrance": ("scale", 1.45),
+    "lake": ("scale", 1.65),
+    # Still the lake's number, and for the same reason: identical grid cell,
+    # identical model data, no station to verify it against. Moving one and
+    # not the other would invent a difference nothing measured.
+    "entrance": ("scale", 1.65),
     "ocean": ("offset", 3.9),
 }
 

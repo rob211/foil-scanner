@@ -281,13 +281,13 @@ def test_missing_env_is_config_error(monkeypatch):
         config.env("FOIL_CALENDAR_ID")
 
 
-# ------------------------------------------------ model wind bias (11 Aug)
+# --------------------------- model wind bias (11 Aug, lake recalibrated 7 Sep)
 
 def test_bias_scales_the_lake_and_offsets_the_ocean():
     from foilscan import config, fetch
 
-    assert fetch.apply_bias("lake", 10.0) == pytest.approx(14.5)
-    assert fetch.apply_bias("entrance", 10.0) == pytest.approx(14.5)
+    assert fetch.apply_bias("lake", 10.0) == pytest.approx(16.5)
+    assert fetch.apply_bias("entrance", 10.0) == pytest.approx(16.5)
     assert fetch.apply_bias("ocean", 10.0) == pytest.approx(13.9)
     # The entrance shares the lake's grid cell, so it must share its number.
     assert config.WIND_BIAS["entrance"] == config.WIND_BIAS["lake"]
@@ -321,7 +321,11 @@ def test_the_correction_lifts_a_real_lake_day_over_its_floor():
     from foilscan import config, fetch
 
     assert fetch.apply_bias("lake", 12.5) >= 18.0
-    # ...without dragging an ordinary breeze over it as well.
+    # ...without dragging an ordinary breeze over it as well. This is the
+    # guard on the top end of the correction, and after the 7 Sep recalibration
+    # it is close: 9 kn now lands at 14.85 against a 15.0 ceiling. Anything
+    # past about x1.67 trips it, which is the point - a future fit that wants
+    # to go there should have to argue for it rather than slide through.
     assert fetch.apply_bias("lake", 9.0) < 15.0
 
 
