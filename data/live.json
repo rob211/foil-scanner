@@ -1,23 +1,23 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-20T16:30:44.893944+11:00",
+  "generated_at": "2026-10-20T17:00:43.356921+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-20T16:00:00+11:00",
-    "speed_kn": 17.3,
-    "gust_kn": 18.9,
+    "time": "2026-10-20T16:30:00+11:00",
+    "speed_kn": 15.1,
+    "gust_kn": 17.8,
     "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-20T16:29:27+11:00",
+    "time": "2026-10-20T16:59:27+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-10-20T16:00:00+11:00",
+    "time": "2026-10-20T16:30:00+11:00",
     "speed_kn": 11.9,
     "gust_kn": 16.2,
     "dir_deg": 45.0
@@ -26,42 +26,30 @@
     {
       "foil_key": "ne_ocean:2026-10-20:14",
       "state": "confirmed",
-      "live_line": "17 kn NNE at 16:00 (Bellambi), forecast 13.4 kn"
+      "live_line": "15 kn NNE at 16:30 (Bellambi), forecast 13.4 kn"
     },
     {
       "foil_key": "entrance_swell:2026-10-20:16",
       "state": "pending",
-      "live_line": "onshore but not wrecking it: 17 kn NNE at 16:00 (Bellambi)"
+      "live_line": "onshore but not wrecking it: 15 kn NNE at 16:30 (Bellambi)"
     }
   ],
-  "alerts": [
-    {
-      "trigger_id": "entrance_ne",
-      "run_name": "Lake Entrance (NE wind)",
-      "station": "Bellambi",
-      "speed_kn": 17.3,
-      "dir_deg": 22.5,
-      "threshold_kn": 16.2,
-      "detail": "Run-out gate today: 04:42-06:42, 16:24-18:24.",
-      "foil_key": "live-alert:2026-10-20:entrance",
-      "created": false
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
       "observed_kn": 0.0,
-      "forecast_kn": 14.1,
-      "gap_kn": -14.1,
+      "forecast_kn": 13.6,
+      "gap_kn": -13.6,
       "flagged": true
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 17.3,
-      "forecast_kn": 13.4,
-      "gap_kn": 3.9,
+      "observed_kn": 15.1,
+      "forecast_kn": 13.2,
+      "gap_kn": 1.9,
       "flagged": false
     }
   ],
