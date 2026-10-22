@@ -1,21 +1,27 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-22T21:00:41.385259+11:00",
+  "generated_at": "2026-10-22T22:00:44.458964+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-22T20:30:00+11:00",
-    "speed_kn": 8.1,
-    "gust_kn": 10.8,
+    "time": "2026-10-22T21:30:00+11:00",
+    "speed_kn": 10.8,
+    "gust_kn": 14.0,
     "dir_deg": 0.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-22T20:59:36+11:00",
+    "time": "2026-10-22T21:59:37+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
-  "port_kembla": null,
+  "port_kembla": {
+    "station": "Port Kembla Harbour",
+    "time": "2026-10-22T21:30:00+11:00",
+    "speed_kn": 9.2,
+    "gust_kn": 13.0,
+    "dir_deg": 45.0
+  },
   "checks": [],
   "alerts": [],
   "bias": [
@@ -23,21 +29,19 @@
       "location": "lake",
       "station": "Lake Illawarra",
       "observed_kn": 0.0,
-      "forecast_kn": 7.7,
-      "gap_kn": -7.7,
+      "forecast_kn": 6.5,
+      "gap_kn": -6.5,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 8.1,
-      "forecast_kn": 9.0,
-      "gap_kn": -0.9,
+      "observed_kn": 10.8,
+      "forecast_kn": 8.4,
+      "gap_kn": 2.4,
       "flagged": false
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": [
-    "Port Kembla station unavailable (logging only): BOM observations (95745) (Port Kembla Harbour): latest reading is 301 min old, cap is 75 min"
-  ]
+  "notes": []
 }
