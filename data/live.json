@@ -1,57 +1,49 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-23T06:30:43.400144+11:00",
+  "generated_at": "2026-10-24T01:00:44.264984+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-23T06:02:00+11:00",
-    "speed_kn": 4.9,
+    "time": "2026-10-24T00:30:00+11:00",
+    "speed_kn": 7.0,
     "gust_kn": 9.2,
     "dir_deg": 0.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-23T06:29:36+11:00",
+    "time": "2026-10-24T00:59:42+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-10-23T06:00:00+11:00",
-    "speed_kn": 3.2,
-    "gust_kn": 4.9,
-    "dir_deg": 337.5
+    "time": "2026-10-24T00:30:00+11:00",
+    "speed_kn": 4.9,
+    "gust_kn": 8.1,
+    "dir_deg": 22.5
   },
-  "checks": [
-    {
-      "foil_key": "entrance_swell:2026-10-23:07",
-      "state": "confirmed",
-      "live_line": "wind favourable for the swell: 5 kn N at 06:02 (Bellambi)"
-    }
-  ],
+  "checks": [],
   "alerts": [],
   "bias": [
     {
       "location": "lake",
       "station": "Lake Illawarra",
       "observed_kn": 0.0,
-      "forecast_kn": null,
-      "gap_kn": null,
-      "flagged": null,
-      "reason": "expectation is from 2026-10-22, not 2026-10-23"
+      "forecast_kn": 5.1,
+      "gap_kn": -5.1,
+      "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 4.9,
-      "forecast_kn": null,
-      "gap_kn": null,
-      "flagged": null,
-      "reason": "expectation is from 2026-10-22, not 2026-10-23"
+      "observed_kn": 7.0,
+      "forecast_kn": 6.8,
+      "gap_kn": 0.2,
+      "flagged": false
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "model bias not checked: expectation is from 2026-10-22, not 2026-10-23"
+    "poll gap: 1110 min since the last live check (06:30); GitHub shed scheduled runs, live alerts could be that late"
   ]
 }
