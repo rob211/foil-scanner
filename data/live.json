@@ -1,35 +1,58 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-25T18:00:38.083049+11:00",
+  "generated_at": "2026-10-25T18:30:33.274484+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-25T17:31:00+11:00",
-    "speed_kn": 11.9,
-    "gust_kn": 17.8,
-    "dir_deg": 337.5
+    "time": "2026-10-25T18:07:00+11:00",
+    "speed_kn": 22.1,
+    "gust_kn": 32.9,
+    "dir_deg": 270.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-25T17:59:49+11:00",
+    "time": "2026-10-25T18:29:49+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-10-25T17:41:00+11:00",
-    "speed_kn": 15.1,
-    "gust_kn": 23.2,
-    "dir_deg": 22.5
+    "time": "2026-10-25T18:20:00+11:00",
+    "speed_kn": 10.8,
+    "gust_kn": 20.0,
+    "dir_deg": 315.0
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-10-25:15",
       "state": "confirmed",
-      "live_line": "wind favourable for the swell: 12 kn NNW at 17:31 (Bellambi)"
+      "live_line": "wind favourable for the swell: 22 kn W at 18:07 (Bellambi)"
     }
   ],
-  "alerts": [],
+  "alerts": [
+    {
+      "trigger_id": "lake_west",
+      "run_name": "Kanahooka / Berkeley",
+      "station": "Bellambi",
+      "speed_kn": 22.1,
+      "dir_deg": 270.0,
+      "threshold_kn": 18.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-10-25:lake",
+      "created": false
+    },
+    {
+      "trigger_id": "entrance_reverse",
+      "run_name": "Entrance reverse run (Boronia Ave)",
+      "station": "Bellambi",
+      "speed_kn": 22.1,
+      "dir_deg": 270.0,
+      "threshold_kn": 20.0,
+      "detail": "Run-in gate today: 03:38-07:03, 16:14-19:21.",
+      "foil_key": "live-alert:2026-10-25:entrance",
+      "created": false
+    }
+  ],
   "bias": [
     {
       "location": "lake",
@@ -42,12 +65,14 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 11.9,
+      "observed_kn": 22.1,
       "forecast_kn": 10.8,
-      "gap_kn": 1.1,
-      "flagged": false
+      "gap_kn": 11.3,
+      "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": []
+  "notes": [
+    "MODEL BUST (ocean): observed 22 kn vs forecast 11 kn at Bellambi"
+  ]
 }
