@@ -1,35 +1,41 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-25T15:00:43.494754+11:00",
+  "generated_at": "2026-10-25T15:43:50.826142+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-10-25T15:00:43.999545+11:00",
+      "fetched_at": "2026-10-25T15:43:51.017388+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-10-25T15:00:44.505333+11:00",
+      "fetched_at": "2026-10-25T15:43:51.431679+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-10-25T15:00:45.082949+11:00",
+      "fetched_at": "2026-10-25T15:43:51.626199+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-10-25T15:00:45.575921+11:00",
+      "fetched_at": "2026-10-25T15:43:52.027697+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-10-25T15:00:46.106927+11:00",
+      "fetched_at": "2026-10-25T15:43:52.420094+11:00",
       "detail": null,
+      "error": null
+    },
+    "entrance_grid": {
+      "ok": true,
+      "fetched_at": null,
+      "detail": "entrance forecast identical to lake: same model grid cell, no entrance-specific signal",
       "error": null
     }
   },
@@ -228,13 +234,13 @@
       "start": "2026-10-25T15:00:00+11:00",
       "end": "2026-10-25T20:00:00+11:00",
       "grade": "green",
-      "peak_median_kn": 8.5,
-      "direction_deg": 350.0,
+      "peak_median_kn": 8.0,
+      "direction_deg": 342.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 9.6,
         "ECMWF": 6.4,
-        "ICON": 7.4,
+        "ICON": 6.2,
         "UKMO": 13.8
       },
       "title_tags": [
@@ -289,13 +295,13 @@
       "start": "2026-10-26T07:00:00+11:00",
       "end": "2026-10-26T08:38:49.411765+11:00",
       "grade": "green",
-      "peak_median_kn": 9.3,
+      "peak_median_kn": 9.1,
       "direction_deg": 167.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 7.8,
         "ECMWF": 7.2,
-        "ICON": 10.7,
+        "ICON": 10.4,
         "UKMO": 11.0
       },
       "title_tags": [
@@ -324,12 +330,12 @@
       "end": "2026-10-26T10:00:00+11:00",
       "grade": "red",
       "peak_median_kn": 9.1,
-      "direction_deg": 175.0,
+      "direction_deg": 176.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 5.7,
         "ECMWF": 8.1,
-        "ICON": 12.6,
+        "ICON": 12.9,
         "UKMO": 10.2
       },
       "title_tags": [],
@@ -411,14 +417,6 @@
       "date": "2026-10-25",
       "start": "2026-10-25T15:00:00+11:00",
       "end": "2026-10-25T16:00:00+11:00",
-      "reason": "single_model",
-      "detail": "only ['icon_seamless'] sees it"
-    },
-    {
-      "trigger_id": "entrance_ne",
-      "date": "2026-10-30",
-      "start": "2026-10-30T13:00:00+11:00",
-      "end": "2026-10-30T18:00:00+11:00",
       "reason": "single_model",
       "detail": "only ['icon_seamless'] sees it"
     },
