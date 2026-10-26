@@ -1,41 +1,35 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-26T09:00:44.016700+11:00",
+  "generated_at": "2026-10-26T11:00:42.573063+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-10-26T09:00:44.202092+11:00",
+      "fetched_at": "2026-10-26T11:00:43.197354+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-10-26T09:00:44.626559+11:00",
+      "fetched_at": "2026-10-26T11:00:45.482505+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-10-26T09:00:45.157323+11:00",
+      "fetched_at": "2026-10-26T11:00:46.128304+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-10-26T09:00:45.535534+11:00",
+      "fetched_at": "2026-10-26T11:00:46.744071+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-10-26T09:00:45.945612+11:00",
+      "fetched_at": "2026-10-26T11:00:47.353695+11:00",
       "detail": null,
-      "error": null
-    },
-    "entrance_grid": {
-      "ok": true,
-      "fetched_at": null,
-      "detail": "entrance forecast identical to lake: same model grid cell, no entrance-specific signal",
       "error": null
     }
   },
@@ -68,7 +62,7 @@
     },
     {
       "time": "2026-10-26T05:00:00+11:00",
-      "lake": 10.1,
+      "lake": 10.3,
       "ocean": 9.4
     },
     {
@@ -98,67 +92,67 @@
     },
     {
       "time": "2026-10-26T11:00:00+11:00",
-      "lake": 11.1,
+      "lake": 11.2,
       "ocean": 10.7
     },
     {
       "time": "2026-10-26T12:00:00+11:00",
-      "lake": 12.8,
+      "lake": 12.3,
       "ocean": 11.6
     },
     {
       "time": "2026-10-26T13:00:00+11:00",
-      "lake": 13.8,
+      "lake": 13.6,
       "ocean": 12.7
     },
     {
       "time": "2026-10-26T14:00:00+11:00",
-      "lake": 13.6,
+      "lake": 13.9,
       "ocean": 12.9
     },
     {
       "time": "2026-10-26T15:00:00+11:00",
-      "lake": 13.1,
+      "lake": 13.0,
       "ocean": 12.4
     },
     {
       "time": "2026-10-26T16:00:00+11:00",
-      "lake": 12.8,
+      "lake": 13.0,
       "ocean": 12.4
     },
     {
       "time": "2026-10-26T17:00:00+11:00",
-      "lake": 12.0,
+      "lake": 11.4,
       "ocean": 11.9
     },
     {
       "time": "2026-10-26T18:00:00+11:00",
-      "lake": 9.5,
+      "lake": 9.2,
       "ocean": 10.2
     },
     {
       "time": "2026-10-26T19:00:00+11:00",
-      "lake": 7.2,
+      "lake": 7.6,
       "ocean": 8.9
     },
     {
       "time": "2026-10-26T20:00:00+11:00",
-      "lake": 4.9,
+      "lake": 5.7,
       "ocean": 6.7
     },
     {
       "time": "2026-10-26T21:00:00+11:00",
-      "lake": 4.5,
+      "lake": 5.3,
       "ocean": 6.5
     },
     {
       "time": "2026-10-26T22:00:00+11:00",
-      "lake": 4.7,
+      "lake": 4.3,
       "ocean": 6.8
     },
     {
       "time": "2026-10-26T23:00:00+11:00",
-      "lake": 4.1,
+      "lake": 3.6,
       "ocean": 6.6
     }
   ],
