@@ -1,41 +1,35 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-28T01:00:43.952402+11:00",
+  "generated_at": "2026-10-28T01:32:44.755333+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-10-28T01:00:44.281873+11:00",
+      "fetched_at": "2026-10-28T01:32:44.903260+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-10-28T01:00:44.862121+11:00",
+      "fetched_at": "2026-10-28T01:32:45.423295+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-10-28T01:00:45.205788+11:00",
+      "fetched_at": "2026-10-28T01:32:45.661961+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-10-28T01:00:45.588110+11:00",
+      "fetched_at": "2026-10-28T01:32:46.342333+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-10-28T01:00:46.171465+11:00",
+      "fetched_at": "2026-10-28T01:32:46.843629+11:00",
       "detail": null,
-      "error": null
-    },
-    "entrance_grid": {
-      "ok": true,
-      "fetched_at": null,
-      "detail": "entrance forecast identical to lake: same model grid cell, no entrance-specific signal",
       "error": null
     }
   },
@@ -43,7 +37,7 @@
   "expected_today": [
     {
       "time": "2026-10-28T00:00:00+11:00",
-      "lake": 5.7,
+      "lake": 5.8,
       "ocean": 7.8
     },
     {
@@ -59,22 +53,22 @@
     {
       "time": "2026-10-28T03:00:00+11:00",
       "lake": 6.1,
-      "ocean": 8.3
+      "ocean": 8.1
     },
     {
       "time": "2026-10-28T04:00:00+11:00",
       "lake": 6.2,
-      "ocean": 8.7
+      "ocean": 8.1
     },
     {
       "time": "2026-10-28T05:00:00+11:00",
       "lake": 6.7,
-      "ocean": 9.0
+      "ocean": 8.4
     },
     {
       "time": "2026-10-28T06:00:00+11:00",
       "lake": 7.4,
-      "ocean": 9.2
+      "ocean": 8.7
     },
     {
       "time": "2026-10-28T07:00:00+11:00",
@@ -88,23 +82,23 @@
     },
     {
       "time": "2026-10-28T09:00:00+11:00",
-      "lake": 11.1,
-      "ocean": 12.1
+      "lake": 12.3,
+      "ocean": 12.2
     },
     {
       "time": "2026-10-28T10:00:00+11:00",
-      "lake": 13.5,
-      "ocean": 12.9
+      "lake": 13.8,
+      "ocean": 13.0
     },
     {
       "time": "2026-10-28T11:00:00+11:00",
-      "lake": 14.9,
-      "ocean": 13.9
+      "lake": 15.3,
+      "ocean": 14.3
     },
     {
       "time": "2026-10-28T12:00:00+11:00",
-      "lake": 14.9,
-      "ocean": 14.3
+      "lake": 15.1,
+      "ocean": 14.7
     },
     {
       "time": "2026-10-28T13:00:00+11:00",
@@ -118,48 +112,48 @@
     },
     {
       "time": "2026-10-28T15:00:00+11:00",
-      "lake": 11.2,
-      "ocean": 11.2
+      "lake": 12.2,
+      "ocean": 11.7
     },
     {
       "time": "2026-10-28T16:00:00+11:00",
       "lake": 10.1,
-      "ocean": 10.6
+      "ocean": 10.9
     },
     {
       "time": "2026-10-28T17:00:00+11:00",
-      "lake": 8.0,
-      "ocean": 9.9
+      "lake": 8.3,
+      "ocean": 10.9
     },
     {
       "time": "2026-10-28T18:00:00+11:00",
-      "lake": 5.9,
-      "ocean": 9.1
+      "lake": 7.1,
+      "ocean": 9.2
     },
     {
       "time": "2026-10-28T19:00:00+11:00",
       "lake": 3.3,
-      "ocean": 6.0
+      "ocean": 6.4
     },
     {
       "time": "2026-10-28T20:00:00+11:00",
       "lake": 2.2,
-      "ocean": 5.0
+      "ocean": 4.7
     },
     {
       "time": "2026-10-28T21:00:00+11:00",
-      "lake": 4.1,
-      "ocean": 4.9
+      "lake": 3.6,
+      "ocean": 5.3
     },
     {
       "time": "2026-10-28T22:00:00+11:00",
-      "lake": 4.6,
-      "ocean": 6.0
+      "lake": 4.2,
+      "ocean": 6.6
     },
     {
       "time": "2026-10-28T23:00:00+11:00",
       "lake": 4.7,
-      "ocean": 7.1
+      "ocean": 7.3
     }
   ],
   "windows": [
@@ -168,13 +162,13 @@
       "run_name": "Kanahooka / Berkeley",
       "date": "2026-10-28",
       "start": "2026-10-28T10:00:00+11:00",
-      "end": "2026-10-28T14:00:00+11:00",
+      "end": "2026-10-28T15:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 16.4,
-      "direction_deg": 236.0,
+      "peak_median_kn": 17.5,
+      "direction_deg": 231.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 16.4
+        "UKMO": 17.5
       },
       "title_tags": [],
       "notes": [],
