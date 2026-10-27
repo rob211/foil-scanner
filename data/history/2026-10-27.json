@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-27T11:00:47.258750+11:00",
+  "generated_at": "2026-10-27T12:29:18.510944+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-10-27T11:00:48.026490+11:00",
+      "fetched_at": "2026-10-27T12:29:18.746856+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-10-27T11:00:48.618681+11:00",
+      "fetched_at": "2026-10-27T12:29:18.950505+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-10-27T11:00:49.170908+11:00",
+      "fetched_at": "2026-10-27T12:29:19.148138+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-10-27T11:00:49.731972+11:00",
+      "fetched_at": "2026-10-27T12:29:19.545448+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-10-27T11:00:50.323748+11:00",
+      "fetched_at": "2026-10-27T12:29:19.939761+11:00",
       "detail": null,
       "error": null
     },
@@ -221,19 +221,19 @@
       "trigger_id": "hill60_swell",
       "run_name": "Hill 60 swell run",
       "date": "2026-10-29",
-      "start": "2026-10-29T17:00:00+11:00",
+      "start": "2026-10-29T16:00:00+11:00",
       "end": "2026-10-29T20:00:00+11:00",
       "grade": "yellow",
       "peak_median_kn": 0.0,
-      "direction_deg": 150.0,
+      "direction_deg": 151.0,
       "models_agreeing": 0,
       "model_values": {},
       "title_tags": [],
       "notes": [
         "swell event, wind not required"
       ],
-      "swell_m": 1.8,
-      "swell_dir_deg": 150.0,
+      "swell_m": 1.84,
+      "swell_dir_deg": 151.0,
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
@@ -241,8 +241,8 @@
       "tide_state": null,
       "confidence": "normal",
       "live_status": "pending",
-      "event_id": "h7da47bd7qla3ovpvv3scos4fc",
-      "foil_key": "hill60_swell:2026-10-29:17"
+      "event_id": "q3abqoejme5k3t1nmjrkp2jphc",
+      "foil_key": "hill60_swell:2026-10-29:16"
     },
     {
       "trigger_id": "lake_ne_rare",
@@ -280,14 +280,14 @@
       "start": "2026-10-31T14:00:00+11:00",
       "end": "2026-10-31T16:00:00+11:00",
       "grade": "yellow",
-      "peak_median_kn": 9.9,
-      "direction_deg": 353.0,
+      "peak_median_kn": 10.3,
+      "direction_deg": 348.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 3.3,
-        "ECMWF": 9.4,
-        "ICON": 16.7,
-        "UKMO": 10.4
+        "GFS": 3.2,
+        "ECMWF": 9.9,
+        "ICON": 16.2,
+        "UKMO": 10.7
       },
       "title_tags": [
         "off-tide"
@@ -295,8 +295,8 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 0.84,
-      "swell_dir_deg": 102.0,
+      "swell_m": 0.88,
+      "swell_dir_deg": 88.0,
       "high_tide": "2026-10-31T12:55:23.076923+11:00",
       "high_tide_m": 1.75,
       "spots": null,
@@ -329,8 +329,8 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 0.98,
-      "swell_dir_deg": 57.0,
+      "swell_m": 0.96,
+      "swell_dir_deg": 61.0,
       "high_tide": "2026-11-01T14:00:00+11:00",
       "high_tide_m": 1.69,
       "spots": null,
@@ -347,7 +347,7 @@
       "date": "2026-11-01",
       "start": "2026-11-01T14:00:00+11:00",
       "end": "2026-11-01T16:00:00+11:00",
-      "grade": "green",
+      "grade": "yellow",
       "peak_median_kn": 8.9,
       "direction_deg": 116.0,
       "models_agreeing": 4,
@@ -359,8 +359,8 @@
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 0.82,
-      "swell_dir_deg": 53.0,
+      "swell_m": 0.78,
+      "swell_dir_deg": 57.0,
       "high_tide": "2026-11-01T14:00:00+11:00",
       "high_tide_m": 1.69,
       "spots": null,
@@ -376,7 +376,7 @@
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-01",
       "start": "2026-11-01T16:00:00+11:00",
-      "end": "2026-11-01T17:06:00+11:00",
+      "end": "2026-11-01T17:00:00+11:00",
       "grade": "watch",
       "peak_median_kn": 8.8,
       "direction_deg": 105.0,
@@ -393,8 +393,8 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 0.78,
-      "swell_dir_deg": 54.0,
+      "swell_m": 0.74,
+      "swell_dir_deg": 57.0,
       "high_tide": "2026-11-01T14:00:00+11:00",
       "high_tide_m": 1.69,
       "spots": null,
@@ -443,7 +443,7 @@
       "trigger_id": "entrance_swell",
       "date": "2026-11-01",
       "start": "2026-11-01T16:00:00+11:00",
-      "end": "2026-11-01T17:06:00+11:00",
+      "end": "2026-11-01T17:00:00+11:00",
       "reason": "off_tide",
       "detail": "runnable but outside the preferred run-out (14:00-16:00); kept as watch"
     },
