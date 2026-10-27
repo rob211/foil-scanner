@@ -1,35 +1,41 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-27T13:00:39.979881+11:00",
+  "generated_at": "2026-10-27T15:00:36.255953+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-10-27T13:00:40.602385+11:00",
+      "fetched_at": "2026-10-27T15:00:36.820039+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-10-27T13:00:41.187936+11:00",
+      "fetched_at": "2026-10-27T15:00:37.420063+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-10-27T13:00:42.034706+11:00",
+      "fetched_at": "2026-10-27T15:00:38.069710+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-10-27T13:00:42.585769+11:00",
+      "fetched_at": "2026-10-27T15:00:38.636751+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-10-27T13:00:43.147058+11:00",
+      "fetched_at": "2026-10-27T15:00:39.140707+11:00",
       "detail": null,
+      "error": null
+    },
+    "entrance_grid": {
+      "ok": true,
+      "fetched_at": null,
+      "detail": "entrance forecast identical to lake: same model grid cell, no entrance-specific signal",
       "error": null
     }
   },
