@@ -7,10 +7,11 @@ with a verdict (self-heals / needs you / code bug), and files it as a
 GitHub issue that @mentions the owner - the issue email carries the
 diagnosis.
 
-One incident is one issue, not one email per run: the first failure opens
-it, repeats only edit the body (edits send no email), and the next green
-run of the same workflow closes it with a recovery comment. Roughly two
-emails per incident instead of one every 30 minutes.
+One incident is one issue per workflow, not one email per run: the first
+failure opens it, a repeat of the same fault only edits the body (edits
+send no email), a new kind of fault mid-incident adds a comment (one
+email), and the first green run after CLOSE_AFTER_QUIET without a failure
+closes it. Roughly two emails per incident instead of one every 30 min.
 
     python scripts/failure_report.py fail <workflow> <log>
     python scripts/failure_report.py recovered <workflow>
@@ -27,11 +28,15 @@ import re
 import subprocess
 import sys
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 OWNER = "rob211"
 TITLE_PREFIX = "[scanner]"
 FP_RE = re.compile(r"<!-- fp:(\S+) -->")
+# A feed that flaps (red, green, red) would otherwise open and close an
+# issue each time - two emails per blip, worse than before.
+CLOSE_AFTER_QUIET = timedelta(hours=3)
+TAIL_MAX_CHARS = 6000
 
 SELF_HEALS = "Self-heals - no action unless it is still open in a day."
 NEEDS_YOU = "Needs you."
@@ -70,16 +75,18 @@ RULES: list[tuple[re.Pattern, str, object]] = [
             "is breaking the scan job (see the open scan issue). If there "
             "is none, scans are not being triggered at all: check the "
             "Cloudflare Worker and its GitHub token.",
-            NEEDS_YOU + " Fix the scan and this clears with it.",
+            "Follow the scan issue - this clears when the scan does.",
         ),
     ),
     (
-        re.compile(r"GitHub PAT EXPIRED"),
-        "pat_expired",
+        # live fails at PAT_FAIL_DAYS, before expiry, so both phrasings occur.
+        re.compile(r"GitHub PAT (EXPIRED|expires in \d+ day)"),
+        "pat_expiry",
         lambda m: (
-            "GitHub token for the Cloudflare Worker has expired",
-            "The Worker can no longer trigger runs; only GitHub's sparse "
-            "backstop schedule is running.",
+            "GitHub token for the Cloudflare Worker "
+            + ("has expired" if m.group(1) == "EXPIRED" else "is about to expire"),
+            "Once it expires the Worker can no longer trigger runs and only "
+            "GitHub's sparse backstop schedule keeps going.",
             NEEDS_YOU + " Roll the token at "
             "github.com/settings/personal-access-tokens, then "
             "`wrangler secret put GITHUB_TOKEN` in cron-worker/.",
@@ -125,13 +132,51 @@ RULES: list[tuple[re.Pattern, str, object]] = [
         ),
     ),
     (
-        re.compile(r"(?:SchemaError|StaleDataError): ([^:]+): (forecast only reaches|forecast ends|forecast starts)"),
+        # live raises FetchError directly; scan wraps it in SOURCE FAILED.
+        re.compile(r"FetchError: GET https?://([^/\s]+)\S* failed after \d+ attempts?: .*(\b[45]\d\d [A-Za-z ]+?(?=:| for url|$)|timed out|Connection(?:Error|Refused|Reset)\w*)"),
+        "fetch_down_{0}",
+        lambda m: (
+            f"Data source down: {m.group(1)}",
+            f"{m.group(1)} failed with '{m.group(2).strip()}' after every retry. "
+            "An outage at the provider.",
+            SELF_HEALS,
+        ),
+    ),
+    (
+        # No exception prefix: in scan this arrives as "SOURCE FAILED x: <msg>".
+        re.compile(r"(?:SOURCE FAILED \S+: |Error: )([^:]+): (forecast only reaches|forecast ends|forecast starts)"),
         "forecast_truncated",
         lambda m: (
             f"{m.group(1)} returned a short or stale forecast",
             "The provider served an old or truncated response. Usually a "
             "cache hiccup at their end.",
             SELF_HEALS,
+        ),
+    ),
+    (
+        # Catch-all for a failed source in scan. A partial failure returns 1
+        # without raising, so there is no traceback to fall back on - without
+        # this it read as "no recognisable error ... infrastructure".
+        re.compile(r"SOURCE FAILED (\S+): (.+)"),
+        "source_failed_{0}",
+        lambda m: (
+            f"Data source failed: {m.group(1)}",
+            f"{m.group(2)}. The rest of the scan still ran and existing "
+            "calendar events were kept.",
+            "Usually a provider hiccup that self-heals. If this is still open "
+            "after a day, the feed has changed and needs a code fix.",
+        ),
+    ),
+    (
+        re.compile(r"(\S+): check failed: (.+)"),
+        "window_check",
+        lambda m: (
+            "A calendar window could not be checked against live wind",
+            f"{m.group(1)}: {m.group(2)}. Other windows and the WIND NOW "
+            "safety net still ran.",
+            "Usually a calendar sync that failed part-way in the last scan; "
+            "clears on the next good scan. If it persists, the event was "
+            "deleted by hand or the sync is broken.",
         ),
     ),
     (
@@ -157,7 +202,7 @@ RULES: list[tuple[re.Pattern, str, object]] = [
         ),
     ),
     (
-        re.compile(r"CalendarError: (.+)"),
+        re.compile(r"CalendarError: (?!one or more window checks failed)(.+)"),
         "calendar",
         lambda m: (
             "Calendar sync problem",
@@ -272,16 +317,27 @@ def diagnose(log: str) -> list[Finding]:
 
 def _tail(log: str, n: int = 25) -> str:
     lines = [l for l in log.splitlines() if l.strip()]
-    return "\n".join(lines[-n:])
+    return "\n".join(lines[-n:])[-TAIL_MAX_CHARS:]
+
+
+def _md(text: str, fenced: bool = False) -> str:
+    """Log and upstream text is untrusted and lands in a public issue.
+    Stop it closing a code fence, @mentioning anyone, rendering links, or
+    planting a fake <!-- count:... --> that _meta() would read back."""
+    text = (text.replace("`" * 3, "` ` `")
+                .replace("@", "@\u200b")
+                .replace("](", "] ("))
+    # &lt; renders literally inside a fence, so use a lookalike there.
+    return text.replace("<", "\u2039" if fenced else "&lt;")
 
 
 def render(workflow: str, findings: list[Finding], log: str, run_url: str,
            first_seen: str, last_seen: str, count: int, related: list[int]) -> str:
     out = [f"@{OWNER} the **{workflow}** job is failing.", ""]
     for f in findings:
-        out += [f"### {f.title}", f.meaning, "", f"**Action:** {f.action}", ""]
+        out += [f"### {_md(f.title)}", _md(f.meaning), "", f"**Action:** {f.action}", ""]
         if f.evidence:
-            out += ["```", f.evidence[:500], "```", ""]
+            out += ["```", _md(f.evidence[:500], fenced=True), "```", ""]
     if related:
         out += ["Related open issue(s): " + ", ".join(f"#{n}" for n in related), ""]
     out += [
@@ -294,7 +350,7 @@ def render(workflow: str, findings: list[Finding], log: str, run_url: str,
         "<details><summary>Last lines of the log</summary>",
         "",
         "```",
-        _tail(log),
+        _md(_tail(log), fenced=True),
         "```",
         "</details>",
     ]
@@ -329,30 +385,57 @@ def _meta(issue: dict, name: str, default: str) -> str:
     return m.group(1) if m else default
 
 
+def _workflow_of(issue: dict) -> str:
+    return (_fp(issue) or "").split(":", 1)[0]
+
+
+def _seen_keys(issue: dict) -> set[str]:
+    raw = _meta(issue, "keys", "")
+    if not raw:  # issues opened before keys were recorded
+        raw = ((_fp(issue) or ":") + ":").split(":")[1].replace("+", ",")
+    return {k for k in raw.split(",") if k}
+
+
+def _stamp(t: datetime) -> str:
+    return t.strftime("%Y-%m-%dT%H:%MZ")
+
+
 def report_failure(workflow: str, log: str) -> None:
     findings = diagnose(log)
-    fp = f"{workflow}:" + "+".join(sorted(f.key for f in findings))
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    now_t = datetime.now(timezone.utc)
+    now = now_t.strftime("%Y-%m-%d %H:%M UTC")
     run_url = (f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}/"
                f"{_repo()}/actions/runs/{os.environ.get('GITHUB_RUN_ID', '')}")
 
     issues = _open_issues()
-    mine = next((i for i in issues if _fp(i) == fp), None)
+    mine = next((i for i in issues if _workflow_of(i) == workflow), None)
     related = [i["number"] for i in issues
-               if i is not mine and not (_fp(i) or "").startswith(workflow + ":")]
+               if i is not mine and _workflow_of(i) != workflow]
 
     first_seen = _meta(mine, "first", now.replace(" ", "_")).replace("_", " ") if mine else now
     count = int(_meta(mine, "count", "0")) + 1 if mine else 1
+    seen = _seen_keys(mine) if mine else set()
+    new = [f for f in findings if f.key not in seen]
+    keys = sorted(seen | {f.key for f in findings})
     body = render(workflow, findings, log, run_url, first_seen, now, count, related)
-    body += (f"\n<!-- fp:{fp} -->\n<!-- first:{first_seen.replace(' ', '_')} -->"
-             f"\n<!-- count:{count} -->\n")
+    body += (f"\n<!-- fp:{workflow}:incident -->\n<!-- keys:{','.join(keys)} -->"
+             f"\n<!-- first:{first_seen.replace(' ', '_')} -->"
+             f"\n<!-- last:{_stamp(now_t)} -->\n<!-- count:{count} -->\n")
 
     if mine:
         # Edit, don't comment: an edit sends no email, so a fault that
-        # repeats every 30 min stays one email until it recovers.
+        # repeats every 30 min stays one email until it recovers. A fault
+        # new to this incident does get a comment - that is news.
         _gh("api", "-X", "PATCH", f"repos/{_repo()}/issues/{mine['number']}",
             "-F", "body=@-", body=body)
-        print(f"updated #{mine['number']} ({count} failures)")
+        if new:
+            note = "\n\n".join(
+                f"**New:** {_md(f.title)} - {_md(f.meaning)}\n\n**Action:** {f.action}"
+                for f in new
+            )
+            _gh("api", f"repos/{_repo()}/issues/{mine['number']}/comments",
+                "-F", "body=@-", body=f"@{OWNER} {note}")
+        print(f"updated #{mine['number']} ({count} failures, {len(new)} new)")
     else:
         title = f"{TITLE_PREFIX} {workflow}: " + "; ".join(f.title for f in findings)
         out = _gh("api", f"repos/{_repo()}/issues", "-f", f"title={title[:250]}",
@@ -361,10 +444,17 @@ def report_failure(workflow: str, log: str) -> None:
 
 
 def report_recovered(workflow: str) -> None:
-    now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    now_t = datetime.now(timezone.utc)
+    now = now_t.strftime("%Y-%m-%d %H:%M UTC")
     for i in _open_issues():
-        if not (_fp(i) or "").startswith(workflow + ":"):
+        if _workflow_of(i) != workflow:
             continue
+        last = _meta(i, "last", "")
+        if last:
+            since = now_t - datetime.strptime(last, "%Y-%m-%dT%H:%MZ").replace(tzinfo=timezone.utc)
+            if since < CLOSE_AFTER_QUIET:
+                print(f"#{i['number']}: green, but only {since} since the last failure; holding open")
+                continue
         count = _meta(i, "count", "?")
         first = _meta(i, "first", "?").replace("_", " ")
         _gh("api", f"repos/{_repo()}/issues/{i['number']}/comments", "-F", "body=@-",
