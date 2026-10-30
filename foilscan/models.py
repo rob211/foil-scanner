@@ -59,10 +59,19 @@ class MarineForecast:
     fetched_at: datetime
     hours: list[MarineHour]
 
-    def at(self, t: datetime) -> MarineHour:
+    def get(self, t: datetime) -> MarineHour | None:
+        """Like at(), but None for an hour fetch_marine dropped. It drops null
+        hours past the strict horizon on purpose, while wind runs the full
+        week, so anything keyed off a wind hour has to expect a gap."""
         for h in self.hours:
             if h.time == t:
                 return h
+        return None
+
+    def at(self, t: datetime) -> MarineHour:
+        h = self.get(t)
+        if h is not None:
+            return h
         from .errors import SchemaError
 
         raise SchemaError(f"no marine data for {t.isoformat()}")
