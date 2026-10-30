@@ -217,3 +217,45 @@ test("the token expiry is read from GitHub and passed on to the workflow", async
   assert.equal(res.expiry, "2026-11-09 00:00:00 UTC");
   assert.equal(bodies[0].inputs.token_expires_at, "2026-11-09 00:00:00 UTC");
 });
+
+// ------------------------------------------------------------- watchdog
+import { silenceAction, watchGitHub, GITHUB_SILENT_AFTER_MS } from "./src/index.js";
+
+const T = Date.UTC(2026, 9, 30, 6, 0);
+const ago = (ms) => new Date(T - ms).toISOString();
+
+test("watchdog: recent completed run, no issue -> nothing", () => {
+  assert.equal(silenceAction(ago(60 * 60 * 1000), undefined, T), "none");
+});
+
+test("watchdog: stale or never -> open once, not again while open", () => {
+  assert.equal(silenceAction(ago(GITHUB_SILENT_AFTER_MS), undefined, T), "open");
+  assert.equal(silenceAction(null, undefined, T), "open");
+  assert.equal(silenceAction(ago(GITHUB_SILENT_AFTER_MS * 2), { number: 9 }, T), "none");
+});
+
+test("watchdog: fresh again with an open issue -> close", () => {
+  assert.equal(silenceAction(ago(10 * 60 * 1000), { number: 9 }, T), "close");
+});
+
+test("watchdog: files one issue against a stale repo, mentioning the owner", async () => {
+  const calls = [];
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, init = {}) => {
+    calls.push({ url, method: init.method || "GET", body: init.body });
+    if (url.includes("/actions/workflows/live.yml/runs")) {
+      return new Response(JSON.stringify({ workflow_runs: [{ updated_at: ago(5 * 3600 * 1000) }] }));
+    }
+    if (url.endsWith("/issues?state=open&per_page=100")) return new Response("[]");
+    return new Response(JSON.stringify({ number: 1 }), { status: 201 });
+  };
+  try {
+    const r = await watchGitHub({ GITHUB_REPO: "x/y", GITHUB_TOKEN: "t" }, T);
+    assert.equal(r.watchdog, "open");
+    const post = calls.find((c) => c.method === "POST");
+    assert.match(JSON.parse(post.body).body, /@rob211 no live run has completed for 5\.0 h/);
+    assert.match(JSON.parse(post.body).body, /fp:silence:incident/);
+  } finally {
+    globalThis.fetch = realFetch;
+  }
+});

@@ -167,6 +167,82 @@ export async function dispatch(workflow, env) {
   throw new Error(`dispatch ${workflow} failed: ${lastError}`);
 }
 
+// ---------------------------------------------------------------- watchdog
+//
+// The other half of silence detection. The repo's own failure_report.py
+// can only report a run that happens; if GitHub Actions stops running
+// altogether (workflows disabled, runners stuck, the account flagged) every
+// alarm inside GitHub goes quiet with it. This Worker is the one thing
+// outside GitHub that runs on a clock, so each tick it checks that a live
+// run has actually *completed* recently - red or green both count, a red
+// one is already being reported - and files an issue when none has.
+//
+// Needs the PAT to carry "Issues: Read and write" as well as Actions. If
+// the PAT itself is dead it cannot alert from here; the repo-side
+// worker_watchdog.py covers that case from the other direction.
+export const GITHUB_SILENT_AFTER_MS = 3 * 60 * 60 * 1000;
+const SILENCE_FP = "<!-- fp:silence:incident -->";
+const OWNER = "rob211";
+
+/** Pure: what the watchdog should do, given the facts it fetched. */
+export function silenceAction(lastCompletedAt, openIssue, now) {
+  const stale =
+    lastCompletedAt === null || now - Date.parse(lastCompletedAt) >= GITHUB_SILENT_AFTER_MS;
+  if (stale && !openIssue) return "open";
+  if (!stale && openIssue) return "close";
+  return "none";
+}
+
+async function gh(env, path, init = {}) {
+  const res = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}${path}`, {
+    ...init,
+    headers: { ...ghHeaders(env), "Content-Type": "application/json" },
+    signal: AbortSignal.timeout(GH_TIMEOUT_MS),
+  });
+  if (!res.ok) throw new Error(`GitHub ${init.method || "GET"} ${path}: HTTP ${res.status}`);
+  return res.status === 204 ? null : res.json();
+}
+
+export async function watchGitHub(env, now) {
+  const runs = await gh(env, "/actions/workflows/live.yml/runs?status=completed&per_page=1");
+  const last = runs.workflow_runs && runs.workflow_runs[0];
+  const lastAt = last ? last.updated_at : null;
+  const issues = await gh(env, "/issues?state=open&per_page=100");
+  const open = issues.find(
+    (i) => !i.pull_request && (i.body || "").includes(SILENCE_FP)
+  );
+  const action = silenceAction(lastAt, open, now);
+  if (action === "open") {
+    const hours = lastAt ? ((now - Date.parse(lastAt)) / 3600000).toFixed(1) : "?";
+    await gh(env, "/issues", {
+      method: "POST",
+      body: JSON.stringify({
+        title: "[scanner] silence: GitHub Actions has stopped running the scanner",
+        body:
+          `@${OWNER} no live run has completed for ${hours} h ` +
+          `(last: ${lastAt || "never"}). The Cloudflare Worker is still ` +
+          "ticking, so this is on GitHub's side: wind alerts, the calendar " +
+          "and the dashboard are all frozen, and the scanner's own failure " +
+          "emails cannot fire because nothing is running.\n\n" +
+          "**Action:** Needs you. Check the repo's Actions tab: workflows " +
+          "disabled, runs stuck in *Queued*, or an Actions incident at " +
+          "githubstatus.com. Closes itself once a live run completes.\n\n" +
+          SILENCE_FP + "\n",
+      }),
+    });
+  } else if (action === "close") {
+    await gh(env, `/issues/${open.number}/comments`, {
+      method: "POST",
+      body: JSON.stringify({ body: `Recovered: a live run completed at ${lastAt}.` }),
+    });
+    await gh(env, `/issues/${open.number}`, {
+      method: "PATCH",
+      body: JSON.stringify({ state: "closed", state_reason: "completed" }),
+    });
+  }
+  return { watchdog: action, last_live_completed: lastAt };
+}
+
 export default {
   async scheduled(event, env, ctx) {
     const now = new Date(event.scheduledTime);
@@ -185,6 +261,13 @@ export default {
         if (r.status === "fulfilled") results.push(r.value);
         else console.error(JSON.stringify({ workflow: wanted[i], error: String(r.reason) }));
       });
+      // After the dispatches and independent of them: a watchdog failure
+      // must never cost a tick, and a failed dispatch must not skip the check.
+      try {
+        log.watch = await watchGitHub(env, now.getTime());
+      } catch (err) {
+        console.error(JSON.stringify({ watchdog: "error", error: String(err) }));
+      }
       if (!results.length) {
         console.log(JSON.stringify({ ...log, skipped: "nothing due this tick" }));
         return;

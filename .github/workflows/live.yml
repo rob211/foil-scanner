@@ -43,6 +43,7 @@ concurrency:
 permissions:
   contents: write
   issues: write  # failure_report.py
+  actions: read  # worker_watchdog.py
 
 jobs:
   live:
@@ -88,6 +89,16 @@ jobs:
               sleep $((attempt * 3))
             done
           fi
+      - name: Worker heartbeat
+        # Backstop ticks only: a run the Worker dispatched proves it is alive.
+        # If the backstop is all that is running, the Worker is dead and the
+        # only other trace would be a poll-gap note nobody is emailed about.
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -o pipefail
+          python3 scripts/worker_watchdog.py 2>&1 | tee -a "$RUNNER_TEMP/run.log"
       - name: Email a diagnosis
         # GitHub's own failure email only says "failed (N annotations)".
         # This files the cause, in plain English, as an issue that mentions

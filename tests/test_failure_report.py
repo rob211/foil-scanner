@@ -250,3 +250,9 @@ def test_log_cannot_spoof_issue_metadata(monkeypatch):
     fr.report_failure("live", BOM)
     assert len(gh.created) == 1
     assert "Failed runs so far: 2" in gh.issues[gh.created[0]]["body"]
+
+
+def test_worker_silence_is_named_and_needs_you():
+    (f,) = fr.diagnose("WORKER SILENT: no Worker-dispatched run for 5.0 h (last 2026-10-30 01:00 UTC)")
+    assert f.key == "worker_silent"
+    assert f.action.startswith(fr.NEEDS_YOU)

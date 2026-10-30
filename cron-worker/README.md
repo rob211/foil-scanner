@@ -47,7 +47,8 @@ GitHub is the fix; the scanner code does not change.
 
 1. Create a **fine-grained** personal access token:
    - Repository access: only `rob211/foil-scanner`
-   - Permissions: **Actions: Read and write**. Nothing else.
+   - Permissions: **Actions: Read and write** and **Issues: Read and
+     write** (the silence watchdog below files an issue). Nothing else.
    - Give it whatever expiry you like. You no longer have to diarise it: the
      Worker reads GitHub's `github-authentication-token-expiration` header
      and forwards it to the scanner, which warns on the dashboard from
@@ -83,6 +84,21 @@ GitHub is the fix; the scanner code does not change.
 
 4. Watch it: `wrangler tail`, or the Workers dashboard. Each fire logs one
    JSON line - dispatched workflow, or why it skipped.
+
+## Silence watchdogs
+
+The scanner's failure emails (`scripts/failure_report.py`) only fire from a
+run that happens. Two watchdogs cover the cases where runs stop instead:
+
+- **Worker dead** (usually an expired token): GitHub's backstop runs keep
+  going, and each one runs `scripts/worker_watchdog.py`, which fails the run
+  when no Worker dispatch has been seen for 3 h. That arrives as an ordinary
+  failure issue naming the Worker.
+- **GitHub Actions not running at all**: every tick, this Worker checks that
+  a live run has *completed* in the last 3 h and opens a
+  `[scanner] silence:` issue if not, closing it again once one does.
+
+Each side watches the other; only both dying at once is silent.
 
 ## If the Worker dies
 
