@@ -283,7 +283,13 @@ def _swell_compatibility(
     """Spec 4.6 for ocean downwinders. Returns the (possibly downgraded)
     window, or None when the swell kills it. South-family windows with swell
     from the south band never reach here (4.3 table wins)."""
-    mh = marine.at(w.peak_time)
+    mh = marine.get(w.peak_time)
+    if mh is None:
+        # Wind outruns the marine feed at the far end of the week. Keep the
+        # run rather than crash the scan; the swell check catches up as the
+        # day comes inside the strict horizon.
+        w.notes.append("no swell data this far out")
+        return w
     w.swell_m = round(mh.swell_m, 2)
     w.swell_dir_deg = round(mh.swell_dir_deg, 0)
     if mh.swell_m < config.SWELL_IGNORE_BELOW_M:
@@ -331,8 +337,8 @@ def south_windows(
         w = _window_from_span(
             "south_ocean", "South runs", span, hour_map, now, config.SOUTH_TARGET_KN
         )
-        mh = marine.at(w.peak_time)
-        in_south_band = config.SOUTH_SWELL_ARC.contains(mh.swell_dir_deg)
+        mh = marine.get(w.peak_time)
+        in_south_band = mh is not None and config.SOUTH_SWELL_ARC.contains(mh.swell_dir_deg)
         if in_south_band and mh.swell_m >= config.SWELL_IGNORE_BELOW_M:
             # 4.3 table wins: Hill 60 handles any size south swell and wind.
             w.swell_m = round(mh.swell_m, 2)
@@ -570,7 +576,10 @@ def baysurf_windows(
         for hw in series:
             if not sun.daylight(hw.time):
                 continue
-            mh = marine.at(hw.time)
+            mh = marine.get(hw.time)
+            if mh is None:
+                # No swell figure for this hour, so nothing to surf on.
+                continue
             if mh.swell_m < config.BAYSURF_SWELL_YELLOW_M:
                 continue
             if not config.BAYSURF_SWELL_ARC.contains(mh.swell_dir_deg):

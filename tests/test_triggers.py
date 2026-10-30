@@ -782,3 +782,30 @@ def test_a_watch_is_left_alone():
 
     w = flag_thin_consensus([_win(config.MIN_MODELS_AGREE, grade="watch")])[0]
     assert w.title_tags == []
+
+
+# ------------------------------------------------- marine gap past horizon
+
+def _marine_without(hours_missing, **kw):
+    # fetch_marine drops null hours past the strict horizon, so a wind hour
+    # with no marine twin is a normal input, not a schema break.
+    m = mk_marine(**kw)
+    m.hours = [h for h in m.hours if h.time.hour not in hours_missing]
+    return m
+
+
+def test_baysurf_skips_wind_hours_with_no_marine_data(sun):
+    # 22-23 Oct 2026: one null swell hour on day 7 killed every scan for 24 h.
+    wind = mk_wind(hours(range(10, 14), 8, 270), location_key="ocean")
+    marine = _marine_with_tide(10, 13)
+    marine.hours = [h for h in marine.hours if h.time.hour != 11]
+    windows, _ = baysurf_windows(wind, marine, sun, NOW)
+    assert all(not (w.start <= at(11) < w.end) for w in windows)
+
+
+def test_south_run_survives_missing_marine_at_peak(sun):
+    wind = mk_wind(hours(range(10, 14), 24, 190))
+    marine = _marine_without(set(range(10, 14)), swell_m=0.6, swell_dir=160)
+    windows, _ = south_windows(wind, marine, sun, NOW)
+    assert len(windows) == 1
+    assert "no swell data this far out" in windows[0].notes
