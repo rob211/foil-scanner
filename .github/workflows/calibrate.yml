@@ -6,8 +6,8 @@ name: calibrate
 # is never the failure mode.
 #
 # The job goes RED when what is measured no longer matches what is applied,
-# which sends GitHub's failure email. It changes nothing on its own; the
-# constants stay a deliberate decision.
+# which files a diagnosis issue (scripts/failure_report.py). It changes
+# nothing on its own; the constants stay a deliberate decision.
 on:
   schedule:
     - cron: "10 20 * * 1"
@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: read
+  issues: write  # failure_report.py
 
 jobs:
   calibrate:
@@ -32,10 +33,31 @@ jobs:
       - run: pip install --require-hashes -r requirements.txt
 
       - name: Tide against the Port Kembla gauge
-        run: python scripts/calibrate_tide.py 14 --check
+        run: |
+          set -o pipefail
+          python scripts/calibrate_tide.py 14 --check 2>&1 | tee -a "$RUNNER_TEMP/run.log"
 
       - name: Wind against both stations
         # always() so a tide drift does not hide a wind drift: both answers
         # are wanted on the same run, not whichever fails first.
         if: always()
-        run: python scripts/calibrate_wind.py 60 --check
+        run: |
+          set -o pipefail
+          python scripts/calibrate_wind.py 60 --check 2>&1 | tee -a "$RUNNER_TEMP/run.log"
+
+      - name: Email a diagnosis
+        # GitHub's own failure email only says "failed (N annotations)".
+        # This files the cause, in plain English, as an issue that mentions
+        # the owner; repeats edit it silently. See scripts/failure_report.py.
+        if: failure()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/failure_report.py fail calibrate "$RUNNER_TEMP/run.log"
+      - name: Close a recovered diagnosis
+        if: success()
+        # Never turn a green run red over issue housekeeping.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/failure_report.py recovered calibrate

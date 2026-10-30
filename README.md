@@ -9,8 +9,10 @@ band: the maybes, collected into one all-day digest per day rather than
 cluttering the calendar with events for runs that probably aren't on.
 
 Failures are loud by design: any dead feed, stale reading or schema change
-fails the run red, emails via GitHub, and drops a red SCANNER BROKEN event on
-today's calendar. A calm-looking week is never allowed to be a broken scanner.
+fails the run red, drops a red SCANNER BROKEN event on today's calendar, and
+opens a GitHub issue that names the fault in plain English and says whether it
+self-heals or needs you (`scripts/failure_report.py`). One issue per incident:
+repeats update it silently and the next green run closes it. A calm-looking week is never allowed to be a broken scanner.
 
 ## How it runs
 
