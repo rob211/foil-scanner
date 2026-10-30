@@ -35,6 +35,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write  # failure_report.py
 
 jobs:
   scan:
@@ -49,7 +50,12 @@ jobs:
         env:
           GCAL_SERVICE_ACCOUNT_JSON: ${{ secrets.GCAL_SERVICE_ACCOUNT_JSON }}
           FOIL_CALENDAR_ID: ${{ secrets.FOIL_CALENDAR_ID }}
-        run: python -m foilscan scan
+          PYTHONUNBUFFERED: "1"
+        # tee keeps the output for the diagnosis step; pipefail keeps the
+        # scanner's exit code instead of tee's.
+        run: |
+          set -o pipefail
+          python -m foilscan scan 2>&1 | tee "$RUNNER_TEMP/run.log"
       - name: Commit verdict data
         # Partial-failure runs still write a verdict worth keeping (spec 8.9).
         if: always()
@@ -66,3 +72,22 @@ jobs:
             echo "push attempt $attempt lost the race, retrying"
             sleep $((attempt * 3))
           done
+      - name: Email a diagnosis
+        # GitHub's own failure email only says "failed (N annotations)".
+        # This files the cause, in plain English, as an issue that mentions
+        # the owner; repeats edit it silently. See scripts/failure_report.py.
+        if: failure()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # The log is quoted into a public issue; these are scrubbed first.
+          REDACT_GCAL: ${{ secrets.GCAL_SERVICE_ACCOUNT_JSON }}
+          REDACT_CAL: ${{ secrets.FOIL_CALENDAR_ID }}
+        run: python3 scripts/failure_report.py fail scan "$RUNNER_TEMP/run.log"
+      - name: Close a recovered diagnosis
+        if: success()
+        # Never turn a green run red over issue housekeeping.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/failure_report.py recovered scan

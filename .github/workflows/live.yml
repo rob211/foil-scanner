@@ -42,6 +42,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write  # failure_report.py
 
 jobs:
   live:
@@ -58,11 +59,16 @@ jobs:
           FOIL_CALENDAR_ID: ${{ secrets.FOIL_CALENDAR_ID }}
           HOLFUY_KEY: ${{ secrets.HOLFUY_KEY }}
           FOIL_TOKEN_EXPIRES_AT: ${{ inputs.token_expires_at }}
+          PYTHONUNBUFFERED: "1"
         # --force on a dispatched run: the Cloudflare Worker already applied
         # the cadence rule before asking, and re-applying it against the time
         # GitHub happens to start the job only ever drops ticks. The schedule
         # backstop arrives ungated and keeps the check.
-        run: python -m foilscan live ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }}
+        # tee keeps the output for the diagnosis step; pipefail keeps the
+        # scanner's exit code instead of tee's.
+        run: |
+          set -o pipefail
+          python -m foilscan live ${{ github.event_name == 'workflow_dispatch' && '--force' || '' }} 2>&1 | tee "$RUNNER_TEMP/run.log"
       - name: Commit live data
         # A failed verify can still have written a useful live.json (spec 8.9).
         if: always()
@@ -82,3 +88,23 @@ jobs:
               sleep $((attempt * 3))
             done
           fi
+      - name: Email a diagnosis
+        # GitHub's own failure email only says "failed (N annotations)".
+        # This files the cause, in plain English, as an issue that mentions
+        # the owner; repeats edit it silently. See scripts/failure_report.py.
+        if: failure()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # The log is quoted into a public issue; these are scrubbed first.
+          REDACT_GCAL: ${{ secrets.GCAL_SERVICE_ACCOUNT_JSON }}
+          REDACT_CAL: ${{ secrets.FOIL_CALENDAR_ID }}
+          REDACT_HOLFUY: ${{ secrets.HOLFUY_KEY }}
+        run: python3 scripts/failure_report.py fail live "$RUNNER_TEMP/run.log"
+      - name: Close a recovered diagnosis
+        if: success()
+        # Never turn a green run red over issue housekeeping.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/failure_report.py recovered live
