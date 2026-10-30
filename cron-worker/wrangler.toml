@@ -26,7 +26,9 @@ GITHUB_REF = "main"
 
 # Secrets, set with `wrangler secret put` - never in this file:
 #   GITHUB_TOKEN        fine-grained PAT, repo rob211/foil-scanner,
-#                       permission "Actions: Read and write". Nothing else.
+#                       permissions "Actions: Read and write" and
+#                       "Issues: Read and write" (the GitHub-silence
+#                       watchdog files an issue). Nothing else.
 #   CRON_SHARED_SECRET  guards the manual POST endpoint (any long random
 #                       string); the endpoint can start CI jobs that write to
 #                       a real calendar.

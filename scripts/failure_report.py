@@ -93,6 +93,19 @@ RULES: list[tuple[re.Pattern, str, object]] = [
         ),
     ),
     (
+        re.compile(r"WORKER SILENT: (.+)"),
+        "worker_silent",
+        lambda m: (
+            "Cloudflare Worker has stopped triggering runs",
+            f"{m.group(1)}. Only GitHub's backstop schedule is running, which "
+            "GitHub sheds under load - live wind alerts can be hours late.",
+            NEEDS_YOU + " Most likely the Worker's GitHub token expired: roll "
+            "it at github.com/settings/personal-access-tokens, then in "
+            "cron-worker/ run `wrangler secret put GITHUB_TOKEN`. "
+            "`wrangler tail` shows the Worker's own errors.",
+        ),
+    ),
+    (
         re.compile(r"BOM observations.*?latest reading is (\d+) min old"),
         "bom_stale",
         lambda m: (*_stale_feed("BOM Bellambi", m), SELF_HEALS),
