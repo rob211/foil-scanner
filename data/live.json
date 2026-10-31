@@ -1,29 +1,35 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-10-31T12:01:26.078375+11:00",
+  "generated_at": "2026-10-31T12:31:10.331806+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-10-31T11:30:00+11:00",
-    "speed_kn": 17.8,
-    "gust_kn": 21.1,
-    "dir_deg": 45.0
+    "time": "2026-10-31T12:00:00+11:00",
+    "speed_kn": 18.9,
+    "gust_kn": 23.2,
+    "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-10-31T12:00:14+11:00",
+    "time": "2026-10-31T12:30:14+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
-  "port_kembla": null,
+  "port_kembla": {
+    "station": "Port Kembla Harbour",
+    "time": "2026-10-31T12:00:00+11:00",
+    "speed_kn": 11.9,
+    "gust_kn": 17.8,
+    "dir_deg": 45.0
+  },
   "checks": [],
   "alerts": [
     {
       "trigger_id": "entrance_ne",
       "run_name": "Lake Entrance (NE wind)",
       "station": "Bellambi",
-      "speed_kn": 17.8,
-      "dir_deg": 45.0,
+      "speed_kn": 18.9,
+      "dir_deg": 22.5,
       "threshold_kn": 16.2,
       "detail": "Run-out gate today: 12:52-14:52.",
       "foil_key": "live-alert:2026-10-31:entrance",
@@ -33,8 +39,8 @@
       "trigger_id": "ne_ocean",
       "run_name": "NE ocean runs",
       "station": "Bellambi",
-      "speed_kn": 17.8,
-      "dir_deg": 45.0,
+      "speed_kn": 18.9,
+      "dir_deg": 22.5,
       "threshold_kn": 10.0,
       "detail": "",
       "foil_key": "live-alert:2026-10-31:ocean",
@@ -53,15 +59,14 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 17.8,
+      "observed_kn": 18.9,
       "forecast_kn": 12.4,
-      "gap_kn": 5.4,
+      "gap_kn": 6.5,
       "flagged": false
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "Port Kembla station unavailable (logging only): BOM observations (95745) (Port Kembla Harbour): latest reading is 181 min old, cap is 75 min",
     "MODEL BUST (lake): observed 0 kn vs forecast 12 kn at Lake Illawarra"
   ]
 }
