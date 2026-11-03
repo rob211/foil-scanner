@@ -1,41 +1,35 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-03T21:00:40.288309+11:00",
+  "generated_at": "2026-11-03T23:00:42.095320+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-11-03T21:00:40.665306+11:00",
+      "fetched_at": "2026-11-03T23:00:42.469830+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-11-03T21:00:41.173781+11:00",
+      "fetched_at": "2026-11-03T23:00:43.238673+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-11-03T21:00:41.834716+11:00",
+      "fetched_at": "2026-11-03T23:00:43.737129+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-11-03T21:00:42.386447+11:00",
+      "fetched_at": "2026-11-03T23:00:44.189278+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-11-03T21:00:42.769009+11:00",
+      "fetched_at": "2026-11-03T23:00:44.595773+11:00",
       "detail": null,
-      "error": null
-    },
-    "entrance_grid": {
-      "ok": true,
-      "fetched_at": null,
-      "detail": "entrance forecast identical to lake: same model grid cell, no entrance-specific signal",
       "error": null
     }
   },
@@ -128,7 +122,7 @@
     },
     {
       "time": "2026-11-03T17:00:00+11:00",
-      "lake": 7.5,
+      "lake": 6.7,
       "ocean": 8.8
     },
     {
@@ -138,12 +132,12 @@
     },
     {
       "time": "2026-11-03T19:00:00+11:00",
-      "lake": 5.9,
+      "lake": 5.5,
       "ocean": 8.2
     },
     {
       "time": "2026-11-03T20:00:00+11:00",
-      "lake": 7.0,
+      "lake": 6.9,
       "ocean": 8.7
     },
     {
@@ -514,33 +508,6 @@
       "live_status": "pending",
       "event_id": null,
       "foil_key": "lake_oakflats_berkeley:2026-11-07:18"
-    },
-    {
-      "trigger_id": "lake_oakflats_berkeley",
-      "run_name": "Oak Flats to Berkeley",
-      "date": "2026-11-08",
-      "start": "2026-11-08T06:00:00+11:00",
-      "end": "2026-11-08T13:00:00+11:00",
-      "grade": "watch",
-      "peak_median_kn": 18.6,
-      "direction_deg": 209.0,
-      "models_agreeing": 1,
-      "model_values": {
-        "ICON": 18.6
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": null,
-      "swell_dir_deg": null,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": "1 of 4 models only (needs 2)",
-      "tide_state": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": null,
-      "foil_key": "lake_oakflats_berkeley:2026-11-08:06"
     },
     {
       "trigger_id": "south_ocean",
