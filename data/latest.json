@@ -1,35 +1,41 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-04T23:01:14.049272+11:00",
+  "generated_at": "2026-11-04T23:10:30.591458+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-11-04T23:01:14.178143+11:00",
+      "fetched_at": "2026-11-04T23:10:30.994656+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-11-04T23:01:14.290671+11:00",
+      "fetched_at": "2026-11-04T23:10:31.078360+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-11-04T23:01:14.693984+11:00",
+      "fetched_at": "2026-11-04T23:10:31.156437+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-11-04T23:01:15.095107+11:00",
+      "fetched_at": "2026-11-04T23:10:31.379781+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-11-04T23:01:15.491469+11:00",
+      "fetched_at": "2026-11-04T23:10:31.799224+11:00",
       "detail": null,
+      "error": null
+    },
+    "entrance_grid": {
+      "ok": true,
+      "fetched_at": null,
+      "detail": "entrance forecast identical to lake: same model grid cell, no entrance-specific signal",
       "error": null
     }
   },
@@ -138,12 +144,12 @@
     {
       "time": "2026-11-04T20:00:00+11:00",
       "lake": 4.1,
-      "ocean": 6.1
+      "ocean": 6.5
     },
     {
       "time": "2026-11-04T21:00:00+11:00",
       "lake": 5.3,
-      "ocean": 7.3
+      "ocean": 7.8
     },
     {
       "time": "2026-11-04T22:00:00+11:00",
@@ -153,7 +159,7 @@
     {
       "time": "2026-11-04T23:00:00+11:00",
       "lake": 8.3,
-      "ocean": 9.3
+      "ocean": 9.4
     }
   ],
   "windows": [
@@ -272,11 +278,11 @@
       "start": "2026-11-07T13:00:00+11:00",
       "end": "2026-11-07T20:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 22.2,
-      "direction_deg": 169.0,
+      "peak_median_kn": 21.4,
+      "direction_deg": 172.0,
       "models_agreeing": 1,
       "model_values": {
-        "UKMO": 22.2
+        "UKMO": 21.4
       },
       "title_tags": [],
       "notes": [],
