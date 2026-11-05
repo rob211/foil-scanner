@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-06T05:50:43.305419+11:00",
+  "generated_at": "2026-11-06T06:01:11.198006+11:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-11-06T05:30:00+11:00",
@@ -10,7 +10,7 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-06T05:50:36+11:00",
+    "time": "2026-11-06T06:00:37+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
@@ -29,19 +29,19 @@
       "location": "lake",
       "station": "Lake Illawarra",
       "observed_kn": 0.0,
-      "forecast_kn": 4.7,
-      "gap_kn": -4.7,
+      "forecast_kn": 4.6,
+      "gap_kn": -4.6,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
       "observed_kn": 4.9,
-      "forecast_kn": 6.8,
-      "gap_kn": -1.9,
+      "forecast_kn": 6.7,
+      "gap_kn": -1.8,
       "flagged": false
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": []
 }
