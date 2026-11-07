@@ -1,29 +1,41 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-07T15:00:18.076098+11:00",
+  "generated_at": "2026-11-07T15:30:23.553839+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-07T14:45:00+11:00",
-    "speed_kn": 10.3,
-    "gust_kn": 29.2,
-    "dir_deg": 202.5
+    "time": "2026-11-07T15:13:00+11:00",
+    "speed_kn": 36.2,
+    "gust_kn": 43.2,
+    "dir_deg": 157.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-07T14:58:43+11:00",
+    "time": "2026-11-07T15:28:43+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-07T14:50:00+11:00",
-    "speed_kn": 8.1,
-    "gust_kn": 14.0,
-    "dir_deg": 247.5
+    "time": "2026-11-07T15:09:00+11:00",
+    "speed_kn": 11.9,
+    "gust_kn": 23.8,
+    "dir_deg": 202.5
   },
   "checks": [],
-  "alerts": [],
+  "alerts": [
+    {
+      "trigger_id": "south_ocean",
+      "run_name": "South runs",
+      "station": "Bellambi",
+      "speed_kn": 36.2,
+      "dir_deg": 157.5,
+      "threshold_kn": 18.0,
+      "detail": "",
+      "foil_key": "live-alert:2026-11-07:ocean",
+      "created": false
+    }
+  ],
   "bias": [
     {
       "location": "lake",
@@ -36,14 +48,15 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 10.3,
+      "observed_kn": 36.2,
       "forecast_kn": 13.9,
-      "gap_kn": -3.6,
-      "flagged": false
+      "gap_kn": 22.3,
+      "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "MODEL BUST (lake): observed 0 kn vs forecast 18 kn at Lake Illawarra"
+    "MODEL BUST (lake): observed 0 kn vs forecast 18 kn at Lake Illawarra",
+    "MODEL BUST (ocean): observed 36 kn vs forecast 14 kn at Bellambi"
   ]
 }
