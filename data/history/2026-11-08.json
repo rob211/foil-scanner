@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-08T05:00:18.490167+11:00",
+  "generated_at": "2026-11-08T07:00:19.722566+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-11-08T05:00:18.590871+11:00",
+      "fetched_at": "2026-11-08T07:00:19.971548+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-11-08T05:00:18.748226+11:00",
+      "fetched_at": "2026-11-08T07:00:20.651984+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-11-08T05:00:21.081260+11:00",
+      "fetched_at": "2026-11-08T07:00:20.965805+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-11-08T05:00:21.532760+11:00",
+      "fetched_at": "2026-11-08T07:00:21.357428+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-11-08T05:00:21.913001+11:00",
+      "fetched_at": "2026-11-08T07:00:21.919576+11:00",
       "detail": null,
       "error": null
     },
@@ -43,43 +43,43 @@
   "expected_today": [
     {
       "time": "2026-11-08T00:00:00+11:00",
-      "lake": 13.8,
-      "ocean": 13.0
+      "lake": 12.5,
+      "ocean": 12.3
     },
     {
       "time": "2026-11-08T01:00:00+11:00",
-      "lake": 13.5,
-      "ocean": 12.2
-    },
-    {
-      "time": "2026-11-08T02:00:00+11:00",
-      "lake": 13.6,
+      "lake": 12.9,
       "ocean": 11.8
     },
     {
+      "time": "2026-11-08T02:00:00+11:00",
+      "lake": 13.1,
+      "ocean": 11.5
+    },
+    {
       "time": "2026-11-08T03:00:00+11:00",
-      "lake": 14.0,
-      "ocean": 11.9
+      "lake": 12.9,
+      "ocean": 11.8
     },
     {
       "time": "2026-11-08T04:00:00+11:00",
-      "lake": 14.4,
+      "lake": 14.1,
       "ocean": 12.0
     },
     {
       "time": "2026-11-08T05:00:00+11:00",
-      "lake": 14.6,
-      "ocean": 12.3
+      "lake": 14.7,
+      "ocean": 12.2
     },
     {
       "time": "2026-11-08T06:00:00+11:00",
       "lake": 15.2,
-      "ocean": 12.9
+      "ocean": 12.8
     },
     {
       "time": "2026-11-08T07:00:00+11:00",
-      "lake": 15.8,
-      "ocean": 13.4
+      "lake": 15.7,
+      "ocean": 13.3
     },
     {
       "time": "2026-11-08T08:00:00+11:00",
@@ -88,28 +88,28 @@
     },
     {
       "time": "2026-11-08T09:00:00+11:00",
-      "lake": 19.2,
+      "lake": 19.1,
       "ocean": 16.2
     },
     {
       "time": "2026-11-08T10:00:00+11:00",
-      "lake": 19.9,
-      "ocean": 17.1
+      "lake": 20.5,
+      "ocean": 17.5
     },
     {
       "time": "2026-11-08T11:00:00+11:00",
-      "lake": 20.9,
-      "ocean": 17.9
+      "lake": 21.0,
+      "ocean": 18.0
     },
     {
       "time": "2026-11-08T12:00:00+11:00",
-      "lake": 21.5,
-      "ocean": 18.4
+      "lake": 21.1,
+      "ocean": 18.1
     },
     {
       "time": "2026-11-08T13:00:00+11:00",
-      "lake": 21.5,
-      "ocean": 17.9
+      "lake": 21.6,
+      "ocean": 17.8
     },
     {
       "time": "2026-11-08T14:00:00+11:00",
@@ -118,12 +118,12 @@
     },
     {
       "time": "2026-11-08T15:00:00+11:00",
-      "lake": 20.6,
+      "lake": 20.2,
       "ocean": 17.8
     },
     {
       "time": "2026-11-08T16:00:00+11:00",
-      "lake": 19.1,
+      "lake": 19.6,
       "ocean": 17.1
     },
     {
@@ -148,18 +148,18 @@
     },
     {
       "time": "2026-11-08T21:00:00+11:00",
-      "lake": 12.7,
+      "lake": 12.4,
       "ocean": 12.6
     },
     {
       "time": "2026-11-08T22:00:00+11:00",
-      "lake": 12.3,
-      "ocean": 12.4
+      "lake": 12.1,
+      "ocean": 12.2
     },
     {
       "time": "2026-11-08T23:00:00+11:00",
-      "lake": 12.7,
-      "ocean": 12.5
+      "lake": 12.3,
+      "ocean": 12.4
     }
   ],
   "windows": [
@@ -170,37 +170,11 @@
       "start": "2026-11-08T06:00:00+11:00",
       "end": "2026-11-08T07:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 17.8,
-      "direction_deg": 211.0,
-      "models_agreeing": 1,
+      "peak_median_kn": 17.5,
+      "direction_deg": 212.0,
+      "models_agreeing": 2,
       "model_values": {
-        "ICON": 17.8
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": null,
-      "swell_dir_deg": null,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": "1 of 4 models only (needs 2)",
-      "tide_state": null,
-      "confidence": "normal",
-      "live_status": "pending",
-      "event_id": null,
-      "foil_key": "lake_oakflats_berkeley:2026-11-08:06"
-    },
-    {
-      "trigger_id": "lake_west",
-      "run_name": "Kanahooka / Berkeley",
-      "date": "2026-11-08",
-      "start": "2026-11-08T06:00:00+11:00",
-      "end": "2026-11-08T07:00:00+11:00",
-      "grade": "watch",
-      "peak_median_kn": 17.3,
-      "direction_deg": 219.0,
-      "models_agreeing": 1,
-      "model_values": {
+        "ICON": 17.8,
         "UKMO": 17.3
       },
       "title_tags": [],
@@ -210,12 +184,12 @@
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
-      "watch": "1 of 4 models only (needs 2)",
+      "watch": "18 kn, needs 18",
       "tide_state": null,
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_west:2026-11-08:06"
+      "foil_key": "lake_oakflats_berkeley:2026-11-08:06"
     },
     {
       "trigger_id": "lake_oakflats_berkeley",
@@ -224,19 +198,16 @@
       "start": "2026-11-08T07:00:00+11:00",
       "end": "2026-11-08T19:00:00+11:00",
       "grade": "green",
-      "peak_median_kn": 24.7,
-      "direction_deg": 180.0,
-      "models_agreeing": 2,
+      "peak_median_kn": 24.8,
+      "direction_deg": 177.0,
+      "models_agreeing": 3,
       "model_values": {
-        "ICON": 25.2,
-        "UKMO": 24.2
+        "GFS": 18.4,
+        "ICON": 24.8,
+        "UKMO": 24.8
       },
-      "title_tags": [
-        "2 of 4 models"
-      ],
-      "notes": [
-        "only 2 of 4 models reached the trigger; the others did not see it"
-      ],
+      "title_tags": [],
+      "notes": [],
       "swell_m": null,
       "swell_dir_deg": null,
       "high_tide": null,
@@ -248,6 +219,33 @@
       "live_status": "pending",
       "event_id": "mcqa1ns8d077pqba74rsaaflok",
       "foil_key": "lake_oakflats_berkeley:2026-11-08:07"
+    },
+    {
+      "trigger_id": "lake_west",
+      "run_name": "Kanahooka / Berkeley",
+      "date": "2026-11-08",
+      "start": "2026-11-08T07:00:00+11:00",
+      "end": "2026-11-08T08:00:00+11:00",
+      "grade": "watch",
+      "peak_median_kn": 18.8,
+      "direction_deg": 215.0,
+      "models_agreeing": 1,
+      "model_values": {
+        "UKMO": 18.8
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": null,
+      "swell_dir_deg": null,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": "1 of 4 models only (needs 2)",
+      "tide_state": null,
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": null,
+      "foil_key": "lake_west:2026-11-08:07"
     },
     {
       "trigger_id": "south_ocean",
@@ -286,10 +284,10 @@
       "end": "2026-11-08T17:00:00+11:00",
       "grade": "green",
       "peak_median_kn": 20.0,
-      "direction_deg": 184.0,
+      "direction_deg": 186.0,
       "models_agreeing": 2,
       "model_values": {
-        "ICON": 20.0,
+        "ICON": 20.1,
         "UKMO": 20.0
       },
       "title_tags": [
@@ -299,8 +297,8 @@
         "south swell 0.9 m SSE",
         "only 2 of 4 models reached the trigger; the others did not see it"
       ],
-      "swell_m": 0.94,
-      "swell_dir_deg": 149.0,
+      "swell_m": 0.88,
+      "swell_dir_deg": 151.0,
       "high_tide": null,
       "high_tide_m": null,
       "spots": [
@@ -323,13 +321,12 @@
       "start": "2026-11-08T17:00:00+11:00",
       "end": "2026-11-08T20:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 17.9,
+      "peak_median_kn": 17.2,
       "direction_deg": 183.0,
-      "models_agreeing": 3,
+      "models_agreeing": 2,
       "model_values": {
-        "GFS": 15.6,
-        "ICON": 18.1,
-        "UKMO": 17.9
+        "ICON": 16.7,
+        "UKMO": 17.7
       },
       "title_tags": [],
       "notes": [],
@@ -338,7 +335,7 @@
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
-      "watch": "18 kn, needs 18",
+      "watch": "17 kn, needs 18",
       "tide_state": null,
       "confidence": "normal",
       "live_status": "pending",
@@ -456,44 +453,17 @@
       "foil_key": "hill60_swell:2026-11-10:06"
     },
     {
-      "trigger_id": "lake_oakflats_berkeley",
-      "run_name": "Oak Flats to Berkeley",
-      "date": "2026-11-11",
-      "start": "2026-11-11T14:00:00+11:00",
-      "end": "2026-11-11T17:00:00+11:00",
-      "grade": "watch",
-      "peak_median_kn": 24.8,
-      "direction_deg": 172.0,
-      "models_agreeing": 1,
-      "model_values": {
-        "UKMO": 24.8
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": null,
-      "swell_dir_deg": null,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": "1 of 4 models only (needs 2)",
-      "tide_state": null,
-      "confidence": "normal",
-      "live_status": "pending",
-      "event_id": null,
-      "foil_key": "lake_oakflats_berkeley:2026-11-11:14"
-    },
-    {
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "date": "2026-11-11",
-      "start": "2026-11-11T14:00:00+11:00",
+      "start": "2026-11-11T17:00:00+11:00",
       "end": "2026-11-11T20:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 19.8,
-      "direction_deg": 171.0,
+      "peak_median_kn": 17.9,
+      "direction_deg": 166.0,
       "models_agreeing": 1,
       "model_values": {
-        "UKMO": 19.8
+        "ICON": 17.9
       },
       "title_tags": [],
       "notes": [],
@@ -507,20 +477,20 @@
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "south_ocean:2026-11-11:14"
+      "foil_key": "south_ocean:2026-11-11:17"
     },
     {
       "trigger_id": "lake_oakflats_berkeley",
       "run_name": "Oak Flats to Berkeley",
       "date": "2026-11-11",
-      "start": "2026-11-11T18:00:00+11:00",
+      "start": "2026-11-11T19:00:00+11:00",
       "end": "2026-11-11T20:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 19.1,
-      "direction_deg": 171.0,
+      "peak_median_kn": 17.7,
+      "direction_deg": 170.0,
       "models_agreeing": 1,
       "model_values": {
-        "UKMO": 19.1
+        "ICON": 17.7
       },
       "title_tags": [],
       "notes": [],
@@ -534,20 +504,20 @@
       "confidence": "normal",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_oakflats_berkeley:2026-11-11:18"
+      "foil_key": "lake_oakflats_berkeley:2026-11-11:19"
     },
     {
       "trigger_id": "lake_oakflats_berkeley",
       "run_name": "Oak Flats to Berkeley",
       "date": "2026-11-12",
-      "start": "2026-11-12T11:00:00+11:00",
-      "end": "2026-11-12T13:00:00+11:00",
+      "start": "2026-11-12T06:00:00+11:00",
+      "end": "2026-11-12T09:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 17.0,
-      "direction_deg": 173.0,
+      "peak_median_kn": 18.6,
+      "direction_deg": 171.0,
       "models_agreeing": 1,
       "model_values": {
-        "UKMO": 17.0
+        "UKMO": 18.6
       },
       "title_tags": [],
       "notes": [],
@@ -561,20 +531,20 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "lake_oakflats_berkeley:2026-11-12:11"
+      "foil_key": "lake_oakflats_berkeley:2026-11-12:06"
     },
     {
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "date": "2026-11-12",
-      "start": "2026-11-12T13:00:00+11:00",
-      "end": "2026-11-12T18:00:00+11:00",
+      "start": "2026-11-12T06:00:00+11:00",
+      "end": "2026-11-12T17:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 16.3,
+      "peak_median_kn": 17.1,
       "direction_deg": 170.0,
       "models_agreeing": 1,
       "model_values": {
-        "UKMO": 16.3
+        "UKMO": 17.1
       },
       "title_tags": [],
       "notes": [],
@@ -588,68 +558,7 @@
       "confidence": "low (long range)",
       "live_status": "pending",
       "event_id": null,
-      "foil_key": "south_ocean:2026-11-12:13"
-    },
-    {
-      "trigger_id": "lake_oakflats_berkeley",
-      "run_name": "Oak Flats to Berkeley",
-      "date": "2026-11-12",
-      "start": "2026-11-12T18:00:00+11:00",
-      "end": "2026-11-12T19:00:00+11:00",
-      "grade": "watch",
-      "peak_median_kn": 15.5,
-      "direction_deg": 170.0,
-      "models_agreeing": 1,
-      "model_values": {
-        "UKMO": 15.5
-      },
-      "title_tags": [],
-      "notes": [],
-      "swell_m": null,
-      "swell_dir_deg": null,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": "1 of 4 models only (needs 2)",
-      "tide_state": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": null,
-      "foil_key": "lake_oakflats_berkeley:2026-11-12:18"
-    },
-    {
-      "trigger_id": "ne_ocean",
-      "run_name": "NE run (Easty / South Beach / Sandon)",
-      "date": "2026-11-13",
-      "start": "2026-11-13T18:00:00+11:00",
-      "end": "2026-11-13T19:00:00+11:00",
-      "grade": "yellow",
-      "peak_median_kn": 10.4,
-      "direction_deg": 61.0,
-      "models_agreeing": 2,
-      "model_values": {
-        "ECMWF": 10.4,
-        "ICON": 10.5
-      },
-      "title_tags": [
-        "off-angle ENE",
-        "cross swell 0.5 m ESE",
-        "2 of 4 models"
-      ],
-      "notes": [
-        "only 2 of 4 models reached the trigger; the others did not see it"
-      ],
-      "swell_m": 0.52,
-      "swell_dir_deg": 103.0,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": null,
-      "tide_state": null,
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": "5tqdalcen94qgj107nmjrudn0s",
-      "foil_key": "ne_ocean:2026-11-13:18"
+      "foil_key": "south_ocean:2026-11-12:06"
     },
     {
       "trigger_id": "entrance_swell",
@@ -658,14 +567,14 @@
       "start": "2026-11-14T06:00:00+11:00",
       "end": "2026-11-14T11:54:00+11:00",
       "grade": "green",
-      "peak_median_kn": 5.0,
-      "direction_deg": 340.0,
+      "peak_median_kn": 6.6,
+      "direction_deg": 334.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 8.0,
-        "ECMWF": 4.3,
+        "ECMWF": 7.5,
         "ICON": 5.7,
-        "UKMO": 3.0
+        "UKMO": 3.9
       },
       "title_tags": [
         "off-tide"
@@ -692,13 +601,14 @@
       "start": "2026-11-14T11:54:00+11:00",
       "end": "2026-11-14T13:54:00+11:00",
       "grade": "green",
-      "peak_median_kn": 10.3,
-      "direction_deg": 21.0,
-      "models_agreeing": 3,
+      "peak_median_kn": 11.2,
+      "direction_deg": 24.0,
+      "models_agreeing": 4,
       "model_values": {
         "GFS": 12.0,
-        "ECMWF": 4.3,
-        "ICON": 10.3
+        "ECMWF": 3.8,
+        "ICON": 10.3,
+        "UKMO": 14.9
       },
       "title_tags": [],
       "notes": [],
@@ -715,19 +625,53 @@
       "foil_key": "entrance_swell:2026-11-14:11"
     },
     {
+      "trigger_id": "ne_ocean",
+      "run_name": "NE run (Easty / South Beach / Sandon)",
+      "date": "2026-11-14",
+      "start": "2026-11-14T16:00:00+11:00",
+      "end": "2026-11-14T18:00:00+11:00",
+      "grade": "yellow",
+      "peak_median_kn": 13.1,
+      "direction_deg": 48.0,
+      "models_agreeing": 2,
+      "model_values": {
+        "GFS": 13.2,
+        "UKMO": 13.0
+      },
+      "title_tags": [
+        "2 of 4 models"
+      ],
+      "notes": [
+        "aligned swell 0.9 m ENE",
+        "only 2 of 4 models reached the trigger; the others did not see it"
+      ],
+      "swell_m": 0.9,
+      "swell_dir_deg": 58.0,
+      "high_tide": null,
+      "high_tide_m": null,
+      "spots": null,
+      "watch": null,
+      "tide_state": null,
+      "confidence": "low (long range)",
+      "live_status": "pending",
+      "event_id": "0dfmf6aqlu0f2c7ie1573ec5mo",
+      "foil_key": "ne_ocean:2026-11-14:16"
+    },
+    {
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-14",
       "start": "2026-11-14T18:53:20+11:00",
       "end": "2026-11-14T20:00:00+11:00",
       "grade": "yellow",
-      "peak_median_kn": 5.2,
-      "direction_deg": 9.0,
-      "models_agreeing": 3,
+      "peak_median_kn": 5.7,
+      "direction_deg": 16.0,
+      "models_agreeing": 4,
       "model_values": {
         "GFS": 4.5,
-        "ECMWF": 5.2,
-        "ICON": 6.8
+        "ECMWF": 1.4,
+        "ICON": 6.8,
+        "UKMO": 10.4
       },
       "title_tags": [
         "off-tide"
@@ -751,17 +695,17 @@
   "near_misses": [
     {
       "trigger_id": "lake_oakflats_berkeley",
-      "date": "2026-11-11",
-      "start": "2026-11-11T14:00:00+11:00",
-      "end": "2026-11-11T17:00:00+11:00",
+      "date": "2026-11-12",
+      "start": "2026-11-12T08:00:00+11:00",
+      "end": "2026-11-12T09:00:00+11:00",
       "reason": "single_model",
       "detail": "only ['ukmo_seamless'] sees it"
     },
     {
-      "trigger_id": "lake_oakflats_berkeley",
-      "date": "2026-11-11",
-      "start": "2026-11-11T18:00:00+11:00",
-      "end": "2026-11-11T19:00:00+11:00",
+      "trigger_id": "lake_west",
+      "date": "2026-11-08",
+      "start": "2026-11-08T07:00:00+11:00",
+      "end": "2026-11-08T08:00:00+11:00",
       "reason": "single_model",
       "detail": "only ['ukmo_seamless'] sees it"
     },
@@ -782,28 +726,28 @@
       "detail": "runnable but outside the preferred run-out (11:54-13:54); kept as yellow"
     },
     {
-      "trigger_id": "south_ocean",
-      "date": "2026-11-11",
-      "start": "2026-11-11T14:00:00+11:00",
-      "end": "2026-11-11T18:00:00+11:00",
-      "reason": "single_model",
-      "detail": "only ['ukmo_seamless'] sees it"
-    },
-    {
       "trigger_id": "ne_ocean",
       "date": "2026-11-10",
-      "start": "2026-11-10T16:00:00+11:00",
+      "start": "2026-11-10T18:00:00+11:00",
       "end": "2026-11-10T19:00:00+11:00",
       "reason": "single_model",
       "detail": "only ['ukmo_seamless'] sees it"
     },
     {
       "trigger_id": "ne_ocean",
-      "date": "2026-11-14",
-      "start": "2026-11-14T14:00:00+11:00",
-      "end": "2026-11-14T18:00:00+11:00",
+      "date": "2026-11-11",
+      "start": "2026-11-11T17:00:00+11:00",
+      "end": "2026-11-11T18:00:00+11:00",
       "reason": "single_model",
-      "detail": "only ['gfs_seamless'] sees it"
+      "detail": "only ['ukmo_seamless'] sees it"
+    },
+    {
+      "trigger_id": "ne_ocean",
+      "date": "2026-11-13",
+      "start": "2026-11-13T15:00:00+11:00",
+      "end": "2026-11-13T19:00:00+11:00",
+      "reason": "single_model",
+      "detail": "only ['icon_seamless'] sees it"
     }
   ]
 }
