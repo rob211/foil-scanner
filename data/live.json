@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-08T16:00:19.188736+11:00",
+  "generated_at": "2026-11-08T16:30:17.181307+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-08T15:30:00+11:00",
-    "speed_kn": 30.2,
-    "gust_kn": 36.2,
+    "time": "2026-11-08T16:00:00+11:00",
+    "speed_kn": 30.8,
+    "gust_kn": 37.8,
     "dir_deg": 157.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-08T15:58:46+11:00",
+    "time": "2026-11-08T16:28:46+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-08T15:30:00+11:00",
-    "speed_kn": 10.8,
-    "gust_kn": 25.9,
-    "dir_deg": 202.5
+    "time": "2026-11-08T16:00:00+11:00",
+    "speed_kn": 11.9,
+    "gust_kn": 27.0,
+    "dir_deg": 157.5
   },
   "checks": [
     {
       "foil_key": "lake_oakflats_berkeley:2026-11-08:07",
       "state": "miss",
-      "live_line": "0 kn N at 15:58 (Lake Illawarra) vs forecast 24.8 kn"
+      "live_line": "0 kn N at 16:28 (Lake Illawarra) vs forecast 24.8 kn"
     }
   ],
   "alerts": [
@@ -34,12 +34,12 @@
       "trigger_id": "south_ocean",
       "run_name": "South runs",
       "station": "Bellambi",
-      "speed_kn": 30.2,
+      "speed_kn": 30.8,
       "dir_deg": 157.5,
       "threshold_kn": 18.0,
       "detail": "",
       "foil_key": "live-alert:2026-11-08:ocean",
-      "created": true
+      "created": false
     }
   ],
   "bias": [
@@ -54,15 +54,15 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 30.2,
+      "observed_kn": 30.8,
       "forecast_kn": 16.9,
-      "gap_kn": 13.3,
+      "gap_kn": 13.9,
       "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
     "MODEL BUST (lake): observed 0 kn vs forecast 19 kn at Lake Illawarra",
-    "MODEL BUST (ocean): observed 30 kn vs forecast 17 kn at Bellambi"
+    "MODEL BUST (ocean): observed 31 kn vs forecast 17 kn at Bellambi"
   ]
 }
