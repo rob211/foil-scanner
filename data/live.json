@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-08T18:01:36.374434+11:00",
+  "generated_at": "2026-11-08T18:31:03.339404+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-08T17:30:00+11:00",
+    "time": "2026-11-08T18:00:00+11:00",
     "speed_kn": 29.2,
-    "gust_kn": 35.1,
+    "gust_kn": 34.0,
     "dir_deg": 157.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-08T18:00:48+11:00",
+    "time": "2026-11-08T18:30:47+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-08T17:30:00+11:00",
-    "speed_kn": 10.3,
-    "gust_kn": 24.8,
+    "time": "2026-11-08T18:00:00+11:00",
+    "speed_kn": 11.9,
+    "gust_kn": 25.9,
     "dir_deg": 202.5
   },
   "checks": [
     {
       "foil_key": "lake_oakflats_berkeley:2026-11-08:07",
       "state": "miss",
-      "live_line": "0 kn N at 18:00 (Lake Illawarra) vs forecast 24.3 kn"
+      "live_line": "0 kn N at 18:30 (Lake Illawarra) vs forecast 24.3 kn"
     }
   ],
   "alerts": [
