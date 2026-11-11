@@ -1,35 +1,41 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-11T21:00:56.718869+11:00",
+  "generated_at": "2026-11-11T23:00:56.964246+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-11-11T21:00:57.008287+11:00",
+      "fetched_at": "2026-11-11T23:00:57.341854+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-11-11T21:00:57.304424+11:00",
+      "fetched_at": "2026-11-11T23:00:57.656250+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-11-11T21:00:58.002486+11:00",
+      "fetched_at": "2026-11-11T23:00:58.368233+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-11-11T21:00:58.702836+11:00",
+      "fetched_at": "2026-11-11T23:00:59.045192+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-11-11T21:00:59.267521+11:00",
+      "fetched_at": "2026-11-11T23:00:59.695670+11:00",
       "detail": null,
+      "error": null
+    },
+    "entrance_grid": {
+      "ok": true,
+      "fetched_at": null,
+      "detail": "entrance forecast identical to lake: same model grid cell, no entrance-specific signal",
       "error": null
     }
   },
@@ -122,18 +128,18 @@
     },
     {
       "time": "2026-11-11T17:00:00+11:00",
-      "lake": 9.9,
+      "lake": 10.1,
       "ocean": 10.7
     },
     {
       "time": "2026-11-11T18:00:00+11:00",
-      "lake": 6.2,
-      "ocean": 8.3
+      "lake": 7.5,
+      "ocean": 9.4
     },
     {
       "time": "2026-11-11T19:00:00+11:00",
-      "lake": 4.5,
-      "ocean": 6.9
+      "lake": 3.8,
+      "ocean": 6.7
     },
     {
       "time": "2026-11-11T20:00:00+11:00",
@@ -142,17 +148,17 @@
     },
     {
       "time": "2026-11-11T21:00:00+11:00",
-      "lake": 4.2,
-      "ocean": 7.5
+      "lake": 5.7,
+      "ocean": 7.8
     },
     {
       "time": "2026-11-11T22:00:00+11:00",
-      "lake": 4.4,
+      "lake": 5.0,
       "ocean": 7.2
     },
     {
       "time": "2026-11-11T23:00:00+11:00",
-      "lake": 5.6,
+      "lake": 6.2,
       "ocean": 7.3
     }
   ],
@@ -162,13 +168,13 @@
       "run_name": "NE run (Easty / South Beach / Sandon)",
       "date": "2026-11-13",
       "start": "2026-11-13T15:00:00+11:00",
-      "end": "2026-11-13T19:00:00+11:00",
+      "end": "2026-11-13T20:00:00+11:00",
       "grade": "yellow",
-      "peak_median_kn": 15.2,
-      "direction_deg": 53.0,
+      "peak_median_kn": 14.9,
+      "direction_deg": 54.0,
       "models_agreeing": 2,
       "model_values": {
-        "GFS": 16.3,
+        "GFS": 15.5,
         "UKMO": 14.2
       },
       "title_tags": [
@@ -197,11 +203,11 @@
       "start": "2026-11-13T19:00:00+11:00",
       "end": "2026-11-13T20:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 8.3,
+      "peak_median_kn": 9.2,
       "direction_deg": 35.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 8.7,
+        "GFS": 10.4,
         "ECMWF": 4.6,
         "ICON": 8.0,
         "UKMO": 12.6
@@ -232,7 +238,7 @@
       "end": "2026-11-14T11:54:00+11:00",
       "grade": "yellow",
       "peak_median_kn": 4.8,
-      "direction_deg": 265.0,
+      "direction_deg": 267.0,
       "models_agreeing": 4,
       "model_values": {
         "GFS": 5.7,
@@ -265,11 +271,11 @@
       "start": "2026-11-14T11:54:00+11:00",
       "end": "2026-11-14T13:54:00+11:00",
       "grade": "green",
-      "peak_median_kn": 4.7,
-      "direction_deg": 33.0,
+      "peak_median_kn": 5.7,
+      "direction_deg": 32.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 7.1,
+        "GFS": 9.0,
         "ECMWF": 2.3,
         "ICON": 2.3,
         "UKMO": 10.4
@@ -296,10 +302,10 @@
       "end": "2026-11-14T20:00:00+11:00",
       "grade": "yellow",
       "peak_median_kn": 6.7,
-      "direction_deg": 156.0,
+      "direction_deg": 206.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 8.8,
+        "GFS": 9.3,
         "ECMWF": 3.2,
         "ICON": 6.2,
         "UKMO": 7.1
@@ -384,11 +390,11 @@
       "start": "2026-11-16T11:00:00+11:00",
       "end": "2026-11-16T14:00:00+11:00",
       "grade": "yellow",
-      "peak_median_kn": 19.6,
-      "direction_deg": 183.0,
+      "peak_median_kn": 19.5,
+      "direction_deg": 182.0,
       "models_agreeing": 2,
       "model_values": {
-        "ICON": 20.2,
+        "ICON": 19.9,
         "UKMO": 19.1
       },
       "title_tags": [
@@ -416,11 +422,11 @@
       "start": "2026-11-16T14:00:00+11:00",
       "end": "2026-11-16T20:00:00+11:00",
       "grade": "watch",
-      "peak_median_kn": 18.0,
-      "direction_deg": 202.0,
+      "peak_median_kn": 20.7,
+      "direction_deg": 191.0,
       "models_agreeing": 1,
       "model_values": {
-        "ICON": 18.0
+        "ICON": 20.7
       },
       "title_tags": [],
       "notes": [],
@@ -444,10 +450,10 @@
       "end": "2026-11-17T14:22:30+11:00",
       "grade": "green",
       "peak_median_kn": 10.4,
-      "direction_deg": 97.0,
+      "direction_deg": 99.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 14.5,
+        "GFS": 13.6,
         "ECMWF": 9.1,
         "ICON": 11.7,
         "UKMO": 8.1
@@ -478,10 +484,10 @@
       "end": "2026-11-17T16:22:30+11:00",
       "grade": "red",
       "peak_median_kn": 10.3,
-      "direction_deg": 92.0,
+      "direction_deg": 95.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 14.5,
+        "GFS": 13.3,
         "ECMWF": 9.3,
         "ICON": 11.3,
         "UKMO": 8.7
@@ -506,7 +512,7 @@
       "trigger_id": "entrance_ne",
       "date": "2026-11-13",
       "start": "2026-11-13T14:00:00+11:00",
-      "end": "2026-11-13T16:00:00+11:00",
+      "end": "2026-11-13T17:00:00+11:00",
       "reason": "single_model",
       "detail": "models never agree on the same hour: ['gfs_seamless', 'ukmo_seamless']"
     },
@@ -549,14 +555,6 @@
       "end": "2026-11-11T19:00:00+11:00",
       "reason": "single_model",
       "detail": "only ['ukmo_seamless'] sees it"
-    },
-    {
-      "trigger_id": "ne_ocean",
-      "date": "2026-11-17",
-      "start": "2026-11-17T18:00:00+11:00",
-      "end": "2026-11-17T20:00:00+11:00",
-      "reason": "single_model",
-      "detail": "only ['gfs_seamless'] sees it"
     }
   ]
 }
