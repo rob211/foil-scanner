@@ -1,23 +1,23 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-13T12:30:54.881729+11:00",
+  "generated_at": "2026-11-13T12:58:11.244208+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-13T12:00:00+11:00",
-    "speed_kn": 15.1,
-    "gust_kn": 17.8,
-    "dir_deg": 45.0
+    "time": "2026-11-13T12:30:00+11:00",
+    "speed_kn": 17.8,
+    "gust_kn": 20.0,
+    "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-13T12:29:09+11:00",
+    "time": "2026-11-13T12:57:09+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-13T12:00:00+11:00",
+    "time": "2026-11-13T12:30:00+11:00",
     "speed_kn": 10.8,
     "gust_kn": 15.1,
     "dir_deg": 45.0
@@ -25,11 +25,22 @@
   "checks": [],
   "alerts": [
     {
+      "trigger_id": "entrance_ne",
+      "run_name": "Lake Entrance (NE wind)",
+      "station": "Bellambi",
+      "speed_kn": 17.8,
+      "dir_deg": 22.5,
+      "threshold_kn": 16.2,
+      "detail": "Run-out gate today: 11:13-13:13.",
+      "foil_key": "live-alert:2026-11-13:entrance",
+      "created": true
+    },
+    {
       "trigger_id": "ne_ocean",
       "run_name": "NE ocean runs",
       "station": "Bellambi",
-      "speed_kn": 15.1,
-      "dir_deg": 45.0,
+      "speed_kn": 17.8,
+      "dir_deg": 22.5,
       "threshold_kn": 10.0,
       "detail": "",
       "foil_key": "live-alert:2026-11-13:ocean",
@@ -48,15 +59,14 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 15.1,
+      "observed_kn": 17.8,
       "forecast_kn": 10.9,
-      "gap_kn": 4.2,
+      "gap_kn": 6.9,
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": [
-    "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)",
     "MODEL BUST (lake): observed 0 kn vs forecast 12 kn at Lake Illawarra"
   ]
 }
