@@ -1,0 +1,137 @@
+{
+  "schema_version": 2,
+  "generated_at": "2026-11-14T01:02:32.541707+11:00",
+  "sources": {
+    "open_meteo_sun": {
+      "ok": false,
+      "fetched_at": null,
+      "detail": null,
+      "error": "FetchError: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
+    },
+    "open_meteo_wind_lake": {
+      "ok": false,
+      "fetched_at": null,
+      "detail": null,
+      "error": "FetchError: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
+    },
+    "open_meteo_wind_entrance": {
+      "ok": true,
+      "fetched_at": "2026-11-14T01:08:36.425191+11:00",
+      "detail": null,
+      "error": null
+    },
+    "open_meteo_wind_ocean": {
+      "ok": true,
+      "fetched_at": "2026-11-14T01:08:36.480075+11:00",
+      "detail": null,
+      "error": null
+    },
+    "open_meteo_marine": {
+      "ok": true,
+      "fetched_at": "2026-11-14T01:08:37.096748+11:00",
+      "detail": null,
+      "error": null
+    }
+  },
+  "heartbeat_max_age_h": 8.0,
+  "expected_today": [
+    {
+      "time": "2026-11-14T00:00:00+11:00",
+      "ocean": 6.2
+    },
+    {
+      "time": "2026-11-14T01:00:00+11:00",
+      "ocean": 6.9
+    },
+    {
+      "time": "2026-11-14T02:00:00+11:00",
+      "ocean": 7.0
+    },
+    {
+      "time": "2026-11-14T03:00:00+11:00",
+      "ocean": 7.4
+    },
+    {
+      "time": "2026-11-14T04:00:00+11:00",
+      "ocean": 7.5
+    },
+    {
+      "time": "2026-11-14T05:00:00+11:00",
+      "ocean": 7.4
+    },
+    {
+      "time": "2026-11-14T06:00:00+11:00",
+      "ocean": 7.4
+    },
+    {
+      "time": "2026-11-14T07:00:00+11:00",
+      "ocean": 6.8
+    },
+    {
+      "time": "2026-11-14T08:00:00+11:00",
+      "ocean": 6.4
+    },
+    {
+      "time": "2026-11-14T09:00:00+11:00",
+      "ocean": 6.4
+    },
+    {
+      "time": "2026-11-14T10:00:00+11:00",
+      "ocean": 7.3
+    },
+    {
+      "time": "2026-11-14T11:00:00+11:00",
+      "ocean": 8.4
+    },
+    {
+      "time": "2026-11-14T12:00:00+11:00",
+      "ocean": 8.6
+    },
+    {
+      "time": "2026-11-14T13:00:00+11:00",
+      "ocean": 7.8
+    },
+    {
+      "time": "2026-11-14T14:00:00+11:00",
+      "ocean": 7.2
+    },
+    {
+      "time": "2026-11-14T15:00:00+11:00",
+      "ocean": 5.7
+    },
+    {
+      "time": "2026-11-14T16:00:00+11:00",
+      "ocean": 6.4
+    },
+    {
+      "time": "2026-11-14T17:00:00+11:00",
+      "ocean": 7.3
+    },
+    {
+      "time": "2026-11-14T18:00:00+11:00",
+      "ocean": 6.6
+    },
+    {
+      "time": "2026-11-14T19:00:00+11:00",
+      "ocean": 5.7
+    },
+    {
+      "time": "2026-11-14T20:00:00+11:00",
+      "ocean": 8.0
+    },
+    {
+      "time": "2026-11-14T21:00:00+11:00",
+      "ocean": 9.9
+    },
+    {
+      "time": "2026-11-14T22:00:00+11:00",
+      "ocean": 10.8
+    },
+    {
+      "time": "2026-11-14T23:00:00+11:00",
+      "ocean": 12.6
+    }
+  ],
+  "windows": [],
+  "near_misses": []
+}
