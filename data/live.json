@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-15T06:19:06.137528+11:00",
+  "generated_at": "2026-11-15T06:30:52.307703+11:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-11-15T06:00:00+11:00",
@@ -10,7 +10,7 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-15T06:17:16+11:00",
+    "time": "2026-11-15T06:29:16+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
@@ -33,7 +33,7 @@
       "threshold_kn": 16.2,
       "detail": "Run-out gate today: 12:38-14:38.",
       "foil_key": "live-alert:2026-11-15:entrance",
-      "created": true
+      "created": false
     },
     {
       "trigger_id": "ne_ocean",
@@ -44,7 +44,7 @@
       "threshold_kn": 10.0,
       "detail": "",
       "foil_key": "live-alert:2026-11-15:ocean",
-      "created": true
+      "created": false
     }
   ],
   "bias": [
@@ -65,9 +65,8 @@
       "flagged": true
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: 429 Client Error: Too Many Requests for url: https://api.open-meteo.com/v1/forecast?latitude=-34.53&longitude=150.84&daily=sunrise%2Csunset&timezone=Australia%2FSydney&forecast_days=7",
     "MODEL BUST (lake): observed 0 kn vs forecast 9 kn at Lake Illawarra",
     "MODEL BUST (ocean): observed 17 kn vs forecast 9 kn at Bellambi"
   ]
