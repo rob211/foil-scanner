@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-14T10:43:30.032480+11:00",
+  "generated_at": "2026-11-14T11:00:59.369561+11:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-11-14T10:30:00+11:00",
@@ -10,7 +10,7 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-14T10:43:14+11:00",
+    "time": "2026-11-14T10:59:12+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
@@ -27,6 +27,11 @@
       "foil_key": "entrance_swell:2026-11-14:06",
       "state": "confirmed",
       "live_line": "wind favourable for the swell: 7 kn N at 10:30 (Bellambi)"
+    },
+    {
+      "foil_key": "entrance_swell:2026-11-14:11",
+      "state": "confirmed",
+      "live_line": "wind favourable for the swell: 7 kn N at 10:30 (Bellambi)"
     }
   ],
   "alerts": [],
@@ -35,20 +40,20 @@
       "location": "lake",
       "station": "Lake Illawarra",
       "observed_kn": 0.0,
-      "forecast_kn": 3.8,
-      "gap_kn": -3.8,
+      "forecast_kn": 5.4,
+      "gap_kn": -5.4,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
       "observed_kn": 7.0,
-      "forecast_kn": 7.2,
-      "gap_kn": -0.2,
+      "forecast_kn": 8.4,
+      "gap_kn": -1.4,
       "flagged": false
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
     "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
   ]
