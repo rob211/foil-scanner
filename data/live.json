@@ -1,52 +1,29 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-15T08:30:49.359816+11:00",
+  "generated_at": "2026-11-15T09:00:50.022679+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-15T08:00:00+11:00",
-    "speed_kn": 17.8,
-    "gust_kn": 22.1,
-    "dir_deg": 67.5
+    "time": "2026-11-15T08:44:00+11:00",
+    "speed_kn": 16.2,
+    "gust_kn": 17.8,
+    "dir_deg": 90.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-15T08:29:17+11:00",
+    "time": "2026-11-15T08:59:18+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-15T08:00:00+11:00",
-    "speed_kn": 7.0,
-    "gust_kn": 11.9,
+    "time": "2026-11-15T08:30:00+11:00",
+    "speed_kn": 4.9,
+    "gust_kn": 10.8,
     "dir_deg": 202.5
   },
   "checks": [],
-  "alerts": [
-    {
-      "trigger_id": "entrance_ne",
-      "run_name": "Lake Entrance (NE wind)",
-      "station": "Bellambi",
-      "speed_kn": 17.8,
-      "dir_deg": 67.5,
-      "threshold_kn": 16.2,
-      "detail": "Run-out gate today: 12:38-14:38.",
-      "foil_key": "live-alert:2026-11-15:entrance",
-      "created": false
-    },
-    {
-      "trigger_id": "ne_ocean",
-      "run_name": "NE ocean runs",
-      "station": "Bellambi",
-      "speed_kn": 17.8,
-      "dir_deg": 67.5,
-      "threshold_kn": 10.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-11-15:ocean",
-      "created": false
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
@@ -60,7 +37,7 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 17.8,
+      "observed_kn": 16.2,
       "forecast_kn": null,
       "gap_kn": null,
       "flagged": null,
@@ -69,7 +46,6 @@
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: 429 Client Error: Too Many Requests for url: https://api.open-meteo.com/v1/forecast?latitude=-34.53&longitude=150.84&daily=sunrise%2Csunset&timezone=Australia%2FSydney&forecast_days=7",
     "model bias not checked: no expectation published yet"
   ]
 }
