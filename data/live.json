@@ -1,26 +1,26 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-16T03:00:43.084513+11:00",
+  "generated_at": "2026-11-16T04:00:48.750421+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-16T02:30:00+11:00",
-    "speed_kn": 10.8,
-    "gust_kn": 18.9,
-    "dir_deg": 135.0
+    "time": "2026-11-16T03:30:00+11:00",
+    "speed_kn": 13.0,
+    "gust_kn": 16.2,
+    "dir_deg": 45.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-16T02:59:20+11:00",
+    "time": "2026-11-16T03:59:20+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-16T02:30:00+11:00",
-    "speed_kn": 7.0,
-    "gust_kn": 10.8,
-    "dir_deg": 247.5
+    "time": "2026-11-16T03:30:00+11:00",
+    "speed_kn": 5.9,
+    "gust_kn": 9.2,
+    "dir_deg": 225.0
   },
   "checks": [],
   "alerts": [],
@@ -29,19 +29,21 @@
       "location": "lake",
       "station": "Lake Illawarra",
       "observed_kn": 0.0,
-      "forecast_kn": 7.7,
-      "gap_kn": -7.7,
+      "forecast_kn": 7.2,
+      "gap_kn": -7.2,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 10.8,
-      "forecast_kn": 8.7,
-      "gap_kn": 2.1,
+      "observed_kn": 13.0,
+      "forecast_kn": 8.9,
+      "gap_kn": 4.1,
       "flagged": false
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": []
+  "notes": [
+    "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: 429 Client Error: Too Many Requests for url: https://api.open-meteo.com/v1/forecast?latitude=-34.53&longitude=150.84&daily=sunrise%2Csunset&timezone=Australia%2FSydney&forecast_days=7"
+  ]
 }
