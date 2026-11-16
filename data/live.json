@@ -1,52 +1,29 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-16T12:00:43.490522+11:00",
+  "generated_at": "2026-11-16T12:30:43.526530+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-16T11:30:00+11:00",
-    "speed_kn": 21.1,
-    "gust_kn": 24.8,
-    "dir_deg": 67.5
+    "time": "2026-11-16T12:00:00+11:00",
+    "speed_kn": 22.1,
+    "gust_kn": 25.9,
+    "dir_deg": 112.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-16T11:59:23+11:00",
+    "time": "2026-11-16T12:29:22+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-16T11:30:00+11:00",
-    "speed_kn": 7.0,
+    "time": "2026-11-16T12:00:00+11:00",
+    "speed_kn": 8.1,
     "gust_kn": 15.1,
     "dir_deg": 202.5
   },
   "checks": [],
-  "alerts": [
-    {
-      "trigger_id": "entrance_ne",
-      "run_name": "Lake Entrance (NE wind)",
-      "station": "Bellambi",
-      "speed_kn": 21.1,
-      "dir_deg": 67.5,
-      "threshold_kn": 16.2,
-      "detail": "Run-out gate today: 01:50-03:50, 13:30-15:30.",
-      "foil_key": "live-alert:2026-11-16:entrance",
-      "created": false
-    },
-    {
-      "trigger_id": "ne_ocean",
-      "run_name": "NE ocean runs",
-      "station": "Bellambi",
-      "speed_kn": 21.1,
-      "dir_deg": 67.5,
-      "threshold_kn": 10.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-11-16:ocean",
-      "created": false
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
@@ -59,15 +36,15 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 21.1,
+      "observed_kn": 22.1,
       "forecast_kn": 12.4,
-      "gap_kn": 8.7,
+      "gap_kn": 9.7,
       "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
     "MODEL BUST (lake): observed 0 kn vs forecast 13 kn at Lake Illawarra",
-    "MODEL BUST (ocean): observed 21 kn vs forecast 12 kn at Bellambi"
+    "MODEL BUST (ocean): observed 22 kn vs forecast 12 kn at Bellambi"
   ]
 }
