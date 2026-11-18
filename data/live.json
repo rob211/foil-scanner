@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-18T15:31:12.825182+11:00",
+  "generated_at": "2026-11-18T15:35:01.056177+11:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-11-18T15:00:00+11:00",
@@ -10,7 +10,7 @@
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-18T15:29:33+11:00",
+    "time": "2026-11-18T15:33:31+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
@@ -48,9 +48,8 @@
       "flagged": false
     }
   ],
-  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "token_expires_at": null,
   "notes": [
-    "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)",
     "MODEL BUST (lake): observed 0 kn vs forecast 14 kn at Lake Illawarra"
   ]
 }
