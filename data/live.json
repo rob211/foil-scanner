@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-18T15:35:01.056177+11:00",
+  "generated_at": "2026-11-18T16:01:23.377162+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-18T15:00:00+11:00",
+    "time": "2026-11-18T15:30:00+11:00",
     "speed_kn": 16.2,
     "gust_kn": 17.8,
-    "dir_deg": 22.5
+    "dir_deg": 0.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-18T15:33:31+11:00",
+    "time": "2026-11-18T15:59:32+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-18T15:00:00+11:00",
+    "time": "2026-11-18T15:30:00+11:00",
     "speed_kn": 11.9,
-    "gust_kn": 16.2,
+    "gust_kn": 15.1,
     "dir_deg": 45.0
   },
   "checks": [
     {
       "foil_key": "ne_ocean:2026-11-18:16",
-      "state": "confirmed",
-      "live_line": "16 kn NNE at 15:00 (Bellambi), forecast 12.2 kn"
+      "state": "miss",
+      "live_line": "16 kn N at 15:30 (Bellambi) vs forecast 12.2 kn"
     }
   ],
   "alerts": [],
@@ -43,13 +43,14 @@
       "location": "ocean",
       "station": "Bellambi",
       "observed_kn": 16.2,
-      "forecast_kn": 12.4,
-      "gap_kn": 3.8,
+      "forecast_kn": 12.7,
+      "gap_kn": 3.5,
       "flagged": false
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
+    "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)",
     "MODEL BUST (lake): observed 0 kn vs forecast 14 kn at Lake Illawarra"
   ]
 }
