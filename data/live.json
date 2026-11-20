@@ -1,26 +1,26 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-21T00:15:43.434805+11:00",
+  "generated_at": "2026-11-21T01:01:09.919732+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-21T00:00:00+11:00",
-    "speed_kn": 7.0,
-    "gust_kn": 8.1,
+    "time": "2026-11-21T00:30:00+11:00",
+    "speed_kn": 4.9,
+    "gust_kn": 7.0,
     "dir_deg": 22.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-21T00:15:42+11:00",
+    "time": "2026-11-21T00:59:41+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-21T00:00:00+11:00",
+    "time": "2026-11-21T00:30:00+11:00",
     "speed_kn": 2.2,
     "gust_kn": 4.9,
-    "dir_deg": 22.5
+    "dir_deg": 90.0
   },
   "checks": [],
   "alerts": [],
@@ -37,16 +37,15 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 7.0,
+      "observed_kn": 4.9,
       "forecast_kn": null,
       "gap_kn": null,
       "flagged": null,
       "reason": "expectation is from 2026-11-20, not 2026-11-21"
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: 429 Client Error: Too Many Requests for url: https://api.open-meteo.com/v1/forecast?latitude=-34.53&longitude=150.84&daily=sunrise%2Csunset&timezone=Australia%2FSydney&forecast_days=7",
     "model bias not checked: expectation is from 2026-11-20, not 2026-11-21"
   ]
 }
