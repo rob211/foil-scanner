@@ -1,34 +1,34 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-20T23:01:16.068515+11:00",
+  "generated_at": "2026-11-20T23:55:56.939517+11:00",
   "sources": {
     "open_meteo_sun": {
       "ok": true,
-      "fetched_at": "2026-11-20T23:01:16.309251+11:00",
+      "fetched_at": "2026-11-20T23:55:57.038181+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_lake": {
       "ok": true,
-      "fetched_at": "2026-11-20T23:01:16.565606+11:00",
+      "fetched_at": "2026-11-20T23:55:57.206279+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_entrance": {
       "ok": true,
-      "fetched_at": "2026-11-20T23:01:16.673690+11:00",
+      "fetched_at": "2026-11-20T23:55:57.382460+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_wind_ocean": {
       "ok": true,
-      "fetched_at": "2026-11-20T23:01:16.778639+11:00",
+      "fetched_at": "2026-11-20T23:55:57.483561+11:00",
       "detail": null,
       "error": null
     },
     "open_meteo_marine": {
       "ok": true,
-      "fetched_at": "2026-11-20T23:01:17.383323+11:00",
+      "fetched_at": "2026-11-20T23:55:57.919572+11:00",
       "detail": null,
       "error": null
     },
@@ -168,7 +168,7 @@
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-20",
       "start": "2026-11-20T06:00:00+11:00",
-      "end": "2026-11-20T07:21:49.090909+11:00",
+      "end": "2026-11-20T07:20:00+11:00",
       "grade": "green",
       "peak_median_kn": 2.2,
       "direction_deg": 333.0,
@@ -181,9 +181,9 @@
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 0.88,
-      "swell_dir_deg": 105.0,
-      "high_tide": "2026-11-20T05:21:49.090909+11:00",
+      "swell_m": 0.98,
+      "swell_dir_deg": 103.0,
+      "high_tide": "2026-11-20T05:25:00+11:00",
       "high_tide_m": 1.25,
       "spots": null,
       "watch": null,
@@ -197,17 +197,17 @@
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-20",
-      "start": "2026-11-20T11:21:49.090909+11:00",
-      "end": "2026-11-20T17:18:27.692308+11:00",
+      "start": "2026-11-20T11:20:00+11:00",
+      "end": "2026-11-20T17:16:21.818182+11:00",
       "grade": "green",
-      "peak_median_kn": 10.9,
-      "direction_deg": 40.0,
+      "peak_median_kn": 11.9,
+      "direction_deg": 51.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 9.1,
+        "GFS": 13.8,
         "ECMWF": 7.4,
-        "ICON": 13.2,
-        "UKMO": 12.6
+        "ICON": 12.2,
+        "UKMO": 11.6
       },
       "title_tags": [
         "off-tide"
@@ -215,10 +215,10 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 1.14,
-      "swell_dir_deg": 66.0,
-      "high_tide": "2026-11-20T17:18:27.692308+11:00",
-      "high_tide_m": 1.26,
+      "swell_m": 1.04,
+      "swell_dir_deg": 103.0,
+      "high_tide": "2026-11-20T17:16:21.818182+11:00",
+      "high_tide_m": 1.25,
       "spots": null,
       "watch": null,
       "tide_state": "workable",
@@ -228,61 +228,27 @@
       "foil_key": "entrance_swell:2026-11-20:11"
     },
     {
-      "trigger_id": "ne_ocean",
-      "run_name": "NE run (Easty / South Beach / Sandon)",
-      "date": "2026-11-20",
-      "start": "2026-11-20T13:00:00+11:00",
-      "end": "2026-11-20T18:00:00+11:00",
-      "grade": "yellow",
-      "peak_median_kn": 12.2,
-      "direction_deg": 60.0,
-      "models_agreeing": 2,
-      "model_values": {
-        "GFS": 13.4,
-        "UKMO": 10.9
-      },
-      "title_tags": [
-        "off-angle ENE",
-        "2 of 4 models"
-      ],
-      "notes": [
-        "aligned swell 1.0 m ENE",
-        "only 2 of 4 models reached the trigger; the others did not see it"
-      ],
-      "swell_m": 0.96,
-      "swell_dir_deg": 78.0,
-      "high_tide": null,
-      "high_tide_m": null,
-      "spots": null,
-      "watch": null,
-      "tide_state": null,
-      "confidence": "normal",
-      "live_status": "pending",
-      "event_id": "rvam5t9dh5tsruv0c982uqiins",
-      "foil_key": "ne_ocean:2026-11-20:13"
-    },
-    {
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-20",
-      "start": "2026-11-20T17:18:27.692308+11:00",
-      "end": "2026-11-20T19:18:27.692308+11:00",
+      "start": "2026-11-20T17:16:21.818182+11:00",
+      "end": "2026-11-20T19:16:21.818182+11:00",
       "grade": "red",
-      "peak_median_kn": 9.9,
-      "direction_deg": 39.0,
+      "peak_median_kn": 6.5,
+      "direction_deg": 33.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 8.4,
-        "ECMWF": 4.9,
-        "ICON": 11.5,
-        "UKMO": 13.5
+        "GFS": 4.2,
+        "ECMWF": 1.4,
+        "ICON": 8.7,
+        "UKMO": 11.9
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 1.14,
-      "swell_dir_deg": 66.0,
-      "high_tide": "2026-11-20T17:18:27.692308+11:00",
-      "high_tide_m": 1.26,
+      "swell_m": 1.18,
+      "swell_dir_deg": 80.0,
+      "high_tide": "2026-11-20T17:16:21.818182+11:00",
+      "high_tide_m": 1.25,
       "spots": null,
       "watch": null,
       "tide_state": "preferred",
@@ -295,24 +261,24 @@
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-21",
-      "start": "2026-11-21T06:04:36.923077+11:00",
-      "end": "2026-11-21T08:04:36.923077+11:00",
+      "start": "2026-11-21T06:00:00+11:00",
+      "end": "2026-11-21T08:00:00+11:00",
       "grade": "red",
-      "peak_median_kn": 3.8,
-      "direction_deg": 323.0,
+      "peak_median_kn": 3.6,
+      "direction_deg": 320.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 3.2,
-        "ECMWF": 6.5,
-        "ICON": 3.8,
-        "UKMO": 3.9
+        "GFS": 3.8,
+        "ECMWF": 6.2,
+        "ICON": 3.5,
+        "UKMO": 2.8
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 1.22,
-      "swell_dir_deg": 63.0,
-      "high_tide": "2026-11-21T06:04:36.923077+11:00",
-      "high_tide_m": 1.36,
+      "swell_m": 1.3,
+      "swell_dir_deg": 65.0,
+      "high_tide": "2026-11-21T06:00:00+11:00",
+      "high_tide_m": 1.38,
       "spots": null,
       "watch": null,
       "tide_state": "preferred",
@@ -327,15 +293,15 @@
       "date": "2026-11-21",
       "start": "2026-11-21T12:16:21.818182+11:00",
       "end": "2026-11-21T18:09:13.846154+11:00",
-      "grade": "yellow",
-      "peak_median_kn": 8.2,
-      "direction_deg": 35.0,
+      "grade": "green",
+      "peak_median_kn": 8.6,
+      "direction_deg": 65.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 5.1,
-        "ECMWF": 6.1,
-        "ICON": 10.3,
-        "UKMO": 12.5
+        "GFS": 11.7,
+        "ECMWF": 2.9,
+        "ICON": 10.0,
+        "UKMO": 7.1
       },
       "title_tags": [
         "off-tide"
@@ -343,10 +309,10 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 1.0,
-      "swell_dir_deg": 67.0,
+      "swell_m": 1.12,
+      "swell_dir_deg": 66.0,
       "high_tide": "2026-11-21T18:09:13.846154+11:00",
-      "high_tide_m": 1.26,
+      "high_tide_m": 1.27,
       "spots": null,
       "watch": null,
       "tide_state": "workable",
@@ -361,7 +327,7 @@
       "date": "2026-11-21",
       "start": "2026-11-21T18:09:13.846154+11:00",
       "end": "2026-11-21T20:00:00+11:00",
-      "grade": "green",
+      "grade": "red",
       "peak_median_kn": 7.6,
       "direction_deg": 16.0,
       "models_agreeing": 4,
@@ -373,10 +339,10 @@
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 0.96,
-      "swell_dir_deg": 70.0,
+      "swell_m": 1.04,
+      "swell_dir_deg": 65.0,
       "high_tide": "2026-11-21T18:09:13.846154+11:00",
-      "high_tide_m": 1.26,
+      "high_tide_m": 1.27,
       "spots": null,
       "watch": null,
       "tide_state": "preferred",
@@ -389,8 +355,8 @@
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-22",
-      "start": "2026-11-22T06:44:00+11:00",
-      "end": "2026-11-22T08:44:00+11:00",
+      "start": "2026-11-22T06:42:51.428571+11:00",
+      "end": "2026-11-22T08:42:51.428571+11:00",
       "grade": "red",
       "peak_median_kn": 3.0,
       "direction_deg": 278.0,
@@ -403,9 +369,9 @@
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 1.12,
+      "swell_m": 1.1,
       "swell_dir_deg": 65.0,
-      "high_tide": "2026-11-22T06:44:00+11:00",
+      "high_tide": "2026-11-22T06:42:51.428571+11:00",
       "high_tide_m": 1.48,
       "spots": null,
       "watch": null,
@@ -420,16 +386,16 @@
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-22",
       "start": "2026-11-22T15:00:00+11:00",
-      "end": "2026-11-22T20:00:00+11:00",
-      "grade": "green",
-      "peak_median_kn": 5.8,
-      "direction_deg": 43.0,
+      "end": "2026-11-22T19:00:00+11:00",
+      "grade": "yellow",
+      "peak_median_kn": 8.0,
+      "direction_deg": 50.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 6.2,
-        "ECMWF": 2.8,
-        "ICON": 5.4,
-        "UKMO": 6.8
+        "GFS": 7.1,
+        "ECMWF": 4.9,
+        "ICON": 9.0,
+        "UKMO": 11.3
       },
       "title_tags": [
         "off-tide"
@@ -437,9 +403,9 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 1.26,
-      "swell_dir_deg": 68.0,
-      "high_tide": "2026-11-22T19:04:36.923077+11:00",
+      "swell_m": 1.0,
+      "swell_dir_deg": 69.0,
+      "high_tide": "2026-11-22T19:00:00+11:00",
       "high_tide_m": 1.28,
       "spots": null,
       "watch": null,
@@ -452,9 +418,39 @@
     {
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
+      "date": "2026-11-22",
+      "start": "2026-11-22T19:00:00+11:00",
+      "end": "2026-11-22T20:00:00+11:00",
+      "grade": "red",
+      "peak_median_kn": 5.8,
+      "direction_deg": 43.0,
+      "models_agreeing": 4,
+      "model_values": {
+        "GFS": 6.2,
+        "ECMWF": 2.8,
+        "ICON": 5.4,
+        "UKMO": 6.8
+      },
+      "title_tags": [],
+      "notes": [],
+      "swell_m": 1.18,
+      "swell_dir_deg": 65.0,
+      "high_tide": "2026-11-22T19:00:00+11:00",
+      "high_tide_m": 1.28,
+      "spots": null,
+      "watch": null,
+      "tide_state": "preferred",
+      "confidence": "normal",
+      "live_status": "pending",
+      "event_id": "flq91pm2u9fmcjsojbtvovp2m8",
+      "foil_key": "entrance_swell:2026-11-22:19"
+    },
+    {
+      "trigger_id": "entrance_swell",
+      "run_name": "Lake Entrance (swell)",
       "date": "2026-11-23",
       "start": "2026-11-23T06:00:00+11:00",
-      "end": "2026-11-23T07:26:15+11:00",
+      "end": "2026-11-23T07:28:14.117647+11:00",
       "grade": "green",
       "peak_median_kn": 4.3,
       "direction_deg": 317.0,
@@ -471,9 +467,9 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 1.48,
-      "swell_dir_deg": 63.0,
-      "high_tide": "2026-11-23T07:26:15+11:00",
+      "swell_m": 1.42,
+      "swell_dir_deg": 62.0,
+      "high_tide": "2026-11-23T07:28:14.117647+11:00",
       "high_tide_m": 1.66,
       "spots": null,
       "watch": null,
@@ -487,8 +483,8 @@
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-23",
-      "start": "2026-11-23T07:26:15+11:00",
-      "end": "2026-11-23T09:26:15+11:00",
+      "start": "2026-11-23T07:28:14.117647+11:00",
+      "end": "2026-11-23T09:28:14.117647+11:00",
       "grade": "red",
       "peak_median_kn": 5.0,
       "direction_deg": 308.0,
@@ -501,9 +497,9 @@
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 1.44,
+      "swell_m": 1.36,
       "swell_dir_deg": 63.0,
-      "high_tide": "2026-11-23T07:26:15+11:00",
+      "high_tide": "2026-11-23T07:28:14.117647+11:00",
       "high_tide_m": 1.66,
       "spots": null,
       "watch": null,
@@ -517,7 +513,7 @@
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-23",
-      "start": "2026-11-23T14:00:00+11:00",
+      "start": "2026-11-23T13:56:28.235294+11:00",
       "end": "2026-11-23T20:00:00+11:00",
       "grade": "green",
       "peak_median_kn": 10.4,
@@ -535,17 +531,17 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 1.3,
-      "swell_dir_deg": 62.0,
-      "high_tide": "2026-11-23T20:00:00+11:00",
-      "high_tide_m": 1.31,
+      "swell_m": 1.24,
+      "swell_dir_deg": 63.0,
+      "high_tide": "2026-11-23T19:56:00+11:00",
+      "high_tide_m": 1.3,
       "spots": null,
       "watch": null,
       "tide_state": "workable",
       "confidence": "normal",
       "live_status": "pending",
-      "event_id": "r4qufoj435jovmmnm18fhuhgbc",
-      "foil_key": "entrance_swell:2026-11-23:14"
+      "event_id": "od3ousi5lcm2s8tpd5blj1udek",
+      "foil_key": "entrance_swell:2026-11-23:13"
     },
     {
       "trigger_id": "lake_west",
@@ -604,78 +600,10 @@
     {
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
-      "date": "2026-11-24",
-      "start": "2026-11-24T06:00:00+11:00",
-      "end": "2026-11-24T08:00:00+11:00",
-      "grade": "yellow",
-      "peak_median_kn": 8.2,
-      "direction_deg": 178.0,
-      "models_agreeing": 4,
-      "model_values": {
-        "GFS": 4.3,
-        "ECMWF": 8.0,
-        "ICON": 11.2,
-        "UKMO": 8.4
-      },
-      "title_tags": [
-        "off-tide"
-      ],
-      "notes": [
-        "runnable but not the preferred run-out (high tide to +2 h)"
-      ],
-      "swell_m": 0.98,
-      "swell_dir_deg": 81.0,
-      "high_tide": "2026-11-24T08:10:35.294118+11:00",
-      "high_tide_m": 1.73,
-      "spots": null,
-      "watch": null,
-      "tide_state": "workable",
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": "9n79lh5n63k33h9jn160ol6dbs",
-      "foil_key": "entrance_swell:2026-11-24:06"
-    },
-    {
-      "trigger_id": "entrance_swell",
-      "run_name": "Lake Entrance (swell)",
       "date": "2026-11-25",
-      "start": "2026-11-25T15:45:52.941176+11:00",
-      "end": "2026-11-25T17:00:00+11:00",
-      "grade": "watch",
-      "peak_median_kn": 9.1,
-      "direction_deg": 56.0,
-      "models_agreeing": 4,
-      "model_values": {
-        "GFS": 7.5,
-        "ECMWF": 9.1,
-        "ICON": 9.1,
-        "UKMO": 12.9
-      },
-      "title_tags": [
-        "off-tide"
-      ],
-      "notes": [
-        "runnable but not the preferred run-out (high tide to +2 h)"
-      ],
-      "swell_m": 0.74,
-      "swell_dir_deg": 103.0,
-      "high_tide": "2026-11-25T09:03:00+11:00",
-      "high_tide_m": 1.8,
-      "spots": null,
-      "watch": "off tide",
-      "tide_state": "workable",
-      "confidence": "low (long range)",
-      "live_status": "pending",
-      "event_id": null,
-      "foil_key": "entrance_swell:2026-11-25:15"
-    },
-    {
-      "trigger_id": "entrance_swell",
-      "run_name": "Lake Entrance (swell)",
-      "date": "2026-11-25",
-      "start": "2026-11-25T18:00:00+11:00",
+      "start": "2026-11-25T15:43:20+11:00",
       "end": "2026-11-25T20:00:00+11:00",
-      "grade": "yellow",
+      "grade": "green",
       "peak_median_kn": 8.2,
       "direction_deg": 51.0,
       "models_agreeing": 4,
@@ -691,17 +619,17 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 0.82,
-      "swell_dir_deg": 91.0,
-      "high_tide": "2026-11-25T21:48:00+11:00",
-      "high_tide_m": 1.23,
+      "swell_m": 1.04,
+      "swell_dir_deg": 93.0,
+      "high_tide": "2026-11-25T21:45:00+11:00",
+      "high_tide_m": 1.27,
       "spots": null,
       "watch": null,
       "tide_state": "workable",
       "confidence": "low (long range)",
       "live_status": "pending",
-      "event_id": "ann481bj6t2ugc2ctbnn9lnun0",
-      "foil_key": "entrance_swell:2026-11-25:18"
+      "event_id": "d7hg87ae2hm323lu0if2v1954o",
+      "foil_key": "entrance_swell:2026-11-25:15"
     },
     {
       "trigger_id": "entrance_swell",
@@ -709,15 +637,15 @@
       "date": "2026-11-26",
       "start": "2026-11-26T06:00:00+11:00",
       "end": "2026-11-26T09:50:31.578947+11:00",
-      "grade": "yellow",
-      "peak_median_kn": 7.4,
-      "direction_deg": 349.0,
+      "grade": "green",
+      "peak_median_kn": 3.0,
+      "direction_deg": 313.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 2.9,
-        "ECMWF": 6.8,
-        "ICON": 8.0,
-        "UKMO": 10.4
+        "GFS": 2.5,
+        "ECMWF": 2.5,
+        "ICON": 6.1,
+        "UKMO": 3.6
       },
       "title_tags": [
         "off-tide"
@@ -725,10 +653,10 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 0.82,
-      "swell_dir_deg": 75.0,
+      "swell_m": 1.02,
+      "swell_dir_deg": 89.0,
       "high_tide": "2026-11-26T09:50:31.578947+11:00",
-      "high_tide_m": 1.78,
+      "high_tide_m": 1.83,
       "spots": null,
       "watch": null,
       "tide_state": "workable",
@@ -744,21 +672,21 @@
       "start": "2026-11-26T09:50:31.578947+11:00",
       "end": "2026-11-26T11:50:31.578947+11:00",
       "grade": "green",
-      "peak_median_kn": 9.8,
-      "direction_deg": 21.0,
+      "peak_median_kn": 8.8,
+      "direction_deg": 5.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 5.7,
-        "ECMWF": 8.4,
-        "ICON": 11.2,
-        "UKMO": 13.5
+        "GFS": 4.3,
+        "ECMWF": 7.7,
+        "ICON": 9.9,
+        "UKMO": 12.2
       },
       "title_tags": [],
       "notes": [],
-      "swell_m": 0.92,
-      "swell_dir_deg": 85.0,
+      "swell_m": 1.0,
+      "swell_dir_deg": 89.0,
       "high_tide": "2026-11-26T09:50:31.578947+11:00",
-      "high_tide_m": 1.78,
+      "high_tide_m": 1.83,
       "spots": null,
       "watch": null,
       "tide_state": "preferred",
@@ -782,14 +710,14 @@
         "UKMO": 13.8
       },
       "title_tags": [
+        "cross swell 1.0 m E",
         "2 of 4 models"
       ],
       "notes": [
-        "aligned swell 0.8 m ENE",
         "only 2 of 4 models reached the trigger; the others did not see it"
       ],
-      "swell_m": 0.8,
-      "swell_dir_deg": 72.0,
+      "swell_m": 0.96,
+      "swell_dir_deg": 87.0,
       "high_tide": null,
       "high_tide_m": null,
       "spots": null,
@@ -804,17 +732,17 @@
       "trigger_id": "entrance_swell",
       "run_name": "Lake Entrance (swell)",
       "date": "2026-11-26",
-      "start": "2026-11-26T16:41:15+11:00",
+      "start": "2026-11-26T16:42:21.176471+11:00",
       "end": "2026-11-26T20:00:00+11:00",
       "grade": "yellow",
-      "peak_median_kn": 7.4,
-      "direction_deg": 30.0,
+      "peak_median_kn": 10.9,
+      "direction_deg": 44.0,
       "models_agreeing": 4,
       "model_values": {
-        "GFS": 1.7,
-        "ECMWF": 4.8,
-        "ICON": 10.0,
-        "UKMO": 13.5
+        "GFS": 6.4,
+        "ECMWF": 8.3,
+        "ICON": 13.6,
+        "UKMO": 14.6
       },
       "title_tags": [
         "off-tide"
@@ -822,10 +750,10 @@
       "notes": [
         "runnable but not the preferred run-out (high tide to +2 h)"
       ],
-      "swell_m": 0.82,
-      "swell_dir_deg": 72.0,
-      "high_tide": "2026-11-26T22:44:00+11:00",
-      "high_tide_m": 1.1,
+      "swell_m": 0.96,
+      "swell_dir_deg": 87.0,
+      "high_tide": "2026-11-26T22:42:51.428571+11:00",
+      "high_tide_m": 1.14,
       "spots": null,
       "watch": null,
       "tide_state": "workable",
@@ -839,10 +767,10 @@
     {
       "trigger_id": "entrance_swell",
       "date": "2026-11-20",
-      "start": "2026-11-20T11:21:49.090909+11:00",
-      "end": "2026-11-20T17:18:27.692308+11:00",
+      "start": "2026-11-20T11:20:00+11:00",
+      "end": "2026-11-20T17:16:21.818182+11:00",
       "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (17:18-19:18); kept as green"
+      "detail": "runnable but outside the preferred run-out (17:16-19:16); kept as green"
     },
     {
       "trigger_id": "entrance_swell",
@@ -850,55 +778,39 @@
       "start": "2026-11-21T12:16:21.818182+11:00",
       "end": "2026-11-21T18:09:13.846154+11:00",
       "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (18:09-20:09); kept as yellow"
+      "detail": "runnable but outside the preferred run-out (18:09-20:09); kept as green"
     },
     {
       "trigger_id": "entrance_swell",
       "date": "2026-11-22",
       "start": "2026-11-22T15:00:00+11:00",
-      "end": "2026-11-22T20:00:00+11:00",
+      "end": "2026-11-22T19:00:00+11:00",
       "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (19:04-21:04); kept as green"
+      "detail": "runnable but outside the preferred run-out (19:00-21:00); kept as yellow"
     },
     {
       "trigger_id": "entrance_swell",
       "date": "2026-11-23",
       "start": "2026-11-23T06:00:00+11:00",
-      "end": "2026-11-23T07:26:15+11:00",
+      "end": "2026-11-23T07:28:14.117647+11:00",
       "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (07:26-09:26); kept as green"
+      "detail": "runnable but outside the preferred run-out (07:28-09:28); kept as green"
     },
     {
       "trigger_id": "entrance_swell",
       "date": "2026-11-23",
-      "start": "2026-11-23T14:00:00+11:00",
+      "start": "2026-11-23T13:56:28.235294+11:00",
       "end": "2026-11-23T20:00:00+11:00",
       "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (20:00-22:00); kept as green"
-    },
-    {
-      "trigger_id": "entrance_swell",
-      "date": "2026-11-24",
-      "start": "2026-11-24T06:00:00+11:00",
-      "end": "2026-11-24T08:00:00+11:00",
-      "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (08:10-10:10); kept as yellow"
+      "detail": "runnable but outside the preferred run-out (19:56-21:56); kept as green"
     },
     {
       "trigger_id": "entrance_swell",
       "date": "2026-11-25",
-      "start": "2026-11-25T15:45:52.941176+11:00",
-      "end": "2026-11-25T17:00:00+11:00",
-      "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (09:03-11:03); kept as watch"
-    },
-    {
-      "trigger_id": "entrance_swell",
-      "date": "2026-11-25",
-      "start": "2026-11-25T18:00:00+11:00",
+      "start": "2026-11-25T15:43:20+11:00",
       "end": "2026-11-25T20:00:00+11:00",
       "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (21:48-23:48); kept as yellow"
+      "detail": "runnable but outside the preferred run-out (21:45-23:45); kept as green"
     },
     {
       "trigger_id": "entrance_swell",
@@ -906,15 +818,31 @@
       "start": "2026-11-26T06:00:00+11:00",
       "end": "2026-11-26T09:50:31.578947+11:00",
       "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (09:50-11:50); kept as yellow"
+      "detail": "runnable but outside the preferred run-out (09:50-11:50); kept as green"
     },
     {
       "trigger_id": "entrance_swell",
       "date": "2026-11-26",
-      "start": "2026-11-26T16:41:15+11:00",
+      "start": "2026-11-26T16:42:21.176471+11:00",
       "end": "2026-11-26T20:00:00+11:00",
       "reason": "off_tide",
-      "detail": "runnable but outside the preferred run-out (22:44-00:44); kept as yellow"
+      "detail": "runnable but outside the preferred run-out (22:42-00:42); kept as yellow"
+    },
+    {
+      "trigger_id": "ne_ocean",
+      "date": "2026-11-20",
+      "start": "2026-11-20T13:00:00+11:00",
+      "end": "2026-11-20T18:00:00+11:00",
+      "reason": "cross_swell",
+      "detail": "cross swell 1.0 m ESE, 43 deg off the wind"
+    },
+    {
+      "trigger_id": "ne_ocean",
+      "date": "2026-11-20",
+      "start": "2026-11-20T12:00:00+11:00",
+      "end": "2026-11-20T20:00:00+11:00",
+      "reason": "single_model",
+      "detail": "models never agree on the same hour: ['gfs_seamless', 'icon_seamless', 'ukmo_seamless']"
     },
     {
       "trigger_id": "ne_ocean",
