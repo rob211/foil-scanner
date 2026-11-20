@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-21T07:01:09.242142+11:00",
+  "generated_at": "2026-11-21T07:31:08.595230+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-21T06:30:00+11:00",
-    "speed_kn": 4.9,
-    "gust_kn": 7.0,
-    "dir_deg": 0.0
+    "time": "2026-11-21T07:00:00+11:00",
+    "speed_kn": 3.8,
+    "gust_kn": 5.9,
+    "dir_deg": 337.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-21T06:59:42+11:00",
+    "time": "2026-11-21T07:29:42+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-21T06:30:00+11:00",
-    "speed_kn": 0.0,
-    "gust_kn": 2.2,
-    "dir_deg": null
+    "time": "2026-11-21T07:00:00+11:00",
+    "speed_kn": 3.2,
+    "gust_kn": 5.9,
+    "dir_deg": 22.5
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-11-21:06",
       "state": "confirmed",
-      "live_line": "wind favourable for the swell: 5 kn N at 06:30 (Bellambi)"
+      "live_line": "wind favourable for the swell: 4 kn NNW at 07:00 (Bellambi)"
     }
   ],
   "alerts": [],
@@ -42,14 +42,12 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 4.9,
+      "observed_kn": 3.8,
       "forecast_kn": 7.0,
-      "gap_kn": -2.1,
+      "gap_kn": -3.2,
       "flagged": false
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
-  "notes": [
-    "entrance_swell:2026-11-21:06: check failed: <HttpError 403 when requesting https://www.googleapis.com/calendar/v3/calendars/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/events/ioft3e361gpgr1ch4umn78pn70?alt=json returned \"Rate Limit Exceeded\". Details: \"[{'domain': 'usageLimits', 'reason': 'rateLimitExceeded', 'message': 'Rate Limit Exceeded'}]\">"
-  ]
+  "notes": []
 }
