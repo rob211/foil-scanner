@@ -1,32 +1,32 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-22T06:31:47.813500+11:00",
+  "generated_at": "2026-11-22T07:00:18.250703+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-22T06:00:00+11:00",
-    "speed_kn": 0.0,
-    "gust_kn": 0.0,
-    "dir_deg": null
+    "time": "2026-11-22T06:30:00+11:00",
+    "speed_kn": 1.1,
+    "gust_kn": 3.8,
+    "dir_deg": 157.5
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-22T06:31:47+11:00",
+    "time": "2026-11-22T06:59:46+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-22T06:00:00+11:00",
-    "speed_kn": 1.1,
-    "gust_kn": 2.2,
-    "dir_deg": 225.0
+    "time": "2026-11-22T06:30:00+11:00",
+    "speed_kn": 0.0,
+    "gust_kn": 1.1,
+    "dir_deg": null
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-11-22:06",
       "state": "confirmed",
-      "live_line": "wind favourable for the swell: 0 kn at 06:00 (Bellambi)"
+      "live_line": "wind favourable for the swell: 1 kn SSE at 06:30 (Bellambi)"
     }
   ],
   "alerts": [],
@@ -35,19 +35,21 @@
       "location": "lake",
       "station": "Lake Illawarra",
       "observed_kn": 0.0,
-      "forecast_kn": 3.3,
-      "gap_kn": -3.3,
+      "forecast_kn": 2.4,
+      "gap_kn": -2.4,
       "flagged": false
     },
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 0.0,
-      "forecast_kn": 5.9,
-      "gap_kn": -5.9,
+      "observed_kn": 1.1,
+      "forecast_kn": 5.5,
+      "gap_kn": -4.4,
       "flagged": false
     }
   ],
-  "token_expires_at": null,
-  "notes": []
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
+  "notes": [
+    "entrance_swell:2026-11-22:06: check failed: <HttpError 403 when requesting https://www.googleapis.com/calendar/v3/calendars/9dafb9d479aebffab573b952f4b02b564f3ece6ff6450b0ebc97dc6ae264dcdb%40group.calendar.google.com/events/s3qrf6k6r9tu4807m4f8gijom8?alt=json returned \"Rate Limit Exceeded\". Details: \"[{'domain': 'usageLimits', 'reason': 'rateLimitExceeded', 'message': 'Rate Limit Exceeded'}]\">"
+  ]
 }
