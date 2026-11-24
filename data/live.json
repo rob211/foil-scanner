@@ -1,16 +1,16 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-24T14:01:13.010904+11:00",
+  "generated_at": "2026-11-24T14:31:03.945042+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-24T13:43:00+11:00",
-    "speed_kn": 25.9,
-    "gust_kn": 30.8,
-    "dir_deg": 135.0
+    "time": "2026-11-24T14:17:00+11:00",
+    "speed_kn": 28.1,
+    "gust_kn": 32.9,
+    "dir_deg": 90.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-24T14:00:14+11:00",
+    "time": "2026-11-24T14:30:15+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
@@ -30,16 +30,16 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 25.9,
+      "observed_kn": 28.1,
       "forecast_kn": 14.7,
-      "gap_kn": 11.2,
+      "gap_kn": 13.4,
       "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "Port Kembla station unavailable (logging only): BOM observations (95745) (Port Kembla Harbour): latest reading is 271 min old, cap is 75 min",
+    "Port Kembla station unavailable (logging only): BOM observations (95745) (Port Kembla Harbour): latest reading is 301 min old, cap is 75 min",
     "MODEL BUST (lake): observed 0 kn vs forecast 16 kn at Lake Illawarra",
-    "MODEL BUST (ocean): observed 26 kn vs forecast 15 kn at Bellambi"
+    "MODEL BUST (ocean): observed 28 kn vs forecast 15 kn at Bellambi"
   ]
 }
