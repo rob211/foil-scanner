@@ -1,16 +1,16 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-25T10:01:03.916565+11:00",
+  "generated_at": "2026-11-25T10:31:05.075686+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-25T09:30:00+11:00",
-    "speed_kn": 8.1,
-    "gust_kn": 10.3,
-    "dir_deg": 112.5
+    "time": "2026-11-25T10:00:00+11:00",
+    "speed_kn": 10.8,
+    "gust_kn": 11.9,
+    "dir_deg": 90.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-25T10:00:18+11:00",
+    "time": "2026-11-25T10:30:18+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
@@ -19,8 +19,8 @@
   "checks": [
     {
       "foil_key": "entrance_swell:2026-11-25:09",
-      "state": "confirmed",
-      "live_line": "wind favourable for the swell: 8 kn ESE at 09:30 (Bellambi)"
+      "state": "pending",
+      "live_line": "onshore but not wrecking it: 11 kn E at 10:00 (Bellambi)"
     }
   ],
   "alerts": [],
@@ -36,15 +36,16 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 8.1,
+      "observed_kn": 10.8,
       "forecast_kn": 10.2,
-      "gap_kn": -2.1,
+      "gap_kn": 0.6,
       "flagged": false
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "Port Kembla station unavailable (logging only): BOM observations (95745) (Port Kembla Harbour): latest reading is 91 min old, cap is 75 min",
+    "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)",
+    "Port Kembla station unavailable (logging only): BOM observations (95745) (Port Kembla Harbour): latest reading is 121 min old, cap is 75 min",
     "MODEL BUST (lake): observed 0 kn vs forecast 9 kn at Lake Illawarra"
   ]
 }
