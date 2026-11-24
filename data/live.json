@@ -1,63 +1,29 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-24T17:01:08.650458+11:00",
+  "generated_at": "2026-11-24T17:31:04.564535+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-24T16:50:00+11:00",
+    "time": "2026-11-24T17:00:00+11:00",
     "speed_kn": 27.0,
-    "gust_kn": 30.8,
-    "dir_deg": 67.5
+    "gust_kn": 32.9,
+    "dir_deg": 90.0
   },
   "holfuy": {
     "station": "Lake Illawarra",
-    "time": "2026-11-24T17:00:15+11:00",
+    "time": "2026-11-24T17:30:14+11:00",
     "speed_kn": 0.0,
     "gust_kn": 0.0,
     "dir_deg": 0.0
   },
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-24T16:30:00+11:00",
+    "time": "2026-11-24T17:00:00+11:00",
     "speed_kn": 10.3,
     "gust_kn": 23.2,
     "dir_deg": 202.5
   },
   "checks": [],
-  "alerts": [
-    {
-      "trigger_id": "lake_ne_rare",
-      "run_name": "Sailing Club to Oak Flats",
-      "station": "Bellambi",
-      "speed_kn": 27.0,
-      "dir_deg": 67.5,
-      "threshold_kn": 22.5,
-      "detail": "",
-      "foil_key": "live-alert:2026-11-24:lake",
-      "created": false
-    },
-    {
-      "trigger_id": "entrance_ne",
-      "run_name": "Lake Entrance (NE wind)",
-      "station": "Bellambi",
-      "speed_kn": 27.0,
-      "dir_deg": 67.5,
-      "threshold_kn": 16.2,
-      "detail": "Run-out gate today: 08:10-10:10, 20:51-22:51.",
-      "foil_key": "live-alert:2026-11-24:entrance",
-      "created": false
-    },
-    {
-      "trigger_id": "ne_ocean",
-      "run_name": "NE ocean runs",
-      "station": "Bellambi",
-      "speed_kn": 27.0,
-      "dir_deg": 67.5,
-      "threshold_kn": 10.0,
-      "detail": "",
-      "foil_key": "live-alert:2026-11-24:ocean",
-      "created": false
-    }
-  ],
+  "alerts": [],
   "bias": [
     {
       "location": "lake",
@@ -71,13 +37,14 @@
       "location": "ocean",
       "station": "Bellambi",
       "observed_kn": 27.0,
-      "forecast_kn": 15.5,
-      "gap_kn": 11.5,
+      "forecast_kn": 15.6,
+      "gap_kn": 11.4,
       "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
+    "sunrise/sunset unavailable, alerting on clock hours only: GET https://api.open-meteo.com/v1/forecast failed after 5 attempts: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)",
     "MODEL BUST (lake): observed 0 kn vs forecast 17 kn at Lake Illawarra",
     "MODEL BUST (ocean): observed 27 kn vs forecast 16 kn at Bellambi"
   ]
