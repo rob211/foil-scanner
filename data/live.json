@@ -1,6 +1,6 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-28T10:37:05.411001+11:00",
+  "generated_at": "2026-11-28T11:00:39.894165+11:00",
   "obs": {
     "station": "Bellambi",
     "time": "2026-11-28T10:30:00+11:00",
@@ -21,6 +21,11 @@
       "foil_key": "entrance_swell:2026-11-28:06",
       "state": "pending",
       "live_line": "onshore but not wrecking it: 19 kn NNE at 10:30 (Bellambi)"
+    },
+    {
+      "foil_key": "entrance_swell:2026-11-28:11",
+      "state": "pending",
+      "live_line": "onshore but not wrecking it: 19 kn NNE at 10:30 (Bellambi)"
     }
   ],
   "alerts": [
@@ -33,7 +38,7 @@
       "threshold_kn": 16.2,
       "detail": "Run-out gate today: 11:45-13:45.",
       "foil_key": "live-alert:2026-11-28:entrance",
-      "created": true
+      "created": false
     },
     {
       "trigger_id": "ne_ocean",
@@ -52,12 +57,12 @@
       "location": "ocean",
       "station": "Bellambi",
       "observed_kn": 18.9,
-      "forecast_kn": 12.1,
-      "gap_kn": 6.8,
+      "forecast_kn": 12.6,
+      "gap_kn": 6.3,
       "flagged": false
     }
   ],
-  "token_expires_at": null,
+  "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
     "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'"
   ]
