@@ -1,20 +1,20 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-28T23:01:04.173641+11:00",
+  "generated_at": "2026-11-29T00:01:00.749276+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-28T22:30:00+11:00",
-    "speed_kn": 13.0,
-    "gust_kn": 18.9,
-    "dir_deg": 0.0
+    "time": "2026-11-28T23:30:00+11:00",
+    "speed_kn": 11.9,
+    "gust_kn": 17.3,
+    "dir_deg": 337.5
   },
   "holfuy": null,
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-28T22:30:00+11:00",
-    "speed_kn": 14.0,
-    "gust_kn": 20.0,
-    "dir_deg": 22.5
+    "time": "2026-11-28T23:30:00+11:00",
+    "speed_kn": 5.9,
+    "gust_kn": 16.2,
+    "dir_deg": 0.0
   },
   "checks": [],
   "alerts": [],
@@ -22,14 +22,16 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 13.0,
-      "forecast_kn": 9.4,
-      "gap_kn": 3.6,
-      "flagged": false
+      "observed_kn": 11.9,
+      "forecast_kn": null,
+      "gap_kn": null,
+      "flagged": null,
+      "reason": "expectation is from 2026-11-28, not 2026-11-29"
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'"
+    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'",
+    "model bias not checked: expectation is from 2026-11-28, not 2026-11-29"
   ]
 }
