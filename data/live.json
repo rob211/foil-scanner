@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-28T14:30:31.962134+11:00",
+  "generated_at": "2026-11-28T15:00:30.108919+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-28T14:00:00+11:00",
+    "time": "2026-11-28T14:30:00+11:00",
     "speed_kn": 20.0,
     "gust_kn": 24.8,
     "dir_deg": 0.0
@@ -11,9 +11,9 @@
   "holfuy": null,
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-28T14:00:00+11:00",
-    "speed_kn": 18.9,
-    "gust_kn": 25.9,
+    "time": "2026-11-28T14:30:00+11:00",
+    "speed_kn": 16.2,
+    "gust_kn": 23.2,
     "dir_deg": 45.0
   },
   "checks": [],
@@ -23,8 +23,8 @@
       "location": "ocean",
       "station": "Bellambi",
       "observed_kn": 20.0,
-      "forecast_kn": 14.3,
-      "gap_kn": 5.7,
+      "forecast_kn": 12.2,
+      "gap_kn": 7.8,
       "flagged": false
     }
   ],
