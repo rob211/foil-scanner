@@ -1,31 +1,26 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-28T11:00:39.894165+11:00",
+  "generated_at": "2026-11-28T11:30:33.671639+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-28T10:30:00+11:00",
-    "speed_kn": 18.9,
-    "gust_kn": 22.1,
+    "time": "2026-11-28T11:00:00+11:00",
+    "speed_kn": 21.1,
+    "gust_kn": 23.2,
     "dir_deg": 22.5
   },
   "holfuy": null,
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-28T10:30:00+11:00",
+    "time": "2026-11-28T11:00:00+11:00",
     "speed_kn": 13.0,
-    "gust_kn": 17.3,
+    "gust_kn": 18.9,
     "dir_deg": 45.0
   },
   "checks": [
     {
       "foil_key": "entrance_swell:2026-11-28:06",
-      "state": "pending",
-      "live_line": "onshore but not wrecking it: 19 kn NNE at 10:30 (Bellambi)"
-    },
-    {
-      "foil_key": "entrance_swell:2026-11-28:11",
-      "state": "pending",
-      "live_line": "onshore but not wrecking it: 19 kn NNE at 10:30 (Bellambi)"
+      "state": "miss",
+      "live_line": "onshore and too strong for the swell: 21 kn NNE at 11:00 (Bellambi)"
     }
   ],
   "alerts": [
@@ -33,7 +28,7 @@
       "trigger_id": "entrance_ne",
       "run_name": "Lake Entrance (NE wind)",
       "station": "Bellambi",
-      "speed_kn": 18.9,
+      "speed_kn": 21.1,
       "dir_deg": 22.5,
       "threshold_kn": 16.2,
       "detail": "Run-out gate today: 11:45-13:45.",
@@ -44,7 +39,7 @@
       "trigger_id": "ne_ocean",
       "run_name": "NE ocean runs",
       "station": "Bellambi",
-      "speed_kn": 18.9,
+      "speed_kn": 21.1,
       "dir_deg": 22.5,
       "threshold_kn": 10.0,
       "detail": "",
@@ -56,14 +51,15 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 18.9,
+      "observed_kn": 21.1,
       "forecast_kn": 12.6,
-      "gap_kn": 6.3,
-      "flagged": false
+      "gap_kn": 8.5,
+      "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'"
+    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'",
+    "MODEL BUST (ocean): observed 21 kn vs forecast 13 kn at Bellambi"
   ]
 }
