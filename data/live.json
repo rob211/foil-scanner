@@ -1,26 +1,26 @@
 {
   "schema_version": 2,
-  "generated_at": "2026-11-28T16:30:59.554844+11:00",
+  "generated_at": "2026-11-28T17:01:06.372894+11:00",
   "obs": {
     "station": "Bellambi",
-    "time": "2026-11-28T16:15:00+11:00",
-    "speed_kn": 17.3,
-    "gust_kn": 27.0,
+    "time": "2026-11-28T16:39:00+11:00",
+    "speed_kn": 23.8,
+    "gust_kn": 30.8,
     "dir_deg": 0.0
   },
   "holfuy": null,
   "port_kembla": {
     "station": "Port Kembla Harbour",
-    "time": "2026-11-28T16:00:00+11:00",
-    "speed_kn": 16.2,
-    "gust_kn": 20.0,
+    "time": "2026-11-28T16:30:00+11:00",
+    "speed_kn": 14.0,
+    "gust_kn": 18.9,
     "dir_deg": 22.5
   },
   "checks": [
     {
       "foil_key": "baysurf:2026-11-28:17",
-      "state": "pending",
-      "live_line": "17 kn N at 16:15 (Bellambi)"
+      "state": "miss",
+      "live_line": "24 kn N at 16:39 (Bellambi) vs forecast 8.5 kn"
     }
   ],
   "alerts": [],
@@ -28,14 +28,15 @@
     {
       "location": "ocean",
       "station": "Bellambi",
-      "observed_kn": 17.3,
-      "forecast_kn": 12.2,
-      "gap_kn": 5.1,
-      "flagged": false
+      "observed_kn": 23.8,
+      "forecast_kn": 10.6,
+      "gap_kn": 13.2,
+      "flagged": true
     }
   ],
   "token_expires_at": "2027-07-31 14:00:00 UTC",
   "notes": [
-    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'"
+    "Holfuy fetch failed, lake safety-net check skipped this hour: Holfuy 366: missing key 'wind'",
+    "MODEL BUST (ocean): observed 24 kn vs forecast 11 kn at Bellambi"
   ]
 }
